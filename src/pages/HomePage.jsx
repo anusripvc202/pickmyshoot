@@ -66,7 +66,7 @@ const HomePage = () => {
             {/* Photographer Center Overlay */}
             <div className="hero-banner-image-wrap">
               <img 
-                src="/banner_photographer.png" 
+                src={`${import.meta.env.BASE_URL}banner_photographer.png`} 
                 className="hero-banner-image" 
                 alt="Photographer" 
               />
@@ -162,7 +162,7 @@ const HomePage = () => {
         </div>
 
         <div className="stripe-image-wrap">
-          <img src="/banner_cameras.png" className="stripe-image" alt="Camera Gear Group" />
+          <img src={`${import.meta.env.BASE_URL}banner_cameras.png`} className="stripe-image" alt="Camera Gear Group" />
         </div>
 
         <button 
