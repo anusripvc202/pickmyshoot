@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- FTII Pune - Film and Television Institute of India -->
+  <!-- Clean white background -->
+  <rect width="200" height="200" fill="white"/>
+  
+  <!-- Stylized F letterform in FTII signature blue, with film strip notch detail -->
+  <g fill="#0055B3">
+    <!-- Vertical stroke -->
+    <rect x="28" y="22" width="32" height="130" rx="4"/>
+    <!-- Top horizontal bar -->
+    <rect x="28" y="22" width="110" height="30" rx="4"/>
+    <!-- Middle bar (shorter, classic F) -->
+    <rect x="28" y="79" width="78" height="28" rx="4"/>
+  </g>
+  
+  <!-- Small film strip squares on top bar for identity -->
+  <rect x="82" y="28" width="10" height="18" rx="2" fill="white" opacity="0.7"/>
+  <rect x="100" y="28" width="10" height="18" rx="2" fill="white" opacity="0.7"/>
+  <rect x="118" y="28" width="10" height="18" rx="2" fill="white" opacity="0.7"/>
+  
+  <!-- FTII text -->
+  <text x="100" y="178" font-family="Arial,sans-serif" font-size="13" font-weight="800" fill="#0055B3" text-anchor="middle" letter-spacing="3">FTII</text>
+  <text x="100" y="194" font-family="Arial,sans-serif" font-size="9" font-weight="500" fill="#666666" text-anchor="middle" letter-spacing="1">PUNE</text>
+</svg>
