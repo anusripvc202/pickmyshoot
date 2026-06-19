@@ -10,7 +10,6 @@ import {
   X, 
   ChevronRight, 
   Check, 
-  Camera,
   CheckCircle,
   Sun,
   Moon,
@@ -19,8 +18,7 @@ import {
   ArrowRight,
   Home,
   Compass,
-  Calendar,
-  User
+  Calendar
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 
@@ -33,7 +31,7 @@ const Layout = () => {
     selectedItemType,
     selectedDate, setSelectedDate,
     selectedTime, setSelectedTime,
-    toast,
+    toast, triggerToast,
     toggleLike,
     handleBookingSubmit,
     isAuthenticated,
@@ -177,7 +175,10 @@ const Layout = () => {
                     <div className="header-user-dropdown-card">
                       <div className="dropdown-user-info">
                         <div className="user-name-role">
-                          <span className="dropdown-user-name">{currentUser?.name}</span>
+                          <span className="dropdown-user-name" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            {currentUser?.name}
+                            <span className="verified-badge-checkmark-pro" title="Verified Creator" style={{ color: 'var(--primary)', fontSize: '11px', display: 'inline-flex', alignSelf: 'center' }}>✓</span>
+                          </span>
                           <span className="dropdown-user-role">{currentUser?.role}</span>
                         </div>
                       </div>
@@ -569,9 +570,9 @@ const Layout = () => {
         <div className="footer-bottom">
           <span className="footer-copy">© 2025 PickMyShoot Technologies Pvt. Ltd. All rights reserved.</span>
           <div className="footer-bottom-links">
-            <a href="#">Privacy</a>
-            <a href="#">Terms</a>
-            <a href="#">Cookies</a>
+            <span style={{ cursor: 'pointer' }} onClick={() => triggerToast("Privacy Policy loaded.")}>Privacy Policy</span>
+            <span style={{ cursor: 'pointer' }} onClick={() => triggerToast("Terms & Conditions loaded.")}>Terms &amp; Conditions</span>
+            <span style={{ cursor: 'pointer' }} onClick={() => triggerToast("Cookie Settings loaded.")}>Cookie Policy</span>
           </div>
         </div>
       </footer>

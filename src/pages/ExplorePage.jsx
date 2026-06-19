@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Star, Heart, ChevronDown, ChevronUp, MapPin, SlidersHorizontal, X } from 'lucide-react';
+import { useState } from 'react';
+import { Star, Heart, ChevronDown, ChevronUp, SlidersHorizontal, X } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 
 const ExplorePage = () => {
