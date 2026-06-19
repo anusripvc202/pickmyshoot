@@ -1,5 +1,5 @@
 import React from 'react';
-import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { 
   Search, 
   Bell, 
@@ -39,32 +39,10 @@ const Layout = () => {
   } = useAppContext();
 
   const navigate = useNavigate();
-  const location = useLocation();
 
-  // Sync theme to parent window when it changes
   React.useEffect(() => {
     document.body.className = `${theme}-theme`;
-    if (window.self !== window.top) {
-      try {
-        window.parent.document.body.className = `desktop-wrapper-body ${theme}-theme`;
-      } catch (e) {
-        console.error("Theme sync failed:", e);
-      }
-    }
   }, [theme]);
-
-  // Sync URL hash from embedded iframe to parent window
-  React.useEffect(() => {
-    if (window.self !== window.top) {
-      try {
-        if (window.parent.location.hash !== window.location.hash) {
-          window.parent.location.hash = window.location.hash;
-        }
-      } catch (e) {
-        console.error("Hash sync failed:", e);
-      }
-    }
-  }, [location]);
 
   const handleSearchSubmit = (e) => {
     if (e) e.preventDefault();
