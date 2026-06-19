@@ -23,7 +23,8 @@ import {
   ClipboardList,
   ThumbsUp,
   Star,
-  Share2
+  Share2,
+  ChevronDown
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { useNavigate } from 'react-router-dom';
@@ -45,13 +46,63 @@ const ProfilePage = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
 
-  // Local state for profile inputs
-  const [profileName, setProfileName] = useState('Dev Creator Workspace');
-  const [profileEmail, setProfileEmail] = useState('creator.workspace@pickmyshoot.com');
-  const [profilePhone, setProfilePhone] = useState('+91 98765 43210');
-  const [profileBio, setProfileBio] = useState(
-    'Premium visual productions hub & studio lot manager. Hosting state-of-the-art camera rentals, lighting packages, and fashion models portfolios across South India.'
-  );
+  // 1. Multiple Profiles State List
+  const [profiles, setProfiles] = useState([
+    {
+      id: "prof-1",
+      name: "Dev Creator Workspace",
+      role: "Verified Studio Partner",
+      email: "creator.workspace@pickmyshoot.com",
+      phone: "+91 98765 43210",
+      bio: "Premium visual productions hub & studio lot manager. Hosting state-of-the-art camera rentals, lighting packages, and fashion models portfolios across South India.",
+      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=180&q=80",
+      shoots: "120+",
+      rating: "4.9 ★",
+      followers: "15K",
+      revenue: "₹1,42,800",
+      success: "99.2%",
+      views: "1,284"
+    },
+    {
+      id: "prof-2",
+      name: "Ananya Wedding Shoot",
+      role: "Verified Photographer",
+      email: "ananya.wedding@pickmyshoot.com",
+      phone: "+91 87654 32109",
+      bio: "Candid wedding & bridal catalog photographer. Documenting timeless love stories through cinematic lens across Hyderabad.",
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=180&q=80",
+      shoots: "85+",
+      rating: "4.8 ★",
+      followers: "8.2K",
+      revenue: "₹76,500",
+      success: "98.5%",
+      views: "640"
+    }
+  ]);
+
+  const [activeProfileId, setActiveProfileId] = useState("prof-1");
+  const activeProfile = profiles.find(p => p.id === activeProfileId) || profiles[0];
+
+  // Local state for profile inputs in settings (synced via activeProfileId)
+  const [profileName, setProfileName] = useState(activeProfile.name);
+  const [profileEmail, setProfileEmail] = useState(activeProfile.email);
+  const [profileBio, setProfileBio] = useState(activeProfile.bio);
+
+  // Sync settings form inputs when active profile changes
+  React.useEffect(() => {
+    setProfileName(activeProfile.name);
+    setProfileEmail(activeProfile.email);
+    setProfileBio(activeProfile.bio);
+  }, [activeProfileId, activeProfile]);
+
+  // Modal and new profile inputs state
+  const [showAddProfileModal, setShowAddProfileModal] = useState(false);
+  const [newProfileName, setNewProfileName] = useState('');
+  const [newProfileRole, setNewProfileRole] = useState('Verified Photographer');
+  const [newProfileEmail, setNewProfileEmail] = useState('');
+  const [newProfilePhone, setNewProfilePhone] = useState('');
+  const [newProfileBio, setNewProfileBio] = useState('');
+  const [newProfileAvatar, setNewProfileAvatar] = useState('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80');
 
   // Sharing interaction state
   const [shareText, setShareText] = useState('Share Dashboard');
@@ -67,7 +118,53 @@ const ProfilePage = () => {
 
   const handleProfileUpdate = (e) => {
     e.preventDefault();
+    setProfiles(prev => prev.map(p => {
+      if (p.id === activeProfileId) {
+        return {
+          ...p,
+          name: profileName,
+          email: profileEmail,
+          bio: profileBio
+        };
+      }
+      return p;
+    }));
     triggerToast("Profile details updated successfully!");
+  };
+
+  const handleAddProfileSubmit = (e) => {
+    e.preventDefault();
+    if (!newProfileName || !newProfileEmail) {
+      triggerToast("Name and Email are required!");
+      return;
+    }
+    const newId = `prof-${Date.now()}`;
+    const newProfile = {
+      id: newId,
+      name: newProfileName,
+      role: newProfileRole,
+      email: newProfileEmail,
+      phone: newProfilePhone || "+91 99999 88888",
+      bio: newProfileBio || "Professional visual creator profile details.",
+      avatar: newProfileAvatar,
+      shoots: "0",
+      rating: "5.0 ★",
+      followers: "0",
+      revenue: "₹0",
+      success: "100%",
+      views: "1"
+    };
+
+    setProfiles(prev => [...prev, newProfile]);
+    setActiveProfileId(newId);
+    setShowAddProfileModal(false);
+    triggerToast(`Profile "${newProfileName}" created successfully!`);
+
+    // Reset inputs
+    setNewProfileName('');
+    setNewProfileEmail('');
+    setNewProfilePhone('');
+    setNewProfileBio('');
   };
 
   // Mock Portfolio Items (landscape & portrait)
@@ -196,45 +293,64 @@ const ProfilePage = () => {
           {/* Avatar with Status indicator */}
           <div className="avatar-overlap-wrap">
             <img 
-              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=180&q=80" 
+              src={activeProfile.avatar} 
               className="profile-avatar-pro" 
               alt="Workspace Owner Avatar" 
             />
             <span className="avatar-badge-active" title="Creator Online"></span>
           </div>
 
-          {/* Bio Description Details */}
+          {/* Bio Description Details with SWITCHER DROPDOWN */}
           <div className="profile-title-bio-col">
             <div className="profile-name-row">
-              <h2 className="profile-name-pro">{profileName}</h2>
+              <div className="profile-selector-wrap">
+                <select 
+                  className="profile-switcher-dropdown"
+                  value={activeProfileId}
+                  onChange={(e) => {
+                    if (e.target.value === "add_new") {
+                      setShowAddProfileModal(true);
+                      e.target.value = activeProfileId; // reset visual dropdown state
+                    } else {
+                      setActiveProfileId(e.target.value);
+                    }
+                  }}
+                >
+                  {profiles.map(p => (
+                    <option key={p.id} value={p.id}>{p.name}</option>
+                  ))}
+                  <option value="add_new">+ Add New Profile...</option>
+                </select>
+                <ChevronDown size={14} className="dropdown-chevron" />
+              </div>
               <span className="badge-verified">
                 <Award size={12} color="white" />
-                <span>Verified Studio Partner</span>
+                <span>{activeProfile.role}</span>
               </span>
             </div>
             
             <div className="profile-meta-row">
               <span className="meta-item"><MapPin size={13} color="var(--primary)" /> Hyderabad, TS</span>
               <span className="meta-item-sep">•</span>
-              <span className="meta-item">{profileEmail}</span>
+              <span className="meta-item">{activeProfile.email}</span>
             </div>
 
-            <p className="profile-bio-pro">{profileBio}</p>
+            <p className="profile-bio-pro">{activeProfile.bio}</p>
           </div>
 
           {/* Dynamic Stats Row & Action Button */}
           <div className="profile-header-right-col">
             <div className="profile-stats-row-pro">
               <div className="stat-pill-pro">
-                <span className="stat-num-pro">120+</span>
+                <span className="stat-num-pro">{activeProfile.shoots}</span>
                 <span className="stat-lbl-pro">Shoots</span>
               </div>
               <div className="stat-pill-pro">
-                <span className="stat-num-pro">4.9 ★</span>
+                <span className="stat-num-pro">{activeProfile.rating}</span>
                 <span className="stat-lbl-pro">Rating</span>
               </div>
               <div className="stat-pill-pro">
-                <span className="stat-num-pro">15K</span>
+                <span className="stat-num-pro">{activeProfile.followers}</span>
                 <span className="stat-lbl-pro">Followers</span>
               </div>
             </div>
@@ -303,7 +419,7 @@ const ProfilePage = () => {
                   <DollarSign size={20} />
                 </div>
                 <div className="kpi-info-col">
-                  <span className="kpi-val">₹1,42,800</span>
+                  <span className="kpi-val">{activeProfile.revenue}</span>
                   <span className="kpi-lbl">Gross Revenue</span>
                   <span className="kpi-trend positive"><TrendingUp size={10} /> +12.5% this mo.</span>
                 </div>
@@ -314,7 +430,7 @@ const ProfilePage = () => {
                   <CheckCircle2 size={20} />
                 </div>
                 <div className="kpi-info-col">
-                  <span className="kpi-val">99.2%</span>
+                  <span className="kpi-val">{activeProfile.success}</span>
                   <span className="kpi-lbl">Booking Success</span>
                   <span className="kpi-trend positive">Superhost Status</span>
                 </div>
@@ -325,7 +441,7 @@ const ProfilePage = () => {
                   <ClipboardList size={20} />
                 </div>
                 <div className="kpi-info-col">
-                  <span className="kpi-val">{bookings.length + 3}</span>
+                  <span className="kpi-val">{bookings.length + (activeProfileId === "prof-1" ? 3 : 0)}</span>
                   <span className="kpi-lbl">Total Projects</span>
                   <span className="kpi-trend positive">{bookings.length} active bookings</span>
                 </div>
@@ -336,7 +452,7 @@ const ProfilePage = () => {
                   <Eye size={20} />
                 </div>
                 <div className="kpi-info-col">
-                  <span className="kpi-val">1,284</span>
+                  <span className="kpi-val">{activeProfile.views}</span>
                   <span className="kpi-lbl">Profile Views</span>
                   <span className="kpi-trend positive">+28% Traffic</span>
                 </div>
@@ -516,56 +632,70 @@ const ProfilePage = () => {
                   Manage rates, live visibility, and view traffic metrics for your listed studios and equipment.
                 </p>
               </div>
-              <button className="pro-btn-primary" onClick={() => navigate('/create')}>
+              <button className="pro-btn-primary" onClick={() => {
+                if (activeProfileId !== "prof-1") {
+                  triggerToast(`Must be main studio owner profile to add properties.`);
+                } else {
+                  navigate('/create');
+                }
+              }}>
                 <Plus size={16} /> Add Listing
               </button>
             </div>
 
-            <div className="owned-listings-grid">
-              {userOwnedListings.map(item => (
-                <div key={item.id} className="owned-listing-card">
-                  <div className="owned-card-img-wrap">
-                    <img src={item.image} alt={item.title} className="owned-card-img" />
-                    <span className="owned-card-badge">{item.type}</span>
-                  </div>
-                  <div className="owned-card-content">
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                      <span className="owned-card-title">{item.title}</span>
-                      <span className="owned-card-price">₹{item.price}/{item.priceUnit}</span>
+            {activeProfileId === "prof-1" ? (
+              <div className="owned-listings-grid">
+                {userOwnedListings.map(item => (
+                  <div key={item.id} className="owned-listing-card">
+                    <div className="owned-card-img-wrap">
+                      <img src={item.image} alt={item.title} className="owned-card-img" />
+                      <span className="owned-card-badge">{item.type}</span>
                     </div>
+                    <div className="owned-card-content">
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <span className="owned-card-title">{item.title}</span>
+                        <span className="owned-card-price">₹{item.price}/{item.priceUnit}</span>
+                      </div>
 
-                    <div className="owned-card-metrics">
-                      <div className="metric-tag">
-                        <Eye size={12} />
-                        <span>{item.views} Views</span>
+                      <div className="owned-card-metrics">
+                        <div className="metric-tag">
+                          <Eye size={12} />
+                          <span>{item.views} Views</span>
+                        </div>
+                        <div className="metric-tag">
+                          <Activity size={12} />
+                          <span>Live Status</span>
+                        </div>
                       </div>
-                      <div className="metric-tag">
-                        <Activity size={12} />
-                        <span>Live Status</span>
-                      </div>
-                    </div>
 
-                    <div className="owned-card-actions">
-                      <div className="visibility-control">
-                        <label className="switch">
-                          <input type="checkbox" defaultChecked={item.active} onChange={() => triggerToast(`Listing visibility toggled.`)} />
-                          <span className="slider"></span>
-                        </label>
-                        <span className="visibility-label">Active</span>
-                      </div>
-                      <div className="button-group-right">
-                        <button className="action-btn-sm" onClick={() => triggerToast("Listing rates locked for edit.")}>
-                          <Edit3 size={12} /> Edit
-                        </button>
-                        <button className="action-btn-sm danger" onClick={() => triggerToast("Cannot delete primary mock listings.")}>
-                          <Trash2 size={12} /> Remove
-                        </button>
+                      <div className="owned-card-actions">
+                        <div className="visibility-control">
+                          <label className="switch">
+                            <input type="checkbox" defaultChecked={item.active} onChange={() => triggerToast(`Listing visibility toggled.`)} />
+                            <span className="slider"></span>
+                          </label>
+                          <span className="visibility-label">Active</span>
+                        </div>
+                        <div className="button-group-right">
+                          <button className="action-btn-sm" onClick={() => triggerToast("Listing rates locked for edit.")}>
+                            <Edit3 size={12} /> Edit
+                          </button>
+                          <button className="action-btn-sm danger" onClick={() => triggerToast("Cannot delete primary mock listings.")}>
+                            <Trash2 size={12} /> Remove
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div className="timeline-empty" style={{ background: 'var(--card-bg)', border: '1px solid var(--border)', borderRadius: '16px', padding: '40px' }}>
+                <Grid size={24} color="var(--text-muted)" />
+                <span style={{ fontWeight: '600', marginTop: '8px' }}>No properties listed under this profile yet.</span>
+                <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>Add spaces or gear rentals using the listing panel.</p>
+              </div>
+            )}
           </div>
         )}
 
@@ -730,6 +860,115 @@ const ProfilePage = () => {
         )}
 
       </div>
+
+      {/* 5. Add Profile Modal Overlay */}
+      {showAddProfileModal && (
+        <div className="profile-modal-overlay" onClick={() => setShowAddProfileModal(false)}>
+          <div className="profile-modal-body" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header-row">
+              <h3 className="section-title-pro">Create Creator Profile</h3>
+              <button className="close-modal-btn" onClick={() => setShowAddProfileModal(false)}>
+                &times;
+              </button>
+            </div>
+            
+            <form onSubmit={handleAddProfileSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '12px' }}>
+              <div className="form-group-row">
+                <div className="form-group">
+                  <label className="form-label">Profile Name</label>
+                  <input 
+                    type="text" 
+                    placeholder="e.g. Wedding Filming Co" 
+                    value={newProfileName} 
+                    onChange={(e) => setNewProfileName(e.target.value)} 
+                    className="form-input-pro"
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Role / Tag</label>
+                  <select 
+                    value={newProfileRole} 
+                    onChange={(e) => setNewProfileRole(e.target.value)} 
+                    className="form-input-pro"
+                  >
+                    <option value="Verified Photographer">Verified Photographer</option>
+                    <option value="Verified Studio Partner">Studio Lot Partner</option>
+                    <option value="Verified Model">Professional Model</option>
+                    <option value="Verified Gear Rental">Equipment supplier</option>
+                    <option value="Verified Creator">Content Creator</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="form-group-row">
+                <div className="form-group">
+                  <label className="form-label">Support Email</label>
+                  <input 
+                    type="email" 
+                    placeholder="creator@pickmyshoot.com" 
+                    value={newProfileEmail} 
+                    onChange={(e) => setNewProfileEmail(e.target.value)} 
+                    className="form-input-pro"
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Contact Phone</label>
+                  <input 
+                    type="text" 
+                    placeholder="+91 99999 88888" 
+                    value={newProfilePhone} 
+                    onChange={(e) => setNewProfilePhone(e.target.value)} 
+                    className="form-input-pro"
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Choose Avatar</label>
+                <div className="avatar-options-grid">
+                  {[
+                    "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80",
+                    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80",
+                    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80",
+                    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80",
+                    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80"
+                  ].map((url, i) => (
+                    <img 
+                      key={i} 
+                      src={url} 
+                      className={`avatar-option-pill ${newProfileAvatar === url ? 'selected' : ''}`}
+                      onClick={() => setNewProfileAvatar(url)}
+                      alt={`Avatar option ${i+1}`}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Creator Biography / Bio</label>
+                <textarea 
+                  placeholder="Tell clients about your photography gear, studios, and visual specialties..." 
+                  value={newProfileBio} 
+                  onChange={(e) => setNewProfileBio(e.target.value)} 
+                  className="form-textarea-pro"
+                  style={{ minHeight: '60px' }}
+                ></textarea>
+              </div>
+
+              <div className="modal-footer-actions">
+                <button type="button" className="modal-cancel-btn" onClick={() => setShowAddProfileModal(false)}>
+                  Cancel
+                </button>
+                <button type="submit" className="pro-btn-primary">
+                  Create Profile
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
     </div>
   );
