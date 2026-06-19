@@ -155,62 +155,7 @@ const Layout = () => {
                 <span>List Space / Gear</span>
               </button>
 
-              {/* Authentication Widget */}
-              {isAuthenticated ? (
-                <div 
-                  className="user-profile-menu-container"
-                  onMouseLeave={() => setUserDropdownOpen(false)}
-                >
-                  <button 
-                    className="user-avatar-badge-btn" 
-                    onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                    style={{ border: 'none', background: 'none', padding: 0, cursor: 'pointer', display: 'flex', alignItems: 'center' }}
-                  >
-                    <img 
-                      src={currentUser?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=40&q=80'} 
-                      className="header-user-avatar" 
-                      alt="User Profile" 
-                      style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--primary)' }}
-                    />
-                  </button>
-                  {userDropdownOpen && (
-                    <div className="header-user-dropdown-card">
-                      <div className="dropdown-user-info">
-                        <div className="user-name-role">
-                          <span className="dropdown-user-name">{currentUser?.name}</span>
-                          <span className="dropdown-user-role">{currentUser?.role}</span>
-                        </div>
-                      </div>
-                      <div className="dropdown-menu-list">
-                        <button className="dropdown-menu-item-btn" onClick={() => { navigate('/profile'); setUserDropdownOpen(false); }}>
-                          Creator Dashboard
-                        </button>
-                        <button className="dropdown-menu-item-btn logout-btn-action" onClick={() => { logoutUser(); setUserDropdownOpen(false); navigate('/'); }}>
-                          Sign Out
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <button 
-                  className="header-secondary-cta"
-                  onClick={() => { navigate('/login'); setSelectedItem(null); }}
-                  style={{ 
-                    padding: '8px 16px', 
-                    borderRadius: '10px', 
-                    border: '1.5px solid var(--primary)', 
-                    background: 'transparent', 
-                    color: 'var(--primary)', 
-                    fontWeight: '600', 
-                    fontSize: '13px', 
-                    cursor: 'pointer',
-                    transition: 'all var(--transition-fast)'
-                  }}
-                >
-                  Sign In
-                </button>
-              )}
+
             </div>
 
           </div>
