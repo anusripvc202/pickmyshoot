@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { 
   popularServices as initialServices, 
   studios as initialStudios, 
@@ -48,6 +48,20 @@ export const AppProvider = ({ children }) => {
   ]);
 
   const [activeProfileId, setActiveProfileId] = useState("prof-1");
+
+  // 1.5 Authentication Global States
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  // Sync currentUser details when profiles list is edited
+  useEffect(() => {
+    if (currentUser) {
+      const updatedUser = profiles.find(p => p.id === currentUser.id);
+      if (updatedUser && JSON.stringify(updatedUser) !== JSON.stringify(currentUser)) {
+        setCurrentUser(updatedUser);
+      }
+    }
+  }, [profiles, currentUser]);
   
   // Lists
   const [services, setServices] = useState(initialServices);
@@ -151,6 +165,67 @@ export const AppProvider = ({ children }) => {
     }
   };
 
+  // Authenticate user session
+  const loginUser = (email, password, demoProfileId = null) => {
+    if (demoProfileId) {
+      const foundProfile = profiles.find(p => p.id === demoProfileId);
+      if (foundProfile) {
+        setCurrentUser(foundProfile);
+        setActiveProfileId(foundProfile.id);
+        setIsAuthenticated(true);
+        triggerToast(`Welcome back, ${foundProfile.name}!`);
+        return true;
+      }
+      return false;
+    }
+
+    const foundProfile = profiles.find(p => p.email.toLowerCase() === email.toLowerCase());
+    if (foundProfile) {
+      setCurrentUser(foundProfile);
+      setActiveProfileId(foundProfile.id);
+      setIsAuthenticated(true);
+      triggerToast(`Welcome back, ${foundProfile.name}!`);
+      return true;
+    } else {
+      triggerToast("Invalid credentials. Try using a demo login!");
+      return false;
+    }
+  };
+
+  // Register new profile and auto-login
+  const signupUser = (name, email, password, role) => {
+    const newProfileId = `prof-${Date.now()}`;
+    const newProfile = {
+      id: newProfileId,
+      name: name,
+      role: role || "Verified Photographer",
+      email: email,
+      phone: "+91 99999 88888",
+      bio: "Newly registered visual creator profile.",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=180&q=80",
+      shoots: "0",
+      rating: "5.0 ★",
+      followers: "0",
+      revenue: "₹0",
+      success: "100%",
+      views: "1"
+    };
+
+    setProfiles(prev => [...prev, newProfile]);
+    setCurrentUser(newProfile);
+    setActiveProfileId(newProfileId);
+    setIsAuthenticated(true);
+    triggerToast(`Welcome to PickMyShoot, ${name}!`);
+    return true;
+  };
+
+  // Sign out and destroy session state
+  const logoutUser = () => {
+    setIsAuthenticated(false);
+    setCurrentUser(null);
+    triggerToast("Logged out successfully.");
+  };
+
   return (
     <AppContext.Provider value={{
       theme, setTheme,
@@ -176,7 +251,12 @@ export const AppProvider = ({ children }) => {
       handleBookingSubmit,
       profiles, setProfiles,
       activeProfileId, setActiveProfileId,
-      toggleListingActive
+      toggleListingActive,
+      isAuthenticated,
+      currentUser,
+      loginUser,
+      signupUser,
+      logoutUser
     }}>
       {children}
     </AppContext.Provider>
