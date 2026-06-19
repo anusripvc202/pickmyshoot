@@ -124,13 +124,23 @@ const Layout = () => {
               >
                 My Bookings
               </NavLink>
-              <NavLink 
-                to="/profile" 
-                className={({ isActive }) => `header-tab-btn ${isActive ? 'active' : ''}`}
-                onClick={() => setSelectedItem(null)}
-              >
-                Profile
-              </NavLink>
+              {isAuthenticated ? (
+                <NavLink 
+                  to="/profile" 
+                  className={({ isActive }) => `header-tab-btn ${isActive ? 'active' : ''}`}
+                  onClick={() => setSelectedItem(null)}
+                >
+                  Profile
+                </NavLink>
+              ) : (
+                <NavLink 
+                  to="/login" 
+                  className={({ isActive }) => `header-tab-btn ${isActive ? 'active' : ''}`}
+                  onClick={() => setSelectedItem(null)}
+                >
+                  Sign In
+                </NavLink>
+              )}
             </div>
 
             {/* Right actions */}
@@ -616,14 +626,25 @@ const Layout = () => {
           <Calendar size={20} />
           <span>Bookings</span>
         </NavLink>
-        <NavLink 
-          to="/profile" 
-          className={({ isActive }) => `mobile-nav-item ${isActive ? 'active' : ''}`}
-          onClick={() => setSelectedItem(null)}
-        >
-          <User size={20} />
-          <span>Profile</span>
-        </NavLink>
+        {isAuthenticated ? (
+          <NavLink 
+            to="/profile" 
+            className={({ isActive }) => `mobile-nav-item ${isActive ? 'active' : ''}`}
+            onClick={() => setSelectedItem(null)}
+          >
+            <User size={20} />
+            <span>Profile</span>
+          </NavLink>
+        ) : (
+          <NavLink 
+            to="/login" 
+            className={({ isActive }) => `mobile-nav-item ${isActive ? 'active' : ''}`}
+            onClick={() => setSelectedItem(null)}
+          >
+            <User size={20} />
+            <span>Sign In</span>
+          </NavLink>
+        )}
       </nav>
 
     </div>
