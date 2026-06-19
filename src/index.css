@@ -360,7 +360,7 @@ body {
 }
 
 .hero-banner {
-  background: linear-gradient(180deg, #a90c22 0%, #800615 100%);
+  background: linear-gradient(135deg, #C8102E 0%, #800A1A 100%);
   border-radius: 28px;
   color: white;
   position: relative;
@@ -370,13 +370,6 @@ body {
   padding: 0 48px;
   transform-style: preserve-3d;
   transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.6s ease;
-}
-
-/* Browser/Desktop viewport background override */
-@media (min-width: 769px) {
-  .hero-banner {
-    background: linear-gradient(180deg, #a90c22 0%, #800615 100%) !important;
-  }
 }
 
 .hero-banner:hover {
@@ -799,12 +792,30 @@ body {
   margin-bottom: 48px;
 }
 
-/* standard 5-column card grid */
+/* Horizontal scroll row for all card sections */
 .desktop-card-grid-5 {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  display: flex;
+  flex-direction: row;
   gap: 16px;
-  margin-bottom: 48px;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 12px 0 20px 0;
+  margin-bottom: 32px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;       /* Firefox */
+  -ms-overflow-style: none;    /* IE/Edge */
+}
+
+.desktop-card-grid-5::-webkit-scrollbar {
+  display: none;               /* Chrome/Safari */
+}
+
+/* Fixed card widths inside scroll rows */
+.desktop-card-grid-5 > * {
+  flex: 0 0 220px;
+  min-width: 220px;
+  scroll-snap-align: start;
 }
 
 /* Visual Cards - Services */
@@ -3753,8 +3764,10 @@ input:checked + .slider:before {
     gap: 20px;
   }
 
-  .desktop-card-grid-5 {
-    grid-template-columns: repeat(3, 1fr);
+  /* Scroll row stays horizontal on tablets */
+  .desktop-card-grid-5 > * {
+    flex: 0 0 180px;
+    min-width: 180px;
   }
 }
 
