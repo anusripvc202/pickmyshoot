@@ -5098,3 +5098,334 @@ input:checked + .slider:before {
   background-color: var(--primary-hover);
 }
 
+/* ===================================================
+   PROFESSIONAL CREATOR PROFILE LAYOUT & PORTFOLIO
+   =================================================== */
+
+.profile-header-right-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 12px;
+}
+
+@media (max-width: 900px) {
+  .profile-header-right-col {
+    align-items: center;
+    width: 100%;
+    margin-top: 12px;
+  }
+}
+
+.profile-stats-row-pro {
+  display: flex;
+  gap: 16px;
+}
+
+.stat-pill-pro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-app);
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  border-radius: 12px;
+  min-width: 80px;
+  text-align: center;
+}
+
+.stat-num-pro {
+  font-size: 16px;
+  font-weight: 850;
+  color: var(--text-main);
+  font-family: var(--font-heading);
+}
+
+.stat-lbl-pro {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+/* Spin animation details for Avatar */
+.avatar-overlap-wrap::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px dashed rgba(var(--primary-rgb), 0.3);
+  animation: avatar-spin 20s linear infinite;
+  pointer-events: none;
+  transition: all 0.5s ease;
+}
+
+.profile-header-card:hover .avatar-overlap-wrap::before {
+  border-color: var(--primary);
+  inset: -10px;
+}
+
+@keyframes avatar-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Portfolio Gallery styling */
+.tab-portfolio-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 8px 0;
+}
+
+.portfolio-masonry-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  grid-auto-flow: dense;
+}
+
+@media (max-width: 900px) {
+  .portfolio-masonry-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .portfolio-masonry-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+.portfolio-item-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: var(--border);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.portfolio-item-card.portrait {
+  grid-row: span 2;
+  aspect-ratio: 2 / 3;
+}
+
+.portfolio-item-card.landscape {
+  aspect-ratio: 3 / 2;
+}
+
+.portfolio-item-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.portfolio-img-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.portfolio-main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.portfolio-item-card:hover .portfolio-main-img {
+  transform: scale(1.06);
+}
+
+.portfolio-hover-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.3) 60%, transparent 100%);
+  opacity: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 20px;
+  transition: opacity var(--transition-normal);
+  z-index: 2;
+}
+
+.portfolio-item-card:hover .portfolio-hover-overlay {
+  opacity: 1;
+}
+
+.portfolio-hover-details {
+  width: 100%;
+  color: #ffffff;
+  transform: translateY(10px);
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.portfolio-item-card:hover .portfolio-hover-details {
+  transform: translateY(0);
+}
+
+.portfolio-item-category {
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.portfolio-item-title {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+.portfolio-item-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+}
+
+.portfolio-likes {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+}
+
+.portfolio-action-view {
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 700;
+}
+
+/* Verified Testimonials Widget */
+.testimonials-section-widget {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.testimonials-grid-pro {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .testimonials-grid-pro {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.testimonial-card-pro {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.4s ease, border-color 0.4s ease;
+}
+
+.testimonial-card-pro:hover {
+  transform: translateY(-2px);
+  border-color: rgba(var(--primary-rgb), 0.3);
+}
+
+.testimonial-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.testimonial-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border);
+}
+
+.testimonial-client-meta {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.client-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.client-company {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.client-rating-stars {
+  display: flex;
+  gap: 2px;
+}
+
+.testimonial-comment {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Custom Settings form inputs */
+.form-group-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 576px) {
+  .form-group-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.form-input-pro, .form-textarea-pro {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: var(--bg-app);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--text-main);
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.form-input-pro:focus, .form-textarea-pro:focus {
+  border-color: var(--primary);
+  background-color: var(--bg-container);
+  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.05);
+}
+
+

@@ -16,13 +16,14 @@ import {
   CheckCircle2,
   Clock,
   Calendar,
-  ArrowUpRight,
-  Lock,
   Grid,
   Trash2,
   Edit3,
   MessageSquare,
-  ClipboardList
+  ClipboardList,
+  ThumbsUp,
+  Star,
+  Share2
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { useNavigate } from 'react-router-dom';
@@ -52,10 +53,94 @@ const ProfilePage = () => {
     'Premium visual productions hub & studio lot manager. Hosting state-of-the-art camera rentals, lighting packages, and fashion models portfolios across South India.'
   );
 
+  // Sharing interaction state
+  const [shareText, setShareText] = useState('Share Dashboard');
+
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setShareText('Copied! ✓');
+    triggerToast("Dashboard URL copied to clipboard!");
+    setTimeout(() => {
+      setShareText('Share Dashboard');
+    }, 2000);
+  };
+
   const handleProfileUpdate = (e) => {
     e.preventDefault();
     triggerToast("Profile details updated successfully!");
   };
+
+  // Mock Portfolio Items (landscape & portrait)
+  const portfolioItems = [
+    {
+      id: "pf-1",
+      title: "Royal Bridal Lookbook",
+      category: "Bridal / Ethnic Wear",
+      image: "https://images.unsplash.com/photo-1591555200118-05306ded3f0a?auto=format&fit=crop&w=600&q=80",
+      likes: 312,
+      aspect: "portrait"
+    },
+    {
+      id: "pf-2",
+      title: "E-Commerce Gadget Shoot",
+      category: "Product / Commercial",
+      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80",
+      likes: 198,
+      aspect: "landscape"
+    },
+    {
+      id: "pf-3",
+      title: "Daylight Fashion Editorial",
+      category: "High-Fashion / Western",
+      image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=600&q=80",
+      likes: 425,
+      aspect: "portrait"
+    },
+    {
+      id: "pf-4",
+      title: "Premium SUV Advertising",
+      category: "Automotive / Action",
+      image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=600&q=80",
+      likes: 184,
+      aspect: "landscape"
+    },
+    {
+      id: "pf-5",
+      title: "Gourmet Dessert Catalog",
+      category: "Food / Styling",
+      image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80",
+      likes: 290,
+      aspect: "portrait"
+    },
+    {
+      id: "pf-6",
+      title: "Minimalist Portrait Studies",
+      category: "Fine Art / Studio Studio",
+      image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
+      likes: 356,
+      aspect: "landscape"
+    }
+  ];
+
+  // Client Testimonials
+  const clientReviews = [
+    {
+      id: "rev-1",
+      client: "Siddharth Sen",
+      company: "Aura Couture",
+      rating: 5,
+      comment: "Absolutely outstanding studio setup. The lighting equipment included with the Loft Studio rental was world-class. Exceptionally clean spaces and professional staff.",
+      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      id: "rev-2",
+      client: "Meera Nair",
+      company: "D2C Cosmetics",
+      rating: 5,
+      comment: "Rented the Sony mirrorless camera kits and the Chroma green room. Pristine equipment condition, zero failures, and quick crew response on bookings.",
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1200&q=80"
+    }
+  ];
 
   // Listings "owned" by the user
   const userOwnedListings = [
@@ -71,8 +156,8 @@ const ProfilePage = () => {
     },
     {
       id: "gr-1",
-      title: "Sony FX3 Cinema Kit",
-      price: 3500,
+      title: "Canon R6 Mark II",
+      price: 2000,
       priceUnit: "day",
       image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=500&q=80",
       type: "Camera Gear",
@@ -129,10 +214,26 @@ const ProfilePage = () => {
             <p className="profile-bio-pro">{profileBio}</p>
           </div>
 
-          {/* Quick Header CTA */}
-          <div className="profile-header-actions">
-            <button className="pro-btn-primary" onClick={() => triggerToast("Dashboard shared to clipboard!")}>
-              Share Dashboard
+          {/* Dynamic Stats Row & Action Button */}
+          <div className="profile-header-right-col">
+            <div className="profile-stats-row-pro">
+              <div className="stat-pill-pro">
+                <span className="stat-num-pro">120+</span>
+                <span className="stat-lbl-pro">Shoots</span>
+              </div>
+              <div className="stat-pill-pro">
+                <span className="stat-num-pro">4.9 ★</span>
+                <span className="stat-lbl-pro">Rating</span>
+              </div>
+              <div className="stat-pill-pro">
+                <span className="stat-num-pro">15K</span>
+                <span className="stat-lbl-pro">Followers</span>
+              </div>
+            </div>
+
+            <button className="pro-btn-primary" onClick={handleShare}>
+              <Share2 size={13} />
+              <span>{shareText}</span>
             </button>
           </div>
 
@@ -147,6 +248,13 @@ const ProfilePage = () => {
         >
           <Activity size={16} />
           <span>Overview</span>
+        </button>
+        <button 
+          className={`profile-nav-tab ${activeTab === 'portfolio' ? 'active' : ''}`}
+          onClick={() => setActiveTab('portfolio')}
+        >
+          <Award size={16} />
+          <span>Portfolio Gallery</span>
         </button>
         <button 
           className={`profile-nav-tab ${activeTab === 'listings' ? 'active' : ''}`}
@@ -318,6 +426,73 @@ const ProfilePage = () => {
 
             </div>
 
+            {/* Testimonials segment */}
+            <div className="testimonials-section-widget">
+              <h3 className="section-title-pro">Verified Client Testimonials</h3>
+              <p className="section-subtitle-pro">What top brands and creators say about booking with our workspace</p>
+              
+              <div className="testimonials-grid-pro">
+                {clientReviews.map(rev => (
+                  <div key={rev.id} className="testimonial-card-pro">
+                    <div className="testimonial-header">
+                      <img src={rev.avatar} className="testimonial-avatar" alt={rev.client} />
+                      <div className="testimonial-client-meta">
+                        <span className="client-name">{rev.client}</span>
+                        <span className="client-company">{rev.company}</span>
+                      </div>
+                      <div className="client-rating-stars">
+                        {[...Array(rev.rating)].map((_, i) => (
+                          <Star key={i} size={12} fill="#ffaa00" color="#ffaa00" />
+                        ))}
+                      </div>
+                    </div>
+                    <p className="testimonial-comment">"{rev.comment}"</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        )}
+
+        {/* ===================================================
+           TAB: PORTFOLIO GALLERY (NEW)
+           =================================================== */}
+        {activeTab === 'portfolio' && (
+          <div className="tab-portfolio-gallery">
+            <div className="portfolio-header-row">
+              <div>
+                <h3 className="section-title-pro">Creative Production Portfolio</h3>
+                <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                  A visual archive of previous shoots, fashion catalog projects, and automotive commercials executed by our studio lot.
+                </p>
+              </div>
+            </div>
+
+            {/* Masonry-style/Premium Gallery Grid */}
+            <div className="portfolio-masonry-grid">
+              {portfolioItems.map(item => (
+                <div key={item.id} className={`portfolio-item-card ${item.aspect}`}>
+                  <div className="portfolio-img-container">
+                    <img src={item.image} alt={item.title} className="portfolio-main-img" />
+                    
+                    {/* Hover Content Overlay */}
+                    <div className="portfolio-hover-overlay">
+                      <div className="portfolio-hover-details">
+                        <span className="portfolio-item-category">{item.category}</span>
+                        <h4 className="portfolio-item-title">{item.title}</h4>
+                        <div className="portfolio-item-footer">
+                          <span className="portfolio-likes">
+                            <ThumbsUp size={11} fill="white" /> {item.likes} likes
+                          </span>
+                          <span className="portfolio-action-view">View Shot</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
@@ -508,30 +683,32 @@ const ProfilePage = () => {
               <h3 className="section-title-pro">Update Public Bio</h3>
               
               <form onSubmit={handleProfileUpdate} style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '12px' }}>
-                <div className="form-group">
-                  <label className="form-label">Display Name</label>
-                  <input 
-                    type="text" 
-                    value={profileName} 
-                    onChange={(e) => setProfileName(e.target.value)} 
-                    className="form-input" 
-                  />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Support Email</label>
-                  <input 
-                    type="email" 
-                    value={profileEmail} 
-                    onChange={(e) => setProfileEmail(e.target.value)} 
-                    className="form-input" 
-                  />
+                <div className="form-group-row">
+                  <div className="form-group">
+                    <label className="form-label">Display Name</label>
+                    <input 
+                      type="text" 
+                      value={profileName} 
+                      onChange={(e) => setProfileName(e.target.value)} 
+                      className="form-input-pro" 
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Support Email</label>
+                    <input 
+                      type="email" 
+                      value={profileEmail} 
+                      onChange={(e) => setProfileEmail(e.target.value)} 
+                      className="form-input-pro" 
+                    />
+                  </div>
                 </div>
                 <div className="form-group">
                   <label className="form-label">Brief Studio Biography</label>
                   <textarea 
                     value={profileBio} 
                     onChange={(e) => setProfileBio(e.target.value)} 
-                    className="form-textarea"
+                    className="form-textarea-pro"
                     style={{ minHeight: '80px' }}
                   ></textarea>
                 </div>
