@@ -79,6 +79,36 @@ export const popularServices = [
     category: "Book Shoot",
     image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=500&q=80",
     description: "Vibrant birthday celebration coverage. Includes cake-smash setups for kids or sleek portraits for adults, capturing candid joy and setup details."
+  },
+  {
+    id: "ps-9",
+    title: "Fashion Catalog Shoot",
+    price: 14999,
+    rating: 4.8,
+    reviews: 110,
+    category: "Book Shoot",
+    image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=500&q=80",
+    description: "Professional fashion editorial and lookbook photography. High-end lighting setups with focus on clothing textures and model poses."
+  },
+  {
+    id: "ps-10",
+    title: "Food & Culinary Shoot",
+    price: 4499,
+    rating: 4.9,
+    reviews: 130,
+    category: "Book Shoot",
+    image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=500&q=80",
+    description: "Stunning food styling and commercial photography for restaurant menus, packaging, cookbooks, and high-impact social media promotions."
+  },
+  {
+    id: "ps-11",
+    title: "Commercial Film Shoot",
+    price: 24999,
+    rating: 4.9,
+    reviews: 85,
+    category: "Book Shoot",
+    image: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=500&q=80",
+    description: "Full-scale corporate video production. Focus on company core values, client testimonials, cinematic b-rolls, and high-definition narrative edits."
   }
 ];
 
@@ -150,6 +180,57 @@ export const studios = [
     features: ["Parking", "Wi-Fi"],
     isFeatured: true,
     description: "A large industrial warehouse studio featuring exposed pipes, brick walls, and multiple rustic props. Great for music videos, cinematic films, and grunge fashion shoots."
+  },
+  {
+    id: "st-5",
+    title: "Chroma Green Room",
+    price: 1000,
+    priceUnit: "hr",
+    rating: 4.6,
+    reviews: 42,
+    location: "Begumpet, Hyderabad",
+    distance: "5.1 km away",
+    image: "https://images.unsplash.com/photo-1601506521937-0121a7fc2a6b?auto=format&fit=crop&w=500&q=80",
+    area: "800 Sq.ft",
+    capacity: "6 People",
+    amenities: ["Full Cyc Green Screen", "Soundproofing", "Controllable LED Grid", "Makeup Room"],
+    features: ["AC", "Wi-Fi"],
+    isFeatured: false,
+    description: "Professional virtual production green screen room with fully integrated lighting grids, ideal for vfx composition, interviews, and reels creator edits."
+  },
+  {
+    id: "st-6",
+    title: "Daylight Minimalist Space",
+    price: 2200,
+    priceUnit: "hr",
+    rating: 4.9,
+    reviews: 83,
+    location: "Jubilee Hills, Hyderabad",
+    distance: "1.9 km away",
+    image: "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=500&q=80",
+    area: "1400 Sq.ft",
+    capacity: "12 People",
+    amenities: ["Softbox Panels", "Textured Backdrops", "Changing Room", "Lounge Area"],
+    features: ["Parking", "AC", "Wi-Fi"],
+    isFeatured: true,
+    description: "Bright and airy high-ceiling studio featuring clean scandinavian styling, natural wooden floorboards, and huge floor-to-ceiling north facing windows."
+  },
+  {
+    id: "st-7",
+    title: "Vintage Library Lot",
+    price: 1900,
+    priceUnit: "hr",
+    rating: 4.8,
+    reviews: 51,
+    location: "Secunderabad, Hyderabad",
+    distance: "6.5 km away",
+    image: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=500&q=80",
+    area: "1100 Sq.ft",
+    capacity: "10 People",
+    amenities: ["Classic Mahogany Bookshelves", "Leather Sofas", "Retro Table Lamps", "Backdrops"],
+    features: ["Parking", "Wi-Fi"],
+    isFeatured: false,
+    description: "Elegant library-themed layout decorated with vintage bookshelves, leather bound books, mahogany desk, and warm ambient lighting. Perfect for academic interviews and portrait shoots."
   }
 ];
 
@@ -436,6 +517,48 @@ export const workshops = [
     location: "Begumpet, Hyderabad",
     description: "Learn how to capture candid wedding moments, handle tricky lighting at venues, manage clients, and streamline batch edits in Lightroom.",
     image: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=500&q=80",
+    isUpcoming: true
+  },
+  {
+    id: "wk-7",
+    title: "Fashion Styling Secrets",
+    price: 1299,
+    date: "24 JUL",
+    instructor: "Nisha Sen",
+    rating: 4.8,
+    reviews: 42,
+    timing: "1:00 PM - 5:00 PM",
+    location: "Jubilee Hills, Hyderabad",
+    description: "Learn fashion lookbook styling, coordinate colors, match clothing styles, and collaborate with makeup artists for high-impact model catalogs.",
+    image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=500&q=80",
+    isUpcoming: true
+  },
+  {
+    id: "wk-8",
+    title: "Lightroom Mastery Course",
+    price: 699,
+    date: "30 JUL",
+    instructor: "EditX Studios",
+    rating: 4.7,
+    reviews: 95,
+    timing: "3:00 PM - 7:00 PM",
+    location: "Virtual (Zoom Live)",
+    description: "Master bulk photo importing, preset creation, color profiles calibration, color grading, skin tone correction, and fast batch-exporting presets.",
+    image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=500&q=80",
+    isUpcoming: true
+  },
+  {
+    id: "wk-9",
+    title: "The Creative Agency Business",
+    price: 1999,
+    date: "03 AUG",
+    instructor: "Kunal Malhotra",
+    rating: 4.9,
+    reviews: 58,
+    timing: "10:00 AM - 4:00 PM",
+    location: "HICC, Hyderabad",
+    description: "Learn how to price photography packages, build high-converting client proposals, close deals, scale studio operations, and draft digital copyrights licensing contracts.",
+    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=500&q=80",
     isUpcoming: true
   }
 ];

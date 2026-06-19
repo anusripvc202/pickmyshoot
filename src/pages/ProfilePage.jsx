@@ -183,7 +183,7 @@ const ProfilePage = () => {
             {/* KPI Cards Grid */}
             <div className="kpi-grid">
               <div className="kpi-card">
-                <div className="kpi-icon-wrap" style={{ background: 'rgba(255, 30, 86, 0.1)', color: 'var(--primary)' }}>
+                <div className="kpi-icon-wrap" style={{ background: 'rgba(var(--primary-rgb), 0.1)', color: 'var(--primary)' }}>
                   <DollarSign size={20} />
                 </div>
                 <div className="kpi-info-col">

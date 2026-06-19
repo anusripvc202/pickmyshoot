@@ -14,7 +14,10 @@ import {
   LayoutGrid, 
   ChevronRight, 
   Heart, 
-  Star 
+  Star,
+  Film,
+  Clapperboard,
+  Palette
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { institutes } from '../data/mockData';
@@ -181,8 +184,8 @@ const HomePage = () => {
             See All Packages <ChevronRight size={14} />
           </span>
         </div>
-        <div className="desktop-card-grid-4">
-          {services.slice(0, 4).map(service => (
+        <div className="desktop-card-grid-5 mobile-scroll-row">
+          {services.slice(0, 7).map(service => (
             <div key={service.id} className="service-card" onClick={() => openDetails(service, 'service')}>
               <div className="card-img-wrap">
                 <img src={service.image} className="card-image" alt={service.title} />
@@ -218,7 +221,7 @@ const HomePage = () => {
             See All Listings <ChevronRight size={14} />
           </span>
         </div>
-        <div className="desktop-card-grid-4">
+        <div className="desktop-card-grid-5 mobile-scroll-row">
           {studios.map(studio => (
             <div key={studio.id} className="near-you-card" onClick={() => openDetails(studio, 'studio')}>
               <div className="near-you-img-wrap">
@@ -254,23 +257,20 @@ const HomePage = () => {
         <div className="section-header">
           <h2 className="section-title">Top Film & Animation Institutes</h2>
         </div>
-        <div className="desktop-card-grid-5">
+        <div className="desktop-card-grid-5 mobile-scroll-row">
           {institutes.map(inst => (
             <div key={inst.id} className="institute-card">
-              <div className="inst-logo">
-                {inst.logo ? (
-                  <img
-                    src={inst.logo}
-                    className="inst-logo-img"
-                    alt={inst.title}
-                    onError={e => {
-                      e.currentTarget.style.display = 'none';
-                      e.currentTarget.parentElement.textContent = inst.title.split(' ').map(w => w[0]).join('').slice(0, 3);
-                    }}
-                  />
-                ) : (
-                  inst.title.split(' ').map(w => w[0]).join('').slice(0, 3)
-                )}
+              <div className="inst-logo-badge">
+                {(() => {
+                  switch (inst.id) {
+                    case 'in-1': return <Film size={22} />;
+                    case 'in-2': return <Clapperboard size={22} />;
+                    case 'in-3': return <GraduationCap size={22} />;
+                    case 'in-4': return <Palette size={22} />;
+                    case 'in-5': return <Video size={22} />;
+                    default: return <GraduationCap size={22} />;
+                  }
+                })()}
               </div>
               <div className="inst-meta">
                 <span className="inst-title">{inst.title}</span>
@@ -290,8 +290,8 @@ const HomePage = () => {
             See Workshops <ChevronRight size={14} />
           </span>
         </div>
-        <div className="desktop-card-grid-4">
-          {workshops.slice(0, 4).map(wk => (
+        <div className="desktop-card-grid-5 mobile-scroll-row">
+          {workshops.slice(0, 7).map(wk => (
             <div key={wk.id} className="workshop-card" onClick={() => openDetails(wk, 'workshop')}>
               <div className="workshop-img-wrap">
                 <img src={wk.image} className="card-image" alt={wk.title} />
