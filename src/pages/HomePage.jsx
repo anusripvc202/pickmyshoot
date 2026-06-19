@@ -121,7 +121,33 @@ const HomePage = () => {
               />
             </div>
 
-
+            {/* Right column: How it Works */}
+            <div className="hero-how-col">
+              <span className="hero-how-label">How it works</span>
+              <div className="hero-how-steps">
+                <div className="hero-how-step">
+                  <span className="hero-how-num">01</span>
+                  <div>
+                    <span className="hero-how-title">Search &amp; Filter</span>
+                    <span className="hero-how-desc">Browse studios, gear &amp; talent by location, category &amp; budget.</span>
+                  </div>
+                </div>
+                <div className="hero-how-step">
+                  <span className="hero-how-num">02</span>
+                  <div>
+                    <span className="hero-how-title">Instant Booking</span>
+                    <span className="hero-how-desc">Pick your date &amp; time slot. Confirm with secure payment in seconds.</span>
+                  </div>
+                </div>
+                <div className="hero-how-step">
+                  <span className="hero-how-num">03</span>
+                  <div>
+                    <span className="hero-how-title">Shoot &amp; Deliver</span>
+                    <span className="hero-how-desc">Show up, create magic. Receive edited content on time, every time.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
 
           </div>
         </div>
@@ -130,36 +156,6 @@ const HomePage = () => {
           <span className="indicator"></span>
           <span className="indicator"></span>
           <span className="indicator"></span>
-        </div>
-      </div>
-
-      {/* How it Works Strip */}
-      <div className="how-it-works-strip">
-        <div className="hiw-step">
-          <div className="hiw-icon">🔍</div>
-          <div className="hiw-body">
-            <span className="hiw-num">Step 01</span>
-            <span className="hiw-title">Search &amp; Filter</span>
-            <span className="hiw-desc">Browse studios, gear &amp; talent by location, category &amp; budget.</span>
-          </div>
-        </div>
-        <div className="hiw-divider" />
-        <div className="hiw-step">
-          <div className="hiw-icon">📅</div>
-          <div className="hiw-body">
-            <span className="hiw-num">Step 02</span>
-            <span className="hiw-title">Instant Booking</span>
-            <span className="hiw-desc">Pick your date &amp; slot. Confirm with secure payment in seconds.</span>
-          </div>
-        </div>
-        <div className="hiw-divider" />
-        <div className="hiw-step">
-          <div className="hiw-icon">🎬</div>
-          <div className="hiw-body">
-            <span className="hiw-num">Step 03</span>
-            <span className="hiw-title">Shoot &amp; Deliver</span>
-            <span className="hiw-desc">Show up &amp; create magic. Receive edited content on time, every time.</span>
-          </div>
         </div>
       </div>
 
