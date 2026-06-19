@@ -119,6 +119,14 @@ const ProfilePage = () => {
       image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
       likes: 356,
       aspect: "landscape"
+    },
+    {
+      id: "pf-7",
+      title: "Nature Cinematography",
+      category: "Cinematography / Nature",
+      image: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=600&q=80",
+      likes: 220,
+      aspect: "landscape"
     }
   ];
 
