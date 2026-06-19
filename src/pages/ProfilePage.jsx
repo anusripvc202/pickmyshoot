@@ -15,6 +15,7 @@ import {
   Eye,
   CheckCircle2,
   Clock,
+  Calendar,
   Grid,
   Trash2,
   Edit3,
@@ -49,7 +50,6 @@ const ProfilePage = () => {
 
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
-  const [portfolioCategory, setPortfolioCategory] = useState('All');
 
   const activeProfile = profiles.find(p => p.id === activeProfileId) || profiles[0];
 
@@ -196,16 +196,6 @@ const ProfilePage = () => {
       aspect: "landscape"
     }
   ];
-
-  // Dynamic filter for portfolio categories
-  const filteredPortfolioItems = portfolioItems.filter(item => {
-    if (portfolioCategory === 'All') return true;
-    if (portfolioCategory === 'Fashion') return item.category.toLowerCase().includes('fashion');
-    if (portfolioCategory === 'Bridal') return item.category.toLowerCase().includes('bridal');
-    if (portfolioCategory === 'Automotive') return item.category.toLowerCase().includes('automotive');
-    if (portfolioCategory === 'Commercial') return item.category.toLowerCase().includes('product') || item.category.toLowerCase().includes('commercial') || item.category.toLowerCase().includes('styling');
-    return true;
-  });
 
   // Client Testimonials
   const clientReviews = [
@@ -437,14 +427,6 @@ const ProfilePage = () => {
                 
                 {/* CSS Visual Inquiries Graph bar representation */}
                 <div className="graph-container">
-                  {/* Grid Lines in background */}
-                  <div className="graph-grid-lines">
-                    <div className="grid-line"><span className="grid-value">120</span></div>
-                    <div className="grid-line"><span className="grid-value">80</span></div>
-                    <div className="grid-line"><span className="grid-value">40</span></div>
-                    <div className="grid-line"><span className="grid-value">0</span></div>
-                  </div>
-
                   <div className="graph-bars-wrap">
                     {[
                       { month: 'Jan', shoots: 40, gear: 60 },
@@ -456,12 +438,8 @@ const ProfilePage = () => {
                     ].map((data, idx) => (
                       <div key={idx} className="graph-column-group">
                         <div className="bars-stack">
-                          <div className="bar bar-shoots" style={{ height: `${data.shoots * 0.9}px` }} title={`Shoots: ${data.shoots}`}>
-                            <span className="bar-tooltip-val">S: {data.shoots}</span>
-                          </div>
-                          <div className="bar bar-gear" style={{ height: `${data.gear * 0.9}px` }} title={`Gear: ${data.gear}`}>
-                            <span className="bar-tooltip-val">G: {data.gear}</span>
-                          </div>
+                          <div className="bar bar-shoots" style={{ height: `${data.shoots * 0.9}px` }} title={`Shoots: ${data.shoots}`}></div>
+                          <div className="bar bar-gear" style={{ height: `${data.gear * 0.9}px` }} title={`Gear: ${data.gear}`}></div>
                         </div>
                         <span className="graph-label">{data.month}</span>
                       </div>
@@ -573,22 +551,9 @@ const ProfilePage = () => {
               </div>
             </div>
 
-            {/* Portfolio Category Filters */}
-            <div className="portfolio-filter-row">
-              {['All', 'Fashion', 'Bridal', 'Automotive', 'Commercial'].map(cat => (
-                <button
-                  key={cat}
-                  className={`portfolio-filter-pill ${portfolioCategory === cat ? 'active' : ''}`}
-                  onClick={() => setPortfolioCategory(cat)}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-
             {/* Masonry-style/Premium Gallery Grid */}
             <div className="portfolio-masonry-grid">
-              {filteredPortfolioItems.map(item => (
+              {portfolioItems.map(item => (
                 <div key={item.id} className={`portfolio-item-card ${item.aspect}`}>
                   <div className="portfolio-img-container">
                     <img src={item.image} alt={item.title} className="portfolio-main-img" />

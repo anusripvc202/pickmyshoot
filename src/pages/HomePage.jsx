@@ -1,3 +1,4 @@
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Camera, 
@@ -41,98 +42,50 @@ const HomePage = () => {
 
   return (
     <>
-      {/* Splitscreen Hero Section */}
-      <div className="hero-splitscreen-container">
-        <div className="hero-left-col">
-          <div className="hero-brand-badge-pro">
-            <span className="badge-dot-glow"></span>
-            <span>HYDERABAD'S NO. 1 CREATOR MARKETPLACE</span>
-          </div>
-          <h1 className="hero-title-main">
-            Discover & Book <span>Creative Spaces</span>, Gear & Talent
-          </h1>
-          <p className="hero-subtext">
-            PickMyShoot is the ultimate marketplace for photographers, filmmakers, and content creators. Find premium studio lots, high-end camera equipment rentals, models, and editing post-production packages near you.
-          </p>
-          <div className="hero-ctas-row">
-            <button 
-              className="hero-cta-btn-primary" 
-              onClick={() => {
-                setExploreTab('services');
-                navigate('/explore');
-              }}
-            >
-              Book a Shoot
-            </button>
-            <button 
-              className="hero-cta-btn-secondary" 
-              onClick={() => {
-                setExploreTab('models');
-                navigate('/explore');
-              }}
-            >
-              Find Creators
-            </button>
-            <button 
-              className="hero-cta-btn-tertiary" 
-              onClick={() => {
-                navigate('/create');
-              }}
-            >
-              List Your Studio
-            </button>
-          </div>
-        </div>
-
-        <div className="hero-right-col">
-          <div className="hero-image-wrapper">
-            <div className="hero-blob-glow"></div>
-            <img 
-              src={`${import.meta.env.BASE_URL}banner_photographer.png`} 
-              className="hero-main-photo" 
-              alt="Creative Photographer" 
-            />
-            {/* Floating Visual Badges */}
-            <div className="floating-badge badge-top-left">
-              <span className="badge-icon">⭐</span>
-              <div className="badge-text-col">
-                <span className="badge-bold">4.9 Average</span>
-                <span className="badge-muted">Client Rating</span>
+      {/* Full-width Hero Banner Slider */}
+      <div className="hero-carousel-container">
+        <div className="hero-banner">
+          <div className="hero-banner-inner">
+            <div className="hero-banner-content">
+              <span className="hero-tag">Biggest Creator Fest</span>
+              <h1 className="hero-title">CREATOR FEST 2026</h1>
+              <div className="hero-bullets">
+                <div className="bullet-item"><span className="bullet-dot"></span><span>Workshops</span></div>
+                <div className="bullet-item"><span className="bullet-dot"></span><span>Gear Deals</span></div>
+                <div className="bullet-item"><span className="bullet-dot"></span><span>Meetups</span></div>
+                <div className="bullet-item"><span className="bullet-dot"></span><span>Awards</span></div>
               </div>
+              <button 
+                className="hero-btn" 
+                onClick={() => {
+                  setExploreTab('workshops');
+                  navigate('/explore');
+                }}
+              >
+                Explore Classes & Register
+              </button>
             </div>
-            <div className="floating-badge badge-bottom-right">
-              <span className="badge-icon">📍</span>
-              <div className="badge-text-col">
-                <span className="badge-bold">500+ Studios</span>
-                <span className="badge-muted">Across South India</span>
-              </div>
+
+            {/* Photographer Center Overlay */}
+            <div className="hero-banner-image-wrap">
+              <img 
+                src={`${import.meta.env.BASE_URL}banner_photographer.png`} 
+                className="hero-banner-image" 
+                alt="Photographer" 
+              />
+            </div>
+
+            <div className="hero-meta-col">
+              <span className="hero-offer">Early Bird 30% OFF</span>
+              <span className="hero-location">📍 20-22 JULY • HICC, HYDERABAD</span>
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Success Stats Strip */}
-      <div className="stats-strip-wrapper">
-        <div className="stats-strip-inner">
-          <div className="stat-pill-item">
-            <h3>12,000+</h3>
-            <p>Shoots Completed</p>
-          </div>
-          <div className="stat-pill-item-separator"></div>
-          <div className="stat-pill-item">
-            <h3>450+</h3>
-            <p>Studios & Spaces</p>
-          </div>
-          <div className="stat-pill-item-separator"></div>
-          <div className="stat-pill-item">
-            <h3>99.2%</h3>
-            <p>Booking Success Rate</p>
-          </div>
-          <div className="stat-pill-item-separator"></div>
-          <div className="stat-pill-item">
-            <h3>3,500+</h3>
-            <p>Vetted Equipment Items</p>
-          </div>
+        <div className="carousel-indicators">
+          <span className="indicator active"></span>
+          <span className="indicator"></span>
+          <span className="indicator"></span>
+          <span className="indicator"></span>
         </div>
       </div>
 
@@ -358,61 +311,6 @@ const HomePage = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Homepage Testimonials Section */}
-      <section className="homepage-testimonials-section" style={{ marginTop: '40px', borderTop: '1px solid var(--border)', paddingTop: '40px' }}>
-        <div className="section-header" style={{ justifyContent: 'center', textAlign: 'center', flexDirection: 'column', gap: '6px', marginBottom: '32px' }}>
-          <h2 className="section-title">What Creators &amp; Clients Say</h2>
-          <p style={{ fontSize: '13px', color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto', marginTop: '4px' }}>
-            Thousands of photographers, brands, and creative professionals rely on PickMyShoot to source production spaces, book talent, and rent high-end gear.
-          </p>
-        </div>
-
-        <div className="testimonials-grid-pro" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
-          {[
-            {
-              id: "rev-h-1",
-              client: "Aarav Sharma",
-              company: "Aura Creative Agency",
-              avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80",
-              rating: 5,
-              comment: "Booking 'The Loft Studio' through PickMyShoot was seamless. We saved hours coordinating with the studio lot owner and the invoice details were immediate."
-            },
-            {
-              id: "rev-h-2",
-              client: "Meera Nair",
-              company: "Independent Filmmaker",
-              avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80",
-              rating: 5,
-              comment: "The gear rental booking flow is unmatched. I rented a Canon R6 and lens pack for a commercial shoot, and verified pickup took less than 2 minutes."
-            },
-            {
-              id: "rev-h-3",
-              client: "Vikram Malhotra",
-              company: "D2C Fashion Hub",
-              avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80",
-              rating: 5,
-              comment: "Finding e-commerce models with verified ratings and booking them for catalog shoots has never been this simple. Highly recommended platform!"
-            }
-          ].map(rev => (
-            <div key={rev.id} className="testimonial-card-pro" style={{ background: 'var(--card-bg)', border: '1px solid var(--border)', borderRadius: '16px', padding: '24px' }}>
-              <div className="testimonial-header" style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
-                <img src={rev.avatar} className="testimonial-avatar" alt={rev.client} style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
-                <div className="testimonial-client-meta" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-                  <span className="client-name" style={{ fontSize: '13px', fontWeight: '700', color: 'var(--text-main)' }}>{rev.client}</span>
-                  <span className="client-company" style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>{rev.company}</span>
-                </div>
-                <div className="client-rating-stars" style={{ display: 'flex', gap: '2px' }}>
-                  {[...Array(rev.rating)].map((_, i) => (
-                    <Star key={i} size={11} fill="#ffaa00" color="#ffaa00" />
-                  ))}
-                </div>
-              </div>
-              <p className="testimonial-comment" style={{ fontSize: '12.5px', lineHeight: '1.5', color: 'var(--text-muted)', fontStyle: 'italic' }}>"{rev.comment}"</p>
             </div>
           ))}
         </div>
