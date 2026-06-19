@@ -25,7 +25,7 @@ function App() {
         
         {/* Protected Routes */}
         <Route path="create" element={<ProtectedRoute><CreatePage /></ProtectedRoute>} />
-        <Route path="bookings" element={<ProtectedRoute><BookingsPage /></ProtectedRoute>} />
+        <Route path="bookings" element={<BookingsPage />} />
         <Route path="profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
       </Route>
     </Routes>
