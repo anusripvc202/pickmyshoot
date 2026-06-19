@@ -12,6 +12,42 @@ const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const [theme, setTheme] = useState('light');
+
+  // 1. Multi-Profile Global States
+  const [profiles, setProfiles] = useState([
+    {
+      id: "prof-1",
+      name: "Dev Creator Workspace",
+      role: "Verified Studio Partner",
+      email: "creator.workspace@pickmyshoot.com",
+      phone: "+91 98765 43210",
+      bio: "Premium visual productions hub & studio lot manager. Hosting state-of-the-art camera rentals, lighting packages, and fashion models portfolios across South India.",
+      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=180&q=80",
+      shoots: "120+",
+      rating: "4.9 ★",
+      followers: "15K",
+      revenue: "₹1,42,800",
+      success: "99.2%",
+      views: "1,284"
+    },
+    {
+      id: "prof-2",
+      name: "Ananya Wedding Shoot",
+      role: "Verified Photographer",
+      email: "ananya.wedding@pickmyshoot.com",
+      phone: "+91 87654 32109",
+      bio: "Candid wedding & bridal catalog photographer. Documenting timeless love stories through cinematic lens across Hyderabad.",
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=180&q=80",
+      shoots: "85+",
+      rating: "4.8 ★",
+      followers: "8.2K",
+      revenue: "₹76,500",
+      success: "98.5%",
+      views: "640"
+    }
+  ]);
+
+  const [activeProfileId, setActiveProfileId] = useState("prof-1");
   
   // Lists
   const [services, setServices] = useState(initialServices);
@@ -104,6 +140,17 @@ export const AppProvider = ({ children }) => {
     triggerToast(`Booking confirmed for ${selectedItem.title}!`);
   };
 
+  // Toggle active visibility of listed spaces / gear rentals dynamically
+  const toggleListingActive = (id, category) => {
+    if (category === 'studio') {
+      setStudios(prev => prev.map(item => item.id === id ? { ...item, active: item.active === false ? true : false } : item));
+    } else if (category === 'gear') {
+      setGear(prev => prev.map(item => item.id === id ? { ...item, active: item.active === false ? true : false } : item));
+    } else if (category === 'service') {
+      setServices(prev => prev.map(item => item.id === id ? { ...item, active: item.active === false ? true : false } : item));
+    }
+  };
+
   return (
     <AppContext.Provider value={{
       theme, setTheme,
@@ -126,7 +173,10 @@ export const AppProvider = ({ children }) => {
       triggerToast,
       toggleLike,
       openDetails,
-      handleBookingSubmit
+      handleBookingSubmit,
+      profiles, setProfiles,
+      activeProfileId, setActiveProfileId,
+      toggleListingActive
     }}>
       {children}
     </AppContext.Provider>

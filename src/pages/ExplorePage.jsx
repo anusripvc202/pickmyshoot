@@ -96,6 +96,9 @@ const ExplorePage = () => {
   const getFilteredAndSortedList = () => {
     let list = [...getRawList()];
 
+    // Exclude inactive listings
+    list = list.filter(item => item.active !== false);
+
     // Search Query Filter
     if (searchQuery) {
       list = list.filter(item => 

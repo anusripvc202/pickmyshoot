@@ -22,7 +22,8 @@ const CreatePage = () => {
     setModels,
     setGear,
     setExploreTab,
-    triggerToast
+    triggerToast,
+    activeProfileId
   } = useAppContext();
 
   const navigate = useNavigate();
@@ -59,7 +60,9 @@ const CreatePage = () => {
       image: defaultImg,
       amenities: ["Verified Seller", "Premium Equipment"],
       features: ["Verified"],
-      specs: newDescription
+      specs: newDescription,
+      ownerId: activeProfileId,
+      active: true
     };
 
     if (newCategory === 'studios') {

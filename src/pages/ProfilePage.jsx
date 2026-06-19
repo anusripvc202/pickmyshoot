@@ -40,47 +40,17 @@ const ProfilePage = () => {
     gear,
     services,
     openDetails,
-    triggerToast
+    triggerToast,
+    profiles,
+    setProfiles,
+    activeProfileId,
+    setActiveProfileId,
+    toggleListingActive
   } = useAppContext();
 
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
 
-  // 1. Multiple Profiles State List
-  const [profiles, setProfiles] = useState([
-    {
-      id: "prof-1",
-      name: "Dev Creator Workspace",
-      role: "Verified Studio Partner",
-      email: "creator.workspace@pickmyshoot.com",
-      phone: "+91 98765 43210",
-      bio: "Premium visual productions hub & studio lot manager. Hosting state-of-the-art camera rentals, lighting packages, and fashion models portfolios across South India.",
-      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=180&q=80",
-      shoots: "120+",
-      rating: "4.9 ★",
-      followers: "15K",
-      revenue: "₹1,42,800",
-      success: "99.2%",
-      views: "1,284"
-    },
-    {
-      id: "prof-2",
-      name: "Ananya Wedding Shoot",
-      role: "Verified Photographer",
-      email: "ananya.wedding@pickmyshoot.com",
-      phone: "+91 87654 32109",
-      bio: "Candid wedding & bridal catalog photographer. Documenting timeless love stories through cinematic lens across Hyderabad.",
-      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=180&q=80",
-      shoots: "85+",
-      rating: "4.8 ★",
-      followers: "8.2K",
-      revenue: "₹76,500",
-      success: "98.5%",
-      views: "640"
-    }
-  ]);
-
-  const [activeProfileId, setActiveProfileId] = useState("prof-1");
   const activeProfile = profiles.find(p => p.id === activeProfileId) || profiles[0];
 
   // Local state for profile inputs in settings (synced via activeProfileId)
@@ -247,28 +217,16 @@ const ProfilePage = () => {
     }
   ];
 
-  // Listings "owned" by the user
+  // Dynamic filter for user owned listings
   const userOwnedListings = [
-    {
-      id: "st-1",
-      title: "The Loft Studio",
-      price: 1500,
-      priceUnit: "hr",
-      image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=500&q=80",
-      type: "Studio Space",
-      views: 340,
-      active: true
-    },
-    {
-      id: "gr-1",
-      title: "Canon R6 Mark II",
-      price: 2000,
-      priceUnit: "day",
-      image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=500&q=80",
-      type: "Camera Gear",
-      views: 198,
-      active: true
-    }
+    ...studios.filter(s => s.ownerId === activeProfileId || (!s.ownerId && activeProfileId === "prof-1" && (s.id === "st-1" || s.id === "st-4" || s.id === "st-6"))).map(s => ({
+      ...s,
+      type: "Studio Space"
+    })),
+    ...gear.filter(g => g.ownerId === activeProfileId || (!g.ownerId && activeProfileId === "prof-1" && (g.id === "gr-1" || g.id === "gr-6"))).map(g => ({
+      ...g,
+      type: "Camera Gear"
+    }))
   ];
 
   return (
@@ -632,18 +590,12 @@ const ProfilePage = () => {
                   Manage rates, live visibility, and view traffic metrics for your listed studios and equipment.
                 </p>
               </div>
-              <button className="pro-btn-primary" onClick={() => {
-                if (activeProfileId !== "prof-1") {
-                  triggerToast(`Must be main studio owner profile to add properties.`);
-                } else {
-                  navigate('/create');
-                }
-              }}>
+              <button className="pro-btn-primary" onClick={() => navigate('/create')}>
                 <Plus size={16} /> Add Listing
               </button>
             </div>
 
-            {activeProfileId === "prof-1" ? (
+            {userOwnedListings.length > 0 ? (
               <div className="owned-listings-grid">
                 {userOwnedListings.map(item => (
                   <div key={item.id} className="owned-listing-card">
@@ -660,7 +612,7 @@ const ProfilePage = () => {
                       <div className="owned-card-metrics">
                         <div className="metric-tag">
                           <Eye size={12} />
-                          <span>{item.views} Views</span>
+                          <span>{item.views || 340} Views</span>
                         </div>
                         <div className="metric-tag">
                           <Activity size={12} />
@@ -671,10 +623,20 @@ const ProfilePage = () => {
                       <div className="owned-card-actions">
                         <div className="visibility-control">
                           <label className="switch">
-                            <input type="checkbox" defaultChecked={item.active} onChange={() => triggerToast(`Listing visibility toggled.`)} />
+                            <input 
+                              type="checkbox" 
+                              checked={item.active !== false} 
+                              onChange={() => {
+                                const category = item.type === "Studio Space" ? "studio" : "gear";
+                                toggleListingActive(item.id, category);
+                                triggerToast(`Listing "${item.title}" visibility updated.`);
+                              }}
+                            />
                             <span className="slider"></span>
                           </label>
-                          <span className="visibility-label">Active</span>
+                          <span className="visibility-label">
+                            {item.active !== false ? 'Active' : 'Inactive'}
+                          </span>
                         </div>
                         <div className="button-group-right">
                           <button className="action-btn-sm" onClick={() => triggerToast("Listing rates locked for edit.")}>
