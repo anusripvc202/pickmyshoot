@@ -124,13 +124,7 @@ const Layout = () => {
               >
                 My Bookings
               </NavLink>
-              <NavLink 
-                to="/profile" 
-                className={({ isActive }) => `header-tab-btn ${isActive ? 'active' : ''}`}
-                onClick={() => setSelectedItem(null)}
-              >
-                Profile
-              </NavLink>
+
             </div>
 
             {/* Right actions */}
@@ -616,14 +610,7 @@ const Layout = () => {
           <Calendar size={20} />
           <span>Bookings</span>
         </NavLink>
-        <NavLink 
-          to="/profile" 
-          className={({ isActive }) => `mobile-nav-item ${isActive ? 'active' : ''}`}
-          onClick={() => setSelectedItem(null)}
-        >
-          <User size={20} />
-          <span>Profile</span>
-        </NavLink>
+
       </nav>
 
     </div>
