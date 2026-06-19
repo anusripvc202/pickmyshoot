@@ -76,7 +76,7 @@ const ProfilePage = () => {
       id: "pf-1",
       title: "Royal Bridal Lookbook",
       category: "Bridal / Ethnic Wear",
-      image: "https://images.unsplash.com/photo-1591555200118-05306ded3f0a?auto=format&fit=crop&w=600&q=80",
+      image: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=600&q=80",
       likes: 312,
       aspect: "portrait"
     },
