@@ -47,38 +47,108 @@ const HomePage = () => {
         <div className="hero-banner">
           <div className="hero-banner-inner">
             <div className="hero-banner-content">
-              <span className="hero-tag">Biggest Creator Fest</span>
-              <h1 className="hero-title">CREATOR FEST 2026</h1>
-              <div className="hero-bullets">
-                <div className="bullet-item"><span className="bullet-dot"></span><span>Workshops</span></div>
-                <div className="bullet-item"><span className="bullet-dot"></span><span>Gear Deals</span></div>
-                <div className="bullet-item"><span className="bullet-dot"></span><span>Meetups</span></div>
-                <div className="bullet-item"><span className="bullet-dot"></span><span>Awards</span></div>
+              {/* Concept Tag */}
+              <div className="hero-tags-row">
+                <span className="hero-tag">India's #1 Creator Marketplace</span>
+                <span className="hero-tag-green">✓ Verified Listings</span>
               </div>
-              <button 
-                className="hero-btn" 
-                onClick={() => {
-                  setExploreTab('workshops');
-                  navigate('/explore');
-                }}
-              >
-                Explore Classes & Register
-              </button>
+
+              {/* Main headline */}
+              <h1 className="hero-title">
+                Book Studios,<br />
+                Gear &amp; Talent<br />
+                <span className="hero-title-accent">Instantly.</span>
+              </h1>
+
+              {/* Sub-headline */}
+              <p className="hero-subtitle">
+                Connect with top-rated photographers, premium studio spaces,
+                professional models &amp; camera gear — all in one place.
+              </p>
+
+              {/* Live Stats Row */}
+              <div className="hero-stats-row">
+                <div className="hero-stat-pill">
+                  <span className="hero-stat-num">2,800+</span>
+                  <span className="hero-stat-label">Verified Studios</span>
+                </div>
+                <div className="hero-stat-divider" />
+                <div className="hero-stat-pill">
+                  <span className="hero-stat-num">15K+</span>
+                  <span className="hero-stat-label">Creators</span>
+                </div>
+                <div className="hero-stat-divider" />
+                <div className="hero-stat-pill">
+                  <span className="hero-stat-num">4.9★</span>
+                  <span className="hero-stat-label">Avg. Rating</span>
+                </div>
+              </div>
+
+              {/* Dual CTA Buttons */}
+              <div className="hero-cta-row">
+                <button
+                  className="hero-btn"
+                  onClick={() => { setExploreTab('studios'); navigate('/explore'); }}
+                >
+                  🎬 Book a Studio
+                </button>
+                <button
+                  className="hero-btn-outline"
+                  onClick={() => { setExploreTab('services'); navigate('/explore'); }}
+                >
+                  Find a Photographer
+                </button>
+              </div>
+
+              {/* Trust Strip */}
+              <div className="hero-trust-strip">
+                <span>📸 Wedding Shoots</span>
+                <span>•</span>
+                <span>🎥 Reels &amp; Ads</span>
+                <span>•</span>
+                <span>🏢 Corporate Events</span>
+                <span>•</span>
+                <span>👗 Fashion &amp; Editorial</span>
+              </div>
             </div>
 
             {/* Photographer Center Overlay */}
             <div className="hero-banner-image-wrap">
-              <img 
-                src={`${import.meta.env.BASE_URL}banner_photographer.png`} 
-                className="hero-banner-image" 
-                alt="Photographer" 
+              <img
+                src={`${import.meta.env.BASE_URL}banner_photographer.png`}
+                className="hero-banner-image"
+                alt="Photographer"
               />
             </div>
 
-            <div className="hero-meta-col">
-              <span className="hero-offer">Early Bird 30% OFF</span>
-              <span className="hero-location">📍 20-22 JULY • HICC, HYDERABAD</span>
+            {/* Right column: How it Works */}
+            <div className="hero-how-col">
+              <span className="hero-how-label">How it works</span>
+              <div className="hero-how-steps">
+                <div className="hero-how-step">
+                  <span className="hero-how-num">01</span>
+                  <div>
+                    <span className="hero-how-title">Search &amp; Filter</span>
+                    <span className="hero-how-desc">Browse studios, gear &amp; talent by location, category &amp; budget.</span>
+                  </div>
+                </div>
+                <div className="hero-how-step">
+                  <span className="hero-how-num">02</span>
+                  <div>
+                    <span className="hero-how-title">Instant Booking</span>
+                    <span className="hero-how-desc">Pick your date &amp; time slot. Confirm with secure payment in seconds.</span>
+                  </div>
+                </div>
+                <div className="hero-how-step">
+                  <span className="hero-how-num">03</span>
+                  <div>
+                    <span className="hero-how-title">Shoot &amp; Deliver</span>
+                    <span className="hero-how-desc">Show up, create magic. Receive edited content on time, every time.</span>
+                  </div>
+                </div>
+              </div>
             </div>
+
           </div>
         </div>
         <div className="carousel-indicators">
