@@ -4240,29 +4240,67 @@ input:checked + .slider:before {
 }
 
 /* ===================================================
-   HORIZONTAL MOBILE SCROLL LISTINGS & PORTRAIT CARDS
+   HORIZONTAL SCROLL LISTINGS (DESKTOP & MOBILE)
    =================================================== */
-@media (max-width: 768px) {
-  /* Make grid containers horizontal flex scrollbars */
+
+/* Make grid containers horizontal flex rows on all devices */
+.mobile-scroll-row {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  gap: 16px !important;
+  padding: 16px 4px 20px 4px !important; /* spacing for shadows/scrollbar/hover transforms */
+  margin-bottom: 32px !important;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+}
+
+/* Custom scrollbars for desktop horizontal scroll rows */
+@media (min-width: 769px) {
   .mobile-scroll-row {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    gap: 16px !important;
-    padding: 8px 4px 16px 4px !important; /* spacing for shadows/scrollbar */
-    margin-bottom: 32px !important;
-    -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: var(--scroll-thumb) transparent;
+  }
+  .mobile-scroll-row::-webkit-scrollbar {
+    height: 6px;
+  }
+  .mobile-scroll-row::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .mobile-scroll-row::-webkit-scrollbar-thumb {
+    background: var(--scroll-thumb);
+    border-radius: 10px;
+  }
+  .mobile-scroll-row::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+  }
+
+  /* Fixed size for child cards on desktop so they scroll horizontally instead of shrinking */
+  .mobile-scroll-row .service-card,
+  .mobile-scroll-row .near-you-card,
+  .mobile-scroll-row .workshop-card,
+  .mobile-scroll-row .institute-card {
+    flex: 0 0 240px !important;
+    width: 240px !important;
+    max-width: 240px !important;
+    scroll-snap-align: start;
+    margin-bottom: 0 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .mobile-scroll-row {
     scrollbar-width: none; /* Firefox */
+    padding: 8px 4px 16px 4px !important; /* compact padding for mobile */
   }
 
   .mobile-scroll-row::-webkit-scrollbar {
     display: none; /* Chrome/Safari */
   }
 
-  /* Make child cards a fixed width and portrait shape */
+  /* Make child cards a fixed width and portrait shape on mobile */
   .mobile-scroll-row .service-card,
   .mobile-scroll-row .near-you-card,
   .mobile-scroll-row .workshop-card,
