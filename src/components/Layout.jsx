@@ -375,12 +375,16 @@ const Layout = () => {
                               <span className="metric-value">{selectedItem.height}</span>
                             </div>
                             <div className="metric-pill">
-                              <span className="metric-label">Experience</span>
-                              <span className="metric-value">4+ Years</span>
+                              <span className="metric-label">Gender</span>
+                              <span className="metric-value">{selectedItem.gender || 'Female'}</span>
                             </div>
                             <div className="metric-pill">
-                              <span className="metric-label">Categories</span>
-                              <span className="metric-value">{selectedItem.categories.join('/')}</span>
+                              <span className="metric-label">Location</span>
+                              <span className="metric-value">{selectedItem.location || 'Hyderabad'}</span>
+                            </div>
+                            <div className="metric-pill">
+                              <span className="metric-label">Experience</span>
+                              <span className="metric-value">4+ Years</span>
                             </div>
                           </>
                         )}
@@ -391,12 +395,12 @@ const Layout = () => {
                               <span className="metric-value">{selectedItem.category}</span>
                             </div>
                             <div className="metric-pill">
-                              <span className="metric-label">Includes</span>
-                              <span className="metric-value">Standard Kit</span>
-                            </div>
-                            <div className="metric-pill">
                               <span className="metric-label">Status</span>
                               <span className="metric-value">Available</span>
+                            </div>
+                            <div className="metric-pill">
+                              <span className="metric-label">Includes</span>
+                              <span className="metric-value">Standard Kit</span>
                             </div>
                           </>
                         )}
@@ -405,6 +409,10 @@ const Layout = () => {
                             <div className="metric-pill">
                               <span className="metric-label">Instructor</span>
                               <span className="metric-value">{selectedItem.instructor}</span>
+                            </div>
+                            <div className="metric-pill">
+                              <span className="metric-label">Date</span>
+                              <span className="metric-value">{selectedItem.date}</span>
                             </div>
                             <div className="metric-pill">
                               <span className="metric-label">Timing</span>
@@ -419,16 +427,36 @@ const Layout = () => {
                         {selectedItemType === 'job' && (
                           <>
                             <div className="metric-pill">
-                              <span className="metric-label">Salary Rate</span>
-                              <span className="metric-value">{selectedItem.price}</span>
-                            </div>
-                            <div className="metric-pill">
                               <span className="metric-label">Company</span>
                               <span className="metric-value">{selectedItem.company}</span>
                             </div>
                             <div className="metric-pill">
                               <span className="metric-label">Job Format</span>
                               <span className="metric-value">{selectedItem.type}</span>
+                            </div>
+                            <div className="metric-pill">
+                              <span className="metric-label">Location</span>
+                              <span className="metric-value">{selectedItem.location}</span>
+                            </div>
+                            <div className="metric-pill">
+                              <span className="metric-label">Salary Rate</span>
+                              <span className="metric-value">{selectedItem.price}</span>
+                            </div>
+                          </>
+                        )}
+                        {selectedItemType === 'service' && (
+                          <>
+                            <div className="metric-pill">
+                              <span className="metric-label">Category</span>
+                              <span className="metric-value">{selectedItem.category || 'Book Shoot'}</span>
+                            </div>
+                            <div className="metric-pill">
+                              <span className="metric-label">Deliverables</span>
+                              <span className="metric-value">High-Res Photos</span>
+                            </div>
+                            <div className="metric-pill">
+                              <span className="metric-label">Location</span>
+                              <span className="metric-value">Hyderabad, TS</span>
                             </div>
                           </>
                         )}
@@ -437,7 +465,14 @@ const Layout = () => {
 
                     {/* Description */}
                     <div className="detail-desc-box">
-                      <span className="detail-desc-title">About Studio</span>
+                      <span className="detail-desc-title">
+                        {selectedItemType === 'studio' ? 'About Studio' :
+                         selectedItemType === 'model' ? 'About Model' :
+                         selectedItemType === 'gear' ? 'About Gear Rental' :
+                         selectedItemType === 'workshop' ? 'About Workshop' :
+                         selectedItemType === 'job' ? 'About Job Opening' :
+                         selectedItemType === 'service' ? 'About Shoot Package' : 'About Listing'}
+                      </span>
                       <p className="detail-desc-text">
                         {showFullDesc || selectedItem.description.length <= 110 
                           ? selectedItem.description 
@@ -452,16 +487,62 @@ const Layout = () => {
                         </button>
                       )}
                       {selectedItem.specs && (
-                        <p className="detail-desc-text" style={{ fontStyle: 'italic', marginTop: '4px' }}>
-                          ⚙️ Technical Specs: {selectedItem.specs}
-                        </p>
+                        <div style={{ marginTop: '12px', borderTop: '1px dashed var(--border)', paddingTop: '10px' }}>
+                          <span className="detail-desc-title" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Technical Specifications</span>
+                          <p className="detail-desc-text" style={{ marginTop: '2px', color: 'var(--text-main)' }}>
+                            {selectedItem.specs}
+                          </p>
+                        </div>
                       )}
                       {selectedItem.includes && (
-                        <p className="detail-desc-text" style={{ fontStyle: 'italic', marginTop: '4px' }}>
-                          📦 Inclusions: {selectedItem.includes}
-                        </p>
+                        <div style={{ marginTop: '12px', borderTop: '1px dashed var(--border)', paddingTop: '10px' }}>
+                          <span className="detail-desc-title" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>What's Included</span>
+                          <p className="detail-desc-text" style={{ marginTop: '2px', color: 'var(--text-main)' }}>
+                            {selectedItem.includes}
+                          </p>
+                        </div>
                       )}
                     </div>
+
+                    {/* Model Categories */}
+                    {selectedItemType === 'model' && selectedItem.categories && (
+                      <div className="detail-amenities-section" style={{ borderTop: '1px solid var(--border)', paddingTop: '14px', marginTop: '14px' }}>
+                        <span className="detail-desc-title">Specialization Categories</span>
+                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '8px' }}>
+                          {selectedItem.categories.map((cat, idx) => (
+                            <span key={idx} className="skill-tag" style={{
+                              background: 'var(--bg-app)',
+                              border: '1px solid var(--border)',
+                              color: 'var(--text-main)',
+                              padding: '5px 12px',
+                              borderRadius: '8px',
+                              fontSize: '11px',
+                              fontWeight: '700'
+                            }}>{cat}</span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Job Skills */}
+                    {selectedItemType === 'job' && selectedItem.skills && (
+                      <div className="detail-amenities-section" style={{ borderTop: '1px solid var(--border)', paddingTop: '14px', marginTop: '14px' }}>
+                        <span className="detail-desc-title">Required Skills & Expertise</span>
+                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '8px' }}>
+                          {selectedItem.skills.map((skill, idx) => (
+                            <span key={idx} className="skill-tag" style={{
+                              background: 'var(--bg-app)',
+                              border: '1px solid var(--border)',
+                              color: 'var(--text-main)',
+                              padding: '5px 12px',
+                              borderRadius: '8px',
+                              fontSize: '11px',
+                              fontWeight: '700'
+                            }}>{skill}</span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
 
                     {/* Amenities tags */}
                     {selectedItem.amenities && (
