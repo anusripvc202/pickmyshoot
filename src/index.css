@@ -1876,6 +1876,7 @@ body {
   min-height: 0;
   position: relative;
   background-color: var(--bg-container);
+  overflow: hidden;
 }
 
 .detail-scrollable-content {
@@ -4474,13 +4475,13 @@ input:checked + .slider:before {
     border-radius: 20px 20px 0 0;
   }
 
-  .detail-content-wrap {
+  .detail-right-container {
     padding: 20px;
     overflow-y: visible;
     height: auto;
   }
 
-  .detail-checkout-bar {
+  .detail-fixed-checkout-bar {
     position: sticky;
     bottom: 0;
     background-color: var(--card-bg);
