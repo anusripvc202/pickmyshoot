@@ -1195,19 +1195,17 @@ body {
 /* Top Creative Institutes cards */
 .institute-card {
   border-radius: 20px;
-  padding: 18px;
   background: var(--card-bg) !important;
   color: var(--text-main);
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 14px;
   cursor: pointer;
   transition: all var(--transition-normal);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
   border: 1px solid var(--border);
-  min-height: 195px;
-  justify-content: space-between;
+  min-height: 290px;
+  overflow: hidden;
+  position: relative;
 }
 
 .institute-card::before {
@@ -1215,62 +1213,200 @@ body {
 }
 
 .institute-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
   border-color: var(--primary);
-  box-shadow: 0 12px 30px rgba(var(--primary-rgb), 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 16px 36px rgba(var(--primary-rgb), 0.15), 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.inst-cover-wrap {
+  width: 100%;
+  height: 115px;
+  position: relative;
+  background-color: var(--border);
+  overflow: hidden;
+}
+
+.inst-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.institute-card:hover .inst-cover-img {
+  transform: scale(1.08);
+}
+
+.inst-status-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(16, 185, 129, 0.95);
+  backdrop-filter: blur(4px);
+  color: white;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  z-index: 5;
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.25);
+}
+
+.inst-status-badge .pulse-dot {
+  width: 6px;
+  height: 6px;
+  background-color: white;
+  border-radius: 50%;
+  animation: pulse-glow 1.5s infinite;
+}
+
+@keyframes pulse-glow {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.9);
+    opacity: 0.6;
+  }
+}
+
+.inst-rating-pill {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  color: #ff9c00;
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 800;
+  z-index: 5;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.inst-logo-container {
+  position: relative;
+  height: 22px;
+  width: 100%;
 }
 
 .inst-logo-badge {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: var(--accent-pink);
-  color: var(--primary);
+  position: absolute;
+  bottom: 0;
+  left: 16px;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  padding: 6px;
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  border: 1px solid rgba(var(--primary-rgb), 0.15);
-  box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.05);
+  border: 3px solid #ffffff; /* Thick white border to pop out */
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
   transition: all var(--transition-fast);
+  z-index: 10;
 }
 
 .institute-card:hover .inst-logo-badge {
-  background: var(--primary);
-  color: white;
-  transform: scale(1.05);
-  box-shadow: 0 6px 15px rgba(var(--primary-rgb), 0.2);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
 }
 
-.inst-meta {
+.inst-logo-badge img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.inst-card-body {
+  padding: 14px 16px 16px 16px;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 10px;
+  flex-grow: 1;
   width: 100%;
+  justify-content: space-between;
 }
 
 .inst-title {
   font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 13px;
-  line-height: 1.3;
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 1.35;
   color: var(--text-main);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: 38px;
+  margin-top: 4px;
   text-shadow: none;
 }
 
-.inst-rating {
+.inst-details-row {
   display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.inst-course-badge {
+  display: inline-block;
+  background: var(--accent-pink);
+  color: var(--primary);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.inst-footer-row {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 4px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #f5a623;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+  margin-top: 4px;
+  width: 100%;
 }
 
 .inst-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   font-size: 11px;
   color: var(--text-muted);
-  font-weight: 400;
+  font-weight: 500;
+}
+
+.inst-apply-btn {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  transition: all var(--transition-fast);
+}
+
+.institute-card:hover .inst-apply-btn {
+  transform: translateX(3px);
+  color: var(--primary-hover);
 }
 
 .inst-badge {
@@ -4808,6 +4944,46 @@ input:checked + .slider:before {
   .mobile-scroll-row .card-rating-row {
     font-size: 11px !important;
     gap: 2px !important;
+  }
+
+  .mobile-scroll-row .inst-cover-wrap {
+    width: 100% !important;
+    height: 100px !important;
+    border-radius: 14px 14px 0 0 !important;
+    overflow: hidden !important;
+  }
+  
+  .mobile-scroll-row .inst-cover-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  .mobile-scroll-row .inst-logo-badge {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 8px !important;
+    left: 10px !important;
+    border: 2px solid #ffffff !important;
+    padding: 4px !important;
+  }
+  
+  .mobile-scroll-row .inst-logo-container {
+    height: 14px !important;
+  }
+
+  .mobile-scroll-row .inst-card-body {
+    padding: 8px 8px 10px 8px !important;
+    gap: 4px !important;
+  }
+
+  .mobile-scroll-row .inst-course-badge {
+    font-size: 8.5px !important;
+    padding: 2px 6px !important;
+  }
+
+  .mobile-scroll-row .inst-apply-btn {
+    display: none !important;
   }
 }
 

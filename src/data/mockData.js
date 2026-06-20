@@ -623,7 +623,8 @@ export const institutes = [
     course: "Film Making",
     status: "Admissions Open",
     bgColor: "#ffffff",
-    logo: "/logo_wwi.png"
+    logo: "/logo_wwi.png",
+    coverImage: "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=500&q=80"
   },
   {
     id: "in-2",
@@ -633,7 +634,8 @@ export const institutes = [
     course: "Film & TV Direction",
     status: "Admissions Open",
     bgColor: "#ffffff",
-    logo: "/logo_ftii.svg"
+    logo: "/logo_ftii.svg",
+    coverImage: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=500&q=80"
   },
   {
     id: "in-3",
@@ -643,7 +645,8 @@ export const institutes = [
     course: "Photography",
     status: "Admissions Open",
     bgColor: "#ffffff",
-    logo: "/logo_aaft.jpg"
+    logo: "/logo_aaft.jpg",
+    coverImage: "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=500&q=80"
   },
   {
     id: "in-4",
@@ -653,7 +656,8 @@ export const institutes = [
     course: "Design & Animation",
     status: "Admissions Open",
     bgColor: "#ffffff",
-    logo: "/logo_nid.svg"
+    logo: "/logo_nid.svg",
+    coverImage: "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=500&q=80"
   },
   {
     id: "in-5",
@@ -663,6 +667,7 @@ export const institutes = [
     course: "VFX & Animation",
     status: "Admissions Open",
     bgColor: "#ffffff",
-    logo: "/logo_arena.png"
+    logo: "/logo_arena.png",
+    coverImage: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=500&q=80"
   }
 ];

@@ -395,59 +395,62 @@ const HomePage = () => {
         <div className="desktop-card-grid-5 mobile-scroll-row">
           {institutes.map(inst => (
             <div key={inst.id} className="institute-card">
-              {/* Logo and Rating Row */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginBottom: '2px' }}>
-                <div className="inst-logo-badge" style={{ padding: '6px', background: inst.bgColor || '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', width: '48px', height: '48px', borderRadius: '12px' }}>
-                  <img 
-                    src={`${import.meta.env.BASE_URL}${inst.logo.startsWith('/') ? inst.logo.slice(1) : inst.logo}`} 
-                    alt={inst.title} 
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'contain',
-                      borderRadius: '4px'
-                    }}
-                  />
-                </div>
-                <div className="inst-rating-pill" style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                  background: 'rgba(255, 170, 0, 0.1)',
-                  color: '#ff9c00',
-                  padding: '4px 10px',
-                  borderRadius: '20px',
-                  fontSize: '11px',
-                  fontWeight: '800'
-                }}>
+              {/* Cover Image & Overlay badges */}
+              <div className="inst-cover-wrap">
+                <img 
+                  src={inst.coverImage} 
+                  alt={`${inst.title} Campus`} 
+                  className="inst-cover-img" 
+                />
+                
+                {/* Status badge with animated breathing dot */}
+                {inst.status && (
+                  <span className="inst-status-badge">
+                    <span className="pulse-dot"></span>
+                    {inst.status}
+                  </span>
+                )}
+
+                {/* Rating Pill */}
+                <div className="inst-rating-pill">
                   <Star size={11} fill="#ff9c00" color="#ff9c00" />
                   <span>{inst.rating}</span>
                 </div>
               </div>
+
+              {/* Overlapping Logo container */}
+              <div className="inst-logo-container">
+                <div className="inst-logo-badge" style={{ background: inst.bgColor || '#ffffff' }}>
+                  <img 
+                    src={`${import.meta.env.BASE_URL}${inst.logo.startsWith('/') ? inst.logo.slice(1) : inst.logo}`} 
+                    alt={inst.title} 
+                  />
+                </div>
+              </div>
               
-              <div className="inst-meta" style={{ display: 'flex', flexDirection: 'column', gap: '6px', width: '100%' }}>
-                <span className="inst-title" style={{ fontSize: '13.5px', fontWeight: '800', color: 'var(--text-main)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', minHeight: '36px', lineHeight: '1.3' }}>
+              {/* Card Content details */}
+              <div className="inst-card-body">
+                <span className="inst-title" title={inst.title}>
                   {inst.title}
                 </span>
                 
-                {/* Course specialty badge */}
-                <span className="inst-course-badge" style={{
-                  display: 'inline-block',
-                  background: 'var(--border)',
-                  color: 'var(--text-muted)',
-                  padding: '3px 8px',
-                  borderRadius: '6px',
-                  fontSize: '10px',
-                  fontWeight: '700',
-                  alignSelf: 'flex-start'
-                }}>
-                  {inst.course || 'Film Studies'}
-                </span>
-                
-                <span className="inst-location" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
-                  <MapPin size={11} color="var(--primary)" />
-                  <span>{inst.location}</span>
-                </span>
+                <div className="inst-details-row">
+                  {/* Course specialty badge */}
+                  <span className="inst-course-badge">
+                    {inst.course || 'Film Studies'}
+                  </span>
+                </div>
+
+                <div className="inst-footer-row">
+                  <span className="inst-location">
+                    <MapPin size={12} color="var(--primary)" />
+                    <span>{inst.location}</span>
+                  </span>
+                  
+                  <span className="inst-apply-btn">
+                    Apply <ChevronRight size={12} />
+                  </span>
+                </div>
               </div>
             </div>
           ))}
