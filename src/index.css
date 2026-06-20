@@ -135,10 +135,13 @@ body {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background-color: var(--navbar-bg);
-  border-bottom: 1px solid var(--border);
-  padding: 16px 0;
+  background-color: var(--glass-bg);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid var(--glass-border);
+  padding: 12px 0;
   transition: all var(--transition-normal);
+  box-shadow: var(--shadow-sm);
 }
 
 .header-row {
@@ -193,21 +196,27 @@ body {
 
 .header-search-wrap {
   flex: 1;
-  max-width: 460px;
+  max-width: 420px;
   display: flex;
   align-items: center;
   gap: 10px;
-  background: var(--border);
-  border-radius: 14px;
-  padding: 10px 16px;
-  border: 1px solid transparent;
-  transition: all var(--transition-fast);
+  background: rgba(var(--primary-rgb), 0.035);
+  border-radius: 30px; /* Pill search shape */
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  transition: all var(--transition-normal);
+}
+
+.header-search-wrap:hover {
+  border-color: rgba(var(--primary-rgb), 0.2);
+  background: rgba(var(--primary-rgb), 0.050);
 }
 
 .header-search-wrap:focus-within {
-  border-color: rgba(var(--primary-rgb), 0.4);
+  border-color: var(--primary);
   background: var(--bg-container);
-  box-shadow: 0 4px 20px rgba(var(--primary-rgb), 0.05);
+  box-shadow: 0 8px 24px rgba(var(--primary-rgb), 0.08);
+  transform: scale(1.01);
 }
 
 .search-input {
@@ -218,6 +227,7 @@ body {
   color: var(--text-main);
   font-family: var(--font-body);
   font-size: 14px;
+  font-weight: 500;
 }
 
 .search-input::placeholder {
@@ -229,13 +239,19 @@ body {
   border: none;
   width: 28px;
   height: 28px;
-  border-radius: 8px;
+  border-radius: 50%; /* Rounded search button */
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   cursor: pointer;
-  transition: transform var(--transition-fast);
+  transition: all var(--transition-fast);
+  box-shadow: 0 2px 8px rgba(var(--primary-rgb), 0.2);
+}
+
+.search-action-btn:hover {
+  background: var(--primary-hover);
+  transform: scale(1.05);
 }
 
 .search-action-btn:active {
@@ -258,17 +274,39 @@ body {
   font-size: 14px;
   color: var(--text-muted);
   cursor: pointer;
+  position: relative;
   transition: all var(--transition-fast);
+  overflow: visible;
 }
 
 .header-tab-btn:hover {
   color: var(--text-main);
-  background: var(--border);
+}
+
+/* Animated Underline active indicator */
+.header-tab-btn::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 12.5%;
+  width: 0;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 20px;
+  transition: width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 1px 6px rgba(var(--primary-rgb), 0.4);
+}
+
+.header-tab-btn:hover::after {
+  width: 75%;
 }
 
 .header-tab-btn.active {
   color: var(--primary);
-  background: var(--accent-pink);
+}
+
+.header-tab-btn.active::after {
+  width: 75%;
 }
 
 .header-right-actions {
@@ -281,13 +319,20 @@ body {
   display: flex;
   align-items: center;
   gap: 4px;
-  background: var(--border);
+  background: rgba(var(--primary-rgb), 0.035);
   padding: 8px 14px;
   border-radius: 20px;
   font-size: 13px;
   font-weight: 600;
   color: var(--text-main);
   cursor: pointer;
+  border: 1px solid var(--border);
+  transition: all var(--transition-fast);
+}
+
+.location-badge:hover {
+  border-color: rgba(var(--primary-rgb), 0.25);
+  background: rgba(var(--primary-rgb), 0.06);
 }
 
 .icon-btn-wrap {
@@ -298,14 +343,41 @@ body {
   cursor: pointer;
   padding: 8px;
   border-radius: 50%;
-  transition: background var(--transition-fast);
+  transition: all var(--transition-fast);
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid transparent;
 }
 
 .icon-btn-wrap:hover {
   background: var(--border);
+  border-color: rgba(var(--primary-rgb), 0.1);
+}
+
+/* Theme Toggle Icon spin on hover */
+.icon-btn-wrap:hover svg {
+  transition: transform 0.4s ease, color 0.4s ease;
+}
+
+.icon-btn-wrap[title*="Theme"]:hover svg {
+  transform: rotate(180deg);
+  color: #ffaa00;
+}
+
+/* Bell bounce ring animation on hover */
+.icon-btn-wrap:not([title*="Theme"]):hover svg {
+  animation: bell-ring 0.6s ease;
+}
+
+@keyframes bell-ring {
+  0% { transform: rotate(0); }
+  15% { transform: rotate(15deg); }
+  30% { transform: rotate(-12deg); }
+  45% { transform: rotate(8deg); }
+  60% { transform: rotate(-6deg); }
+  75% { transform: rotate(4deg); }
+  100% { transform: rotate(0); }
 }
 
 .badge-count {
@@ -326,14 +398,14 @@ body {
 }
 
 .header-primary-cta {
-  background-color: var(--primary);
+  background: linear-gradient(135deg, var(--primary) 0%, #FF4D5A 100%);
   color: white;
   border: none;
   font-family: var(--font-heading);
   font-weight: 700;
   font-size: 13px;
-  padding: 10px 18px;
-  border-radius: 12px;
+  padding: 10px 20px;
+  border-radius: 30px; /* Rounded CTA pill */
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -343,9 +415,12 @@ body {
 }
 
 .header-primary-cta:hover {
-  background-color: var(--primary-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(var(--primary-rgb), 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(var(--primary-rgb), 0.35);
+}
+
+.header-primary-cta:active {
+  transform: translateY(-1px) scale(0.98);
 }
 
 /* Page content segment spacing */
