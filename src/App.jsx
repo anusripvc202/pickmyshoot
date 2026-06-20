@@ -10,6 +10,7 @@ import LoginPage from './pages/LoginPage';
 import ClientDashboard from './pages/ClientDashboard';
 import PhotographerDashboard from './pages/PhotographerDashboard';
 import AdminDashboard from './pages/AdminDashboard';
+import BlogPage from './pages/BlogPage';
 import { useAppContext } from './context/AppContext';
 
 // Simple Route Guarding Wrapper Component
@@ -25,6 +26,7 @@ function App() {
         <Route index element={<HomePage />} />
         <Route path="explore" element={<ExplorePage />} />
         <Route path="login" element={<LoginPage />} />
+        <Route path="blog" element={<BlogPage />} />
         
         {/* Protected Routes */}
         <Route path="create" element={<ProtectedRoute><CreatePage /></ProtectedRoute>} />

@@ -777,6 +777,7 @@ const Layout = () => {
               <ul className="footer-links-list">
                 <li><a href="#">About Us</a></li>
                 <li><a href="#">Careers <span className="footer-link-tag">We're Hiring!</span></a></li>
+                <li><NavLink to="/blog" onClick={() => setSelectedItem(null)}>Blog</NavLink></li>
                 <li><a href="#">Partner with Us</a></li>
               </ul>
             </div>
