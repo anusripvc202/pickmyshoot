@@ -1194,19 +1194,20 @@ body {
 
 /* Top Creative Institutes cards */
 .institute-card {
-  border-radius: 16px;
-  padding: 16px;
+  border-radius: 20px;
+  padding: 18px;
   background: var(--card-bg) !important;
   color: var(--text-main);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 12px;
+  gap: 14px;
   cursor: pointer;
-  transition: all var(--transition-fast);
-  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
   border: 1px solid var(--border);
-  min-height: 0;
+  min-height: 195px;
+  justify-content: space-between;
 }
 
 .institute-card::before {
@@ -1214,9 +1215,9 @@ body {
 }
 
 .institute-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-5px);
   border-color: var(--primary);
+  box-shadow: 0 12px 30px rgba(var(--primary-rgb), 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .inst-logo-badge {
