@@ -765,9 +765,6 @@ const Layout = () => {
                 <li><NavLink to="/explore" onClick={() => setSelectedItem(null)}>Rent a Studio</NavLink></li>
                 <li><NavLink to="/explore" onClick={() => setSelectedItem(null)}>Hire a Model</NavLink></li>
                 <li><NavLink to="/explore" onClick={() => setSelectedItem(null)}>Gear Rentals</NavLink></li>
-                <li><NavLink to="/explore" onClick={() => setSelectedItem(null)}>Workshops</NavLink></li>
-                <li><NavLink to="/explore" onClick={() => setSelectedItem(null)}>Find Jobs</NavLink></li>
-                <li><NavLink to="/explore" onClick={() => setSelectedItem(null)}>Film Institutes</NavLink></li>
               </ul>
             </div>
 
@@ -780,10 +777,7 @@ const Layout = () => {
               <ul className="footer-links-list">
                 <li><a href="#">About Us</a></li>
                 <li><a href="#">Careers <span className="footer-link-tag">We're Hiring!</span></a></li>
-                <li><a href="#">Blog</a></li>
-                <li><a href="#">Press Kit</a></li>
                 <li><a href="#">Partner with Us</a></li>
-                <li><a href="#">Advertise</a></li>
               </ul>
             </div>
 
@@ -798,7 +792,6 @@ const Layout = () => {
                 <li><a href="#">Terms of Service</a></li>
                 <li><a href="#">Privacy Policy</a></li>
                 <li><a href="#">Refund Policy</a></li>
-                <li><a href="#">Safety Guidelines</a></li>
               </ul>
               <div className="footer-contact">
                 <a href="mailto:hello@pickmyshoot.in" className="footer-contact-item">
