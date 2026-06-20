@@ -47,7 +47,7 @@ export const popularServices = [
     rating: 4.8,
     reviews: 245,
     category: "Book Shoot",
-    image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1598550874175-4d0ef436c909?auto=format&fit=crop&w=500&q=80",
     description: "Create viral short-form videos with professional cinematography, dynamic transitions, audio synchronization, and editing tailored for Instagram and TikTok."
   },
   {
@@ -57,7 +57,7 @@ export const popularServices = [
     rating: 4.9,
     reviews: 185,
     category: "Book Shoot",
-    image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=500&q=80",
     description: "Celebrate motherhood with artistic maternity sessions. Beautiful gowns, professional posing guide, and private studio setting."
   },
   {
@@ -156,7 +156,7 @@ export const studios = [
     reviews: 78,
     location: "Jubilee Hills, Hyderabad",
     distance: "2.1 km away",
-    image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=500&q=80",
     area: "900 Sq.ft",
     capacity: "8 People",
     amenities: ["Vintage Props", "Colored Backgrounds", "Makeup Room"],
@@ -375,7 +375,7 @@ export const gearRentals = [
     rating: 4.8,
     reviews: 39,
     category: "Gimbal",
-    image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1621252179027-94459d278660?auto=format&fit=crop&w=500&q=80",
     specs: "3.0 kg Tested Payload, Automated Axis Locks, 1.8\" OLED Touchscreen",
     includes: "RS 3 Gimbal, BG21 Grip, Briefcase Handle, Lens Support, Focus Gear, USB-C Cables, Carrying Case",
     description: "Professional camera stabilizer offering incredible stabilization performance, automatic lock/unlock mechanisms, and intuitive touch screen operation."
@@ -388,7 +388,7 @@ export const gearRentals = [
     rating: 4.9,
     reviews: 45,
     category: "Lights",
-    image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1560169897-fc0cdbdfa4d5?auto=format&fit=crop&w=500&q=80",
     specs: "60W LED Continuous Video Light, 5600K Color Temperature, Bowens Mount",
     includes: "Light Unit, Standard Reflector, Power Cord, Wireless Remote, 8ft Light Stand",
     description: "An incredibly popular daylight-balanced continuous LED light source. Offers high color accuracy (CRI 95+) and soft light, ideal for talking head videos and streaming."
@@ -401,7 +401,7 @@ export const gearRentals = [
     rating: 4.9,
     reviews: 81,
     category: "Drones",
-    image: "https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1507682531662-421b17ac4f93?auto=format&fit=crop&w=500&q=80",
     specs: "Hasselblad Main Camera (4/3 CMOS), Triple Camera System, 43 Min Flight Time",
     includes: "DJI Mavic 3 Pro, DJI RC Controller, 3 Intelligent Flight Batteries, Battery Charging Hub, ND Filter Set, Case",
     description: "The ultimate cinema drone featuring three distinct optical camera sensors. Capture majestic master shots with extreme detail, professional color profiles (D-Log), and advanced obstacle sensing."
@@ -427,7 +427,7 @@ export const gearRentals = [
     rating: 4.8,
     reviews: 29,
     category: "Lights",
-    image: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=500&q=80",
     specs: "350W COB LED, 5500K Daylight, Bowens Mount, 0-100% Stepless Dimming",
     includes: "LS C300d II Light, Control Box, Hyper Reflector, Quick Release Clamp, Heavy Duty Light Stand, Remote, Safe Case",
     description: "Industry-standard point source LED fixture. Highly powerful, daylight-balanced output that rivals traditional 575W HMI lights, featuring built-in lighting effects."
@@ -544,7 +544,7 @@ export const workshops = [
     timing: "3:00 PM - 7:00 PM",
     location: "Virtual (Zoom Live)",
     description: "Master bulk photo importing, preset creation, color profiles calibration, color grading, skin tone correction, and fast batch-exporting presets.",
-    image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&w=500&q=80",
     isUpcoming: true
   },
   {
