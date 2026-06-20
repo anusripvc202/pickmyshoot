@@ -395,17 +395,17 @@ const HomePage = () => {
         <div className="desktop-card-grid-5 mobile-scroll-row">
           {institutes.map(inst => (
             <div key={inst.id} className="institute-card">
-              <div className="inst-logo-badge">
-                {(() => {
-                  switch (inst.id) {
-                    case 'in-1': return <Film size={22} />;
-                    case 'in-2': return <Clapperboard size={22} />;
-                    case 'in-3': return <GraduationCap size={22} />;
-                    case 'in-4': return <Palette size={22} />;
-                    case 'in-5': return <Video size={22} />;
-                    default: return <GraduationCap size={22} />;
-                  }
-                })()}
+              <div className="inst-logo-badge" style={{ padding: '6px', background: inst.bgColor || '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                <img 
+                  src={`${import.meta.env.BASE_URL}${inst.logo.startsWith('/') ? inst.logo.slice(1) : inst.logo}`} 
+                  alt={inst.title} 
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'contain',
+                    borderRadius: '6px'
+                  }}
+                />
               </div>
               <div className="inst-meta">
                 <span className="inst-title">{inst.title}</span>
