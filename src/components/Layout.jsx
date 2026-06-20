@@ -36,7 +36,9 @@ import {
   Palette,
   Grid,
   Sliders,
-  Award
+  Award,
+  Video,
+  Briefcase
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 
