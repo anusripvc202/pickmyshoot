@@ -160,8 +160,12 @@ const HomePage = () => {
       </div>
 
       {/* Category Grid Row */}
-      <div className="categories-container">
-        <div className="categories-grid">
+      <section style={{ marginTop: '48px', marginBottom: '24px' }}>
+        <div className="section-header" style={{ marginBottom: '20px' }}>
+          <h2 className="section-title">Explore Categories</h2>
+        </div>
+        <div className="categories-container" style={{ marginBottom: 0 }}>
+          <div className="categories-grid">
           
           <div className="category-card" onClick={() => handleCategoryClick('services')}>
             <div className="category-icon-wrap">
@@ -285,6 +289,7 @@ const HomePage = () => {
 
         </div>
       </div>
+    </section>
 
       {/* Promo Banner stripe */}
       <div className="mid-promo-stripe">
