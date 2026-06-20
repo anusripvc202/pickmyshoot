@@ -1725,6 +1725,122 @@ body {
   padding: 14px 0;
 }
 
+.detail-specs-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0;
+}
+
+.spec-icon-card {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-app);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: 10px;
+  transition: all var(--transition-fast);
+}
+
+.spec-icon-card:hover {
+  transform: translateY(-1px);
+  border-color: var(--primary);
+  background-color: var(--accent-pink);
+}
+
+.spec-icon-wrap {
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spec-icon-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.read-more-btn-link {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  margin-top: 2px;
+  padding: 0;
+  align-self: flex-start;
+  transition: color var(--transition-fast);
+}
+
+.read-more-btn-link:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+.amenities-icons-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.amenity-icon-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  width: 68px;
+}
+
+.amenity-icon-wrap {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background-color: var(--bg-app);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-main);
+  transition: all var(--transition-fast);
+}
+
+.amenity-icon-card:hover .amenity-icon-wrap {
+  background-color: var(--accent-pink);
+  color: var(--primary);
+  border-color: var(--primary);
+  transform: scale(1.06);
+}
+
+.amenity-icon-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-muted);
+  line-height: 1.2;
+}
+
+.date-more-btn {
+  border-style: dashed !important;
+  border-color: var(--text-muted) !important;
+  opacity: 0.8;
+}
+
+.date-more-btn:hover {
+  border-style: solid !important;
+  border-color: var(--primary) !important;
+  opacity: 1;
+}
+
 .metric-pill {
   display: flex;
   flex-direction: column;

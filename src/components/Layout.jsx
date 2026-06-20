@@ -20,9 +20,59 @@ import {
   Home,
   Compass,
   Calendar,
-  User
+  User,
+  Maximize2,
+  Users,
+  Car,
+  Wind,
+  Wifi,
+  Lightbulb,
+  Image,
+  Sparkles,
+  Shirt,
+  Coffee,
+  Layers,
+  VolumeX,
+  Palette,
+  Grid,
+  Sliders,
+  Award
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
+
+const amenityIconMap = {
+  'Lighting Equipment': <Lightbulb size={22} />,
+  'Studio Lights': <Lightbulb size={22} />,
+  'Backdrops': <Image size={22} />,
+  'Makeup Room': <Sparkles size={22} />,
+  'Changing Room': <Shirt size={22} />,
+  'Pantry': <Coffee size={22} />,
+  'Cyc Wall': <Layers size={22} />,
+  'Vintage Props': <Award size={22} />,
+  'Colored Backgrounds': <Palette size={22} />,
+  'Industrial Props': <Sliders size={22} />,
+  'High Ceilings': <Maximize2 size={22} />,
+  'Full Cyc Green Screen': <Video size={22} />,
+  'Soundproofing': <VolumeX size={22} />,
+  'Controllable LED Grid': <Grid size={22} />,
+  'Lounge Area': <Heart size={22} />,
+  'Softbox Panels': <Grid size={22} />,
+  'Textured Backdrops': <Layers size={22} />,
+  'Classic Mahogany Bookshelves': <Briefcase size={22} />,
+  'Leather Sofas': <Heart size={22} />,
+  'Retro Table Lamps': <Sun size={22} />
+};
+
+const featureIconMap = {
+  'Parking': <Car size={20} />,
+  'AC': <Wind size={20} />,
+  'Wi-Fi': <Wifi size={20} />,
+  'Lighting Equipment': <Lightbulb size={20} />,
+  'Studio Lights': <Lightbulb size={20} />,
+  'Cyc Wall': <Layers size={20} />,
+  'Soundproofing': <VolumeX size={20} />,
+  'Controllable LED Grid': <Grid size={20} />
+};
 
 const Layout = () => {
   const {
@@ -44,6 +94,7 @@ const Layout = () => {
   const navigate = useNavigate();
   const [userDropdownOpen, setUserDropdownOpen] = React.useState(false);
   const [bookingStatus, setBookingStatus] = React.useState('idle'); // 'idle' | 'processing' | 'success'
+  const [showFullDesc, setShowFullDesc] = React.useState(false);
 
   React.useEffect(() => {
     document.body.className = `${theme}-theme`;
@@ -52,6 +103,7 @@ const Layout = () => {
   React.useEffect(() => {
     if (!selectedItem) {
       setBookingStatus('idle');
+      setShowFullDesc(false);
     }
   }, [selectedItem]);
 
@@ -294,98 +346,109 @@ const Layout = () => {
 
                     {/* Metrics specifications blocks */}
                     {selectedItemType === 'studio' && (
-                      <div className="detail-metrics-grid">
-                        <div className="metric-pill">
-                          <span className="metric-label">Dimensions</span>
-                          <span className="metric-value">{selectedItem.area}</span>
+                      <div className="detail-specs-row">
+                        <div className="spec-icon-card">
+                          <div className="spec-icon-wrap"><Maximize2 size={20} /></div>
+                          <span className="spec-icon-label">{selectedItem.area || '1500 Sq.ft'}</span>
                         </div>
-                        <div className="metric-pill">
-                          <span className="metric-label">Capacity</span>
-                          <span className="metric-value">{selectedItem.capacity}</span>
+                        <div className="spec-icon-card">
+                          <div className="spec-icon-wrap"><Users size={20} /></div>
+                          <span className="spec-icon-label">{selectedItem.capacity ? `${selectedItem.capacity.split(' ')[0]} Capacity` : '15 Capacity'}</span>
                         </div>
-                        <div className="metric-pill">
-                          <span className="metric-label">Features</span>
-                          <span className="metric-value">{selectedItem.features.slice(0, 2).join(' & ')}</span>
-                        </div>
+                        {selectedItem.features && selectedItem.features.map((feat, idx) => (
+                          <div key={idx} className="spec-icon-card">
+                            <div className="spec-icon-wrap">{featureIconMap[feat] || <CheckCircle size={20} />}</div>
+                            <span className="spec-icon-label">{feat}</span>
+                          </div>
+                        ))}
                       </div>
                     )}
 
-                    {selectedItemType === 'model' && (
+                    {selectedItemType !== 'studio' && (
                       <div className="detail-metrics-grid">
-                        <div className="metric-pill">
-                          <span className="metric-label">Height</span>
-                          <span className="metric-value">{selectedItem.height}</span>
-                        </div>
-                        <div className="metric-pill">
-                          <span className="metric-label">Experience</span>
-                          <span className="metric-value">4+ Years</span>
-                        </div>
-                        <div className="metric-pill">
-                          <span className="metric-label">Categories</span>
-                          <span className="metric-value">{selectedItem.categories.join('/')}</span>
-                        </div>
-                      </div>
-                    )}
-
-                    {selectedItemType === 'gear' && (
-                      <div className="detail-metrics-grid">
-                        <div className="metric-pill">
-                          <span className="metric-label">Rental Type</span>
-                          <span className="metric-value">{selectedItem.category}</span>
-                        </div>
-                        <div className="metric-pill">
-                          <span className="metric-label">Includes</span>
-                          <span className="metric-value">Standard Kit</span>
-                        </div>
-                        <div className="metric-pill">
-                          <span className="metric-label">Status</span>
-                          <span className="metric-value">Available</span>
-                        </div>
-                      </div>
-                    )}
-
-                    {selectedItemType === 'workshop' && (
-                      <div className="detail-metrics-grid">
-                        <div className="metric-pill">
-                          <span className="metric-label">Instructor</span>
-                          <span className="metric-value">{selectedItem.instructor}</span>
-                        </div>
-                        <div className="metric-pill">
-                          <span className="metric-label">Timing</span>
-                          <span className="metric-value">{selectedItem.timing}</span>
-                        </div>
-                        <div className="metric-pill">
-                          <span className="metric-label">Location</span>
-                          <span className="metric-value">{selectedItem.location.split(',')[0]}</span>
-                        </div>
-                      </div>
-                    )}
-
-                    {selectedItemType === 'job' && (
-                      <div className="detail-metrics-grid">
-                        <div className="metric-pill">
-                          <span className="metric-label">Salary Rate</span>
-                          <span className="metric-value">{selectedItem.price}</span>
-                        </div>
-                        <div className="metric-pill">
-                          <span className="metric-label">Company</span>
-                          <span className="metric-value">{selectedItem.company}</span>
-                        </div>
-                        <div className="metric-pill">
-                          <span className="metric-label">Job Format</span>
-                          <span className="metric-value">{selectedItem.type}</span>
-                        </div>
+                        {selectedItemType === 'model' && (
+                          <>
+                            <div className="metric-pill">
+                              <span className="metric-label">Height</span>
+                              <span className="metric-value">{selectedItem.height}</span>
+                            </div>
+                            <div className="metric-pill">
+                              <span className="metric-label">Experience</span>
+                              <span className="metric-value">4+ Years</span>
+                            </div>
+                            <div className="metric-pill">
+                              <span className="metric-label">Categories</span>
+                              <span className="metric-value">{selectedItem.categories.join('/')}</span>
+                            </div>
+                          </>
+                        )}
+                        {selectedItemType === 'gear' && (
+                          <>
+                            <div className="metric-pill">
+                              <span className="metric-label">Rental Type</span>
+                              <span className="metric-value">{selectedItem.category}</span>
+                            </div>
+                            <div className="metric-pill">
+                              <span className="metric-label">Includes</span>
+                              <span className="metric-value">Standard Kit</span>
+                            </div>
+                            <div className="metric-pill">
+                              <span className="metric-label">Status</span>
+                              <span className="metric-value">Available</span>
+                            </div>
+                          </>
+                        )}
+                        {selectedItemType === 'workshop' && (
+                          <>
+                            <div className="metric-pill">
+                              <span className="metric-label">Instructor</span>
+                              <span className="metric-value">{selectedItem.instructor}</span>
+                            </div>
+                            <div className="metric-pill">
+                              <span className="metric-label">Timing</span>
+                              <span className="metric-value">{selectedItem.timing}</span>
+                            </div>
+                            <div className="metric-pill">
+                              <span className="metric-label">Location</span>
+                              <span className="metric-value">{selectedItem.location.split(',')[0]}</span>
+                            </div>
+                          </>
+                        )}
+                        {selectedItemType === 'job' && (
+                          <>
+                            <div className="metric-pill">
+                              <span className="metric-label">Salary Rate</span>
+                              <span className="metric-value">{selectedItem.price}</span>
+                            </div>
+                            <div className="metric-pill">
+                              <span className="metric-label">Company</span>
+                              <span className="metric-value">{selectedItem.company}</span>
+                            </div>
+                            <div className="metric-pill">
+                              <span className="metric-label">Job Format</span>
+                              <span className="metric-value">{selectedItem.type}</span>
+                            </div>
+                          </>
+                        )}
                       </div>
                     )}
 
                     {/* Description */}
                     <div className="detail-desc-box">
-                      <span className="detail-desc-title">
-                        {selectedItemType === 'job' ? 'Job Inclusions & Description' : 'Listing Description'}
-                      </span>
+                      <span className="detail-desc-title">About Studio</span>
                       <p className="detail-desc-text">
-                        {selectedItem.description}
+                        {showFullDesc || selectedItem.description.length <= 110 
+                          ? selectedItem.description 
+                          : `${selectedItem.description.slice(0, 110)}...`}
                       </p>
+                      {selectedItem.description.length > 110 && (
+                        <button 
+                          className="read-more-btn-link" 
+                          onClick={() => setShowFullDesc(!showFullDesc)}
+                        >
+                          {showFullDesc ? 'Read Less' : 'Read More'}
+                        </button>
+                      )}
                       {selectedItem.specs && (
                         <p className="detail-desc-text" style={{ fontStyle: 'italic', marginTop: '4px' }}>
                           ⚙️ Technical Specs: {selectedItem.specs}
@@ -401,12 +464,14 @@ const Layout = () => {
                     {/* Amenities tags */}
                     {selectedItem.amenities && (
                       <div className="detail-amenities-section">
-                        <span className="detail-desc-title">Amenities List</span>
-                        <div className="amenities-list">
+                        <span className="detail-desc-title">Amenities</span>
+                        <div className="amenities-icons-row">
                           {selectedItem.amenities.map((amen, idx) => (
-                            <div key={idx} className="amenity-item">
-                              <Check size={12} color="var(--primary)" />
-                              <span>{amen}</span>
+                            <div key={idx} className="amenity-icon-card">
+                              <div className="amenity-icon-wrap">
+                                {amenityIconMap[amen] || <CheckCircle size={22} />}
+                              </div>
+                              <span className="amenity-icon-label">{amen}</span>
                             </div>
                           ))}
                         </div>
@@ -416,7 +481,7 @@ const Layout = () => {
                     {/* Schedulers (for booking items) */}
                     {selectedItemType !== 'job' && selectedItemType !== 'workshop' && (
                       <div className="scheduler-box">
-                        <span className="scheduler-title">Select Rental Date & Time Slot</span>
+                        <span className="scheduler-title">Select Date & Time</span>
                         
                         {/* Date pills */}
                         <div className="date-carousel">
@@ -436,6 +501,14 @@ const Layout = () => {
                               <span className="date-select-name">{item.name}</span>
                             </div>
                           ))}
+                          {/* More Pill */}
+                          <div 
+                            className="date-select-pill date-more-btn"
+                            onClick={() => triggerToast("Calendar picker opened!")}
+                          >
+                            <span className="date-select-day" style={{ fontSize: '13px', fontWeight: '800' }}>More</span>
+                            <span className="date-select-name">...</span>
+                          </div>
                         </div>
 
                         {/* Time slots */}
@@ -458,16 +531,18 @@ const Layout = () => {
                   <div className="detail-fixed-checkout-bar">
                     <div className="checkout-price-col">
                       <span className="checkout-price-val">
-                        {typeof selectedItem.price === 'number' ? `₹${selectedItem.price.toLocaleString('en-IN')}` : selectedItem.price}
+                        {typeof selectedItem.price === 'number' 
+                          ? `₹${selectedItem.price.toLocaleString('en-IN')}${selectedItem.priceUnit ? ` / ${selectedItem.priceUnit}` : ''}` 
+                          : selectedItem.price}
                       </span>
                       <span className="checkout-price-unit">
-                        {typeof selectedItem.price === 'number' ? `Total billing rate (${selectedItem.priceUnit || 'booking'})` : 'Salary package rate'}
+                        Total rate excl. tax
                       </span>
                     </div>
 
                     <button className="checkout-submit-btn" onClick={handleBookingClick}>
-                      {selectedItemType === 'job' ? 'Apply for Gig' : 
-                       selectedItemType === 'workshop' ? 'Register for Workshop' : 'Book Listing Now'}
+                      {selectedItemType === 'job' ? 'Apply Now' : 
+                       selectedItemType === 'workshop' ? 'Register Now' : 'Book Now'}
                     </button>
                   </div>
                 </>
