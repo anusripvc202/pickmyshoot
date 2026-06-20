@@ -164,62 +164,122 @@ const HomePage = () => {
         <div className="categories-grid">
           
           <div className="category-card" onClick={() => handleCategoryClick('services')}>
-            <div className="category-icon-wrap"><Camera size={26} /></div>
+            <div className="category-icon-wrap">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                <path d="M4 5h3l1.8-2.4C9.2 2.2 9.6 2 10 2h4c.4 0 .8.2 1.2.6L17 5h3a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H4a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3zm8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
+              </svg>
+            </div>
             <span className="category-label">Book a Shoot</span>
           </div>
 
           <div className="category-card" onClick={() => handleCategoryClick('studios')}>
-            <div className="category-icon-wrap"><Building2 size={26} /></div>
+            <div className="category-icon-wrap">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                <path d="M10 2v20H3V2h7zm11 6v14h-7V8h7zM7 6H5v2h2V6zm0 4H5v2h2v-2zm0 4H5v2h2v-2zm0 4H5v2h2v-2zm11-8h-2v2h2v-2zm0 4h-2v2h2v-2zm0 4h-2v2h2v-2z" />
+              </svg>
+            </div>
             <span className="category-label">Studios</span>
           </div>
 
           <div className="category-card" onClick={() => handleCategoryClick('models')}>
-            <div className="category-icon-wrap"><User size={26} /></div>
+            <div className="category-icon-wrap">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm-7 8c0-2.8 2.2-5 5-5h4c2.8 0 5 2.2 5 5v1a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-1z" />
+              </svg>
+            </div>
             <span className="category-label">Models</span>
           </div>
 
           <div className="category-card" onClick={() => handleCategoryClick('rentals')}>
-            <div className="category-icon-wrap"><Camera size={26} /></div>
+            <div className="category-icon-wrap">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                <path d="M8 3a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H8zm4 5a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
+                <path d="M11 10.5h2v2.5h-2z" />
+                <path d="M11.5 13L6.5 21.5a.8.8 0 0 0 .7 1.2h1.3a.8.8 0 0 0 .7-.4L12 16.5l2.8 5.8a.8.8 0 0 0 .7.4h1.3a.8.8 0 0 0 .7-1.2L12.5 13h-1z" />
+                <path d="M11.25 13v7.5a.75.75 0 0 0 1.5 0V13h-1.5z" />
+              </svg>
+            </div>
             <span className="category-label">Gear Rentals</span>
           </div>
 
           <div className="category-card" onClick={() => handleCategoryClick('rentals')}>
-            <div className="category-icon-wrap"><ShoppingCart size={26} /></div>
+            <div className="category-icon-wrap">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0 0 20 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
+              </svg>
+            </div>
             <span className="category-label">Buy Gear</span>
           </div>
 
           <div className="category-card" onClick={() => handleCategoryClick('studios')}>
-            <div className="category-icon-wrap"><MapPin size={26} /></div>
+            <div className="category-icon-wrap">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" />
+              </svg>
+            </div>
             <span className="category-label">Locations</span>
           </div>
 
           <div className="category-card" onClick={() => handleCategoryClick('services')}>
-            <div className="category-icon-wrap"><Video size={26} /></div>
+            <div className="category-icon-wrap">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                <path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z" />
+              </svg>
+            </div>
             <span className="category-label">Videography</span>
           </div>
 
           <div className="category-card" onClick={() => handleCategoryClick('services')}>
-            <div className="category-icon-wrap"><Scissors size={26} /></div>
+            <div className="category-icon-wrap">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                <path d="M2 3h10v18H2V3zm2 2v2h2V5H4v2zm0 4v2h2V9H4v2zm0 4v2h2v-2H4v2zm4 2h2V5H8v14z" opacity="0.85" />
+                <path d="M13.5 10.5c-.8 0-1.5-.7-1.5-1.5s.7-1.5 1.5-1.5 1.5.7 1.5 1.5-.7 1.5-1.5 1.5zm0-2a.5.5 0 1 0 0 1 .5.5 0 0 0 0-1z" />
+                <path d="M13.5 16.5c-.8 0-1.5-.7-1.5-1.5s.7-1.5 1.5-1.5 1.5.7 1.5 1.5-.7 1.5-1.5 1.5zm0-2a.5.5 0 1 0 0 1 .5.5 0 0 0 0-1z" />
+                <path d="M14.5 11l5-5h2.5v1l-5 5z" />
+                <path d="M14.5 13l5 5h2.5v-1l-5-5z" />
+              </svg>
+            </div>
             <span className="category-label">Editing & Post Production</span>
           </div>
 
           <div className="category-card" onClick={() => handleCategoryClick('workshops')}>
-            <div className="category-icon-wrap"><Calendar size={26} /></div>
+            <div className="category-icon-wrap">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                <path d="M19 3h-1V1h-2v2H8V1H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z" />
+                <path d="M12 8.5l1.5 3 3.3.5-2.4 2.3.6 3.3-3-1.6-3 1.6.6-3.3-2.4-2.3 3.3-.5z" fill="white" />
+              </svg>
+            </div>
             <span className="category-label">Workshops & Events</span>
           </div>
 
           <div className="category-card" onClick={() => handleCategoryClick('jobs')}>
-            <div className="category-icon-wrap"><Briefcase size={26} /></div>
+            <div className="category-icon-wrap">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H2c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h18c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zM10 4h4v2h-4V4z" />
+              </svg>
+            </div>
             <span className="category-label">Jobs & Collabs</span>
           </div>
 
           <div className="category-card" onClick={() => handleCategoryClick('workshops')}>
-            <div className="category-icon-wrap"><GraduationCap size={26} /></div>
+            <div className="category-icon-wrap">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z" />
+                <path d="M5 13.18v4c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-4l-7 3.82-7-3.82z" />
+              </svg>
+            </div>
             <span className="category-label">Admissions (Institutes)</span>
           </div>
 
           <div className="category-card" onClick={() => handleCategoryClick('services')}>
-            <div className="category-icon-wrap"><LayoutGrid size={26} /></div>
+            <div className="category-icon-wrap">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                <rect x="3" y="3" width="7" height="7" rx="2" />
+                <rect x="14" y="3" width="7" height="7" rx="2" />
+                <rect x="3" y="14" width="7" height="7" rx="2" />
+                <rect x="14" y="14" width="7" height="7" rx="2" opacity="0.8" />
+              </svg>
+            </div>
             <span className="category-label">More Services</span>
           </div>
 

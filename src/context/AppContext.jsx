@@ -134,7 +134,7 @@ export const AppProvider = ({ children }) => {
   };
 
   // Book Item action
-  const handleBookingSubmit = () => {
+  const handleBookingSubmit = (autoClose = true) => {
     if (!selectedItem) return;
 
     let cost = selectedItem.price;
@@ -150,7 +150,9 @@ export const AppProvider = ({ children }) => {
     };
 
     setBookings(prev => [newBooking, ...prev]);
-    setSelectedItem(null);
+    if (autoClose) {
+      setSelectedItem(null);
+    }
     triggerToast(`Booking confirmed for ${selectedItem.title}!`);
   };
 

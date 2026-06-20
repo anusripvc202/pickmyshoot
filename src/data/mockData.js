@@ -7,7 +7,7 @@ export const popularServices = [
     rating: 4.8,
     reviews: 320,
     category: "Book Shoot",
-    image: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=500&q=80",
+    image: "/pre_wedding_shoot_new.png",
     description: "Capture the chemistry before the big day with professional photographers, custom styling advice, and scenic outdoor locations."
   },
   {
