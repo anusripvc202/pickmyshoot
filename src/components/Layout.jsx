@@ -624,11 +624,11 @@ const Layout = () => {
                     <div className="checkout-price-col">
                       <span className="checkout-price-val">
                         {typeof selectedItem.price === 'number' 
-                          ? `₹${selectedItem.price.toLocaleString('en-IN')}${selectedItem.priceUnit ? ` / ${selectedItem.priceUnit}` : ''}` 
+                          ? `₹${selectedItem.price.toLocaleString('en-IN')}${selectedItem.priceUnit ? ` /${selectedItem.priceUnit}` : ''}` 
                           : selectedItem.price}
                       </span>
                       <span className="checkout-price-unit">
-                        Total rate excl. tax
+                        Total (incl. taxes)
                       </span>
                     </div>
 
