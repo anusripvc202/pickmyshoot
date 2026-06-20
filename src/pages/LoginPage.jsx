@@ -191,10 +191,10 @@ const LoginPage = () => {
           </div>
 
           <div className="social-login-grid">
-            <button className="social-btn" onClick={() => handleDemoLogin('prof-1')}>
+            <button className="social-btn" onClick={() => handleDemoLogin('prof-client')}>
               Google
             </button>
-            <button className="social-btn" onClick={() => handleDemoLogin('prof-2')}>
+            <button className="social-btn" onClick={() => handleDemoLogin('prof-photographer')}>
               Apple ID
             </button>
           </div>
