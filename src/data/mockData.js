@@ -17,7 +17,7 @@ export const popularServices = [
     rating: 4.7,
     reviews: 210,
     category: "Book Shoot",
-    image: "https://images.unsplash.com/photo-1555252333-9f8e92e65df9?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=500&q=80",
     description: "Adorable baby portrait session with creative themes, baby-safe props, and professional lighting in a comfortable temperature-controlled environment."
   },
   {
@@ -27,7 +27,7 @@ export const popularServices = [
     rating: 4.9,
     reviews: 512,
     category: "Book Shoot",
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=500&q=80",
     description: "High-resolution studio product photos with clean white background or styled lifestyle setups, perfect for e-commerce, websites, and marketing."
   },
   {
@@ -37,7 +37,7 @@ export const popularServices = [
     rating: 4.6,
     reviews: 120,
     category: "Book Shoot",
-    image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=500&q=80",
     description: "Ultra-wide-angle HDR photography highlighting property layouts, natural light, and architecture to attract high-value buyers or renters."
   },
   {
@@ -67,7 +67,7 @@ export const popularServices = [
     rating: 4.7,
     reviews: 95,
     category: "Book Shoot",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=500&q=80",
     description: "High-quality corporate headshots, team group photographs, and workspace lifestyle content suitable for LinkedIn profiles and annual reports."
   },
   {
@@ -77,7 +77,7 @@ export const popularServices = [
     rating: 4.8,
     reviews: 142,
     category: "Book Shoot",
-    image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=500&q=80",
     description: "Vibrant birthday celebration coverage. Includes cake-smash setups for kids or sleek portraits for adults, capturing candid joy and setup details."
   },
   {
@@ -87,7 +87,7 @@ export const popularServices = [
     rating: 4.8,
     reviews: 110,
     category: "Book Shoot",
-    image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=500&q=80",
     description: "Professional fashion editorial and lookbook photography. High-end lighting setups with focus on clothing textures and model poses."
   },
   {
@@ -97,7 +97,7 @@ export const popularServices = [
     rating: 4.9,
     reviews: 130,
     category: "Book Shoot",
-    image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=500&q=80",
     description: "Stunning food styling and commercial photography for restaurant menus, packaging, cookbooks, and high-impact social media promotions."
   },
   {
@@ -107,7 +107,7 @@ export const popularServices = [
     rating: 4.9,
     reviews: 85,
     category: "Book Shoot",
-    image: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=500&q=80",
     description: "Full-scale corporate video production. Focus on company core values, client testimonials, cinematic b-rolls, and high-definition narrative edits."
   }
 ];
@@ -122,7 +122,7 @@ export const studios = [
     reviews: 128,
     location: "Banjara Hills, Hyderabad",
     distance: "1.2 km away",
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=500&q=80",
     area: "1500 Sq.ft",
     capacity: "15 People",
     amenities: ["Lighting Equipment", "Backdrops", "Makeup Room", "Changing Room", "Pantry"],
@@ -173,7 +173,7 @@ export const studios = [
     reviews: 64,
     location: "Gachibowli, Hyderabad",
     distance: "4.8 km away",
-    image: "https://images.unsplash.com/photo-1595515106969-1ce29566ff1c?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=500&q=80",
     area: "1800 Sq.ft",
     capacity: "20 People",
     amenities: ["Industrial Props", "High Ceilings", "Makeup Room", "AC"],
@@ -207,7 +207,7 @@ export const studios = [
     reviews: 83,
     location: "Jubilee Hills, Hyderabad",
     distance: "1.9 km away",
-    image: "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=500&q=80",
     area: "1400 Sq.ft",
     capacity: "12 People",
     amenities: ["Softbox Panels", "Textured Backdrops", "Changing Room", "Lounge Area"],
@@ -224,7 +224,7 @@ export const studios = [
     reviews: 51,
     location: "Secunderabad, Hyderabad",
     distance: "6.5 km away",
-    image: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=500&q=80",
     area: "1100 Sq.ft",
     capacity: "10 People",
     amenities: ["Classic Mahogany Bookshelves", "Leather Sofas", "Retro Table Lamps", "Backdrops"],
@@ -446,7 +446,7 @@ export const workshops = [
     timing: "10:00 AM - 5:00 PM",
     location: "HICC, Hyderabad",
     description: "Learn professional camera movement, lighting setups, cinematic framing, and visual storytelling secrets from industry veteran Vijay Kartik.",
-    image: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=500&q=80",
     isUpcoming: true
   },
   {
@@ -460,7 +460,7 @@ export const workshops = [
     timing: "9:00 AM - 1:00 PM",
     location: "Gachibowli, Hyderabad",
     description: "Master aerial composition, flight safety regulations, weather planning, and advanced cinematic camera panning with the DJI Mavic series.",
-    image: "https://images.unsplash.com/photo-1473968512647-3e447244af8f?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1507682531662-421b17ac4f93?auto=format&fit=crop&w=500&q=80",
     isUpcoming: true
   },
   {
@@ -474,7 +474,7 @@ export const workshops = [
     timing: "2:00 PM - 6:00 PM",
     location: "Virtual (Google Meet)",
     description: "Go from beginner to advanced editing workflows, keyboard shortcuts, color grading (LUTs), keyframing, and quick exporting in Adobe Premiere.",
-    image: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?auto=format&fit=crop&w=500&q=80",
     isUpcoming: true
   },
   {
@@ -488,7 +488,7 @@ export const workshops = [
     timing: "11:00 AM - 4:00 PM",
     location: "The Loft Studio, Hyderabad",
     description: "Master indoor and outdoor lighting ratios for dramatic portraiture. Includes a hands-on live model session and raw conversion workflow tips.",
-    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=500&q=80",
     isUpcoming: true
   },
   {
@@ -502,7 +502,7 @@ export const workshops = [
     timing: "6:00 PM - 8:00 PM",
     location: "Virtual (Zoom Live)",
     description: "Learn viral video scripting, hooks, mobile transitions, trending audio algorithms, and organic hashtag strategies to explosive growth.",
-    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1598550874175-4d0ef436c909?auto=format&fit=crop&w=500&q=80",
     isUpcoming: true
   },
   {
@@ -516,7 +516,7 @@ export const workshops = [
     timing: "10:00 AM - 5:00 PM",
     location: "Begumpet, Hyderabad",
     description: "Learn how to capture candid wedding moments, handle tricky lighting at venues, manage clients, and streamline batch edits in Lightroom.",
-    image: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=500&q=80",
     isUpcoming: true
   },
   {
@@ -530,7 +530,7 @@ export const workshops = [
     timing: "1:00 PM - 5:00 PM",
     location: "Jubilee Hills, Hyderabad",
     description: "Learn fashion lookbook styling, coordinate colors, match clothing styles, and collaborate with makeup artists for high-impact model catalogs.",
-    image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=500&q=80",
     isUpcoming: true
   },
   {
@@ -558,7 +558,7 @@ export const workshops = [
     timing: "10:00 AM - 4:00 PM",
     location: "HICC, Hyderabad",
     description: "Learn how to price photography packages, build high-converting client proposals, close deals, scale studio operations, and draft digital copyrights licensing contracts.",
-    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1431540015161-0bf868a2d407?auto=format&fit=crop&w=500&q=80",
     isUpcoming: true
   }
 ];
