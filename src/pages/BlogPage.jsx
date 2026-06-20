@@ -8,7 +8,8 @@ import {
   ArrowLeft, 
   X, 
   ChevronRight,
-  Sparkles
+  Sparkles,
+  Heart
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -125,6 +126,9 @@ const BlogPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [activeArticle, setActiveArticle] = useState(null);
+  const [likedArticles, setLikedArticles] = useState({});
+  const [comments, setComments] = useState({});
+  const [newComment, setNewComment] = useState("");
 
   const categories = ["All", "Lighting Guide", "Gear Reviews", "Tutorials", "Creative Stories"];
 
@@ -313,6 +317,56 @@ const BlogPage = () => {
                 {activeArticle.content.map((para, i) => (
                   <p key={i}>{para}</p>
                 ))}
+              </div>
+
+              {/* Interaction Section */}
+              <div className="blog-interaction-section" style={{ borderTop: '1px solid var(--border)', paddingTop: '24px', marginTop: '24px' }}>
+                <button 
+                  className={`primary-btn ${likedArticles[activeArticle.id] ? 'liked' : ''}`}
+                  onClick={() => setLikedArticles(prev => ({...prev, [activeArticle.id]: !prev[activeArticle.id]}))}
+                  style={{ background: likedArticles[activeArticle.id] ? 'var(--primary)' : 'var(--bg-app)', color: likedArticles[activeArticle.id] ? 'white' : 'var(--text-main)', border: '1px solid var(--border)', padding: '10px 20px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontWeight: 'bold', width: 'fit-content' }}
+                >
+                  <Heart size={16} fill={likedArticles[activeArticle.id] ? 'white' : 'none'} />
+                  {likedArticles[activeArticle.id] ? 'Liked' : 'Like Article'}
+                </button>
+
+                <div className="blog-comments-section" style={{ marginTop: '30px' }}>
+                  <h3 style={{ fontSize: '18px', marginBottom: '16px', color: 'var(--text-main)' }}>Comments</h3>
+                  <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
+                    <input 
+                      type="text" 
+                      placeholder="Add a comment..." 
+                      value={newComment}
+                      onChange={(e) => setNewComment(e.target.value)}
+                      style={{ flex: 1, padding: '12px', borderRadius: '8px', border: '1px solid var(--border)', background: 'var(--card-bg)', color: 'var(--text-main)' }}
+                    />
+                    <button 
+                      onClick={() => {
+                        if (newComment.trim()) {
+                          setComments(prev => ({
+                            ...prev, 
+                            [activeArticle.id]: [...(prev[activeArticle.id] || []), newComment]
+                          }));
+                          setNewComment("");
+                        }
+                      }}
+                      style={{ padding: '0 20px', borderRadius: '8px', background: 'var(--primary)', color: 'white', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}
+                    >
+                      Post
+                    </button>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {(comments[activeArticle.id] || []).map((c, i) => (
+                      <div key={i} style={{ padding: '12px', background: 'var(--bg-app)', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
+                        <span style={{ fontWeight: 'bold', display: 'block', marginBottom: '4px', fontSize: '13px' }}>You</span>
+                        <p style={{ margin: 0, fontSize: '14px', color: 'var(--text-muted)' }}>{c}</p>
+                      </div>
+                    ))}
+                    {!(comments[activeArticle.id] || []).length && (
+                      <p style={{ color: 'var(--text-muted)', fontSize: '14px', fontStyle: 'italic' }}>No comments yet. Be the first to share your thoughts!</p>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

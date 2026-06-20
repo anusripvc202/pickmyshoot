@@ -1,5 +1,7 @@
 import React from 'react';
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
+import PageTransition from './PageTransition';
 import { 
   Search, 
   Bell, 
@@ -97,6 +99,7 @@ const Layout = () => {
   } = useAppContext();
 
   const navigate = useNavigate();
+  const location = useLocation();
   const [userDropdownOpen, setUserDropdownOpen] = React.useState(false);
   const [bookingStatus, setBookingStatus] = React.useState('idle'); // 'idle' | 'processing' | 'success'
   const [showFullDesc, setShowFullDesc] = React.useState(false);
@@ -300,7 +303,11 @@ const Layout = () => {
 
       {/* MAIN CONTENT BODY */}
       <main className="max-width-wrapper page-content-body">
-        <Outlet />
+        <AnimatePresence mode="wait">
+          <PageTransition key={location.pathname}>
+            <Outlet />
+          </PageTransition>
+        </AnimatePresence>
       </main>
 
       {/* DYNAMIC DESKTOP SPLIT VIEW MODAL DIALOG */}
@@ -775,10 +782,10 @@ const Layout = () => {
                 Company
               </h4>
               <ul className="footer-links-list">
-                <li><a href="#">About Us</a></li>
+                <li><NavLink to="/about" onClick={() => setSelectedItem(null)}>About Us</NavLink></li>
                 <li><a href="#">Careers <span className="footer-link-tag">We're Hiring!</span></a></li>
                 <li><NavLink to="/blog" onClick={() => setSelectedItem(null)}>Blog</NavLink></li>
-                <li><a href="#">Partner with Us</a></li>
+                <li><NavLink to="/contact" onClick={() => setSelectedItem(null)}>Partner with Us</NavLink></li>
               </ul>
             </div>
 
@@ -789,7 +796,7 @@ const Layout = () => {
                 Support
               </h4>
               <ul className="footer-links-list">
-                <li><a href="#">Help Center</a></li>
+                <li><NavLink to="/faq" onClick={() => setSelectedItem(null)}>Help Center & FAQ</NavLink></li>
                 <li><a href="#">Terms of Service</a></li>
                 <li><a href="#">Privacy Policy</a></li>
                 <li><a href="#">Refund Policy</a></li>

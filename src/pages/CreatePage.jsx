@@ -36,6 +36,10 @@ const CreatePage = () => {
   const [newLocation, setNewLocation] = useState('');
   const [newDescription, setNewDescription] = useState('');
   const [newImage, setNewImage] = useState('');
+  // Photography-specific fields
+  const [newSpecialization, setNewSpecialization] = useState('Wedding Photography');
+  const [newExperience, setNewExperience] = useState('');
+  const [newPortfolio, setNewPortfolio] = useState('');
 
   const handleCreateSubmit = (e) => {
     e.preventDefault();
@@ -48,9 +52,13 @@ const CreatePage = () => {
     const generatedId = `custom-${Date.now()}`;
     const defaultImg = newImage || "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=500&q=80";
 
+    // Map frontend category to DB type value
+    const typeMap = { studios: 'studio', gear: 'gear', models: 'model', services: 'service', photography: 'service' };
+
     const newItem = {
       id: generatedId,
       title: newTitle,
+      type: typeMap[newCategory] || 'service',
       price: priceVal,
       priceUnit: newPriceUnit,
       rating: 5.0,
@@ -58,10 +66,11 @@ const CreatePage = () => {
       location: newLocation || "Hyderabad",
       description: newDescription,
       image: defaultImg,
-      amenities: ["Verified Seller", "Premium Equipment"],
+      amenities: ["Verified Photographer", "Professional Equipment"],
       features: ["Verified"],
       specs: newDescription,
       ownerId: activeProfileId,
+      creatorId: activeProfileId,
       active: true
     };
 
@@ -81,10 +90,28 @@ const CreatePage = () => {
       newItem.includes = "Camera body, standard accessory kit";
       setGear(prev => [newItem, ...prev]);
       setExploreTab('rentals');
+    } else if (newCategory === 'photography') {
+      newItem.specialization = newSpecialization;
+      newItem.experience = newExperience ? `${newExperience} years` : 'Not specified';
+      newItem.portfolio = newPortfolio;
+      newItem.category = newSpecialization;
+      newItem.amenities = [newSpecialization, 'Professional Gear', 'Edited Deliverables'];
+      setServices(prev => [newItem, ...prev]);
+      setExploreTab('services');
     } else {
       setServices(prev => [newItem, ...prev]);
       setExploreTab('services');
     }
+
+    // ✅ Save to MongoDB Atlas via /api/listings
+    fetch('/api/listings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newItem)
+    })
+      .then(res => res.json())
+      .then(saved => console.log('Listing saved to DB:', saved._id))
+      .catch(err => console.warn('Failed to sync listing to DB:', err));
 
     triggerToast(`Listing published: "${newTitle}"`);
     
@@ -93,6 +120,8 @@ const CreatePage = () => {
     setNewPrice('');
     setNewDescription('');
     setNewImage('');
+    setNewExperience('');
+    setNewPortfolio('');
     
     navigate('/explore');
   };
@@ -120,7 +149,8 @@ const CreatePage = () => {
                   { id: 'studios', label: 'Studio Space', icon: Building2, desc: 'Indoor stages & lots' },
                   { id: 'gear', label: 'Camera Gear', icon: Camera, desc: 'Cameras, lenses & kits' },
                   { id: 'models', label: 'Models Portfolio', icon: User, desc: 'Fashion talents' },
-                  { id: 'services', label: 'Shoot Package', icon: Video, desc: 'Post production & photography' }
+                  { id: 'photography', label: 'Photography Services', icon: Camera, desc: 'List yourself as a photographer' },
+                  { id: 'services', label: 'Shoot Package', icon: Video, desc: 'Post production & editing' }
                 ].map(cat => {
                   const Icon = cat.icon;
                   const isActive = newCategory === cat.id;
@@ -130,7 +160,6 @@ const CreatePage = () => {
                       className={`category-select-card ${isActive ? 'active' : ''}`}
                       onClick={() => {
                         setNewCategory(cat.id);
-                        // Sensible default price units depending on category selection
                         if (cat.id === 'studios') setNewPriceUnit('hr');
                         else if (cat.id === 'gear') setNewPriceUnit('day');
                         else if (cat.id === 'models') setNewPriceUnit('day');
@@ -250,6 +279,63 @@ const CreatePage = () => {
                 ></textarea>
               </div>
             </div>
+
+            {/* 6. Photography-specific fields (only shown for Photography Services) */}
+            {newCategory === 'photography' && (
+              <>
+                <div className="form-group">
+                  <label className="form-label">Photography Specialization *</label>
+                  <div className="auth-input-wrap">
+                    <select
+                      className="auth-select-input"
+                      value={newSpecialization}
+                      onChange={(e) => setNewSpecialization(e.target.value)}
+                    >
+                      <option value="Wedding Photography">Wedding Photography</option>
+                      <option value="Portrait Photography">Portrait Photography</option>
+                      <option value="Fashion Photography">Fashion Photography</option>
+                      <option value="Product Photography">Product Photography</option>
+                      <option value="Event Photography">Event Photography</option>
+                      <option value="Wildlife Photography">Wildlife Photography</option>
+                      <option value="Aerial / Drone Photography">Aerial / Drone Photography</option>
+                      <option value="Cinematography / Videography">Cinematography / Videography</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="form-row-premium">
+                  <div className="form-group">
+                    <label className="form-label">Years of Experience</label>
+                    <div className="input-with-icon-wrap">
+                      <div className="input-icon-left"><Star size={16} /></div>
+                      <input
+                        type="number"
+                        placeholder="e.g. 5"
+                        className="form-input-premium"
+                        value={newExperience}
+                        onChange={(e) => setNewExperience(e.target.value)}
+                        min="0"
+                        max="50"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Portfolio / Instagram URL</label>
+                    <div className="input-with-icon-wrap">
+                      <div className="input-icon-left"><Image size={16} /></div>
+                      <input
+                        type="url"
+                        placeholder="https://instagram.com/yourhandle"
+                        className="form-input-premium"
+                        value={newPortfolio}
+                        onChange={(e) => setNewPortfolio(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
 
             <button type="submit" className="form-submit-premium-btn">
               Publish Listing live

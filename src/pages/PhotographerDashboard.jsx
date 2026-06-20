@@ -851,7 +851,7 @@ const PhotographerDashboard = () => {
                 <div className="receipt-meta-grid">
                   <div>
                     <span className="label">Client Partner</span>
-                    <span className="val">Amit Sharma</span>
+                    <span className="val">{(profiles.find(p => p.id === bookingObj.clientId) || { name: 'Client' }).name}</span>
                   </div>
                   <div>
                     <span className="label">Date issued</span>

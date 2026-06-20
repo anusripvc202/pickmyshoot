@@ -11,6 +11,9 @@ import ClientDashboard from './pages/ClientDashboard';
 import PhotographerDashboard from './pages/PhotographerDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import BlogPage from './pages/BlogPage';
+import AboutPage from './pages/AboutPage';
+import ContactPage from './pages/ContactPage';
+import FaqPage from './pages/FaqPage';
 import { useAppContext } from './context/AppContext';
 
 // Simple Route Guarding Wrapper Component
@@ -27,6 +30,9 @@ function App() {
         <Route path="explore" element={<ExplorePage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="blog" element={<BlogPage />} />
+        <Route path="about" element={<AboutPage />} />
+        <Route path="contact" element={<ContactPage />} />
+        <Route path="faq" element={<FaqPage />} />
         
         {/* Protected Routes */}
         <Route path="create" element={<ProtectedRoute><CreatePage /></ProtectedRoute>} />

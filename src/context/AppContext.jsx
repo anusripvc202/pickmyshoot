@@ -14,89 +14,14 @@ export const AppProvider = ({ children }) => {
   const [theme, setTheme] = useState('light');
 
   // 1. Multi-Profile Global States
-  const [profiles, setProfiles] = useState([
-    {
-      id: "prof-client",
-      name: "Amit Sharma",
-      role: "Client / Content Creator",
-      email: "amit.sharma@pickmyshoot.com",
-      phone: "+91 99999 77777",
-      bio: "Creative director & indie producer based in Hyderabad. Booking studios, hiring fashion models, and searching for talented photographers for corporate shoots.",
-      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=180&q=80",
-      shoots: "12 Gigs",
-      rating: "4.8 ★",
-      followers: "120",
-      revenue: "₹45,000 spent",
-      success: "100%",
-      views: "182"
-    },
-    {
-      id: "prof-photographer",
-      name: "Ananya Wedding Shoot",
-      role: "Verified Photographer",
-      email: "ananya.wedding@pickmyshoot.com",
-      phone: "+91 87654 32109",
-      bio: "Candid wedding & bridal catalog photographer. Documenting timeless love stories through cinematic lens across Hyderabad.",
-      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=180&q=80",
-      shoots: "85+",
-      rating: "4.8 ★",
-      followers: "8.2K",
-      revenue: "₹76,500",
-      success: "98.5%",
-      views: "640"
-    },
-    {
-      id: "prof-admin",
-      name: "Deepak Raj",
-      role: "System Administrator",
-      email: "deepak.admin@pickmyshoot.com",
-      phone: "+91 98888 11111",
-      bio: "Platform operations lead and admin manager at PickMyShoot. Reviewing vendor verification, payouts, and listings moderation.",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=180&q=80",
-      shoots: "All Platform",
-      rating: "5.0 ★",
-      followers: "1",
-      revenue: "₹2,19,300 Volume",
-      success: "100%",
-      views: "1,200"
-    },
-    {
-      id: "prof-1",
-      name: "Dev Creator Workspace",
-      role: "Verified Studio Partner",
-      email: "creator.workspace@pickmyshoot.com",
-      phone: "+91 98765 43210",
-      bio: "Premium visual productions hub & studio lot manager. Hosting state-of-the-art camera rentals, lighting packages, and fashion models portfolios across South India.",
-      avatar: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=180&q=80",
-      shoots: "120+",
-      rating: "4.9 ★",
-      followers: "15K",
-      revenue: "₹1,42,800",
-      success: "99.2%",
-      views: "1,284"
-    }
-  ]);
+  const [profiles, setProfiles] = useState([]);
 
-  const [activeProfileId, setActiveProfileId] = useState("prof-client");
+  const [activeProfileId, setActiveProfileId] = useState("");
   const [currentRole, setCurrentRole] = useState('client');
 
   // 1.5 Authentication Global States
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-  const [currentUser, setCurrentUser] = useState({
-    id: "prof-client",
-    name: "Amit Sharma",
-    role: "Client / Content Creator",
-    email: "amit.sharma@pickmyshoot.com",
-    phone: "+91 99999 77777",
-    bio: "Creative director & indie producer based in Hyderabad. Booking studios, hiring fashion models, and searching for talented photographers for corporate shoots.",
-    avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=180&q=80",
-    shoots: "12 Gigs",
-    rating: "4.8 ★",
-    followers: "120",
-    revenue: "₹45,000 spent",
-    success: "100%",
-    views: "182"
-  });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
   // Sync currentUser details when profiles list is edited
   useEffect(() => {
@@ -107,6 +32,63 @@ export const AppProvider = ({ children }) => {
       }
     }
   }, [profiles, currentUser]);
+
+  // Load registered users from MongoDB on startup
+  useEffect(() => {
+    fetch('/api/users')
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to load users");
+        return res.json();
+      })
+      .then(data => {
+        if (Array.isArray(data)) {
+          const dbProfiles = data.map(u => ({
+            ...u,
+            id: u.id || u._id,
+            name: u.name,
+            role: u.role || 'client',
+            email: u.email,
+            phone: u.phone || "+91 99999 88888",
+            bio: u.bio || "Newly registered visual creator profile.",
+            avatar: u.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=180&q=80",
+            shoots: u.shoots || "0",
+            rating: u.rating || "5.0 ★",
+            followers: u.followers || "0",
+            revenue: u.revenue || "₹0",
+            success: u.success || "100%",
+            views: u.views || "1"
+          }));
+
+          setProfiles(prev => {
+            // Keep existing profiles unless they match email of DB profiles
+            const filteredPrev = prev.filter(p => !dbProfiles.some(dp => dp.email.toLowerCase() === p.email.toLowerCase()));
+            return [...filteredPrev, ...dbProfiles];
+          });
+        }
+      })
+      .catch(err => console.warn('Failed to load users from DB:', err));
+  }, []);
+
+  // Load bookings from MongoDB on startup
+  useEffect(() => {
+    fetch('/api/bookings')
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to load bookings");
+        return res.json();
+      })
+      .then(data => {
+        if (Array.isArray(data)) {
+          const dbBookings = data.map(b => ({
+            ...b,
+            id: b.id || b._id
+          }));
+          setBookings(dbBookings);
+        }
+      })
+      .catch(err => console.warn('Failed to load bookings from DB:', err));
+  }, []);
+
+
   
   // Lists
   const [services, setServices] = useState(initialServices);
@@ -187,42 +169,8 @@ export const AppProvider = ({ children }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [exploreTab, setExploreTab] = useState('services');
 
-  // Bookings list state (with cross-linked clients and owners)
-  const [bookings, setBookings] = useState([
-    {
-      id: "b-prev-1",
-      clientId: "prof-client",
-      ownerId: "prof-photographer",
-      item: initialServices[0], // Pre Wedding Shoot
-      itemType: "Service",
-      date: "20 MON",
-      time: "11:00 AM",
-      price: 12999,
-      status: "confirmed"
-    },
-    {
-      id: "b-prev-2",
-      clientId: "prof-client",
-      ownerId: "prof-1", // Dev Creator Workspace
-      item: initialStudios[0], // The Loft Studio
-      itemType: "Studio",
-      date: "18 SAT",
-      time: "09:00 AM",
-      price: 1500,
-      status: "confirmed"
-    },
-    {
-      id: "b-prev-3",
-      clientId: "prof-client",
-      ownerId: "prof-photographer",
-      item: initialServices[8], // Fashion Catalog Shoot
-      itemType: "Service",
-      date: "15 THU",
-      time: "02:00 PM",
-      price: 14999,
-      status: "completed"
-    }
-  ]);
+  // Bookings list state - initialized to empty array (clean dashboard)
+  const [bookings, setBookings] = useState([]);
   const [bookingFilter, setBookingFilter] = useState('upcoming');
 
   // Liked items state (ID -> boolean map)
@@ -232,26 +180,12 @@ export const AppProvider = ({ children }) => {
     "ps-1": false
   });
 
-  // Support Tickets State
-  const [tickets, setTickets] = useState([
-    { id: "t-1", clientId: "prof-client", category: "Booking Issue", subject: "Rescheduling studio booking", status: "open", message: "Hi, I need to reschedule my session at Loft Studio.", date: "2026-06-19" },
-    { id: "t-2", clientId: "prof-client", category: "Billing Refund", subject: "Refund for cancelled shoot", status: "resolved", message: "My booking b-prev-3 was completed but I had an extra charge.", date: "2026-06-18" }
-  ]);
+  // Support Tickets State - initialized to empty array (clean dashboard)
+  const [tickets, setTickets] = useState([]);
 
-  // Chats / Messaging State
-  const [chatSessions, setChatSessions] = useState([
-    { id: "ch-1", participantIds: ["prof-client", "prof-photographer"], lastMessage: "Yes, I will be there by 10 AM.", lastUpdated: "10:30 AM" },
-    { id: "ch-2", participantIds: ["prof-client", "prof-1"], lastMessage: "The booking is confirmed. Lighting setup is ready.", lastUpdated: "Yesterday" }
-  ]);
-  const [chatMessages, setChatMessages] = useState([
-    { id: "m-1", sessionId: "ch-1", senderId: "prof-client", text: "Hi Ananya, just checking on our shoot tomorrow.", time: "10:15 AM" },
-    { id: "m-2", sessionId: "ch-1", senderId: "prof-photographer", text: "Hi Amit! Yes, all preparations are done from my end.", time: "10:20 AM" },
-    { id: "m-3", sessionId: "ch-1", senderId: "prof-client", text: "Awesome, should I bring any specific outfit?", time: "10:22 AM" },
-    { id: "m-4", sessionId: "ch-1", senderId: "prof-photographer", text: "Yes, I will be there by 10 AM. Standard casuals will work fine.", time: "10:30 AM" },
-    
-    { id: "m-5", sessionId: "ch-2", senderId: "prof-client", text: "Is the lighting equipment included in the studio package?", time: "Yesterday" },
-    { id: "m-6", sessionId: "ch-2", senderId: "prof-1", text: "The booking is confirmed. Lighting setup is ready.", time: "Yesterday" }
-  ]);
+  // Chats / Messaging State - initialized to empty array (clean dashboard)
+  const [chatSessions, setChatSessions] = useState([]);
+  const [chatMessages, setChatMessages] = useState([]);
 
   // Coupons State
   const [coupons, setCoupons] = useState([
@@ -303,23 +237,44 @@ export const AppProvider = ({ children }) => {
 
     let cost = selectedItem.price;
 
-    const newBooking = {
-      id: `b-${Date.now()}`,
+    const dbBooking = {
+      listingId: selectedItem.id || selectedItem._id || "",
       clientId: activeProfileId || "prof-client",
-      ownerId: selectedItem.ownerId || (selectedItemType === "service" ? "prof-photographer" : "prof-1"),
-      item: selectedItem,
+      creatorId: selectedItem.ownerId || (selectedItemType === "service" ? "prof-photographer" : "prof-1"),
       itemType: selectedItemType.charAt(0).toUpperCase() + selectedItemType.slice(1),
+      title: selectedItem.title || "",
       date: selectedItemType === 'workshop' ? selectedItem.date : selectedDate,
       time: selectedItemType === 'workshop' ? selectedItem.timing : selectedTime,
       price: cost,
-      status: "confirmed"
+      status: "pending",
+      item: selectedItem
     };
 
-    setBookings(prev => [newBooking, ...prev]);
+    // Sync with backend
+    fetch('/api/bookings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dbBooking)
+    })
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to save booking");
+        return res.json();
+      })
+      .then(savedBooking => {
+        const mappedBooking = { ...savedBooking, id: savedBooking._id };
+        setBookings(prev => [mappedBooking, ...prev]);
+        triggerToast(`Booking confirmed for ${selectedItem.title}!`);
+      })
+      .catch(err => {
+        console.warn("Failed to sync booking to DB, saving locally:", err);
+        const localBooking = { id: `b-${Date.now()}`, ...dbBooking };
+        setBookings(prev => [localBooking, ...prev]);
+        triggerToast(`Booking confirmed locally for ${selectedItem.title}!`);
+      });
+
     if (autoClose) {
       setSelectedItem(null);
     }
-    triggerToast(`Booking confirmed for ${selectedItem.title}!`);
   };
 
   // Toggle active visibility of listed spaces / gear rentals dynamically
@@ -336,23 +291,20 @@ export const AppProvider = ({ children }) => {
   // Switch role helper
   const changeUserRole = (newRole) => {
     setCurrentRole(newRole);
-    let targetProfileId = "prof-client";
-    if (newRole === 'photographer') targetProfileId = "prof-photographer";
-    if (newRole === 'admin') targetProfileId = "prof-admin";
-
-    const found = profiles.find(p => p.id === targetProfileId);
-    if (found) {
-      setCurrentUser(found);
-      setActiveProfileId(found.id);
-      setIsAuthenticated(true);
-      triggerToast(`Switched to ${newRole.charAt(0).toUpperCase() + newRole.slice(1)} Workspace`);
-    }
+    triggerToast(`Switched to ${newRole.charAt(0).toUpperCase() + newRole.slice(1)} Workspace`);
   };
 
   // Update booking status helper
   const updateBookingStatus = (bookingId, newStatus) => {
     setBookings(prev => prev.map(b => b.id === bookingId ? { ...b, status: newStatus } : b));
     triggerToast(`Booking status marked as ${newStatus}`);
+
+    // Sync status update with backend
+    fetch('/api/bookings', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: bookingId, status: newStatus })
+    }).catch(err => console.warn('Failed to sync booking status update with DB:', err));
   };
 
   // Toggle user verification helper
@@ -412,6 +364,14 @@ export const AppProvider = ({ children }) => {
 
   // Authenticate user session
   const loginUser = (email, password, demoProfileId = null) => {
+    const getMappedRole = (profile) => {
+      if (!profile || !profile.role) return 'client';
+      const roleLower = profile.role.toLowerCase();
+      if (roleLower.includes('admin')) return 'admin';
+      if (roleLower.includes('photographer')) return 'photographer';
+      return 'client';
+    };
+
     if (demoProfileId) {
       const foundProfile = profiles.find(p => p.id === demoProfileId);
       if (foundProfile) {
@@ -419,9 +379,7 @@ export const AppProvider = ({ children }) => {
         setActiveProfileId(foundProfile.id);
         setIsAuthenticated(true);
         // Sync role based on user profile
-        if (foundProfile.id === 'prof-client') setCurrentRole('client');
-        else if (foundProfile.id === 'prof-photographer') setCurrentRole('photographer');
-        else if (foundProfile.id === 'prof-admin') setCurrentRole('admin');
+        setCurrentRole(getMappedRole(foundProfile));
         triggerToast(`Welcome back, ${foundProfile.name}!`);
         return true;
       }
@@ -433,9 +391,7 @@ export const AppProvider = ({ children }) => {
       setCurrentUser(foundProfile);
       setActiveProfileId(foundProfile.id);
       setIsAuthenticated(true);
-      if (foundProfile.id === 'prof-client') setCurrentRole('client');
-      else if (foundProfile.id === 'prof-photographer') setCurrentRole('photographer');
-      else if (foundProfile.id === 'prof-admin') setCurrentRole('admin');
+      setCurrentRole(getMappedRole(foundProfile));
       triggerToast(`Welcome back, ${foundProfile.name}!`);
       return true;
     } else {
@@ -445,16 +401,16 @@ export const AppProvider = ({ children }) => {
   };
 
   // Register new profile and auto-login
-  const signupUser = (name, email, password, role) => {
+  const signupUser = (name, email, password, role, avatar = null, phone = '') => {
     const newProfileId = `prof-${Date.now()}`;
     const newProfile = {
       id: newProfileId,
       name: name,
-      role: role || "Verified Photographer",
+      role: role || "client",
       email: email,
-      phone: "+91 99999 88888",
+      phone: phone || "+91 99999 88888",
       bio: "Newly registered visual creator profile.",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=180&q=80",
+      avatar: avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=180&q=80",
       shoots: "0",
       rating: "5.0 ★",
       followers: "0",
@@ -467,7 +423,23 @@ export const AppProvider = ({ children }) => {
     setCurrentUser(newProfile);
     setActiveProfileId(newProfileId);
     setIsAuthenticated(true);
-    setCurrentRole(role.toLowerCase().includes('photographer') ? 'photographer' : 'client');
+    
+    // Set correct role
+    if (role === 'admin') {
+      setCurrentRole('admin');
+    } else if (role === 'photographer') {
+      setCurrentRole('photographer');
+    } else {
+      setCurrentRole('client');
+    }
+    
+    // Sync with backend
+    fetch('/api/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newProfile)
+    }).catch(err => console.warn('Failed to sync new user with DB', err));
+
     triggerToast(`Welcome to PickMyShoot, ${name}!`);
     return true;
   };
