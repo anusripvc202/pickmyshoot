@@ -97,13 +97,22 @@ const Layout = () => {
   const [userDropdownOpen, setUserDropdownOpen] = React.useState(false);
   const [bookingStatus, setBookingStatus] = React.useState('idle'); // 'idle' | 'processing' | 'success'
   const [showFullDesc, setShowFullDesc] = React.useState(false);
+  const scrollRef = React.useRef(null);
 
   React.useEffect(() => {
     document.body.className = `${theme}-theme`;
   }, [theme]);
 
   React.useEffect(() => {
-    if (!selectedItem) {
+    if (selectedItem) {
+      // Force scroll position to top on next render frame to handle layout shifts / focus resets
+      const timer = setTimeout(() => {
+        if (scrollRef.current) {
+          scrollRef.current.scrollTop = 0;
+        }
+      }, 0);
+      return () => clearTimeout(timer);
+    } else {
       setBookingStatus('idle');
       setShowFullDesc(false);
     }
@@ -321,7 +330,7 @@ const Layout = () => {
 
               {bookingStatus === 'idle' && (
                 <>
-                  <div className="detail-scrollable-content">
+                  <div className="detail-scrollable-content" ref={scrollRef}>
                     <div className="detail-title-section">
                       {selectedItem.isFeatured && (
                         <span className="detail-featured-badge">Featured Space</span>
