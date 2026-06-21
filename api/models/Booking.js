@@ -12,6 +12,9 @@ const bookingSchema = new mongoose.Schema({
   status: { type: String, default: 'pending' },
   item: { type: mongoose.Schema.Types.Mixed },
   ownerId: { type: String },
+  clientName: { type: String },
+  clientEmail: { type: String },
+  clientPhone: { type: String },
   createdAt: { type: Date, default: Date.now },
 });
 

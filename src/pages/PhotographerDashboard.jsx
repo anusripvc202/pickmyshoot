@@ -417,18 +417,23 @@ const PhotographerDashboard = () => {
                 <span className="widget-title">Incoming Customer Reservations</span>
                 <span className="widget-desc">Moderate incoming shoot requests and completed sessions.</span>
                 <div className="timeline-list">
-                  {photographerBookings.map((b) => (
-                    <div key={b.id} className="request-card-item">
-                      <div className="request-header-row">
-                        <div className="request-client-info">
-                          <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&q=80" alt="Client Avatar" className="req-client-avatar" />
-                          <div>
-                            <span className="req-client-name">Customer Partnership</span>
-                            <span className="req-time-slot">{b.date} • {b.time}</span>
+                  {photographerBookings.map((b) => {
+                    const clientProfile = profiles.find(p => p.id === b.clientId || p._id === b.clientId);
+                    const clientName = clientProfile?.name || b.clientName || "Customer Partnership";
+                    const clientAvatar = clientProfile?.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&q=80";
+
+                    return (
+                      <div key={b.id} className="request-card-item">
+                        <div className="request-header-row">
+                          <div className="request-client-info">
+                            <img src={clientAvatar} alt={clientName} className="req-client-avatar" />
+                            <div>
+                              <span className="req-client-name">{clientName}</span>
+                              <span className="req-time-slot">{b.date} • {b.time}</span>
+                            </div>
                           </div>
+                          <span className={`status-badge-chip ${b.status}`}>{b.status}</span>
                         </div>
-                        <span className={`status-badge-chip ${b.status}`}>{b.status}</span>
-                      </div>
                       
                       <span className="request-listing-title">{b.item?.title || 'Photoshoot Package Session'}</span>
                       <span className="request-price-tag">Amount Due: <strong>₹{b.price.toLocaleString('en-IN')}</strong></span>
@@ -451,7 +456,8 @@ const PhotographerDashboard = () => {
                         )}
                       </div>
                     </div>
-                  ))}
+                  );
+                })}
                   {photographerBookings.length === 0 && (
                     <div className="timeline-empty">
                       <Clock size={28} />
