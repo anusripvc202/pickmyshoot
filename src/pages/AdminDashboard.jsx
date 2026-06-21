@@ -40,7 +40,8 @@ const AdminDashboard = () => {
     updateTicketStatus,
     coupons,
     toggleCouponStatus,
-    createCoupon
+    createCoupon,
+    currentUser
   } = useAppContext();
 
   const [activeTab, setActiveTab] = useState('overview');
@@ -105,6 +106,13 @@ const AdminDashboard = () => {
 
   const handleProfileUpdate = (e) => {
     e.preventDefault();
+    const updatedFields = {
+      id: activeProfileId,
+      name: profileName,
+      email: profileEmail,
+      bio: profileBio
+    };
+
     setProfiles(prev => prev.map(p => {
       if (p.id === activeProfileId) {
         return {
@@ -116,7 +124,23 @@ const AdminDashboard = () => {
       }
       return p;
     }));
-    triggerToast("Profile details updated successfully!");
+
+    fetch('/api/users', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updatedFields)
+    })
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to save to database");
+        return res.json();
+      })
+      .then(() => {
+        triggerToast("Profile details updated successfully!");
+      })
+      .catch(err => {
+        console.warn("Could not sync profile update to DB:", err);
+        triggerToast("Profile updated locally");
+      });
   };
 
   const handleCreateListingSubmit = (e) => {

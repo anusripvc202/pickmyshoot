@@ -69,23 +69,117 @@ export const AppProvider = ({ children }) => {
       .catch(err => console.warn('Failed to load users from DB:', err));
   }, []);
 
-  // Load bookings from MongoDB on startup
+  // Load and poll bookings from MongoDB
   useEffect(() => {
-    fetch('/api/bookings')
+    const loadBookings = () => {
+      fetch('/api/bookings')
+        .then(res => {
+          if (!res.ok) throw new Error("Failed to load bookings");
+          return res.json();
+        })
+        .then(data => {
+          if (Array.isArray(data)) {
+            const dbBookings = data.map(b => ({
+              ...b,
+              id: b.id || b._id,
+              ownerId: b.ownerId || b.creatorId
+            }));
+            
+            // Sync state and avoid unnecessary renders if the data is unchanged
+            setBookings(prev => {
+              if (JSON.stringify(prev) !== JSON.stringify(dbBookings)) {
+                // Check if a new booking has been added
+                if (prev.length > 0 && dbBookings.length > prev.length) {
+                  const newBookings = dbBookings.filter(b => !prev.some(p => p.id === b.id));
+                  newBookings.forEach(nb => {
+                    if (nb.status === 'pending' && (nb.ownerId === activeProfileId || nb.creatorId === activeProfileId)) {
+                      triggerToast(`🔔 New booking request received: "${nb.title}"!`);
+                    }
+                  });
+                }
+                return dbBookings;
+              }
+              return prev;
+            });
+          }
+        })
+        .catch(err => console.warn('Failed to load bookings from DB:', err));
+    };
+
+    loadBookings();
+    const interval = setInterval(loadBookings, 5000); // poll every 5s for real-time notification feel
+    return () => clearInterval(interval);
+  }, [activeProfileId]);
+
+  // Load listings from MongoDB on startup
+  useEffect(() => {
+    fetch('/api/listings')
       .then(res => {
-        if (!res.ok) throw new Error("Failed to load bookings");
+        if (!res.ok) throw new Error("Failed to load listings");
         return res.json();
       })
       .then(data => {
         if (Array.isArray(data)) {
-          const dbBookings = data.map(b => ({
-            ...b,
-            id: b.id || b._id
-          }));
-          setBookings(dbBookings);
+          const dbServices = [];
+          const dbStudios = [];
+          const dbModels = [];
+          const dbGear = [];
+          const dbWorkshops = [];
+          const dbJobs = [];
+
+          data.forEach(item => {
+            const mappedItem = {
+              ...item,
+              id: item.id || item._id,
+              ownerId: item.ownerId || (item.creatorId && typeof item.creatorId === 'object' ? item.creatorId.id || item.creatorId._id : item.creatorId)
+            };
+            if (item.type === 'service') dbServices.push(mappedItem);
+            else if (item.type === 'studio') dbStudios.push(mappedItem);
+            else if (item.type === 'model') dbModels.push(mappedItem);
+            else if (item.type === 'gear') dbGear.push(mappedItem);
+            else if (item.type === 'workshop') dbWorkshops.push(mappedItem);
+            else if (item.type === 'job') dbJobs.push(mappedItem);
+          });
+
+          if (dbServices.length > 0) {
+            setServices(prev => {
+              const filteredPrev = prev.filter(p => !dbServices.some(d => d.id === p.id));
+              return [...dbServices, ...filteredPrev];
+            });
+          }
+          if (dbStudios.length > 0) {
+            setStudios(prev => {
+              const filteredPrev = prev.filter(p => !dbStudios.some(d => d.id === p.id));
+              return [...dbStudios, ...filteredPrev];
+            });
+          }
+          if (dbModels.length > 0) {
+            setModels(prev => {
+              const filteredPrev = prev.filter(p => !dbModels.some(d => d.id === p.id));
+              return [...dbModels, ...filteredPrev];
+            });
+          }
+          if (dbGear.length > 0) {
+            setGear(prev => {
+              const filteredPrev = prev.filter(p => !dbGear.some(d => d.id === p.id));
+              return [...dbGear, ...filteredPrev];
+            });
+          }
+          if (dbWorkshops.length > 0) {
+            setWorkshops(prev => {
+              const filteredPrev = prev.filter(p => !dbWorkshops.some(d => d.id === p.id));
+              return [...dbWorkshops, ...filteredPrev];
+            });
+          }
+          if (dbJobs.length > 0) {
+            setJobs(prev => {
+              const filteredPrev = prev.filter(p => !dbJobs.some(d => d.id === p.id));
+              return [...dbJobs, ...filteredPrev];
+            });
+          }
         }
       })
-      .catch(err => console.warn('Failed to load bookings from DB:', err));
+      .catch(err => console.warn('Failed to load listings from DB:', err));
   }, []);
 
 
@@ -241,13 +335,18 @@ export const AppProvider = ({ children }) => {
       listingId: selectedItem.id || selectedItem._id || "",
       clientId: activeProfileId || "prof-client",
       creatorId: selectedItem.ownerId || (selectedItemType === "service" ? "prof-photographer" : "prof-1"),
+      ownerId: selectedItem.ownerId || (selectedItemType === "service" ? "prof-photographer" : "prof-1"),
       itemType: selectedItemType.charAt(0).toUpperCase() + selectedItemType.slice(1),
       title: selectedItem.title || "",
       date: selectedItemType === 'workshop' ? selectedItem.date : selectedDate,
       time: selectedItemType === 'workshop' ? selectedItem.timing : selectedTime,
       price: cost,
       status: "pending",
-      item: selectedItem
+      item: selectedItem,
+      // Client details for email notification
+      clientName: currentUser?.name || "",
+      clientEmail: currentUser?.email || "",
+      clientPhone: currentUser?.phone || ""
     };
 
     // Sync with backend
@@ -261,13 +360,21 @@ export const AppProvider = ({ children }) => {
         return res.json();
       })
       .then(savedBooking => {
-        const mappedBooking = { ...savedBooking, id: savedBooking._id };
+        const mappedBooking = { 
+          ...savedBooking, 
+          id: savedBooking._id,
+          ownerId: savedBooking.ownerId || savedBooking.creatorId
+        };
         setBookings(prev => [mappedBooking, ...prev]);
         triggerToast(`Booking confirmed for ${selectedItem.title}!`);
       })
       .catch(err => {
         console.warn("Failed to sync booking to DB, saving locally:", err);
-        const localBooking = { id: `b-${Date.now()}`, ...dbBooking };
+        const localBooking = { 
+          id: `b-${Date.now()}`, 
+          ...dbBooking,
+          ownerId: dbBooking.ownerId || dbBooking.creatorId
+        };
         setBookings(prev => [localBooking, ...prev]);
         triggerToast(`Booking confirmed locally for ${selectedItem.title}!`);
       });

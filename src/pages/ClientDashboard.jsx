@@ -41,7 +41,8 @@ const ClientDashboard = () => {
     addSupportTicket,
     chatSessions,
     chatMessages,
-    sendChatMessage
+    sendChatMessage,
+    currentUser
   } = useAppContext();
 
   const navigate = useNavigate();
@@ -110,6 +111,13 @@ const ClientDashboard = () => {
 
   const handleProfileUpdate = (e) => {
     e.preventDefault();
+    const updatedFields = {
+      id: activeProfileId,
+      name: profileName,
+      email: profileEmail,
+      bio: profileBio
+    };
+
     setProfiles(prev => prev.map(p => {
       if (p.id === activeProfileId) {
         return {
@@ -121,11 +129,30 @@ const ClientDashboard = () => {
       }
       return p;
     }));
-    triggerToast("Profile details updated successfully!");
+
+    fetch('/api/users', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updatedFields)
+    })
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to save to database");
+        return res.json();
+      })
+      .then(() => {
+        triggerToast("Profile details updated successfully!");
+      })
+      .catch(err => {
+        console.warn("Could not sync profile update to DB:", err);
+        triggerToast("Profile updated locally");
+      });
   };
 
   // Client filtering
-  const clientBookings = bookings.filter(b => b.clientId === activeProfileId);
+  const clientBookings = bookings.filter(b => 
+    b.clientId === activeProfileId || 
+    (currentUser && (b.clientId === currentUser.id || b.clientId === currentUser._id))
+  );
   const clientSpent = clientBookings.reduce((sum, b) => sum + (b.status === 'cancelled' ? 0 : b.price), 0);
 
   return (
@@ -327,7 +354,7 @@ const ClientDashboard = () => {
                       >
                         <FileText size={14} /> Receipt
                       </button>
-                      {b.status === 'confirmed' && (
+                      {(b.status === 'confirmed' || b.status === 'pending') && (
                         <button 
                           className="cancel-btn-action" 
                           onClick={() => { updateBookingStatus(b.id, 'cancelled'); }}

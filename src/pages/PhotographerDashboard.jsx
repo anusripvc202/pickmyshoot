@@ -45,7 +45,8 @@ const PhotographerDashboard = () => {
     portfolioItems,
     chatSessions,
     chatMessages,
-    sendChatMessage
+    sendChatMessage,
+    currentUser
   } = useAppContext();
 
   const navigate = useNavigate();
@@ -125,6 +126,13 @@ const PhotographerDashboard = () => {
 
   const handleProfileUpdate = (e) => {
     e.preventDefault();
+    const updatedFields = {
+      id: activeProfileId,
+      name: profileName,
+      email: profileEmail,
+      bio: profileBio
+    };
+
     setProfiles(prev => prev.map(p => {
       if (p.id === activeProfileId) {
         return {
@@ -136,7 +144,23 @@ const PhotographerDashboard = () => {
       }
       return p;
     }));
-    triggerToast("Profile details updated successfully!");
+
+    fetch('/api/users', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updatedFields)
+    })
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to save to database");
+        return res.json();
+      })
+      .then(() => {
+        triggerToast("Profile details updated successfully!");
+      })
+      .catch(err => {
+        console.warn("Could not sync profile update to DB:", err);
+        triggerToast("Profile updated locally");
+      });
   };
 
   const handleAddPortfolioSubmit = (e) => {
@@ -155,7 +179,11 @@ const PhotographerDashboard = () => {
   };
 
   // Photographer filtering & data
-  const photographerBookings = bookings.filter(b => b.ownerId === activeProfileId);
+  const photographerBookings = bookings.filter(b => 
+    b.ownerId === activeProfileId || 
+    b.creatorId === activeProfileId || 
+    (currentUser && (b.ownerId === currentUser.id || b.ownerId === currentUser._id || b.creatorId === currentUser.id || b.creatorId === currentUser._id))
+  );
   const photographerEarnings = photographerBookings.reduce((sum, b) => sum + (b.status === 'confirmed' || b.status === 'completed' ? b.price : 0), 0);
   const photographerOwnedListings = [
     ...services.filter(s => s.ownerId === activeProfileId || (!s.ownerId && activeProfileId === "prof-photographer" && (s.id === "ps-1" || s.id === "ps-9"))).map(s => ({ ...s, type: "Service Package", categoryKey: "service" })),

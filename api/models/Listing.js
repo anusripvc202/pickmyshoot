@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 const listingSchema = new mongoose.Schema({
+  id: { type: String },
   title: { type: String, required: true },
   type: { type: String, default: 'studio' },
   price: { type: Number, required: true },

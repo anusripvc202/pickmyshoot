@@ -16,10 +16,26 @@ import ContactPage from './pages/ContactPage';
 import FaqPage from './pages/FaqPage';
 import { useAppContext } from './context/AppContext';
 
-// Simple Route Guarding Wrapper Component
+// Redirect to login if not authenticated
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAppContext();
   return isAuthenticated ? children : <Navigate to="/login" replace />;
+};
+
+// Redirect to the correct dashboard if the user's role doesn't match
+const RoleRoute = ({ allowedRole, children }) => {
+  const { isAuthenticated, currentUser } = useAppContext();
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+
+  const role = currentUser?.role;
+
+  // Exact role match — render the page
+  if (role === allowedRole) return children;
+
+  // Wrong role — send them to their own dashboard
+  if (role === 'admin')        return <Navigate to="/dashboard/admin"        replace />;
+  if (role === 'photographer') return <Navigate to="/dashboard/photographer" replace />;
+  return                                <Navigate to="/dashboard/client"      replace />;
 };
 
 function App() {
@@ -27,25 +43,26 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
-        <Route path="explore" element={<ExplorePage />} />
-        <Route path="login" element={<LoginPage />} />
-        <Route path="blog" element={<BlogPage />} />
-        <Route path="about" element={<AboutPage />} />
-        <Route path="contact" element={<ContactPage />} />
-        <Route path="faq" element={<FaqPage />} />
-        
+        <Route path="explore"  element={<ExplorePage />} />
+        <Route path="login"    element={<LoginPage />} />
+        <Route path="blog"     element={<BlogPage />} />
+        <Route path="about"    element={<AboutPage />} />
+        <Route path="contact"  element={<ContactPage />} />
+        <Route path="faq"      element={<FaqPage />} />
+
         {/* Protected Routes */}
-        <Route path="create" element={<ProtectedRoute><CreatePage /></ProtectedRoute>} />
+        <Route path="create"   element={<ProtectedRoute><CreatePage /></ProtectedRoute>} />
         <Route path="bookings" element={<BookingsPage />} />
-        <Route path="profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-        
-        {/* Role-Specific Dashboards */}
-        <Route path="dashboard/client" element={<ProtectedRoute><ClientDashboard /></ProtectedRoute>} />
-        <Route path="dashboard/photographer" element={<ProtectedRoute><PhotographerDashboard /></ProtectedRoute>} />
-        <Route path="dashboard/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+        <Route path="profile"  element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+
+        {/* Role-Specific Dashboards — each locked to correct role */}
+        <Route path="dashboard/client"       element={<RoleRoute allowedRole="client"><ClientDashboard /></RoleRoute>} />
+        <Route path="dashboard/photographer" element={<RoleRoute allowedRole="photographer"><PhotographerDashboard /></RoleRoute>} />
+        <Route path="dashboard/admin"        element={<RoleRoute allowedRole="admin"><AdminDashboard /></RoleRoute>} />
       </Route>
     </Routes>
   );
 }
 
 export default App;
+

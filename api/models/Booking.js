@@ -11,6 +11,7 @@ const bookingSchema = new mongoose.Schema({
   price: { type: mongoose.Schema.Types.Mixed, required: true },
   status: { type: String, default: 'pending' },
   item: { type: mongoose.Schema.Types.Mixed },
+  ownerId: { type: String },
   createdAt: { type: Date, default: Date.now },
 });
 

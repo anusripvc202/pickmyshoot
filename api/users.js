@@ -21,10 +21,18 @@ export default async function handler(req, res) {
   } else if (req.method === 'PUT') {
     try {
       const { id, ...updateData } = req.body;
-      const user = await User.findByIdAndUpdate(id, updateData, { new: true });
+      const query = { $or: [{ id: id }] };
+      if (id && id.match(/^[0-9a-fA-F]{24}$/)) {
+        query.$or.push({ _id: id });
+      }
+      const user = await User.findOneAndUpdate(query, updateData, { new: true });
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
       res.status(200).json(user);
     } catch (error) {
-      res.status(400).json({ error: 'Failed to update user' });
+      console.error('Failed to update user:', error);
+      res.status(400).json({ error: 'Failed to update user', details: error.message });
     }
   } else {
     res.setHeader('Allow', ['GET', 'POST', 'PUT']);

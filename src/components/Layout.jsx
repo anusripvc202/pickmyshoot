@@ -95,7 +95,9 @@ const Layout = () => {
     logoutUser,
     currentRole,
     changeUserRole,
-    setExploreTab
+    setExploreTab,
+    bookings,
+    activeProfileId
   } = useAppContext();
 
   const navigate = useNavigate();
@@ -104,6 +106,18 @@ const Layout = () => {
   const [bookingStatus, setBookingStatus] = React.useState('idle'); // 'idle' | 'processing' | 'success'
   const [showFullDesc, setShowFullDesc] = React.useState(false);
   const scrollRef = React.useRef(null);
+
+  // Calculate pending booking notification count
+  const pendingCount = bookings.filter(b => {
+    if (!currentUser) return false;
+    if (currentUser.role === 'photographer') {
+      return (b.ownerId === activeProfileId || b.creatorId === activeProfileId) && b.status === 'pending';
+    }
+    if (currentUser.role === 'admin') {
+      return b.status === 'pending';
+    }
+    return false;
+  }).length;
 
   React.useEffect(() => {
     document.body.className = `${theme}-theme`;
@@ -219,9 +233,17 @@ const Layout = () => {
                 {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
               </button>
 
-              <button className="icon-btn-wrap">
+              <button 
+                className="icon-btn-wrap"
+                onClick={() => {
+                  if (currentUser?.role === 'photographer') navigate('/dashboard/photographer');
+                  else if (currentUser?.role === 'admin') navigate('/dashboard/admin');
+                  else if (currentUser?.role === 'client') navigate('/dashboard/client');
+                }}
+                title={pendingCount > 0 ? `${pendingCount} Pending Bookings` : 'Notifications'}
+              >
                 <Bell size={18} />
-                <span className="badge-count">3</span>
+                {pendingCount > 0 && <span className="badge-count">{pendingCount}</span>}
               </button>
 
               <button 
@@ -259,16 +281,34 @@ const Layout = () => {
                         </div>
                       </div>
                       <div className="dropdown-menu-list">
-                        <button className="dropdown-menu-item-btn" onClick={() => { changeUserRole('client'); navigate('/dashboard/client'); setUserDropdownOpen(false); }}>
-                          💼 Client Dashboard
-                        </button>
-                        <button className="dropdown-menu-item-btn" onClick={() => { changeUserRole('photographer'); navigate('/dashboard/photographer'); setUserDropdownOpen(false); }}>
-                          📸 Creator Dashboard
-                        </button>
-                        <button className="dropdown-menu-item-btn" onClick={() => { changeUserRole('admin'); navigate('/dashboard/admin'); setUserDropdownOpen(false); }}>
-                          🛡️ Admin Dashboard
-                        </button>
+                        {/* Show dashboard link that matches the user's actual registered role */}
+                        {currentUser?.role === 'client' && (
+                          <button className="dropdown-menu-item-btn" onClick={() => { navigate('/dashboard/client'); setUserDropdownOpen(false); }}>
+                            💼 My Dashboard
+                          </button>
+                        )}
+                        {currentUser?.role === 'photographer' && (
+                          <button className="dropdown-menu-item-btn" onClick={() => { navigate('/dashboard/photographer'); setUserDropdownOpen(false); }}>
+                            📸 My Dashboard
+                          </button>
+                        )}
+                        {currentUser?.role === 'admin' && (
+                          <>
+                            <button className="dropdown-menu-item-btn" onClick={() => { navigate('/dashboard/admin'); setUserDropdownOpen(false); }}>
+                              🛡️ Admin Dashboard
+                            </button>
+                            <button className="dropdown-menu-item-btn" onClick={() => { navigate('/dashboard/client'); setUserDropdownOpen(false); }}>
+                              💼 Client View
+                            </button>
+                            <button className="dropdown-menu-item-btn" onClick={() => { navigate('/dashboard/photographer'); setUserDropdownOpen(false); }}>
+                              📸 Photographer View
+                            </button>
+                          </>
+                        )}
                         <div style={{ borderTop: '1px dashed var(--border)', margin: '6px 0' }} />
+                        <button className="dropdown-menu-item-btn" onClick={() => { navigate('/profile'); setUserDropdownOpen(false); }}>
+                          👤 My Profile
+                        </button>
                         <button className="dropdown-menu-item-btn logout-btn-action" onClick={() => { logoutUser(); setUserDropdownOpen(false); navigate('/'); }}>
                           Sign Out
                         </button>
