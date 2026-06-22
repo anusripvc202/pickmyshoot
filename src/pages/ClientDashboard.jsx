@@ -641,7 +641,7 @@ const ClientDashboard = () => {
         )}
 
         {activeTab === 'support' && (
-          <div className="tab-support-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '24px' }}>
+          <div className="tab-support-layout responsive-two-col-grid">
             {/* Left side: Support Ticket Form */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div className="settings-section-card" style={{ margin: 0 }}>

@@ -23,6 +23,129 @@ export const AppProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
 
+  // Lists
+  const [services, setServices] = useState(initialServices);
+  const [studios, setStudios] = useState(initialStudios);
+  const [models, setModels] = useState(initialModels);
+  const [gear, setGear] = useState(initialGear);
+  const [workshops, setWorkshops] = useState(initialWorkshops);
+  const [jobs, setJobs] = useState(initialJobs);
+
+  // Initial Mock Portfolio Items state
+  const [portfolioItems, setPortfolioItems] = useState([
+    {
+      id: "pf-1",
+      ownerId: "prof-photographer",
+      title: "Royal Bridal Lookbook",
+      category: "Bridal / Ethnic Wear",
+      image: "/pre_wedding_shoot_new.png",
+      likes: 312,
+      aspect: "portrait"
+    },
+    {
+      id: "pf-2",
+      ownerId: "prof-1",
+      title: "E-Commerce Gadget Shoot",
+      category: "Product / Commercial",
+      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80",
+      likes: 198,
+      aspect: "landscape"
+    },
+    {
+      id: "pf-3",
+      ownerId: "prof-photographer",
+      title: "Daylight Fashion Editorial",
+      category: "High-Fashion / Western",
+      image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=600&q=80",
+      likes: 425,
+      aspect: "portrait"
+    },
+    {
+      id: "pf-4",
+      ownerId: "prof-photographer",
+      title: "Premium SUV Advertising",
+      category: "Automotive / Action",
+      image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=600&q=80",
+      likes: 184,
+      aspect: "landscape"
+    },
+    {
+      id: "pf-5",
+      ownerId: "prof-photographer",
+      title: "Gourmet Dessert Catalog",
+      category: "Food / Styling",
+      image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80",
+      likes: 290,
+      aspect: "portrait"
+    },
+    {
+      id: "pf-6",
+      ownerId: "prof-1",
+      title: "Minimalist Portrait Studies",
+      category: "Fine Art / Studio Studio",
+      image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
+      likes: 356,
+      aspect: "landscape"
+    },
+    {
+      id: "pf-7",
+      ownerId: "prof-photographer",
+      title: "Nature Cinematography",
+      category: "Cinematography / Nature",
+      image: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=600&q=80",
+      likes: 220,
+      aspect: "landscape"
+    }
+  ]);
+
+  // Search & Filter State
+  const [searchQuery, setSearchQuery] = useState('');
+  const [exploreTab, setExploreTab] = useState('services');
+
+  // Bookings list state - initialized to empty array (clean dashboard)
+  const [bookings, setBookings] = useState([]);
+  const [bookingFilter, setBookingFilter] = useState('upcoming');
+
+  // Liked items state (ID -> boolean map)
+  const [likedItems, setLikedItems] = useState({
+    "st-1": true,
+    "gr-1": true,
+    "ps-1": false
+  });
+
+  // Support Tickets State - initialized to empty array (clean dashboard)
+  const [tickets, setTickets] = useState([]);
+
+  // Chats / Messaging State - initialized to empty array (clean dashboard)
+  const [chatSessions, setChatSessions] = useState([]);
+  const [chatMessages, setChatMessages] = useState([]);
+
+  // Coupons State
+  const [coupons, setCoupons] = useState([
+    { code: "SHOOT40", discount: "40%", description: "40% off on all camera gear rentals", active: true },
+    { code: "CREATOR15", discount: "15%", description: "15% off on studio space bookings", active: true },
+    { code: "WEDDING500", discount: "₹500 Flat", description: "Flat ₹500 discount on pre-wedding packages", active: false }
+  ]);
+
+  // Selected item for details modal
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItemType, setSelectedItemType] = useState(''); // 'service' | 'studio' | 'model' | 'gear' | 'workshop' | 'job'
+  
+  // Booking date & time scheduler inside details view
+  const [selectedDate, setSelectedDate] = useState('19 SUN');
+  const [selectedTime, setSelectedTime] = useState('11:00 AM');
+
+  // Toast Notification
+  const [toast, setToast] = useState({ show: false, message: '' });
+
+  // Show Toast helper function
+  const triggerToast = (msg) => {
+    setToast({ show: true, message: msg });
+    setTimeout(() => {
+      setToast({ show: false, message: '' });
+    }, 2800);
+  };
+
   // Sync currentUser details when profiles list is edited
   useEffect(() => {
     if (currentUser) {
@@ -182,130 +305,6 @@ export const AppProvider = ({ children }) => {
       .catch(err => console.warn('Failed to load listings from DB:', err));
   }, []);
 
-
-  
-  // Lists
-  const [services, setServices] = useState(initialServices);
-  const [studios, setStudios] = useState(initialStudios);
-  const [models, setModels] = useState(initialModels);
-  const [gear, setGear] = useState(initialGear);
-  const [workshops, setWorkshops] = useState(initialWorkshops);
-  const [jobs, setJobs] = useState(initialJobs);
-
-  // Initial Mock Portfolio Items state
-  const [portfolioItems, setPortfolioItems] = useState([
-    {
-      id: "pf-1",
-      ownerId: "prof-photographer",
-      title: "Royal Bridal Lookbook",
-      category: "Bridal / Ethnic Wear",
-      image: "/pre_wedding_shoot_new.png",
-      likes: 312,
-      aspect: "portrait"
-    },
-    {
-      id: "pf-2",
-      ownerId: "prof-1",
-      title: "E-Commerce Gadget Shoot",
-      category: "Product / Commercial",
-      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80",
-      likes: 198,
-      aspect: "landscape"
-    },
-    {
-      id: "pf-3",
-      ownerId: "prof-photographer",
-      title: "Daylight Fashion Editorial",
-      category: "High-Fashion / Western",
-      image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=600&q=80",
-      likes: 425,
-      aspect: "portrait"
-    },
-    {
-      id: "pf-4",
-      ownerId: "prof-photographer",
-      title: "Premium SUV Advertising",
-      category: "Automotive / Action",
-      image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=600&q=80",
-      likes: 184,
-      aspect: "landscape"
-    },
-    {
-      id: "pf-5",
-      ownerId: "prof-photographer",
-      title: "Gourmet Dessert Catalog",
-      category: "Food / Styling",
-      image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80",
-      likes: 290,
-      aspect: "portrait"
-    },
-    {
-      id: "pf-6",
-      ownerId: "prof-1",
-      title: "Minimalist Portrait Studies",
-      category: "Fine Art / Studio Studio",
-      image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
-      likes: 356,
-      aspect: "landscape"
-    },
-    {
-      id: "pf-7",
-      ownerId: "prof-photographer",
-      title: "Nature Cinematography",
-      category: "Cinematography / Nature",
-      image: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=600&q=80",
-      likes: 220,
-      aspect: "landscape"
-    }
-  ]);
-
-  // Search & Filter State
-  const [searchQuery, setSearchQuery] = useState('');
-  const [exploreTab, setExploreTab] = useState('services');
-
-  // Bookings list state - initialized to empty array (clean dashboard)
-  const [bookings, setBookings] = useState([]);
-  const [bookingFilter, setBookingFilter] = useState('upcoming');
-
-  // Liked items state (ID -> boolean map)
-  const [likedItems, setLikedItems] = useState({
-    "st-1": true,
-    "gr-1": true,
-    "ps-1": false
-  });
-
-  // Support Tickets State - initialized to empty array (clean dashboard)
-  const [tickets, setTickets] = useState([]);
-
-  // Chats / Messaging State - initialized to empty array (clean dashboard)
-  const [chatSessions, setChatSessions] = useState([]);
-  const [chatMessages, setChatMessages] = useState([]);
-
-  // Coupons State
-  const [coupons, setCoupons] = useState([
-    { code: "SHOOT40", discount: "40%", description: "40% off on all camera gear rentals", active: true },
-    { code: "CREATOR15", discount: "15%", description: "15% off on studio space bookings", active: true },
-    { code: "WEDDING500", discount: "₹500 Flat", description: "Flat ₹500 discount on pre-wedding packages", active: false }
-  ]);
-
-  // Selected item for details modal
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [selectedItemType, setSelectedItemType] = useState(''); // 'service' | 'studio' | 'model' | 'gear' | 'workshop' | 'job'
-  
-  // Booking date & time scheduler inside details view
-  const [selectedDate, setSelectedDate] = useState('19 SUN');
-  const [selectedTime, setSelectedTime] = useState('11:00 AM');
-
-  // Toast Notification
-  const [toast, setToast] = useState({ show: false, message: '' });
-
-  // Show Toast helper function
-  const triggerToast = (msg) => {
-    setToast({ show: true, message: msg });
-    setTimeout(() => {
-      setToast({ show: false, message: '' });
-    }, 2800);
-  };
 
   // Toggle Like state
   const toggleLike = (id, e) => {

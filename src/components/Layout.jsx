@@ -88,6 +88,7 @@ const Layout = () => {
     selectedDate, setSelectedDate,
     selectedTime, setSelectedTime,
     toast,
+    triggerToast,
     toggleLike,
     handleBookingSubmit,
     isAuthenticated,

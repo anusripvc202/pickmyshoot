@@ -10108,3 +10108,95 @@ input:checked + .slider:before {
   .auth-header h2 { font-size: 22px; }
   .social-login-grid { grid-template-columns: 1fr; }
 }
+
+/* ==========================================================================
+   ADDITIONAL RESPONSIVENESS OVERRIDES & HELPER CLASSES
+   ========================================================================== */
+
+/* Responsive Two-Column Layout Grid for Calendar, Invoice, and Support */
+.responsive-two-col-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+}
+
+.responsive-two-col-grid.invoice-grid {
+  grid-template-columns: 1fr 360px;
+}
+
+@media (max-width: 900px) {
+  .responsive-two-col-grid,
+  .responsive-two-col-grid.invoice-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 900px) {
+  .profile-name-row {
+    justify-content: center !important;
+  }
+  .profile-meta-row {
+    justify-content: center !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-header-card {
+    padding: 20px 16px !important;
+    margin-top: -60px !important;
+  }
+  .profile-cover-banner {
+    height: 180px !important;
+    border-radius: 16px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .timeline-booking-row-client {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 16px !important;
+  }
+  .timeline-row-img {
+    width: 100% !important;
+    height: 160px !important;
+    border-radius: 12px;
+  }
+  .row-action-buttons {
+    flex-direction: row !important;
+    width: 100%;
+    gap: 10px !important;
+  }
+  .row-action-buttons button,
+  .row-action-buttons a {
+    flex: 1;
+    justify-content: center;
+    padding: 8px 12px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-stats-row-pro {
+    width: 100%;
+    justify-content: center;
+    gap: 8px !important;
+  }
+  .stat-pill-pro {
+    flex: 1;
+    padding: 8px 4px !important;
+    min-width: unset !important;
+  }
+  .stat-num-pro {
+    font-size: 14px !important;
+  }
+}
+
+.request-actions-row {
+  flex-wrap: wrap;
+}
+.request-actions-row .action-btn-sm {
+  flex: 1;
+  text-align: center;
+  justify-content: center;
+}

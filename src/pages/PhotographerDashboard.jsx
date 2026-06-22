@@ -627,7 +627,7 @@ const PhotographerDashboard = () => {
         )}
 
         {activeTab === 'calendar' && (
-          <div className="tab-calendar-availability-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '24px' }}>
+          <div className="tab-calendar-availability-layout responsive-two-col-grid">
             {/* Left side: operating settings */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div className="settings-section-card" style={{ margin: 0 }}>
@@ -717,7 +717,7 @@ const PhotographerDashboard = () => {
         )}
 
         {activeTab === 'invoices' && (
-          <div className="tab-invoices-generator-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: '24px' }}>
+          <div className="tab-invoices-generator-layout responsive-two-col-grid invoice-grid">
             {/* Left side: Invoice Creator Settings */}
             <div className="settings-section-card" style={{ margin: 0 }}>
               <h3 className="section-title-pro">
