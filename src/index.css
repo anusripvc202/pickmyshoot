@@ -8951,6 +8951,8 @@ input:checked + .slider:before {
   .dashboard-sidebar-menu {
     position: static;
     padding: 12px;
+    max-width: 100%;
+    overflow: hidden;
   }
   .profile-tabs-nav-vertical {
     flex-direction: row;
@@ -8958,6 +8960,7 @@ input:checked + .slider:before {
     white-space: nowrap;
     padding-bottom: 4px;
     gap: 8px;
+    max-width: 100%;
   }
   .profile-tabs-nav-vertical .profile-nav-tab {
     width: auto;
