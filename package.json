@@ -10,7 +10,9 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "vercel:dev": "npx vercel dev",
+    "vercel:deploy": "npx vercel --prod"
   },
   "dependencies": {
     "framer-motion": "^12.40.0",
