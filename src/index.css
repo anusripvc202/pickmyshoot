@@ -7645,7 +7645,9 @@ input:checked + .slider:before {
 /* 10. Platform Admin Data Table styling */
 .admin-table-container {
   width: 100%;
+  max-width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   background: var(--card-bg);
   border: 1.5px solid var(--border);
   border-radius: 20px;

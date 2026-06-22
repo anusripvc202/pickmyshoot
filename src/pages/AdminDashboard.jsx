@@ -456,7 +456,9 @@ const AdminDashboard = () => {
                     const vendorUser = profiles.find(p => p.id === b.ownerId) || { name: "Studio Operator" };
                     return (
                       <tr key={b.id}>
-                        <td className="bold">{b.id}</td>
+                        <td className="bold" title={b.id}>
+                          {b.id && b.id.length > 8 ? `${b.id.substring(0, 6)}...${b.id.substring(b.id.length - 4)}` : b.id}
+                        </td>
                         <td>{clientUser.name}</td>
                         <td>{vendorUser.name}</td>
                         <td>{b.item?.title}</td>
@@ -686,7 +688,9 @@ const AdminDashboard = () => {
                     const clientObj = profiles.find(p => p.id === ticket.clientId) || { name: "Platform Client" };
                     return (
                       <tr key={ticket.id}>
-                        <td className="bold">{ticket.id}</td>
+                        <td className="bold" title={ticket.id}>
+                          {ticket.id && ticket.id.length > 8 ? `${ticket.id.substring(0, 6)}...${ticket.id.substring(ticket.id.length - 4)}` : ticket.id}
+                        </td>
                         <td>{clientObj.name}</td>
                         <td><span className="support-ticket-cat">{ticket.category}</span></td>
                         <td className="bold">{ticket.subject}</td>

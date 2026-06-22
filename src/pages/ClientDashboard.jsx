@@ -608,7 +608,9 @@ const ClientDashboard = () => {
                 <tbody>
                   {clientBookings.map(b => (
                     <tr key={b.id}>
-                      <td className="bold">TXN-{b.id.toUpperCase()}</td>
+                      <td className="bold" title={`TXN-${b.id.toUpperCase()}`}>
+                        TXN-{b.id && b.id.length > 8 ? `${b.id.substring(0, 6)}...${b.id.substring(b.id.length - 4)}`.toUpperCase() : b.id.toUpperCase()}
+                      </td>
                       <td>{b.date}</td>
                       <td>{b.item?.title}</td>
                       <td>
