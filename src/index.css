@@ -8864,6 +8864,11 @@ input:checked + .slider:before {
   margin-top: 12px;
 }
 
+.dashboard-content-area {
+  min-width: 0;
+  width: 100%;
+}
+
 .dashboard-sidebar-menu {
   background-color: var(--card-bg);
   border-radius: 20px;
@@ -10153,15 +10158,24 @@ input:checked + .slider:before {
 }
 
 @media (max-width: 600px) {
+  .timeline-full-widget {
+    padding: 16px !important;
+  }
   .timeline-booking-row-client {
     flex-direction: column;
     align-items: flex-start !important;
     gap: 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
   .timeline-row-img {
     width: 100% !important;
     height: 160px !important;
     border-radius: 12px;
+  }
+  .timeline-row-info {
+    width: 100% !important;
+    min-width: 0 !important;
   }
   .row-action-buttons {
     flex-direction: row !important;
