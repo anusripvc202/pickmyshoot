@@ -895,9 +895,13 @@ const Layout = () => {
         {/* Bottom bar */}
         <div className="footer-bottom">
           <div className="footer-bottom-inner">
-            <div className="footer-bottom-left">
-              <span className="footer-copy">© 2025 PickMyShoot Technologies Pvt. Ltd. All rights reserved.</span>
-              <span className="footer-made-in">🇮🇳 Made with ❤️ in India</span>
+            <div className="footer-bottom-left" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <span className="footer-powered-by" style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
+                Powered by <span style={{ color: '#ff9f43', fontWeight: '700' }}>Patterns Infotech Private Limited</span>
+              </span>
+              <span className="footer-copy" style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                © 2026 VisaVaani. All rights reserved.
+              </span>
             </div>
             <div className="footer-bottom-links">
               <a href="#">Privacy</a>
