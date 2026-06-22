@@ -7657,6 +7657,7 @@ input:checked + .slider:before {
 
 .admin-data-table {
   width: 100%;
+  min-width: 900px;
   border-collapse: collapse;
   text-align: left;
   font-size: 13px;
