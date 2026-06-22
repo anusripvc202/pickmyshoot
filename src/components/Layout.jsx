@@ -894,21 +894,13 @@ const Layout = () => {
 
         {/* Bottom bar */}
         <div className="footer-bottom">
-          <div className="footer-bottom-inner">
-            <div className="footer-bottom-left" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <span className="footer-powered-by" style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-                Powered by <span style={{ color: '#ff9f43', fontWeight: '700' }}>Patterns Infotech Private Limited</span>
-              </span>
-              <span className="footer-copy" style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                © 2026 VisaVaani. All rights reserved.
-              </span>
-            </div>
-            <div className="footer-bottom-links">
-              <a href="#">Privacy</a>
-              <a href="#">Terms</a>
-              <a href="#">Cookies</a>
-              <a href="#">Sitemap</a>
-            </div>
+          <div className="footer-bottom-inner-centered">
+            <p className="footer-powered-by">
+              Powered by <span className="powered-highlight">Patterns Infotech Private Limited</span>
+            </p>
+            <p className="footer-copyright">
+              © 2026 VisaVaani. All rights reserved.
+            </p>
           </div>
         </div>
       </footer>

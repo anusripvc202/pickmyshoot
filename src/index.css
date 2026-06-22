@@ -4630,6 +4630,40 @@ input:checked + .slider:before {
   border-top: 1px solid var(--footer-border);
 }
 
+.footer-bottom-inner-centered {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 36px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.footer-bottom-inner-centered .footer-powered-by {
+  font-size: 17px;
+  color: var(--footer-text);
+  opacity: 0.85;
+  font-weight: 500;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.footer-bottom-inner-centered .powered-highlight {
+  color: #ff9f43; /* orange color matching the requested design */
+  font-weight: 600;
+}
+
+.footer-bottom-inner-centered .footer-copyright {
+  font-size: 15px;
+  color: var(--footer-text);
+  opacity: 0.7;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
 .footer-bottom-inner {
   max-width: 1280px;
   margin: 0 auto;
