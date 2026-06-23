@@ -2789,14 +2789,15 @@ body {
 @media (max-width: 480px) {
   .billing-pill-group {
     flex-wrap: wrap;
-    gap: 4px;
+    gap: 6px;
     border-radius: 12px;
+    padding: 6px;
   }
   .billing-pill-btn {
-    flex: 1 1 auto;
-    font-size: 10px;
-    padding: 8px 4px;
-    border-radius: 8px;
+    flex: 1;
+    font-size: 11px;
+    padding: 10px 12px;
+    border-radius: 10px;
   }
 }
 
