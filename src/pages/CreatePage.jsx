@@ -234,11 +234,18 @@ const CreatePage = () => {
                 <div className="input-with-icon-wrap">
                   <div className="input-icon-left"><IndianRupee size={16} /></div>
                   <input 
-                    type="number" 
+                    type="text" 
+                    inputMode="decimal"
+                    pattern="[0-9]*\.?[0-9]*"
                     placeholder="e.g. 1500" 
                     className="form-input-premium"
                     value={newPrice}
-                    onChange={(e) => setNewPrice(e.target.value)}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val === '' || /^\d*\.?\d*$/.test(val)) {
+                        setNewPrice(val);
+                      }
+                    }}
                     required
                   />
                 </div>
@@ -358,13 +365,18 @@ const CreatePage = () => {
                     <div className="input-with-icon-wrap">
                       <div className="input-icon-left"><Star size={16} /></div>
                       <input
-                        type="number"
+                        type="text"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
                         placeholder="e.g. 5"
                         className="form-input-premium"
                         value={newExperience}
-                        onChange={(e) => setNewExperience(e.target.value)}
-                        min="0"
-                        max="50"
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          if (val === '' || /^\d*$/.test(val)) {
+                            setNewExperience(val);
+                          }
+                        }}
                       />
                     </div>
                   </div>

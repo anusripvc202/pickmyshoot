@@ -2779,14 +2779,27 @@ body {
 
 .billing-pill-btn:hover {
   color: var(--text-main);
-}
-
-.billing-pill-btn.active {
+}.billing-pill-btn.active {
   background-color: var(--card-bg);
   color: var(--primary);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--glass-border);
 }
+
+@media (max-width: 480px) {
+  .billing-pill-group {
+    flex-wrap: wrap;
+    gap: 4px;
+    border-radius: 12px;
+  }
+  .billing-pill-btn {
+    flex: 1 1 auto;
+    font-size: 10px;
+    padding: 8px 4px;
+    border-radius: 8px;
+  }
+}
+
 
 .form-submit-premium-btn {
   background: linear-gradient(135deg, var(--primary) 0%, #FF4D5A 100%);
