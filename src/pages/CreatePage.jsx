@@ -13,7 +13,8 @@ import {
   Edit3, 
   Star,
   Sparkles,
-  Lightbulb
+  Lightbulb,
+  Upload
 } from 'lucide-react';
 
 const CreatePage = () => {
@@ -41,6 +42,20 @@ const CreatePage = () => {
   const [newSpecialization, setNewSpecialization] = useState('Wedding Photography');
   const [newExperience, setNewExperience] = useState('');
   const [newPortfolio, setNewPortfolio] = useState('');
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 4.5 * 1024 * 1024) {
+      triggerToast('Please upload an image smaller than 4.5 MB.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setNewImage(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
 
   const handleCreateSubmit = (e) => {
     e.preventDefault();
@@ -270,16 +285,31 @@ const CreatePage = () => {
               </div>
 
               <div className="form-group">
-                <label className="form-label">High-Resolution Image URL</label>
-                <div className="input-with-icon-wrap">
-                  <div className="input-icon-left"><Image size={16} /></div>
+                <label className="form-label">Gallery Cover Image</label>
+                <div className="form-file-upload-wrap">
+                  <label htmlFor="create-image-upload" className="form-file-upload-label">
+                    <Upload size={16} />
+                    <span>{newImage ? 'Change Photo' : 'Upload from Gallery'}</span>
+                  </label>
                   <input 
-                    type="text" 
-                    placeholder="Paste a direct image URL (or leave empty for default)" 
-                    className="form-input-premium"
-                    value={newImage}
-                    onChange={(e) => setNewImage(e.target.value)}
+                    id="create-image-upload"
+                    type="file" 
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    style={{ display: 'none' }}
                   />
+                  {newImage && (
+                    <div className="form-file-upload-status">
+                      <span className="file-success-badge">✓ Image loaded successfully</span>
+                      <button 
+                        type="button" 
+                        className="file-clear-btn" 
+                        onClick={() => setNewImage('')}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
