@@ -898,7 +898,7 @@ const Layout = () => {
         <div className="footer-bottom">
           <div className="footer-bottom-inner">
             <div className="footer-bottom-left">
-              <span className="footer-copy">© 2025 PickMyShoot Technologies Pvt. Ltd. All rights reserved.</span>
+              <span className="footer-copy">powered by <strong style={{ color: 'var(--primary)', fontWeight: '700' }}>Patterns Infotech Private Limited</strong> @2026 pickmyshoot. all rights reserved</span>
               <span className="footer-made-in">🇮🇳 Made with ❤️ in India</span>
             </div>
             <div className="footer-bottom-links">
