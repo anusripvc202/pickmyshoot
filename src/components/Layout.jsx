@@ -214,7 +214,7 @@ const Layout = () => {
               >
                 Explore Listings
               </NavLink>
-              {isAuthenticated && currentUser?.role === 'admin' && (
+              {isAuthenticated && currentRole === 'admin' && (
                 <NavLink 
                   to="/dashboard/admin" 
                   className={({ isActive }) => `header-tab-btn ${isActive ? 'active' : ''}`}
@@ -239,9 +239,9 @@ const Layout = () => {
               <button 
                 className="icon-btn-wrap"
                 onClick={() => {
-                  if (currentUser?.role === 'photographer') navigate('/dashboard/photographer');
-                  else if (currentUser?.role === 'admin') navigate('/dashboard/admin');
-                  else if (currentUser?.role === 'client') navigate('/dashboard/client');
+                  if (currentRole === 'photographer') navigate('/dashboard/photographer');
+                  else if (currentRole === 'admin') navigate('/dashboard/admin');
+                  else if (currentRole === 'client') navigate('/dashboard/client');
                 }}
                 title={pendingCount > 0 ? `${pendingCount} Pending Bookings` : 'Notifications'}
               >
@@ -285,17 +285,17 @@ const Layout = () => {
                       </div>
                       <div className="dropdown-menu-list">
                         {/* Show dashboard link that matches the user's actual registered role */}
-                        {currentUser?.role === 'client' && (
+                        {currentRole === 'client' && (
                           <button className="dropdown-menu-item-btn" onClick={() => { navigate('/dashboard/client'); setUserDropdownOpen(false); }}>
                             💼 My Dashboard
                           </button>
                         )}
-                        {currentUser?.role === 'photographer' && (
+                        {currentRole === 'photographer' && (
                           <button className="dropdown-menu-item-btn" onClick={() => { navigate('/dashboard/photographer'); setUserDropdownOpen(false); }}>
                             📸 My Dashboard
                           </button>
                         )}
-                        {currentUser?.role === 'admin' && (
+                        {currentRole === 'admin' && (
                           <>
                             <button className="dropdown-menu-item-btn" onClick={() => { navigate('/dashboard/admin'); setUserDropdownOpen(false); }}>
                               🛡️ Admin Dashboard

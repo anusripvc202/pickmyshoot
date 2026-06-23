@@ -24,10 +24,10 @@ const ProtectedRoute = ({ children }) => {
 
 // Redirect to the correct dashboard if the user's role doesn't match
 const RoleRoute = ({ allowedRole, children }) => {
-  const { isAuthenticated, currentUser } = useAppContext();
+  const { isAuthenticated, currentRole } = useAppContext();
   if (!isAuthenticated) return <Navigate to="/login" replace />;
 
-  const role = currentUser?.role;
+  const role = currentRole;
 
   // Exact role match — render the page
   if (role === allowedRole) return children;

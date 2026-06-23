@@ -9,6 +9,7 @@ const BookingsPage = () => {
     setBookingFilter,
     activeProfileId,
     currentUser,
+    currentRole,
     updateBookingStatus
   } = useAppContext();
   const navigate = useNavigate();
@@ -16,8 +17,8 @@ const BookingsPage = () => {
   // Filter based on logged-in user profile/role
   const myBookings = bookings.filter(b => {
     if (!currentUser) return false;
-    if (currentUser.role === 'admin') return true; // Admins see all bookings
-    if (currentUser.role === 'photographer') {
+    if (currentRole === 'admin') return true; // Admins see all bookings
+    if (currentRole === 'photographer') {
       return b.ownerId === activeProfileId || b.creatorId === activeProfileId;
     }
     // For clients (or default)
@@ -103,7 +104,7 @@ const BookingsPage = () => {
                   {book.status}
                 </span>
 
-                {(book.status === 'pending' || book.status === 'confirmed') && (currentUser?.role === 'client' || currentUser?.role === 'admin') && (
+                {(book.status === 'pending' || book.status === 'confirmed') && (currentRole === 'client' || currentRole === 'admin') && (
                   <button 
                     className="cancel-btn-action" 
                     onClick={() => updateBookingStatus(book.id, 'cancelled')}
