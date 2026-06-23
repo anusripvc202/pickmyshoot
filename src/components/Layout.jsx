@@ -214,13 +214,15 @@ const Layout = () => {
               >
                 Explore Listings
               </NavLink>
-              <NavLink 
-                to="/bookings" 
-                className={({ isActive }) => `header-tab-btn ${isActive ? 'active' : ''}`}
-                onClick={() => setSelectedItem(null)}
-              >
-                My Bookings
-              </NavLink>
+              {isAuthenticated && currentUser?.role === 'admin' && (
+                <NavLink 
+                  to="/dashboard/admin" 
+                  className={({ isActive }) => `header-tab-btn ${isActive ? 'active' : ''}`}
+                  onClick={() => setSelectedItem(null)}
+                >
+                  Admin Dashboard
+                </NavLink>
+              )}
             </div>
 
             {/* Right actions */}

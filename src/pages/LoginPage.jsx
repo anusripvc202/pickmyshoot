@@ -346,7 +346,6 @@ const LoginPage = () => {
                   >
                     <option value="client">🎬 Client / Content Creator</option>
                     <option value="photographer">📸 Photographer / Videographer</option>
-                    <option value="admin">🛡️ Studio Administrator</option>
                   </select>
                 </div>
               </div>
