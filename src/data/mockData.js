@@ -401,7 +401,7 @@ export const gearRentals = [
     rating: 4.9,
     reviews: 81,
     category: "Drones",
-    image: "https://images.unsplash.com/photo-1507682531662-421b17ac4f93?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=500&q=80",
     specs: "Hasselblad Main Camera (4/3 CMOS), Triple Camera System, 43 Min Flight Time",
     includes: "DJI Mavic 3 Pro, DJI RC Controller, 3 Intelligent Flight Batteries, Battery Charging Hub, ND Filter Set, Case",
     description: "The ultimate cinema drone featuring three distinct optical camera sensors. Capture majestic master shots with extreme detail, professional color profiles (D-Log), and advanced obstacle sensing."
@@ -414,7 +414,7 @@ export const gearRentals = [
     rating: 4.7,
     reviews: 33,
     category: "Lights",
-    image: "https://images.unsplash.com/photo-1603162589842-ad6e2979ab65?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=500&q=80",
     specs: "200Ws TTL Pocket Flash, High-Speed Sync (HSS) up to 1/8000s, 2.4G Wireless System",
     includes: "AD200 Pro Flash Body, Speedlite Flash Head, Bare Bulb Head, Lithium Battery Pack, Charger, Bracket, Carry Case",
     description: "A pocket-sized 200W strobe light combining power, portability, and studio flexibility. Fully compatible with Canon, Sony, and Nikon TTL wireless triggers."
@@ -608,7 +608,7 @@ export const jobs = [
     location: "Remote",
     company: "CreatorVerse",
     rating: 4.6,
-    image: "https://images.unsplash.com/photo-1542744094-3a31f103e35f?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=500&q=80",
     skills: ["UGC Video", "Storyboarding", "CapCut", "Product Styling"],
     description: "Create engaging user-generated vertical video advertisements (UGC) for a series of lifestyle, camera, and travel brands. Scripting and styling will be self-directed."
   }
