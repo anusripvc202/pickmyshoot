@@ -214,11 +214,11 @@ const Layout = () => {
               >
                 Explore Listings
               </NavLink>
-              {isAuthenticated && currentRole === 'admin' && (
+              {isAuthenticated && currentUser?.role === 'admin' && (
                 <NavLink 
                   to="/dashboard/admin" 
                   className={({ isActive }) => `header-tab-btn ${isActive ? 'active' : ''}`}
-                  onClick={() => setSelectedItem(null)}
+                  onClick={() => { setSelectedItem(null); changeUserRole('admin'); }}
                 >
                   Admin Dashboard
                 </NavLink>
@@ -285,25 +285,25 @@ const Layout = () => {
                       </div>
                       <div className="dropdown-menu-list">
                         {/* Show dashboard link that matches the user's actual registered role */}
-                        {currentRole === 'client' && (
+                        {currentUser?.role === 'client' && (
                           <button className="dropdown-menu-item-btn" onClick={() => { navigate('/dashboard/client'); setUserDropdownOpen(false); }}>
                             💼 My Dashboard
                           </button>
                         )}
-                        {currentRole === 'photographer' && (
+                        {currentUser?.role === 'photographer' && (
                           <button className="dropdown-menu-item-btn" onClick={() => { navigate('/dashboard/photographer'); setUserDropdownOpen(false); }}>
                             📸 My Dashboard
                           </button>
                         )}
-                        {currentRole === 'admin' && (
+                        {currentUser?.role === 'admin' && (
                           <>
-                            <button className="dropdown-menu-item-btn" onClick={() => { navigate('/dashboard/admin'); setUserDropdownOpen(false); }}>
+                            <button className="dropdown-menu-item-btn" onClick={() => { changeUserRole('admin'); navigate('/dashboard/admin'); setUserDropdownOpen(false); }}>
                               🛡️ Admin Dashboard
                             </button>
-                            <button className="dropdown-menu-item-btn" onClick={() => { navigate('/dashboard/client'); setUserDropdownOpen(false); }}>
+                            <button className="dropdown-menu-item-btn" onClick={() => { changeUserRole('client'); navigate('/dashboard/client'); setUserDropdownOpen(false); }}>
                               💼 Client View
                             </button>
-                            <button className="dropdown-menu-item-btn" onClick={() => { navigate('/dashboard/photographer'); setUserDropdownOpen(false); }}>
+                            <button className="dropdown-menu-item-btn" onClick={() => { changeUserRole('photographer'); navigate('/dashboard/photographer'); setUserDropdownOpen(false); }}>
                               📸 Photographer View
                             </button>
                           </>
