@@ -12,7 +12,8 @@ import {
   Image, 
   Edit3, 
   Star,
-  Sparkles
+  Sparkles,
+  Lightbulb
 } from 'lucide-react';
 
 const CreatePage = () => {
@@ -53,7 +54,16 @@ const CreatePage = () => {
     const defaultImg = newImage || "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=500&q=80";
 
     // Map frontend category to DB type value
-    const typeMap = { studios: 'studio', gear: 'gear', models: 'model', services: 'service', photography: 'service' };
+    const typeMap = { 
+      studios: 'studio', 
+      gear: 'gear', 
+      models: 'model', 
+      services: 'service', 
+      photography: 'service',
+      makeup: 'service',
+      lighting: 'gear',
+      locations: 'studio'
+    };
 
     const newItem = {
       id: generatedId,
@@ -66,7 +76,7 @@ const CreatePage = () => {
       location: newLocation || "Hyderabad",
       description: newDescription,
       image: defaultImg,
-      amenities: ["Verified Photographer", "Professional Equipment"],
+      amenities: ["Verified Provider", "Professional Service"],
       features: ["Verified"],
       specs: newDescription,
       ownerId: activeProfileId,
@@ -74,9 +84,10 @@ const CreatePage = () => {
       active: true
     };
 
-    if (newCategory === 'studios') {
-      newItem.area = "1000 Sq.ft";
-      newItem.capacity = "10 People";
+    if (newCategory === 'studios' || newCategory === 'locations') {
+      newItem.area = "1200 Sq.ft";
+      newItem.capacity = "10 Capacity";
+      newItem.amenities = newCategory === 'locations' ? ["Outdoor Set", "Changing Room"] : ["Lighting Equipment", "Backdrops", "Makeup Room"];
       setStudios(prev => [newItem, ...prev]);
       setExploreTab('studios');
     } else if (newCategory === 'models') {
@@ -85,11 +96,16 @@ const CreatePage = () => {
       newItem.categories = ["Fashion", "Ethnic"];
       setModels(prev => [newItem, ...prev]);
       setExploreTab('models');
-    } else if (newCategory === 'gear') {
-      newItem.category = "Camera";
-      newItem.includes = "Camera body, standard accessory kit";
+    } else if (newCategory === 'gear' || newCategory === 'lighting') {
+      newItem.category = newCategory === 'lighting' ? "Lights" : "Camera";
+      newItem.includes = "Standard kit and accessories";
       setGear(prev => [newItem, ...prev]);
       setExploreTab('rentals');
+    } else if (newCategory === 'makeup') {
+      newItem.category = "Makeup & Styling";
+      newItem.amenities = ["Makeup Room", "Styling Kit", "Professional Cosmetics"];
+      setServices(prev => [newItem, ...prev]);
+      setExploreTab('services');
     } else if (newCategory === 'photography') {
       newItem.specialization = newSpecialization;
       newItem.experience = newExperience ? `${newExperience} years` : 'Not specified';
@@ -150,6 +166,9 @@ const CreatePage = () => {
                   { id: 'gear', label: 'Camera Gear', icon: Camera, desc: 'Cameras, lenses & kits' },
                   { id: 'models', label: 'Models Portfolio', icon: User, desc: 'Fashion talents' },
                   { id: 'photography', label: 'Photography Services', icon: Camera, desc: 'List yourself as a photographer' },
+                  { id: 'makeup', label: 'Makeup & Styling', icon: Sparkles, desc: 'Professional MUAs & hair stylists' },
+                  { id: 'lighting', label: 'Lighting & Props', icon: Lightbulb, desc: 'Studio flashes, modifiers & props' },
+                  { id: 'locations', label: 'Shooting Locations', icon: MapPin, desc: 'Resorts, villas & outdoor sets' },
                   { id: 'services', label: 'Shoot Package', icon: Video, desc: 'Post production & editing' }
                 ].map(cat => {
                   const Icon = cat.icon;
@@ -160,8 +179,8 @@ const CreatePage = () => {
                       className={`category-select-card ${isActive ? 'active' : ''}`}
                       onClick={() => {
                         setNewCategory(cat.id);
-                        if (cat.id === 'studios') setNewPriceUnit('hr');
-                        else if (cat.id === 'gear') setNewPriceUnit('day');
+                        if (cat.id === 'studios' || cat.id === 'locations') setNewPriceUnit('hr');
+                        else if (cat.id === 'gear' || cat.id === 'lighting') setNewPriceUnit('day');
                         else if (cat.id === 'models') setNewPriceUnit('day');
                         else setNewPriceUnit('booking');
                       }}
