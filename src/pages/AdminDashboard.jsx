@@ -52,19 +52,19 @@ const AdminDashboard = () => {
 
   const [activeTab, setActiveTab] = useState('overview');
 
-  const activeProfile = profiles.find(p => p.id === activeProfileId) || profiles[0];
+  const adminProfile = profiles.find(p => p.role === 'admin') || currentUser || profiles[0];
 
   // Local state for profile inputs in settings
-  const [profileName, setProfileName] = useState(activeProfile.name);
-  const [profileEmail, setProfileEmail] = useState(activeProfile.email);
-  const [profileBio, setProfileBio] = useState(activeProfile.bio);
+  const [profileName, setProfileName] = useState(adminProfile.name);
+  const [profileEmail, setProfileEmail] = useState(adminProfile.email);
+  const [profileBio, setProfileBio] = useState(adminProfile.bio);
 
-  // Sync settings form inputs when active profile changes
+  // Sync settings form inputs when admin profile changes
   useEffect(() => {
-    setProfileName(activeProfile.name);
-    setProfileEmail(activeProfile.email);
-    setProfileBio(activeProfile.bio);
-  }, [activeProfileId, activeProfile]);
+    setProfileName(adminProfile.name);
+    setProfileEmail(adminProfile.email);
+    setProfileBio(adminProfile.bio);
+  }, [adminProfile]);
 
   // Sharing interaction state
   const [shareText, setShareText] = useState('Share Dashboard');
@@ -113,14 +113,14 @@ const AdminDashboard = () => {
   const handleProfileUpdate = (e) => {
     e.preventDefault();
     const updatedFields = {
-      id: activeProfileId,
+      id: adminProfile.id,
       name: profileName,
       email: profileEmail,
       bio: profileBio
     };
 
     setProfiles(prev => prev.map(p => {
-      if (p.id === activeProfileId) {
+      if (p.id === adminProfile.id) {
         return {
           ...p,
           name: profileName,
@@ -214,7 +214,7 @@ const AdminDashboard = () => {
           
           <div className="avatar-overlap-wrap">
             <img 
-              src={activeProfile.avatar} 
+              src={adminProfile.avatar} 
               className="profile-avatar-pro" 
               alt="Profile Owner Avatar" 
             />
@@ -224,21 +224,21 @@ const AdminDashboard = () => {
           <div className="profile-title-bio-col">
             <div className="profile-name-row">
               <div className="profile-selector-wrap">
-                <span className="profile-active-name">{activeProfile.name}</span>
+                <span className="profile-active-name">{adminProfile.name}</span>
               </div>
               <span className="badge-verified role-badge-admin">
                 <Shield size={12} color="white" />
-                <span>{activeProfile.role}</span>
+                <span>{adminProfile.role}</span>
               </span>
             </div>
             
             <div className="profile-meta-row">
               <span className="meta-item"><MapPin size={13} color="var(--primary)" /> Hyderabad, TS</span>
               <span className="meta-item-sep">•</span>
-              <span className="meta-item">{activeProfile.email}</span>
+              <span className="meta-item">{adminProfile.email}</span>
             </div>
 
-            <p className="profile-bio-pro">{activeProfile.bio}</p>
+            <p className="profile-bio-pro">{adminProfile.bio}</p>
           </div>
 
           <div className="profile-header-right-col">
@@ -252,7 +252,7 @@ const AdminDashboard = () => {
                 <span className="stat-lbl-pro">Users</span>
               </div>
               <div className="stat-pill-pro">
-                <span className="stat-num-pro">{activeProfile.rating}</span>
+                <span className="stat-num-pro">{adminProfile.rating}</span>
                 <span className="stat-lbl-pro">Rating</span>
               </div>
             </div>
