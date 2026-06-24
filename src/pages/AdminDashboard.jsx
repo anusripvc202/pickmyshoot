@@ -163,6 +163,7 @@ const AdminDashboard = () => {
     const newListing = {
       id: `${listType === 'studio' ? 'st' : listType === 'gear' ? 'gr' : 'ps'}-${Date.now()}`,
       title: listTitle,
+      type: listType,
       price: Number(listPrice),
       priceUnit: listType === 'studio' ? 'hr' : 'day',
       rating: 5.0,
@@ -172,7 +173,8 @@ const AdminDashboard = () => {
       image: listImage,
       active: true,
       description: listDesc || `${listTitle} - premium listing added on PickMyShoot.`,
-      ownerId: "prof-photographer"
+      ownerId: "prof-photographer",
+      creatorId: "prof-photographer"
     };
 
     if (listType === 'studio') {
@@ -183,10 +185,47 @@ const AdminDashboard = () => {
       setServices(prev => [newListing, ...prev]);
     }
 
+    // Sync listing with backend API
+    fetch('/api/listings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newListing)
+    })
+      .then(res => res.json())
+      .then(saved => {
+        console.log('Admin mock listing saved to DB:', saved._id);
+      })
+      .catch(err => console.warn('Failed to sync admin listing to DB:', err));
+
     setShowCreateListingModal(false);
     setListTitle('');
     setListDesc('');
     triggerToast(`New listing "${listTitle}" added to Explore catalog!`);
+  };
+
+  const handleDeleteListing = (id, category) => {
+    if (category === 'studio') {
+      setStudios(prev => prev.filter(item => item.id !== id && item._id !== id));
+    } else if (category === 'gear') {
+      setGear(prev => prev.filter(item => item.id !== id && item._id !== id));
+    } else if (category === 'service') {
+      setServices(prev => prev.filter(item => item.id !== id && item._id !== id));
+    }
+
+    fetch(`/api/listings?id=${id}`, {
+      method: 'DELETE'
+    })
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to delete listing");
+        return res.json();
+      })
+      .then(() => {
+        triggerToast("Listing deleted successfully!");
+      })
+      .catch(err => {
+        console.warn("Could not sync deletion with DB:", err);
+        triggerToast("Listing deleted locally");
+      });
   };
 
   // Admin platform calculations
@@ -610,7 +649,7 @@ const AdminDashboard = () => {
                               />
                               <span className="slider"></span>
                             </label>
-                            <button className="action-btn-sm danger" onClick={() => triggerToast("Admin mock deletion locked.")}>
+                            <button className="action-btn-sm danger" onClick={() => handleDeleteListing(item.id || item._id, item.cat)}>
                               Delete
                             </button>
                           </div>
