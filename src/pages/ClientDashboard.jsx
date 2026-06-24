@@ -36,6 +36,7 @@ const ClientDashboard = () => {
     profiles,
     setProfiles,
     activeProfileId,
+    setActiveProfileId,
     updateBookingStatus,
     tickets,
     addSupportTicket,
@@ -189,7 +190,31 @@ const ClientDashboard = () => {
           <div className="profile-title-bio-col">
             <div className="profile-name-row">
               <div className="profile-selector-wrap">
-                <span className="profile-active-name">{activeProfile.name}</span>
+                {currentUser?.role === 'admin' ? (
+                  <select 
+                    value={activeProfileId} 
+                    onChange={(e) => setActiveProfileId(e.target.value)}
+                    className="profile-active-name-select"
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      fontSize: '22px',
+                      fontWeight: '800',
+                      color: 'var(--text-main)',
+                      cursor: 'pointer',
+                      outline: 'none',
+                      paddingRight: '20px'
+                    }}
+                  >
+                    {profiles.filter(p => p.role.includes('client')).map(client => (
+                      <option key={client.id} value={client.id} style={{ color: '#000' }}>
+                        {client.name} ({client.role})
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <span className="profile-active-name">{activeProfile.name}</span>
+                )}
               </div>
               <span className="badge-verified role-badge-client">
                 <User size={12} color="white" />

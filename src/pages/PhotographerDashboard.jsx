@@ -39,6 +39,7 @@ const PhotographerDashboard = () => {
     profiles,
     setProfiles,
     activeProfileId,
+    setActiveProfileId,
     toggleListingActive,
     updateBookingStatus,
     addPortfolioItem,
@@ -225,7 +226,31 @@ const PhotographerDashboard = () => {
           <div className="profile-title-bio-col">
             <div className="profile-name-row">
               <div className="profile-selector-wrap">
-                <span className="profile-active-name">{activeProfile.name}</span>
+                {currentUser?.role === 'admin' ? (
+                  <select 
+                    value={activeProfileId} 
+                    onChange={(e) => setActiveProfileId(e.target.value)}
+                    className="profile-active-name-select"
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      fontSize: '22px',
+                      fontWeight: '800',
+                      color: 'var(--text-main)',
+                      cursor: 'pointer',
+                      outline: 'none',
+                      paddingRight: '20px'
+                    }}
+                  >
+                    {profiles.filter(p => p.role.includes('photographer')).map(photographer => (
+                      <option key={photographer.id} value={photographer.id} style={{ color: '#000' }}>
+                        {photographer.name} ({photographer.role})
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <span className="profile-active-name">{activeProfile.name}</span>
+                )}
               </div>
               <span className="badge-verified role-badge-photographer">
                 <Camera size={12} color="white" />

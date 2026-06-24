@@ -14,9 +14,11 @@ import {
   PlusCircle,
   Tag,
   Check,
-  Share2
+  Share2,
+  User
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
+import { useNavigate } from 'react-router-dom';
 
 const AdminDashboard = () => {
   const {
@@ -33,6 +35,7 @@ const AdminDashboard = () => {
     profiles,
     setProfiles,
     activeProfileId,
+    setActiveProfileId,
     toggleListingActive,
     updateBookingStatus,
     toggleUserVerification,
@@ -41,8 +44,11 @@ const AdminDashboard = () => {
     coupons,
     toggleCouponStatus,
     createCoupon,
-    currentUser
+    currentUser,
+    changeUserRole
   } = useAppContext();
+
+  const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState('overview');
 
@@ -315,6 +321,13 @@ const AdminDashboard = () => {
             >
               <Tag size={16} />
               <span>Coupons &amp; Offers</span>
+            </button>
+            <button 
+              className={`profile-nav-tab ${activeTab === 'clients' ? 'active' : ''}`}
+              onClick={() => setActiveTab('clients')}
+            >
+              <User size={16} />
+              <span>Clients List ({profiles.filter(p => p.role.includes('client')).length})</span>
             </button>
           </div>
         </aside>
@@ -827,6 +840,60 @@ const AdminDashboard = () => {
                 </div>
               </div>
             )}
+          </div>
+        )}
+
+        {activeTab === 'clients' && (
+          <div className="admin-clients-layout admin-column-layout">
+            <h3 className="section-title-pro">Platform Registered Clients</h3>
+            <p className="section-desc-pro mt-negative">Overview of all active clients, their contact information, and platform utilization.</p>
+            <div className="admin-table-container">
+              <table className="admin-data-table">
+                <thead>
+                  <tr>
+                    <th>Avatar</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Role</th>
+                    <th>Total Bookings</th>
+                    <th>Total Spent</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {profiles.filter(p => p.role.includes('client')).map(client => {
+                    const clientBookings = bookings.filter(b => b.clientId === client.id);
+                    const clientSpent = clientBookings.reduce((sum, b) => sum + (b.status === 'cancelled' ? 0 : (parseFloat(b.price) || 0)), 0);
+                    return (
+                      <tr key={client.id}>
+                        <td>
+                          <img src={client.avatar} className="ver-user-avatar" style={{ width: '32px', height: '32px', borderRadius: '50%' }} alt={client.name} />
+                        </td>
+                        <td className="bold">{client.name}</td>
+                        <td>{client.email}</td>
+                        <td>{client.phone}</td>
+                        <td><span className="category-pill-admin">{client.role.toUpperCase()}</span></td>
+                        <td className="bold">{clientBookings.length} bookings</td>
+                        <td className="bold">₹{clientSpent.toLocaleString('en-IN')}</td>
+                        <td>
+                          <button 
+                            className="admin-action-btn complete"
+                            onClick={() => {
+                              setActiveProfileId(client.id);
+                              changeUserRole('client');
+                              navigate('/dashboard/client');
+                            }}
+                          >
+                            View Client Dashboard
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>
