@@ -620,54 +620,69 @@ export const institutes = [
     title: "Whistling Woods International",
     location: "Mumbai",
     rating: 4.6,
+    reviews: 145,
     course: "Film Making",
     status: "Admissions Open",
     bgColor: "#ffffff",
     logo: "/logo_wwi.png",
-    coverImage: "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=500&q=80"
+    image: "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=500&q=80",
+    coverImage: "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=500&q=80",
+    description: "Founded by filmmaker Subhash Ghai, Whistling Woods International is India's premier institute for film, communication, and creative arts, offering world-class infrastructure and industry-driven training."
   },
   {
     id: "in-2",
     title: "FTII Pune",
     location: "Pune",
     rating: 4.7,
+    reviews: 210,
     course: "Film & TV Direction",
     status: "Admissions Open",
     bgColor: "#ffffff",
     logo: "/logo_ftii.svg",
-    coverImage: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=500&q=80"
+    image: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=500&q=80",
+    coverImage: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=500&q=80",
+    description: "The Film and Television Institute of India (FTII) is India's top premier film school under the Ministry of Information and Broadcasting, known for producing legendary filmmakers and actors."
   },
   {
     id: "in-3",
     title: "AAFT University",
     location: "Noida",
     rating: 4.5,
+    reviews: 98,
     course: "Photography",
     status: "Admissions Open",
     bgColor: "#ffffff",
     logo: "/logo_aaft.jpg",
-    coverImage: "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=500&q=80"
+    image: "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=500&q=80",
+    coverImage: "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=500&q=80",
+    description: "Asian Academy of Film and Television (AAFT) offers comprehensive hands-on training in cinema, media, journalism, and performing arts with active collaboration from global production houses."
   },
   {
     id: "in-4",
     title: "NID Ahmedabad",
     location: "Ahmedabad",
     rating: 4.7,
+    reviews: 185,
     course: "Design & Animation",
     status: "Admissions Open",
     bgColor: "#ffffff",
     logo: "/logo_nid.svg",
-    coverImage: "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=500&q=80"
+    image: "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=500&q=80",
+    coverImage: "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=500&q=80",
+    description: "National Institute of Design (NID) is internationally acclaimed for its design education and research, offering top-tier undergraduate and postgraduate programs in animation, graphics, and visual communication."
   },
   {
     id: "in-5",
     title: "Arena Animation",
     location: "Multiple Locations",
     rating: 4.4,
+    reviews: 320,
     course: "VFX & Animation",
     status: "Admissions Open",
     bgColor: "#ffffff",
     logo: "/logo_arena.png",
-    coverImage: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=500&q=80"
+    image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=500&q=80",
+    coverImage: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=500&q=80",
+    description: "Arena Animation is a pioneer in animation and multimedia education, providing highly specialized vocational courses in VFX, game design, web design, and 3D animation across various global campus branches."
   }
 ];

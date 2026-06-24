@@ -394,7 +394,12 @@ const HomePage = () => {
         </div>
         <div className="desktop-card-grid-5 mobile-scroll-row">
           {institutes.map(inst => (
-            <div key={inst.id} className="institute-card">
+            <div 
+              key={inst.id} 
+              className="institute-card" 
+              onClick={() => openDetails(inst, 'institute')}
+              style={{ cursor: 'pointer' }}
+            >
               {/* Cover Image & Overlay badges */}
               <div className="inst-cover-wrap">
                 <img 

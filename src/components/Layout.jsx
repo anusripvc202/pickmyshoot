@@ -360,7 +360,7 @@ const Layout = () => {
             
             {/* Left Column: Image gallery */}
             <div className="detail-header-image-box">
-              <img src={selectedItem.image} className="card-image" alt={selectedItem.title} />
+              <img src={selectedItem.image || selectedItem.coverImage} className="card-image" alt={selectedItem.title} />
               
               <button 
                 className={`card-like-btn ${likedItems[selectedItem.id] ? 'liked' : ''}`}
@@ -524,6 +524,26 @@ const Layout = () => {
                             </div>
                           </>
                         )}
+                        {selectedItemType === 'institute' && (
+                          <>
+                            <div className="metric-pill">
+                              <span className="metric-label">Offered Course</span>
+                              <span className="metric-value">{selectedItem.course}</span>
+                            </div>
+                            <div className="metric-pill">
+                              <span className="metric-label">Admissions</span>
+                              <span className="metric-value">{selectedItem.status || 'Open'}</span>
+                            </div>
+                            <div className="metric-pill">
+                              <span className="metric-label">Rating</span>
+                              <span className="metric-value">{selectedItem.rating} ★</span>
+                            </div>
+                            <div className="metric-pill">
+                              <span className="metric-label">Campus Location</span>
+                              <span className="metric-value">{selectedItem.location}</span>
+                            </div>
+                          </>
+                        )}
                       </div>
                     )}
 
@@ -535,14 +555,15 @@ const Layout = () => {
                          selectedItemType === 'gear' ? 'About Gear Rental' :
                          selectedItemType === 'workshop' ? 'About Workshop' :
                          selectedItemType === 'job' ? 'About Job Opening' :
-                         selectedItemType === 'service' ? 'About Shoot Package' : 'About Listing'}
+                         selectedItemType === 'service' ? 'About Shoot Package' :
+                         selectedItemType === 'institute' ? 'About Institute' : 'About Listing'}
                       </span>
                       <p className="detail-desc-text">
-                        {showFullDesc || selectedItem.description.length <= 110 
-                          ? selectedItem.description 
+                        {showFullDesc || !selectedItem.description || selectedItem.description.length <= 110 
+                          ? (selectedItem.description || "No description available.") 
                           : `${selectedItem.description.slice(0, 110)}...`}
                       </p>
-                      {selectedItem.description.length > 110 && (
+                      {selectedItem.description && selectedItem.description.length > 110 && (
                         <button 
                           className="read-more-btn-link" 
                           onClick={() => setShowFullDesc(!showFullDesc)}
@@ -678,17 +699,19 @@ const Layout = () => {
                   <div className="detail-fixed-checkout-bar">
                     <div className="checkout-price-col">
                       <span className="checkout-price-val">
-                        {typeof selectedItem.price === 'number' 
-                          ? `₹${selectedItem.price.toLocaleString('en-IN')}${selectedItem.priceUnit ? ` /${selectedItem.priceUnit}` : ''}` 
-                          : selectedItem.price}
+                        {selectedItemType === 'institute' 
+                          ? 'Free to Apply' 
+                          : (typeof selectedItem.price === 'number' 
+                              ? `₹${selectedItem.price.toLocaleString('en-IN')}${selectedItem.priceUnit ? ` /${selectedItem.priceUnit}` : ''}` 
+                              : selectedItem.price || 'Free')}
                       </span>
                       <span className="checkout-price-unit">
-                        Total (incl. taxes)
+                        {selectedItemType === 'institute' ? 'No application fee' : 'Total (incl. taxes)'}
                       </span>
                     </div>
 
                     <button className="checkout-submit-btn" onClick={handleBookingClick}>
-                      {selectedItemType === 'job' ? 'Apply Now' : 
+                      {selectedItemType === 'job' || selectedItemType === 'institute' ? 'Apply Now' : 
                        selectedItemType === 'workshop' ? 'Register Now' : 'Book Now'}
                     </button>
                   </div>
@@ -716,7 +739,7 @@ const Layout = () => {
                       <span className="summary-label">Listing</span>
                       <span className="summary-value">{selectedItem.title}</span>
                     </div>
-                    {selectedItemType !== 'job' && selectedItemType !== 'workshop' && (
+                    {selectedItemType !== 'job' && selectedItemType !== 'workshop' && selectedItemType !== 'institute' && (
                       <>
                         <div className="summary-row">
                           <span className="summary-label">Date</span>
@@ -729,8 +752,14 @@ const Layout = () => {
                       </>
                     )}
                     <div className="summary-row total">
-                      <span className="summary-label">Total Invoiced</span>
-                      <span className="summary-value">{typeof selectedItem.price === 'number' ? `₹${selectedItem.price.toLocaleString('en-IN')}` : selectedItem.price}</span>
+                      <span className="summary-label">
+                        {selectedItemType === 'institute' ? 'Application' : 'Total Invoiced'}
+                      </span>
+                      <span className="summary-value">
+                        {selectedItemType === 'institute' 
+                          ? 'Submitted' 
+                          : (typeof selectedItem.price === 'number' ? `₹${selectedItem.price.toLocaleString('en-IN')}` : selectedItem.price || 'Free')}
+                      </span>
                     </div>
                   </div>
                   <p className="redirect-note">Redirecting to your bookings dashboard...</p>

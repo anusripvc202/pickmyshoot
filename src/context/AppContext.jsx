@@ -328,17 +328,17 @@ export const AppProvider = ({ children }) => {
   const handleBookingSubmit = (autoClose = true) => {
     if (!selectedItem) return;
 
-    let cost = selectedItem.price;
+    let cost = selectedItem.price || 'Free';
 
     const dbBooking = {
       listingId: selectedItem.id || selectedItem._id || "",
       clientId: activeProfileId || "prof-client",
-      creatorId: selectedItem.ownerId || (selectedItemType === "service" ? "prof-photographer" : "prof-1"),
-      ownerId: selectedItem.ownerId || (selectedItemType === "service" ? "prof-photographer" : "prof-1"),
+      creatorId: selectedItem.ownerId || (selectedItemType === "service" ? "prof-photographer" : (selectedItemType === "institute" ? "admin" : "prof-1")),
+      ownerId: selectedItem.ownerId || (selectedItemType === "service" ? "prof-photographer" : (selectedItemType === "institute" ? "admin" : "prof-1")),
       itemType: selectedItemType.charAt(0).toUpperCase() + selectedItemType.slice(1),
       title: selectedItem.title || "",
-      date: selectedItemType === 'workshop' ? selectedItem.date : selectedDate,
-      time: selectedItemType === 'workshop' ? selectedItem.timing : selectedTime,
+      date: selectedItemType === 'workshop' ? selectedItem.date : (selectedItemType === 'institute' ? 'Immediate' : selectedDate),
+      time: selectedItemType === 'workshop' ? selectedItem.timing : (selectedItemType === 'institute' ? 'Admissions Open' : selectedTime),
       price: cost,
       status: "pending",
       item: selectedItem,
