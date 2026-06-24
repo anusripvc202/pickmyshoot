@@ -76,76 +76,7 @@
       margin-bottom: 25px;
     }
 
-    .account-list {
-      text-align: left;
-      margin-bottom: 30px;
-      border-top: 1px solid var(--border-color);
-    }
-
-    .account-item {
-      display: flex;
-      align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border-color);
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-
-    .account-item:hover {
-      background-color: rgba(60, 64, 67, 0.04);
-      margin-left: -40px;
-      margin-right: -40px;
-      padding-left: 40px;
-      padding-right: 40px;
-    }
-
-    .avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: var(--google-blue);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 500;
-      font-size: 14px;
-      margin-right: 12px;
-      overflow: hidden;
-    }
-
-    .avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .account-details {
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-    }
-
-    .account-name {
-      font-size: 14px;
-      font-weight: 500;
-      color: #3c4043;
-    }
-
-    .account-email {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .other-option {
-      color: var(--google-blue);
-      font-size: 14px;
-      font-weight: 500;
-    }
-
-    /* Custom email form */
     .custom-form {
-      display: none;
       text-align: left;
       animation: fadeIn 0.3s ease-in-out;
     }
@@ -185,24 +116,9 @@
 
     .btn-group {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
       margin-top: 25px;
-    }
-
-    .btn-back {
-      color: var(--google-blue);
-      font-size: 14px;
-      font-weight: 500;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 8px 12px;
-      border-radius: 4px;
-    }
-
-    .btn-back:hover {
-      background-color: rgba(26, 115, 232, 0.04);
     }
 
     .btn-submit {
@@ -250,46 +166,6 @@
       </svg>
     </div>
 
-    <div id="select-account-view">
-      <h1>Choose an account</h1>
-      <p class="subtitle">to continue to PickMyShoot</p>
-
-      <div class="account-list">
-        <!-- Account 1 -->
-        <div class="account-item" onclick="selectUser('Anusha Reddy', 'anusripvc202@gmail.com')">
-          <div class="avatar" style="background-color: #c51162;">A</div>
-          <div class="account-details">
-            <span class="account-name">Anusha Reddy</span>
-            <span class="account-email">anusripvc202@gmail.com</span>
-          </div>
-        </div>
-
-        <!-- Account 2 -->
-        <div class="account-item" onclick="selectUser('Nikhil Jai', 'nikhiljai1215@gmail.com')">
-          <div class="avatar" style="background-color: #3f51b5;">N</div>
-          <div class="account-details">
-            <span class="account-name">Nikhil Jai</span>
-            <span class="account-email">nikhiljai1215@gmail.com</span>
-          </div>
-        </div>
-
-        <!-- Use another account -->
-        <div class="account-item" onclick="showCustomForm()">
-          <div class="avatar" style="background-color: #f1f3f4; color: var(--text-muted);">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-              <circle cx="9" cy="7" r="4"></circle>
-              <line x1="19" y1="8" x2="19" y2="14"></line>
-              <line x1="22" y1="11" x2="16" y2="11"></line>
-            </svg>
-          </div>
-          <div class="account-details">
-            <span class="other-option">Use another account</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Custom email / role form -->
     <div id="custom-account-view" class="custom-form">
       <h1 style="text-align: left; font-size: 24px; margin-bottom: 8px;">Sign in</h1>
@@ -306,7 +182,6 @@
       </div>
 
       <div class="btn-group">
-        <button class="btn-back" onclick="showAccountSelect()">Back</button>
         <button class="btn-submit" onclick="submitCustomUser()">Next</button>
       </div>
     </div>
@@ -333,16 +208,6 @@
         }
       }, window.location.origin);
       window.close();
-    }
-
-    function showCustomForm() {
-      document.getElementById('select-account-view').style.display = 'none';
-      document.getElementById('custom-account-view').style.display = 'block';
-    }
-
-    function showAccountSelect() {
-      document.getElementById('select-account-view').style.display = 'block';
-      document.getElementById('custom-account-view').style.display = 'none';
     }
 
     function submitCustomUser() {
