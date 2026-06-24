@@ -58,12 +58,14 @@ const AdminDashboard = () => {
   const [profileName, setProfileName] = useState(adminProfile.name);
   const [profileEmail, setProfileEmail] = useState(adminProfile.email);
   const [profileBio, setProfileBio] = useState(adminProfile.bio);
+  const [profileAvatar, setProfileAvatar] = useState(adminProfile.avatar);
 
   // Sync settings form inputs when admin profile changes
   useEffect(() => {
     setProfileName(adminProfile.name);
     setProfileEmail(adminProfile.email);
     setProfileBio(adminProfile.bio);
+    setProfileAvatar(adminProfile.avatar);
   }, [adminProfile]);
 
   // Sharing interaction state
@@ -116,7 +118,8 @@ const AdminDashboard = () => {
       id: adminProfile.id,
       name: profileName,
       email: profileEmail,
-      bio: profileBio
+      bio: profileBio,
+      avatar: profileAvatar
     };
 
     setProfiles(prev => prev.map(p => {
@@ -125,7 +128,8 @@ const AdminDashboard = () => {
           ...p,
           name: profileName,
           email: profileEmail,
-          bio: profileBio
+          bio: profileBio,
+          avatar: profileAvatar
         };
       }
       return p;
@@ -645,6 +649,41 @@ const AdminDashboard = () => {
             <div className="settings-section-card">
               <h3 className="section-title-pro">Update Public Profile Bio</h3>
               <form onSubmit={handleProfileUpdate} className="modal-form-layout">
+                <div className="form-group" style={{ marginBottom: '20px' }}>
+                  <label className="form-label">Profile Avatar Image</label>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '8px' }}>
+                    <img 
+                      src={profileAvatar} 
+                      style={{ width: '64px', height: '64px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--primary)' }} 
+                      alt="Avatar Preview" 
+                    />
+                    <div>
+                      <label 
+                        htmlFor="admin-avatar-input" 
+                        className="pro-btn-primary theme-btn-admin" 
+                        style={{ padding: '8px 16px', fontSize: '13px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px', width: 'auto', minWidth: '0' }}
+                      >
+                        Upload Photo
+                      </label>
+                      <input 
+                        id="admin-avatar-input" 
+                        type="file" 
+                        accept="image/*" 
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          if (file) {
+                            const reader = new FileReader();
+                            reader.onloadend = () => {
+                              setProfileAvatar(reader.result);
+                            };
+                            reader.readAsDataURL(file);
+                          }
+                        }} 
+                        style={{ display: 'none' }} 
+                      />
+                    </div>
+                  </div>
+                </div>
                 <div className="form-group-row">
                   <div className="form-group">
                     <label className="form-label">Display Name</label>
