@@ -4,7 +4,7 @@ const listingSchema = new mongoose.Schema({
   id: { type: String },
   title: { type: String, required: true },
   type: { type: String, default: 'studio' },
-  price: { type: mongoose.Schema.Types.Mixed, required: true },
+  price: { type: Number, required: true },
   priceUnit: { type: String, default: 'hr' },
   image: { type: String, default: '' },
   description: { type: String, default: '' },

@@ -375,14 +375,7 @@ const LoginPage = () => {
             <button
               className="social-btn"
               type="button"
-              onClick={() => {
-                const success = loginUser('', '', '6a380b1e73c0e340a6bf3a41');
-                if (success) {
-                  navigate('/dashboard/admin');
-                } else {
-                  triggerToast('Demo admin profile not loaded yet. Try again in a second.');
-                }
-              }}
+              onClick={() => triggerToast('Social login coming soon. Use the form above!')}
             >
               <svg width="16" height="16" viewBox="0 0 48 48" fill="none">
                 <path d="M43.6 20.5H42V20H24v8h11.3C33.65 32.09 29.27 35 24 35c-6.07 0-11-4.93-11-11s4.93-11 11-11c2.8 0 5.35 1.06 7.28 2.78l5.66-5.66C33.46 7.11 28.97 5 24 5 12.96 5 4 13.96 4 25s8.96 20 20 20 20-8.96 20-20c0-1.34-.14-2.65-.4-3.5z" fill="#FFC107"/>
@@ -390,24 +383,17 @@ const LoginPage = () => {
                 <path d="M24 45c4.84 0 9.24-1.85 12.55-4.87l-5.8-4.91C28.99 36.99 26.6 38 24 38c-5.25 0-9.62-3.58-11.23-8.41l-6.52 5.02C9.51 41.02 16.27 45 24 45z" fill="#4CAF50"/>
                 <path d="M43.6 20.5H42V20H24v8h11.3a11.54 11.54 0 01-4.15 5.19l5.8 4.91C36.45 40.5 44 35 44 25c0-1.34-.14-2.65-.4-3.5z" fill="#1976D2"/>
               </svg>
-              Google (Admin Demo)
+              Google
             </button>
             <button
               className="social-btn"
               type="button"
-              onClick={() => {
-                const success = loginUser('', '', 'prof-photographer');
-                if (success) {
-                  navigate('/dashboard/photographer');
-                } else {
-                  triggerToast('Demo photographer profile not loaded yet. Try again in a second.');
-                }
-              }}
+              onClick={() => triggerToast('Social login coming soon. Use the form above!')}
             >
               <svg width="16" height="16" viewBox="0 0 814 1000" fill="currentColor">
                 <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-37.5-155.5-105C159.4 652 105 439.4 105 281.6c0-137.9 70.6-211.5 166.2-211.5 71.8 0 127 40.8 174.4 40.8 43.3 0 108.2-40.8 186.6-40.8 30.5 0 110.7 2.6 167.4 71.6zm-220.9-213.3c31.3-38.7 53.5-92.7 53.5-146.7 0-7.1-.6-14.3-1.9-20.1-50.6 1.9-110.8 33.7-147.1 75.8-28.5 32.4-55.1 86.4-55.1 141.2 0 7.8 1.3 15.6 1.9 18.1 3.2.6 8.4 1.3 13.6 1.3 45.4 0 102.5-30.4 135.1-69.6z"/>
               </svg>
-              Apple (Vendor Demo)
+              Apple
             </button>
           </div>
 
