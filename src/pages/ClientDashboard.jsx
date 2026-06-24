@@ -153,7 +153,10 @@ const ClientDashboard = () => {
     b.clientId === activeProfileId || 
     (currentUser && (b.clientId === currentUser.id || b.clientId === currentUser._id))
   );
-  const clientSpent = clientBookings.reduce((sum, b) => sum + (b.status === 'cancelled' ? 0 : b.price), 0);
+  const clientSpent = clientBookings.reduce((sum, b) => {
+    const priceVal = typeof b.price === 'number' ? b.price : parseFloat(b.price) || 0;
+    return sum + (b.status === 'cancelled' ? 0 : priceVal);
+  }, 0);
 
   return (
     <div className="profile-pro-container">
@@ -344,7 +347,7 @@ const ClientDashboard = () => {
                         <span className={`status-badge-chip ${b.status}`}>{b.status}</span>
                       </div>
                       <span className="row-sub-info">Reserved: {b.date} • {b.time} | Category: {b.itemType}</span>
-                      <span className="row-price">Invoiced Amount: <strong>₹{b.price.toLocaleString('en-IN')}</strong></span>
+                      <span className="row-price">Invoiced Amount: <strong>{typeof b.price === 'number' ? `₹${b.price.toLocaleString('en-IN')}` : b.price}</strong></span>
                     </div>
                     <div className="row-action-buttons">
                       <button 
@@ -619,7 +622,7 @@ const ClientDashboard = () => {
                           <span>UPI / Card</span>
                         </span>
                       </td>
-                      <td className="bold">₹{b.price.toLocaleString('en-IN')}</td>
+                      <td className="bold">{typeof b.price === 'number' ? `₹${b.price.toLocaleString('en-IN')}` : b.price}</td>
                       <td><span className={`status-badge-chip ${b.status}`}>{b.status}</span></td>
                       <td>
                         <button 
@@ -785,12 +788,12 @@ const ClientDashboard = () => {
                 </div>
                 <div className="table-body-row">
                   <span>{selectedBooking.item?.title} ({selectedBooking.itemType})</span>
-                  <span>₹{selectedBooking.price.toLocaleString('en-IN')}</span>
+                  <span>{typeof selectedBooking.price === 'number' ? `₹${selectedBooking.price.toLocaleString('en-IN')}` : selectedBooking.price}</span>
                 </div>
                 <div className="table-total-divider" />
                 <div className="table-total-row">
                   <span>Net Price (Tax included)</span>
-                  <span className="total-bold">₹{selectedBooking.price.toLocaleString('en-IN')}</span>
+                  <span className="total-bold">{typeof selectedBooking.price === 'number' ? `₹${selectedBooking.price.toLocaleString('en-IN')}` : selectedBooking.price}</span>
                 </div>
               </div>
             </div>

@@ -184,7 +184,10 @@ const PhotographerDashboard = () => {
     b.creatorId === activeProfileId || 
     (currentUser && (b.ownerId === currentUser.id || b.ownerId === currentUser._id || b.creatorId === currentUser.id || b.creatorId === currentUser._id))
   );
-  const photographerEarnings = photographerBookings.reduce((sum, b) => sum + (b.status === 'confirmed' || b.status === 'completed' ? b.price : 0), 0);
+  const photographerEarnings = photographerBookings.reduce((sum, b) => {
+    const priceVal = typeof b.price === 'number' ? b.price : parseFloat(b.price) || 0;
+    return sum + (b.status === 'confirmed' || b.status === 'completed' ? priceVal : 0);
+  }, 0);
   const photographerOwnedListings = [
     ...services.filter(s => s.ownerId === activeProfileId || (!s.ownerId && activeProfileId === "prof-photographer" && (s.id === "ps-1" || s.id === "ps-9"))).map(s => ({ ...s, type: "Service Package", categoryKey: "service" })),
     ...gear.filter(g => g.ownerId === activeProfileId || (!g.ownerId && activeProfileId === "prof-photographer" && (g.id === "gr-1" || g.id === "gr-6"))).map(g => ({ ...g, type: "Gear Rental", categoryKey: "gear" })),
@@ -436,7 +439,7 @@ const PhotographerDashboard = () => {
                         </div>
                       
                       <span className="request-listing-title">{b.item?.title || 'Photoshoot Package Session'}</span>
-                      <span className="request-price-tag">Amount Due: <strong>₹{b.price.toLocaleString('en-IN')}</strong></span>
+                      <span className="request-price-tag">Amount Due: <strong>{typeof b.price === 'number' ? `₹${b.price.toLocaleString('en-IN')}` : b.price}</strong></span>
                       
                       <div className="request-actions-row">
                         {b.status === 'pending' && (
@@ -861,8 +864,9 @@ const PhotographerDashboard = () => {
       {showInvoicePreview && (() => {
         const bookingObj = bookings.find(b => b.id === selectedInvoiceBookingId);
         if (!bookingObj) return null;
-        const discAmt = Math.round(bookingObj.price * (invoiceDiscount / 100));
-        const finalPrice = bookingObj.price - discAmt;
+        const priceVal = typeof bookingObj.price === 'number' ? bookingObj.price : parseFloat(bookingObj.price) || 0;
+        const discAmt = Math.round(priceVal * (invoiceDiscount / 100));
+        const finalPrice = priceVal - discAmt;
         return (
           <div className="profile-modal-overlay" onClick={() => setShowInvoicePreview(false)}>
             <div className="profile-modal-body receipt-modal" onClick={(e) => e.stopPropagation()}>
@@ -904,7 +908,7 @@ const PhotographerDashboard = () => {
                   </div>
                   <div className="table-body-row">
                     <span>{bookingObj.item?.title}</span>
-                    <span>₹{bookingObj.price.toLocaleString('en-IN')}</span>
+                    <span>{typeof bookingObj.price === 'number' ? `₹${bookingObj.price.toLocaleString('en-IN')}` : bookingObj.price}</span>
                   </div>
                   {invoiceDiscount > 0 && (
                     <div className="table-body-row" style={{ color: '#e74c3c' }}>

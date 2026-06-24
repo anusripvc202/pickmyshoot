@@ -180,7 +180,10 @@ const AdminDashboard = () => {
   };
 
   // Admin platform calculations
-  const platformRevenue = bookings.reduce((sum, b) => sum + (b.status !== 'cancelled' ? b.price : 0), 0);
+  const platformRevenue = bookings.reduce((sum, b) => {
+    const priceVal = typeof b.price === 'number' ? b.price : parseFloat(b.price) || 0;
+    return sum + (b.status !== 'cancelled' ? priceVal : 0);
+  }, 0);
   const platformCommission = Math.round(platformRevenue * 0.1);
   const totalVerifiedCount = profiles.filter(p => p.role.startsWith("Verified")).length;
 
@@ -464,7 +467,7 @@ const AdminDashboard = () => {
                         <td>{b.item?.title}</td>
                         <td>{b.date}</td>
                         <td>{b.time}</td>
-                        <td className="bold">₹{b.price.toLocaleString('en-IN')}</td>
+                        <td className="bold">{typeof b.price === 'number' ? `₹${b.price.toLocaleString('en-IN')}` : b.price}</td>
                         <td><span className={`status-badge-chip ${b.status}`}>{b.status}</span></td>
                         <td>
                           <div className="admin-action-btn-group">
