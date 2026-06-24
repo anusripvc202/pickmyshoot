@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 
 const LoginPage = () => {
-  const { loginUser, signupUser, isAuthenticated, triggerToast } = useAppContext();
+  const { loginUser, signupUser, isAuthenticated, triggerToast, loginOrSignupGoogle } = useAppContext();
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState('login');
@@ -51,6 +51,36 @@ const LoginPage = () => {
       setAvatarPreview(reader.result);
     };
     reader.readAsDataURL(file);
+  };
+
+  /* ── Google Login popup trigger ── */
+  const handleGoogleLogin = () => {
+    const width = 500;
+    const height = 600;
+    const left = window.screen.width / 2 - width / 2;
+    const top = window.screen.height / 2 - height / 2;
+    
+    window.open(
+      '/mock-google-login.html', 
+      'Google Sign In', 
+      `width=${width},height=${height},left=${left},top=${top},status=no,menubar=no,toolbar=no`
+    );
+
+    const messageListener = (event) => {
+      if (event.origin !== window.location.origin) return;
+      
+      if (event.data && event.data.type === 'GOOGLE_SIGNIN_SUCCESS') {
+        const { name, email, avatar } = event.data.user;
+        loginOrSignupGoogle(name, email, avatar).then((success) => {
+          if (success) {
+            navigate('/profile');
+          }
+        });
+        window.removeEventListener('message', messageListener);
+      }
+    };
+
+    window.addEventListener('message', messageListener);
   };
 
   /* ── Login Submit ──────────────── */
@@ -375,7 +405,7 @@ const LoginPage = () => {
             <button
               className="social-btn"
               type="button"
-              onClick={() => triggerToast('Social login coming soon. Use the form above!')}
+              onClick={handleGoogleLogin}
             >
               <svg width="16" height="16" viewBox="0 0 48 48" fill="none">
                 <path d="M43.6 20.5H42V20H24v8h11.3C33.65 32.09 29.27 35 24 35c-6.07 0-11-4.93-11-11s4.93-11 11-11c2.8 0 5.35 1.06 7.28 2.78l5.66-5.66C33.46 7.11 28.97 5 24 5 12.96 5 4 13.96 4 25s8.96 20 20 20 20-8.96 20-20c0-1.34-.14-2.65-.4-3.5z" fill="#FFC107"/>

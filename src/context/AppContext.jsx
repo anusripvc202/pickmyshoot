@@ -558,6 +558,64 @@ export const AppProvider = ({ children }) => {
     triggerToast("Logged out successfully.");
   };
 
+  // Google sign in / sign up helper
+  const loginOrSignupGoogle = async (name, email, avatar = null) => {
+    let role = 'client';
+    if (email.toLowerCase() === 'anusripvc202@gmail.com') role = 'admin';
+    else if (email.toLowerCase() === 'nikhiljai1215@gmail.com') role = 'photographer';
+
+    const existing = profiles.find(p => p.email.toLowerCase() === email.toLowerCase());
+    if (existing) {
+      setCurrentUser(existing);
+      setActiveProfileId(existing.id);
+      setIsAuthenticated(true);
+      
+      const roleLower = existing.role.toLowerCase();
+      if (roleLower.includes('admin')) setCurrentRole('admin');
+      else if (roleLower.includes('photographer')) setCurrentRole('photographer');
+      else setCurrentRole('client');
+      
+      triggerToast(`Welcome back, ${existing.name}!`);
+      return true;
+    } else {
+      const newProfileId = `prof-${Date.now()}`;
+      const newProfile = {
+        id: newProfileId,
+        name: name,
+        role: role,
+        email: email,
+        phone: "+91 99999 88888",
+        bio: "Newly registered visual creator profile via Google.",
+        avatar: avatar || `https://api.dicebear.com/7.x/initials/svg?seed=${name}`,
+        shoots: "0",
+        rating: "5.0 ★",
+        followers: "0",
+        revenue: "₹0",
+        success: "100%",
+        views: "1"
+      };
+
+      setProfiles(prev => [...prev, newProfile]);
+      setCurrentUser(newProfile);
+      setActiveProfileId(newProfileId);
+      setIsAuthenticated(true);
+      setCurrentRole(role);
+
+      try {
+        await fetch('/api/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newProfile)
+        });
+      } catch (err) {
+        console.warn('Failed to sync new Google user with DB', err);
+      }
+
+      triggerToast(`Successfully registered with Google, welcome ${name}!`);
+      return true;
+    }
+  };
+
   return (
     <AppContext.Provider value={{
       theme, setTheme,
@@ -589,6 +647,7 @@ export const AppProvider = ({ children }) => {
       loginUser,
       signupUser,
       logoutUser,
+      loginOrSignupGoogle,
       portfolioItems, setPortfolioItems,
       currentRole, changeUserRole,
       updateBookingStatus,
