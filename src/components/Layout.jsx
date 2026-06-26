@@ -10,6 +10,7 @@ import {
   Star, 
   Plus, 
   X, 
+  ChevronLeft,
   ChevronRight, 
   Check, 
   Camera,
@@ -107,6 +108,86 @@ const Layout = () => {
   const [bookingStatus, setBookingStatus] = React.useState('idle'); // 'idle' | 'processing' | 'success'
   const [showFullDesc, setShowFullDesc] = React.useState(false);
   const scrollRef = React.useRef(null);
+
+  // Custom interactive calendar states and helpers
+  const [viewDate, setViewDate] = React.useState(new Date());
+
+  const getDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
+  const getFirstDayOfMonth = (year, month) => new Date(year, month, 1).getDay();
+
+  const viewYear = viewDate.getFullYear();
+  const viewMonth = viewDate.getMonth();
+
+  const handlePrevMonth = () => {
+    setViewDate(new Date(viewYear, viewMonth - 1, 1));
+  };
+  const handleNextMonth = () => {
+    setViewDate(new Date(viewYear, viewMonth + 1, 1));
+  };
+
+  const isPastDate = (year, month, day) => {
+    const cellDate = new Date(year, month, day);
+    const todayZero = new Date();
+    todayZero.setHours(0, 0, 0, 0);
+    return cellDate < todayZero;
+  };
+
+  const formatDateString = (year, month, day) => {
+    const monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return `${day} ${monthNamesShort[month]} ${year}`;
+  };
+
+  const calendarCells = React.useMemo(() => {
+    const daysInMonth = getDaysInMonth(viewYear, viewMonth);
+    const firstDay = getFirstDayOfMonth(viewYear, viewMonth);
+    const prevMonthDays = getDaysInMonth(viewYear, viewMonth - 1);
+    
+    const cells = [];
+    
+    // Padding from previous month
+    for (let i = firstDay - 1; i >= 0; i--) {
+      cells.push({
+        day: prevMonthDays - i,
+        month: viewMonth === 0 ? 11 : viewMonth - 1,
+        year: viewMonth === 0 ? viewYear - 1 : viewYear,
+        isCurrentMonth: false,
+      });
+    }
+    
+    // Current month days
+    for (let i = 1; i <= daysInMonth; i++) {
+      cells.push({
+        day: i,
+        month: viewMonth,
+        year: viewYear,
+        isCurrentMonth: true,
+      });
+    }
+    
+    // Next month days padding (up to 42 cells)
+    const remaining = 42 - cells.length;
+    for (let i = 1; i <= remaining; i++) {
+      cells.push({
+        day: i,
+        month: viewMonth === 11 ? 0 : viewMonth + 1,
+        year: viewMonth === 11 ? viewYear + 1 : viewYear,
+        isCurrentMonth: false,
+      });
+    }
+    return cells;
+  }, [viewYear, viewMonth]);
+
+  // Redesigned premium time slots
+  const timeSlots = [
+    { time: '08:00 AM', status: 'Almost Full', category: 'Morning' },
+    { time: '10:00 AM', status: 'Available', category: 'Morning' },
+    { time: '11:30 AM', status: 'Booked', category: 'Morning' },
+    { time: '01:00 PM', status: 'Available', category: 'Afternoon' },
+    { time: '02:30 PM', status: 'Available', category: 'Afternoon' },
+    { time: '04:00 PM', status: 'Almost Full', category: 'Afternoon' },
+    { time: '05:30 PM', status: 'Available', category: 'Evening' },
+    { time: '07:00 PM', status: 'Available', category: 'Evening' }
+  ];
 
   // Calculate pending booking notification count
   const pendingCount = bookings.filter(b => {
@@ -657,45 +738,88 @@ const Layout = () => {
                       <div className="scheduler-box">
                         <span className="scheduler-title">Select Date & Time</span>
                         
-                        {/* Date pills */}
-                        <div className="date-carousel">
-                          {[
-                            { day: '18', name: 'SAT' },
-                            { day: '19', name: 'SUN' },
-                            { day: '20', name: 'MON' },
-                            { day: '21', name: 'TUE' },
-                            { day: '22', name: 'WED' }
-                          ].map((item, idx) => (
-                            <div 
-                              key={idx} 
-                              className={`date-select-pill ${selectedDate === `${item.day} ${item.name}` ? 'active' : ''}`}
-                              onClick={() => setSelectedDate(`${item.day} ${item.name}`)}
-                            >
-                              <span className="date-select-day">{item.day}</span>
-                              <span className="date-select-name">{item.name}</span>
-                            </div>
-                          ))}
-                          {/* More Pill */}
-                          <div 
-                            className="date-select-pill date-more-btn"
-                            onClick={() => triggerToast("Calendar picker opened!")}
-                          >
-                            <span className="date-select-day" style={{ fontSize: '13px', fontWeight: '800' }}>More</span>
-                            <span className="date-select-name">...</span>
+                        {/* Interactive Monthly Calendar */}
+                        <div className="modern-calendar-container">
+                          <div className="calendar-header">
+                            <button type="button" className="cal-nav-btn" onClick={handlePrevMonth} title="Previous Month">
+                              <ChevronLeft size={16} />
+                            </button>
+                            <span className="cal-month-title">
+                              {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][viewMonth]} {viewYear}
+                            </span>
+                            <button type="button" className="cal-nav-btn" onClick={handleNextMonth} title="Next Month">
+                              <ChevronRight size={16} />
+                            </button>
+                          </div>
+                          
+                          <div className="calendar-weekdays">
+                            {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
+                              <div key={d} className="weekday-lbl">{d}</div>
+                            ))}
+                          </div>
+                          
+                          <div className="calendar-days-grid">
+                            {calendarCells.map((cell, idx) => {
+                              const cellDateStr = formatDateString(cell.year, cell.month, cell.day);
+                              const isSelected = selectedDate === cellDateStr;
+                              const isPast = isPastDate(cell.year, cell.month, cell.day);
+                              const isToday = new Date().toDateString() === new Date(cell.year, cell.month, cell.day).toDateString();
+                              
+                              return (
+                                <button
+                                  key={idx}
+                                  type="button"
+                                  className={`calendar-day-cell ${cell.isCurrentMonth ? 'current-month' : 'other-month'} ${isSelected ? 'active' : ''} ${isToday ? 'today' : ''}`}
+                                  disabled={isPast}
+                                  onClick={() => setSelectedDate(cellDateStr)}
+                                >
+                                  <span className="day-number">{cell.day}</span>
+                                  {isToday && <span className="today-dot"></span>}
+                                </button>
+                              );
+                            })}
                           </div>
                         </div>
 
-                        {/* Time slots */}
-                        <div className="time-slot-grid">
-                          {['09:00 AM', '11:00 AM', '01:00 PM', '03:00 PM'].map((slot, idx) => (
-                            <div 
-                              key={idx} 
-                              className={`time-slot-pill ${selectedTime === slot ? 'active' : ''}`}
-                              onClick={() => setSelectedTime(slot)}
-                            >
-                              {slot}
-                            </div>
-                          ))}
+                        {/* Selected Date Indicator */}
+                        <div className="selected-date-indicator">
+                          <span>📅 Selected Date: <strong>{selectedDate}</strong></span>
+                        </div>
+
+                        {/* Redesigned Premium Categorized Time Slots */}
+                        <div className="time-slots-container">
+                          <span className="scheduler-subtitle">Select Time Slot</span>
+                          
+                          {/* Group by category */}
+                          {['Morning', 'Afternoon', 'Evening'].map((category) => {
+                            const categorySlots = timeSlots.filter(s => s.category === category);
+                            return (
+                              <div key={category} className="time-category-group">
+                                <span className="time-category-title">{category}</span>
+                                <div className="time-slot-subgrid">
+                                  {categorySlots.map((slot, idx) => {
+                                    const isSelected = selectedTime === slot.time;
+                                    const isBooked = slot.status === 'Booked';
+                                    
+                                    return (
+                                      <button
+                                        key={idx}
+                                        type="button"
+                                        className={`premium-time-slot ${isSelected ? 'active' : ''} ${isBooked ? 'booked' : ''}`}
+                                        disabled={isBooked}
+                                        onClick={() => setSelectedTime(slot.time)}
+                                      >
+                                        <span className="slot-time">{slot.time}</span>
+                                        <span className={`slot-status-lbl status-${slot.status.toLowerCase().replace(' ', '-')}`}>
+                                          {slot.status}
+                                        </span>
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
                     )}

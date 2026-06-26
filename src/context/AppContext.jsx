@@ -134,8 +134,13 @@ export const AppProvider = ({ children }) => {
   const [selectedItemType, setSelectedItemType] = useState(''); // 'service' | 'studio' | 'model' | 'gear' | 'workshop' | 'job'
   
   // Booking date & time scheduler inside details view
-  const [selectedDate, setSelectedDate] = useState('19 SUN');
-  const [selectedTime, setSelectedTime] = useState('11:00 AM');
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return `${tomorrow.getDate()} ${monthNamesShort[tomorrow.getMonth()]} ${tomorrow.getFullYear()}`;
+  });
+  const [selectedTime, setSelectedTime] = useState('10:00 AM');
 
   // Toast Notification
   const [toast, setToast] = useState({ show: false, message: '' });
@@ -332,8 +337,13 @@ export const AppProvider = ({ children }) => {
     }
     setSelectedItem(item);
     setSelectedItemType(type);
-    setSelectedDate('19 SUN');
-    setSelectedTime('11:00 AM');
+    
+    // Default to tomorrow's date
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    setSelectedDate(`${tomorrow.getDate()} ${monthNamesShort[tomorrow.getMonth()]} ${tomorrow.getFullYear()}`);
+    setSelectedTime('10:00 AM');
   };
 
   // Book Item action
