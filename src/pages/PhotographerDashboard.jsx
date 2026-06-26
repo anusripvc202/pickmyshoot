@@ -22,10 +22,12 @@ import {
   FileText,
   Lock,
   Check,
-  Share2
+  Share2,
+  Briefcase
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { useNavigate } from 'react-router-dom';
+import PublishListingModal from '../components/PublishListingModal';
 
 const PhotographerDashboard = () => {
   const {
@@ -43,6 +45,7 @@ const PhotographerDashboard = () => {
     toggleListingActive,
     updateBookingStatus,
     addPortfolioItem,
+    publishPostToListing,
     portfolioItems,
     chatSessions,
     chatMessages,
@@ -75,6 +78,10 @@ const PhotographerDashboard = () => {
   const [pfTitle, setPfTitle] = useState('');
   const [pfCategory, setPfCategory] = useState('Western / Editorial');
   const [pfImage, setPfImage] = useState('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80');
+
+  // Publish listing modal state
+  const [showPublishModal, setShowPublishModal] = useState(false);
+  const [selectedPostForPublish, setSelectedPostForPublish] = useState(null);
 
   // Chat window states
   const [selectedSessionId, setSelectedSessionId] = useState('ch-1');
@@ -517,9 +524,29 @@ const PhotographerDashboard = () => {
                       <div className="portfolio-hover-details">
                         <span className="portfolio-item-category">{pf.category}</span>
                         <h4 className="portfolio-item-title">{pf.title}</h4>
-                        <div className="portfolio-item-footer">
-                          <span className="portfolio-likes"><ThumbsUp size={12} /> 120 Likes</span>
-                          <span className="portfolio-action-view">View Shot</span>
+                        <div className="portfolio-item-footer" style={{ flexWrap: 'wrap', gap: '8px' }}>
+                          <span className="portfolio-likes"><ThumbsUp size={12} /> {pf.likes || 120} Likes</span>
+                          <div style={{ display: 'flex', gap: '6px' }}>
+                            <span className="portfolio-action-view" style={{ fontSize: '10px', padding: '3px 8px' }}>View</span>
+                            <span 
+                              className="portfolio-action-publish" 
+                              onClick={(e) => { e.stopPropagation(); setSelectedPostForPublish(pf); setShowPublishModal(true); }}
+                              style={{ 
+                                backgroundColor: 'var(--primary)', 
+                                border: '1px solid var(--primary)', 
+                                padding: '3px 8px', 
+                                borderRadius: '20px', 
+                                fontWeight: '700', 
+                                fontSize: '10px', 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                gap: '3px',
+                                color: '#fff'
+                              }}
+                            >
+                              <Briefcase size={10} /> Publish
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -1026,6 +1053,18 @@ const PhotographerDashboard = () => {
             </form>
           </div>
         </div>
+      )}
+
+      {showPublishModal && (
+        <PublishListingModal 
+          isOpen={showPublishModal}
+          onClose={() => { setShowPublishModal(false); setSelectedPostForPublish(null); }}
+          post={selectedPostForPublish}
+          onPublish={(listingData) => {
+            publishPostToListing(listingData);
+            setActiveTab('listings');
+          }}
+        />
       )}
 
     </div>
