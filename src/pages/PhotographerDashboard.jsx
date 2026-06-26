@@ -328,6 +328,13 @@ const PhotographerDashboard = () => {
               <span>Catalog Visibility</span>
             </button>
             <button 
+              className={`profile-nav-tab ${activeTab === 'job-applications' ? 'active' : ''}`}
+              onClick={() => setActiveTab('job-applications')}
+            >
+              <Briefcase size={16} />
+              <span>Job Applications</span>
+            </button>
+            <button 
               className={`profile-nav-tab ${activeTab === 'calendar' ? 'active' : ''}`}
               onClick={() => setActiveTab('calendar')}
             >
@@ -523,6 +530,103 @@ const PhotographerDashboard = () => {
               </div>
             </div>
 
+          </div>
+        )}
+
+        {activeTab === 'job-applications' && (
+          <div className="tab-job-applications">
+            <h3 className="section-title-pro">Received Job Applications</h3>
+            <p className="fav-empty-note" style={{ marginBottom: '20px', color: 'var(--text-muted)' }}>
+              Manage candidates who applied for the jobs and gig listings posted by your studio.
+            </p>
+            
+            <div className="timeline-list" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '16px' }}>
+              {photographerBookings.filter(b => b.itemType === 'Job').map((b) => {
+                const clientProfile = profiles.find(p => p.id === b.clientId || p._id === b.clientId);
+                const clientName = clientProfile?.name || b.clientName || "Candidate Partnership";
+                const clientAvatar = clientProfile?.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&q=80";
+
+                return (
+                  <div key={b.id} className="request-card-item" style={{ margin: 0, padding: '16px', background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '12px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    <div className="request-header-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div className="request-client-info" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <img src={clientAvatar} alt={clientName} className="req-client-avatar" style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
+                        <div>
+                          <span className="req-client-name" style={{ display: 'block', fontWeight: '700', fontSize: '14px', color: 'var(--text-main)' }}>{clientName}</span>
+                          <span className="req-time-slot" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Applied to your post</span>
+                        </div>
+                      </div>
+                      <span className={`status-badge-chip ${b.status}`} style={{
+                        fontSize: '10px',
+                        fontWeight: '700',
+                        textTransform: 'uppercase',
+                        padding: '4px 10px',
+                        borderRadius: '6px',
+                        backgroundColor: b.status === 'confirmed' ? 'rgba(0, 180, 100, 0.12)' : 
+                                         b.status === 'pending' ? 'rgba(255, 165, 0, 0.12)' :
+                                         b.status === 'completed' ? 'rgba(0, 120, 240, 0.12)' : 'rgba(200, 16, 46, 0.12)',
+                        color: b.status === 'confirmed' ? '#00b464' : 
+                               b.status === 'pending' ? '#ffa500' :
+                               b.status === 'completed' ? '#0078f0' : '#C8102E'
+                      }}>
+                        {b.status === 'pending' ? 'Applied' : b.status === 'completed' ? 'Hired' : b.status}
+                      </span>
+                    </div>
+
+                    <div style={{ borderTop: '1px solid var(--border)', paddingTop: '12px' }}>
+                      <span className="request-listing-title" style={{ display: 'block', fontWeight: '800', fontSize: '15px', color: 'var(--text-main)' }}>
+                        {b.item?.title || b.title}
+                      </span>
+                      <span style={{ fontSize: '12px', color: 'var(--text-muted)', display: 'block', marginTop: '2px' }}>
+                        Compensation: <strong>{b.price}</strong>
+                      </span>
+                    </div>
+
+                    <div style={{ fontSize: '11.5px', display: 'flex', flexDirection: 'column', gap: '5px', background: 'var(--bg-app)', padding: '10px', borderRadius: '8px', border: '1px solid var(--border)', width: '100%' }}>
+                      {b.item?.location && <span>📍 Location: <strong>{b.item.location}</strong></span>}
+                      {b.clientEmail && <span>📧 Contact Email: <strong><a href={`mailto:${b.clientEmail}`} style={{ color: 'var(--primary)' }}>{b.clientEmail}</a></strong></span>}
+                      {b.clientPhone && <span>📞 Phone: <strong>{b.clientPhone}</strong></span>}
+                      {b.resumeUrl && (
+                        <span>📄 Resume: <strong><a href={b.resumeUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>View Resume</a></strong></span>
+                      )}
+                      {b.portfolioUrl && (
+                        <span>🌐 Portfolio: <strong><a href={b.portfolioUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>View Portfolio</a></strong></span>
+                      )}
+                      {b.coverLetter && (
+                        <div style={{ marginTop: '4px', borderTop: '1px dashed var(--border)', paddingTop: '4px' }}>
+                          <strong style={{ color: 'var(--text-muted)' }}>Cover Note:</strong>
+                          <p style={{ margin: '2px 0 0 0', fontStyle: 'italic', color: 'var(--text-main)' }}>"{b.coverLetter}"</p>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="request-actions-row" style={{ display: 'flex', gap: '8px', marginTop: 'auto', paddingTop: '8px' }}>
+                      {b.status === 'pending' && (
+                        <>
+                          <button className="action-btn-sm confirm-btn" style={{ flex: 1, padding: '8px', fontSize: '12px', fontWeight: '700', borderRadius: '8px' }} onClick={() => updateBookingStatus(b.id, 'confirmed')}>Accept Candidate</button>
+                          <button className="action-btn-sm decline-btn" style={{ padding: '8px 12px', fontSize: '12px', fontWeight: '700', borderRadius: '8px' }} onClick={() => updateBookingStatus(b.id, 'cancelled')}>Reject</button>
+                        </>
+                      )}
+                      {b.status === 'confirmed' && (
+                        <button className="action-btn-sm confirm-btn" style={{ flex: 1, padding: '8px', fontSize: '12px', fontWeight: '700', borderRadius: '8px' }} onClick={() => updateBookingStatus(b.id, 'completed')}>Hire Candidate</button>
+                      )}
+                      {b.status === 'completed' && (
+                        <span className="completed-success-tag" style={{ fontSize: '12px', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '4px', color: '#00b464' }}>Hired Candidate ✓</span>
+                      )}
+                      {b.status === 'cancelled' && (
+                        <span className="cancelled-fail-tag" style={{ fontSize: '12px', fontWeight: '700', color: '#C8102E' }}>Rejected Candidate</span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+
+              {photographerBookings.filter(b => b.itemType === 'Job').length === 0 && (
+                <div className="fav-empty-note" style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px 0' }}>
+                  No candidate applications received yet for your job postings.
+                </div>
+              )}
+            </div>
           </div>
         )}
 
