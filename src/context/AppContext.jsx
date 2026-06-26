@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   popularServices as initialServices, 
   studios as initialStudios, 
@@ -11,6 +12,7 @@ import {
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [theme, setTheme] = useState('light');
 
   // 1. Multi-Profile Global States
@@ -309,6 +311,11 @@ export const AppProvider = ({ children }) => {
   // Toggle Like state
   const toggleLike = (id, e) => {
     if (e) e.stopPropagation();
+    if (!isAuthenticated) {
+      triggerToast("Please log in to add items to favorites.");
+      navigate('/login');
+      return;
+    }
     setLikedItems(prev => {
       const nextState = !prev[id];
       triggerToast(nextState ? "Added to favorites!" : "Removed from favorites");
@@ -318,6 +325,11 @@ export const AppProvider = ({ children }) => {
 
   // Open detail modal
   const openDetails = (item, type) => {
+    if (!isAuthenticated) {
+      triggerToast("Please log in to view details and make a booking.");
+      navigate('/login');
+      return;
+    }
     setSelectedItem(item);
     setSelectedItemType(type);
     setSelectedDate('19 SUN');

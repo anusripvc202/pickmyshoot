@@ -145,6 +145,12 @@ const Layout = () => {
   };
 
   const handleBookingClick = () => {
+    if (!isAuthenticated) {
+      triggerToast("Please log in to complete your booking.");
+      setSelectedItem(null);
+      navigate('/login');
+      return;
+    }
     if (bookingStatus !== 'idle') return;
     setBookingStatus('processing');
     setTimeout(() => {
