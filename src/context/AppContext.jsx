@@ -268,7 +268,7 @@ export const AppProvider = ({ children }) => {
             else if (item.type === 'model') dbModels.push(mappedItem);
             else if (item.type === 'gear') dbGear.push(mappedItem);
             else if (item.type === 'workshop') dbWorkshops.push(mappedItem);
-            else if (item.type === 'job') dbJobs.push(mappedItem);
+            else if (item.type === 'job' || item.skills || item.company) dbJobs.push(mappedItem);
           });
 
           if (dbServices.length > 0) {
