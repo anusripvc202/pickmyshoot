@@ -15,9 +15,6 @@ const bookingSchema = new mongoose.Schema({
   clientName: { type: String },
   clientEmail: { type: String },
   clientPhone: { type: String },
-  resumeUrl: { type: String },
-  portfolioUrl: { type: String },
-  coverLetter: { type: String },
   createdAt: { type: Date, default: Date.now },
 });
 

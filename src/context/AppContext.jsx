@@ -268,7 +268,7 @@ export const AppProvider = ({ children }) => {
             else if (item.type === 'model') dbModels.push(mappedItem);
             else if (item.type === 'gear') dbGear.push(mappedItem);
             else if (item.type === 'workshop') dbWorkshops.push(mappedItem);
-            else if (item.type === 'job' || item.skills || item.company) dbJobs.push(mappedItem);
+            else if (item.type === 'job') dbJobs.push(mappedItem);
           });
 
           if (dbServices.length > 0) {
@@ -347,7 +347,7 @@ export const AppProvider = ({ children }) => {
   };
 
   // Book Item action
-  const handleBookingSubmit = (autoClose = true, extraFields = {}) => {
+  const handleBookingSubmit = (autoClose = true) => {
     if (!selectedItem) return;
 
     let cost = selectedItem.price || 'Free';
@@ -367,8 +367,7 @@ export const AppProvider = ({ children }) => {
       // Client details for email notification
       clientName: currentUser?.name || "",
       clientEmail: currentUser?.email || "",
-      clientPhone: currentUser?.phone || "",
-      ...extraFields
+      clientPhone: currentUser?.phone || ""
     };
 
     // Sync with backend
@@ -639,62 +638,6 @@ export const AppProvider = ({ children }) => {
     }
   };
 
-  // Publish a portfolio post or existing client post directly as a job or explore grid listing
-  const publishPostToListing = async (listingData) => {
-    const enrichedData = {
-      ...listingData,
-      ownerId: activeProfileId,
-      creatorId: activeProfileId
-    };
-
-    try {
-      const response = await fetch('/api/listings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(enrichedData)
-      });
-      if (!response.ok) throw new Error("Failed to save to database");
-      const savedListing = await response.json();
-      const finalItem = {
-        ...enrichedData,
-        id: savedListing._id || savedListing.id || enrichedData.id
-      };
-      
-      // Update local state based on type
-      if (finalItem.type === 'service') {
-        setServices(prev => [finalItem, ...prev]);
-      } else if (finalItem.type === 'studio') {
-        setStudios(prev => [finalItem, ...prev]);
-      } else if (finalItem.type === 'model') {
-        setModels(prev => [finalItem, ...prev]);
-      } else if (finalItem.type === 'gear') {
-        setGear(prev => [finalItem, ...prev]);
-      } else if (finalItem.type === 'job') {
-        setJobs(prev => [finalItem, ...prev]);
-      }
-      
-      triggerToast(`Successfully published "${finalItem.title}" to ${finalItem.type === 'job' ? 'Jobs' : 'Grid'} section!`);
-      return finalItem;
-    } catch (error) {
-      console.error("Error publishing listing:", error);
-      triggerToast("Failed to publish listing to DB, added locally.");
-      
-      // Fallback local update
-      if (enrichedData.type === 'service') {
-        setServices(prev => [enrichedData, ...prev]);
-      } else if (enrichedData.type === 'studio') {
-        setStudios(prev => [enrichedData, ...prev]);
-      } else if (enrichedData.type === 'model') {
-        setModels(prev => [enrichedData, ...prev]);
-      } else if (enrichedData.type === 'gear') {
-        setGear(prev => [enrichedData, ...prev]);
-      } else if (enrichedData.type === 'job') {
-        setJobs(prev => [enrichedData, ...prev]);
-      }
-      return enrichedData;
-    }
-  };
-
   return (
     <AppContext.Provider value={{
       theme, setTheme,
@@ -732,7 +675,6 @@ export const AppProvider = ({ children }) => {
       updateBookingStatus,
       toggleUserVerification,
       addPortfolioItem,
-      publishPostToListing,
       tickets, setTickets,
       chatSessions, setChatSessions,
       chatMessages, setChatMessages,
