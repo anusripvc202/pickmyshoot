@@ -16,14 +16,10 @@ import {
   Shield,
   Send,
   HelpCircle,
-  CreditCard,
-  Plus,
-  ThumbsUp,
-  Briefcase
+  CreditCard
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { useNavigate } from 'react-router-dom';
-import PublishListingModal from '../components/PublishListingModal';
 
 const ClientDashboard = () => {
   const {
@@ -35,10 +31,6 @@ const ClientDashboard = () => {
     studios,
     gear,
     services,
-    jobs,
-    setJobs,
-    models,
-    toggleListingActive,
     openDetails,
     triggerToast,
     profiles,
@@ -51,11 +43,7 @@ const ClientDashboard = () => {
     chatSessions,
     chatMessages,
     sendChatMessage,
-    currentUser,
-    portfolioItems,
-    setPortfolioItems,
-    addPortfolioItem,
-    publishPostToListing
+    currentUser
   } = useAppContext();
 
   const navigate = useNavigate();
@@ -87,34 +75,9 @@ const ClientDashboard = () => {
   const [ticketSubject, setTicketSubject] = useState('');
   const [ticketMessage, setTicketMessage] = useState('');
 
-  // Client Posts & creations states
-  const [showPortfolioModal, setShowPortfolioModal] = useState(false);
-  const [pfTitle, setPfTitle] = useState('');
-  const [pfCategory, setPfCategory] = useState('Jobs & Gigs');
-  const [pfImage, setPfImage] = useState('https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=600&q=80');
-
-  // Publish listing modal state
-  const [showPublishModal, setShowPublishModal] = useState(false);
-  const [selectedPostForPublish, setSelectedPostForPublish] = useState(null);
-
   // Chat window states
   const [selectedSessionId, setSelectedSessionId] = useState('ch-1');
   const [chatInputText, setChatInputText] = useState('');
-
-  const handleAddPortfolioSubmit = (e) => {
-    e.preventDefault();
-    if (!pfTitle) {
-      triggerToast("Please provide a title");
-      return;
-    }
-    addPortfolioItem({
-      title: pfTitle,
-      category: pfCategory,
-      image: pfImage
-    });
-    setShowPortfolioModal(false);
-    setPfTitle('');
-  };
 
   const handleTicketSubmit = (e) => {
     e.preventDefault();
@@ -195,14 +158,6 @@ const ClientDashboard = () => {
     const priceVal = typeof b.price === 'number' ? b.price : parseFloat(b.price) || 0;
     return sum + (b.status === 'cancelled' ? 0 : priceVal);
   }, 0);
-
-  const clientOwnedListings = [
-    ...jobs.filter(j => j.ownerId === activeProfileId || j.creatorId === activeProfileId || (!j.ownerId && activeProfileId === "prof-1" && j.id === "jb-2")).map(j => ({ ...j, type: "Job Listing", categoryKey: "job" })),
-    ...services.filter(s => s.ownerId === activeProfileId || s.creatorId === activeProfileId).map(s => ({ ...s, type: "Service Package", categoryKey: "service" })),
-    ...studios.filter(st => st.ownerId === activeProfileId || st.creatorId === activeProfileId).map(st => ({ ...st, type: "Studio Space", categoryKey: "studio" })),
-    ...gear.filter(g => g.ownerId === activeProfileId || g.creatorId === activeProfileId).map(g => ({ ...g, type: "Gear Rental", categoryKey: "gear" })),
-    ...models.filter(m => m.ownerId === activeProfileId || m.creatorId === activeProfileId).map(m => ({ ...m, type: "Model Listing", categoryKey: "model" }))
-  ];
 
   return (
     <div className="profile-pro-container">
@@ -321,13 +276,6 @@ const ClientDashboard = () => {
             >
               <Heart size={16} />
               <span>Favorites Wishlist</span>
-            </button>
-            <button 
-              className={`profile-nav-tab ${activeTab === 'posts' ? 'active' : ''}`}
-              onClick={() => setActiveTab('posts')}
-            >
-              <Grid size={16} />
-              <span>My Posts & Gigs</span>
             </button>
             <button 
               className={`profile-nav-tab ${activeTab === 'settings' ? 'active' : ''}`}
@@ -515,98 +463,6 @@ const ClientDashboard = () => {
                 )}
               </div>
             </div>
-          </div>
-        )}
-
-        {activeTab === 'posts' && (
-          <div className="tab-portfolio-gallery">
-            <div className="listings-header-row">
-              <h3 className="section-title-pro">My Posts & Creations</h3>
-              <button className="pro-btn-primary theme-btn-client" onClick={() => setShowPortfolioModal(true)}>
-                <Plus size={14} /> Upload Creation
-              </button>
-            </div>
-
-            <div className="portfolio-masonry-grid">
-              {portfolioItems.filter(pf => pf.ownerId === activeProfileId).map((pf) => (
-                <div key={pf.id} className="portfolio-item-card portrait">
-                  <div className="portfolio-img-container">
-                    <img src={pf.image} className="portfolio-main-img" alt={pf.title} />
-                    <div className="portfolio-hover-overlay">
-                      <div className="portfolio-hover-details">
-                        <span className="portfolio-item-category">{pf.category}</span>
-                        <h4 className="portfolio-item-title">{pf.title}</h4>
-                        <div className="portfolio-item-footer" style={{ flexWrap: 'wrap', gap: '8px' }}>
-                          <span className="portfolio-likes"><ThumbsUp size={12} /> {pf.likes || 0} Likes</span>
-                          <div style={{ display: 'flex', gap: '6px' }}>
-                            <span className="portfolio-action-view" style={{ fontSize: '10px', padding: '3px 8px' }}>View</span>
-                            <span 
-                              className="portfolio-action-publish" 
-                              onClick={(e) => { e.stopPropagation(); setSelectedPostForPublish(pf); setShowPublishModal(true); }}
-                              style={{ 
-                                backgroundColor: 'var(--primary)', 
-                                border: '1px solid var(--primary)', 
-                                padding: '3px 8px', 
-                                borderRadius: '20px', 
-                                fontWeight: '700', 
-                                fontSize: '10px', 
-                                display: 'flex', 
-                                alignItems: 'center', 
-                                gap: '3px',
-                                color: '#fff'
-                              }}
-                            >
-                              <Briefcase size={10} /> Publish
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-              {portfolioItems.filter(pf => pf.ownerId === activeProfileId).length === 0 && (
-                <div className="timeline-empty" style={{ gridColumn: 'span 5', width: '100%', background: 'var(--card-bg)', padding: '40px', borderRadius: '16px', border: '1px solid var(--border)' }}>
-                  <span style={{ fontWeight: '700' }}>No creations uploaded. Upload reference images or drafts here!</span>
-                </div>
-              )}
-            </div>
-
-            {/* Published listings section */}
-            <div style={{ marginTop: '40px' }}>
-              <h3 className="section-title-pro">My Published Listings & Jobs</h3>
-              <div className="owned-listings-grid">
-                {clientOwnedListings.map((item) => (
-                  <div key={item.id} className="owned-listing-card">
-                    <div className="owned-card-img-wrap">
-                      <img src={item.image} className="owned-card-img" alt={item.title} />
-                      <span className="owned-card-badge">{item.type}</span>
-                    </div>
-                    <div className="owned-card-content">
-                      <h4 className="owned-card-title">{item.title}</h4>
-                      <span className="owned-card-price">₹{item.price}/{item.priceUnit || 'session'}</span>
-                      <div className="owned-card-actions">
-                        <div className="visibility-control">
-                          <span className="visibility-label">Active:</span>
-                          <label className="switch">
-                            <input 
-                              type="checkbox" 
-                              checked={item.active} 
-                              onChange={() => toggleListingActive(item.categoryKey, item.id)} 
-                            />
-                            <span className="slider"></span>
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                {clientOwnedListings.length === 0 && (
-                  <span className="fav-empty-note" style={{ gridColumn: 'span 3', width: '100%' }}>No listings active. Select a post above and click "Publish" to register it in Jobs or Explorer Grid!</span>
-                )}
-              </div>
-            </div>
-
           </div>
         )}
 
@@ -975,80 +831,6 @@ const ClientDashboard = () => {
             </div>
           </div>
         </div>
-      )}
-
-      {showPortfolioModal && (
-        <div className="profile-modal-overlay" onClick={() => setShowPortfolioModal(false)}>
-          <div className="profile-modal-body" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header-row">
-              <h3 className="section-title-pro">Upload Reference / Draft Post</h3>
-              <button className="close-modal-btn" onClick={() => setShowPortfolioModal(false)}><X size={16} /></button>
-            </div>
-            
-            <form onSubmit={handleAddPortfolioSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '12px' }}>
-              <div className="form-group">
-                <label className="form-label">Post Title</label>
-                <input 
-                  type="text" 
-                  placeholder="e.g. Wedding Cinematic Video Reference" 
-                  value={pfTitle}
-                  onChange={(e) => setPfTitle(e.target.value)}
-                  className="form-input-pro"
-                  required
-                />
-              </div>
-              <div className="form-group-row">
-                <div className="form-group">
-                  <label className="form-label">Post Category</label>
-                  <select 
-                    value={pfCategory} 
-                    onChange={(e) => setPfCategory(e.target.value)} 
-                    className="form-input-pro"
-                  >
-                    <option value="Bridal / Ethnic Wear">Bridal / Wedding</option>
-                    <option value="Product / Commercial">E-Commerce Product</option>
-                    <option value="Western / Editorial">Western Fashion</option>
-                    <option value="Cinematography / Nature">Cinematography</option>
-                    <option value="Jobs & Gigs">Jobs & Gigs Reference</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Reference Image URL</label>
-                  <input 
-                    type="text" 
-                    value={pfImage}
-                    onChange={(e) => setPfImage(e.target.value)}
-                    className="form-input-pro"
-                    required
-                  />
-                </div>
-              </div>
-              
-              <div className="form-group">
-                <label className="form-label">Quick Image Preview</label>
-                <div className="preview-image-box-modal">
-                  <img src={pfImage} alt="Portfolio preview" className="modal-preview-img" onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=300&q=80" }} />
-                </div>
-              </div>
-
-              <div className="modal-footer-actions">
-                <button type="button" className="modal-cancel-btn" onClick={() => setShowPortfolioModal(false)}>Cancel</button>
-                <button type="submit" className="pro-btn-primary theme-btn-client">Upload Post</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {showPublishModal && (
-        <PublishListingModal 
-          isOpen={showPublishModal}
-          onClose={() => { setShowPublishModal(false); setSelectedPostForPublish(null); }}
-          post={selectedPostForPublish}
-          onPublish={(listingData) => {
-            publishPostToListing(listingData);
-          }}
-        />
       )}
 
     </div>
