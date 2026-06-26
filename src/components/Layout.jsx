@@ -19,6 +19,7 @@ import {
   Moon,
   Mail,
   Phone,
+  ArrowLeft,
   ArrowRight,
   Home,
   Compass,
@@ -109,6 +110,26 @@ const Layout = () => {
   const [showFullDesc, setShowFullDesc] = React.useState(false);
   const scrollRef = React.useRef(null);
 
+  // Payment UI States
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = React.useState('upi');
+  const [upiId, setUpiId] = React.useState('');
+  const [cardName, setCardName] = React.useState('');
+  const [cardNumber, setCardNumber] = React.useState('');
+  const [cardExpiry, setCardExpiry] = React.useState('');
+  const [cardCvv, setCardCvv] = React.useState('');
+
+  const getPriceNumeric = (price) => {
+    if (typeof price === 'number') return price;
+    if (!price) return 0;
+    const matched = price.toString().replace(/,/g, '').match(/\d+/);
+    return matched ? parseInt(matched[0], 10) : 0;
+  };
+
+  const baseAmount = selectedItem ? getPriceNumeric(selectedItem.price) : 0;
+  const platformFee = Math.round(baseAmount * 0.1);
+  const gstAmount = Math.round((baseAmount + platformFee) * 0.18);
+  const totalAmount = baseAmount + platformFee + gstAmount;
+
   // Generate the next 14 upcoming/coming dates starting from today dynamically
   const upcomingDatesList = React.useMemo(() => {
     const dates = [];
@@ -186,7 +207,26 @@ const Layout = () => {
       navigate('/login');
       return;
     }
-    if (bookingStatus !== 'idle') return;
+    // If it is free (job/institute), bypass payment!
+    if (selectedItemType === 'job' || selectedItemType === 'institute') {
+      if (bookingStatus !== 'idle') return;
+      setBookingStatus('processing');
+      setTimeout(() => {
+        handleBookingSubmit(false);
+        setBookingStatus('success');
+        setTimeout(() => {
+          setSelectedItem(null);
+          navigate('/bookings');
+        }, 1800);
+      }, 1500);
+    } else {
+      // Transition to payment step!
+      setBookingStatus('payment');
+    }
+  };
+
+  const handlePaymentSubmit = () => {
+    if (bookingStatus !== 'payment') return;
     setBookingStatus('processing');
     setTimeout(() => {
       handleBookingSubmit(false); // registers the booking without closing modal
@@ -776,6 +816,176 @@ const Layout = () => {
                     </button>
                   </div>
                 </>
+              )}
+
+              {bookingStatus === 'payment' && (
+                <div className="payment-checkout-view">
+                  <div className="payment-header-row">
+                    <button type="button" className="payment-back-btn" onClick={() => setBookingStatus('idle')}>
+                      <ArrowLeft size={16} /> Back
+                    </button>
+                    <h4>Secure Checkout</h4>
+                  </div>
+
+                  <div className="payment-scroll-content">
+                    {/* Order summary card */}
+                    <div className="payment-summary-card">
+                      <span className="summary-section-title">Order Summary</span>
+                      <div className="summary-item-title-row">
+                        <span className="summary-item-name">{selectedItem.title}</span>
+                        <span className="summary-item-tag">{selectedItemType.toUpperCase()}</span>
+                      </div>
+                      
+                      <div className="summary-details-grid">
+                        <div>📅 Date: <strong>{selectedDate}</strong></div>
+                        <div>⏰ Time: <strong>{selectedTime}</strong></div>
+                      </div>
+
+                      <div className="price-breakdown-box">
+                        <div className="breakdown-row">
+                          <span>Base Amount</span>
+                          <span>₹{baseAmount.toLocaleString('en-IN')}</span>
+                        </div>
+                        <div className="breakdown-row">
+                          <span>Platform Fee (10%)</span>
+                          <span>₹{platformFee.toLocaleString('en-IN')}</span>
+                        </div>
+                        <div className="breakdown-row">
+                          <span>GST (18%)</span>
+                          <span>₹{gstAmount.toLocaleString('en-IN')}</span>
+                        </div>
+                        <div className="breakdown-row total-row">
+                          <span>Total to Pay</span>
+                          <span>₹{totalAmount.toLocaleString('en-IN')}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Payment methods selector */}
+                    <div className="payment-method-section">
+                      <span className="payment-section-title">Select Payment Method</span>
+                      <div className="payment-methods-grid">
+                        {[
+                          { id: 'upi', label: 'UPI / GPay', desc: 'Scan QR or enter UPI ID' },
+                          { id: 'card', label: 'Credit/Debit Card', desc: 'Visa, Mastercard, RuPay' },
+                          { id: 'netbanking', label: 'Net Banking', desc: 'All Indian Banks' }
+                        ].map(method => (
+                          <div 
+                            key={method.id} 
+                            className={`payment-method-card ${selectedPaymentMethod === method.id ? 'active' : ''}`}
+                            onClick={() => setSelectedPaymentMethod(method.id)}
+                          >
+                            <span className="method-label">{method.label}</span>
+                            <span className="method-desc">{method.desc}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Conditional input fields based on payment method */}
+                    {selectedPaymentMethod === 'upi' && (
+                      <div className="upi-input-container">
+                        <div className="upi-qr-mock">
+                          <div className="mock-qr-code-box">
+                            <div className="qr-corner top-left"></div>
+                            <div className="qr-corner top-right"></div>
+                            <div className="qr-corner bottom-left"></div>
+                            <div className="qr-content-sim">QR Code Scan & Pay</div>
+                          </div>
+                          <span className="qr-sub-text">Scan with Google Pay, PhonePe or Paytm</span>
+                        </div>
+
+                        <div className="form-field-wrap">
+                          <label className="form-label">Or Enter UPI ID</label>
+                          <input 
+                            type="text" 
+                            className="form-input-pro" 
+                            placeholder="username@okaxis" 
+                            value={upiId} 
+                            onChange={(e) => setUpiId(e.target.value)} 
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {selectedPaymentMethod === 'card' && (
+                      <div className="card-input-container">
+                        <div className="form-field-wrap">
+                          <label className="form-label">Cardholder Name</label>
+                          <input 
+                            type="text" 
+                            className="form-input-pro" 
+                            placeholder="Full Name" 
+                            value={cardName} 
+                            onChange={(e) => setCardName(e.target.value)} 
+                          />
+                        </div>
+                        <div className="form-field-wrap">
+                          <label className="form-label">Card Number</label>
+                          <input 
+                            type="text" 
+                            className="form-input-pro" 
+                            placeholder="4111 2222 3333 4444" 
+                            value={cardNumber} 
+                            onChange={(e) => setCardNumber(e.target.value)} 
+                          />
+                        </div>
+                        <div className="form-row-two-col">
+                          <div className="form-field-wrap">
+                            <label className="form-label">Expiry Date</label>
+                            <input 
+                              type="text" 
+                              className="form-input-pro" 
+                              placeholder="MM/YY" 
+                              value={cardExpiry} 
+                              onChange={(e) => setCardExpiry(e.target.value)} 
+                            />
+                          </div>
+                          <div className="form-field-wrap">
+                            <label className="form-label">CVV</label>
+                            <input 
+                              type="password" 
+                              maxLength="3"
+                              className="form-input-pro" 
+                              placeholder="***" 
+                              value={cardCvv} 
+                              onChange={(e) => setCardCvv(e.target.value)} 
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {selectedPaymentMethod === 'netbanking' && (
+                      <div className="netbanking-input-container">
+                        <label className="form-label">Choose Bank</label>
+                        <select className="form-input-pro">
+                          <option>SBI - State Bank of India</option>
+                          <option>HDFC Bank</option>
+                          <option>ICICI Bank</option>
+                          <option>Axis Bank</option>
+                          <option>Kotak Mahindra Bank</option>
+                        </select>
+                      </div>
+                    )}
+
+                  </div>
+
+                  <div className="payment-fixed-action-bar">
+                    <div className="pay-amount-col">
+                      <span className="pay-amount-val">₹{totalAmount.toLocaleString('en-IN')}</span>
+                      <span className="pay-amount-lbl">Amount Payable</span>
+                    </div>
+                    <button 
+                      type="button" 
+                      className="pay-submit-btn" 
+                      onClick={handlePaymentSubmit}
+                      disabled={selectedPaymentMethod === 'card' && (!cardName || !cardNumber || !cardExpiry || !cardCvv)}
+                    >
+                      Pay & Confirm Booking
+                    </button>
+                  </div>
+                </div>
               )}
 
               {bookingStatus === 'processing' && (
