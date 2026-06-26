@@ -414,6 +414,7 @@ const CreatePage = () => {
                   </div>
                 </div>
               </>
+            )}
             {/* Job-specific fields (only shown for Jobs & Gigs) */}
             {newCategory === 'jobs' && (
               <>
