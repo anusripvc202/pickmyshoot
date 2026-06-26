@@ -14,7 +14,8 @@ import {
   Star,
   Sparkles,
   Lightbulb,
-  Upload
+  Upload,
+  Briefcase
 } from 'lucide-react';
 
 const CreatePage = () => {
@@ -23,6 +24,7 @@ const CreatePage = () => {
     setStudios,
     setModels,
     setGear,
+    setJobs,
     setExploreTab,
     triggerToast,
     activeProfileId
@@ -42,6 +44,9 @@ const CreatePage = () => {
   const [newSpecialization, setNewSpecialization] = useState('Wedding Photography');
   const [newExperience, setNewExperience] = useState('');
   const [newPortfolio, setNewPortfolio] = useState('');
+  // Job-specific fields
+  const [newCompany, setNewCompany] = useState('');
+  const [newSkills, setNewSkills] = useState('');
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -77,7 +82,8 @@ const CreatePage = () => {
       photography: 'service',
       makeup: 'service',
       lighting: 'gear',
-      locations: 'studio'
+      locations: 'studio',
+      jobs: 'job'
     };
 
     const newItem = {
@@ -129,6 +135,12 @@ const CreatePage = () => {
       newItem.amenities = [newSpecialization, 'Professional Gear', 'Edited Deliverables'];
       setServices(prev => [newItem, ...prev]);
       setExploreTab('services');
+    } else if (newCategory === 'jobs') {
+      newItem.company = newCompany || "Creative Studio";
+      newItem.skills = newSkills ? newSkills.split(',').map(s => s.trim()) : ["Photography"];
+      newItem.type = "Contract / Project Based";
+      setJobs(prev => [newItem, ...prev]);
+      setExploreTab('jobs');
     } else {
       setServices(prev => [newItem, ...prev]);
       setExploreTab('services');
@@ -153,6 +165,8 @@ const CreatePage = () => {
     setNewImage('');
     setNewExperience('');
     setNewPortfolio('');
+    setNewCompany('');
+    setNewSkills('');
     
     navigate('/explore');
   };
@@ -184,7 +198,8 @@ const CreatePage = () => {
                   { id: 'makeup', label: 'Makeup & Styling', icon: Sparkles, desc: 'Professional MUAs & hair stylists' },
                   { id: 'lighting', label: 'Lighting & Props', icon: Lightbulb, desc: 'Studio flashes, modifiers & props' },
                   { id: 'locations', label: 'Shooting Locations', icon: MapPin, desc: 'Resorts, villas & outdoor sets' },
-                  { id: 'services', label: 'Shoot Package', icon: Video, desc: 'Post production & editing' }
+                  { id: 'services', label: 'Shoot Package', icon: Video, desc: 'Post production & editing' },
+                  { id: 'jobs', label: 'Jobs & Gigs', icon: Briefcase, desc: 'Post jobs to hire creators' }
                 ].map(cat => {
                   const Icon = cat.icon;
                   const isActive = newCategory === cat.id;
@@ -197,6 +212,7 @@ const CreatePage = () => {
                         if (cat.id === 'studios' || cat.id === 'locations') setNewPriceUnit('hr');
                         else if (cat.id === 'gear' || cat.id === 'lighting') setNewPriceUnit('day');
                         else if (cat.id === 'models') setNewPriceUnit('day');
+                        else if (cat.id === 'jobs') setNewPriceUnit('project');
                         else setNewPriceUnit('booking');
                       }}
                     >
@@ -397,6 +413,42 @@ const CreatePage = () => {
                 </div>
               </>
             )}
+
+            {/* 7. Job-specific fields (only shown for Jobs & Gigs) */}
+            {newCategory === 'jobs' && (
+              <>
+                <div className="form-group">
+                  <label className="form-label">Hiring Company / Client Name *</label>
+                  <div className="input-with-icon-wrap">
+                    <div className="input-icon-left"><Building2 size={16} /></div>
+                    <input 
+                      type="text" 
+                      placeholder="e.g. Pixel Works Production" 
+                      className="form-input-premium"
+                      value={newCompany}
+                      onChange={(e) => setNewCompany(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Required Skills (Comma Separated) *</label>
+                  <div className="input-with-icon-wrap">
+                    <div className="input-icon-left"><FileText size={16} /></div>
+                    <input 
+                      type="text" 
+                      placeholder="e.g. Video Editing, Photoshop, Lighting" 
+                      className="form-input-premium"
+                      value={newSkills}
+                      onChange={(e) => setNewSkills(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+
 
             <button type="submit" className="form-submit-premium-btn">
               Publish Listing live
