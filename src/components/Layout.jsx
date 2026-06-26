@@ -109,73 +109,27 @@ const Layout = () => {
   const [showFullDesc, setShowFullDesc] = React.useState(false);
   const scrollRef = React.useRef(null);
 
-  // Custom interactive calendar states and helpers
-  const [viewDate, setViewDate] = React.useState(new Date());
-
-  const getDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
-  const getFirstDayOfMonth = (year, month) => new Date(year, month, 1).getDay();
-
-  const viewYear = viewDate.getFullYear();
-  const viewMonth = viewDate.getMonth();
-
-  const handlePrevMonth = () => {
-    setViewDate(new Date(viewYear, viewMonth - 1, 1));
-  };
-  const handleNextMonth = () => {
-    setViewDate(new Date(viewYear, viewMonth + 1, 1));
-  };
-
-  const isPastDate = (year, month, day) => {
-    const cellDate = new Date(year, month, day);
-    const todayZero = new Date();
-    todayZero.setHours(0, 0, 0, 0);
-    return cellDate < todayZero;
-  };
-
-  const formatDateString = (year, month, day) => {
+  // Generate the next 14 upcoming/coming dates starting from today dynamically
+  const upcomingDatesList = React.useMemo(() => {
+    const dates = [];
+    const today = new Date();
+    const weekdayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
     const monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    return `${day} ${monthNamesShort[month]} ${year}`;
-  };
-
-  const calendarCells = React.useMemo(() => {
-    const daysInMonth = getDaysInMonth(viewYear, viewMonth);
-    const firstDay = getFirstDayOfMonth(viewYear, viewMonth);
-    const prevMonthDays = getDaysInMonth(viewYear, viewMonth - 1);
     
-    const cells = [];
-    
-    // Padding from previous month
-    for (let i = firstDay - 1; i >= 0; i--) {
-      cells.push({
-        day: prevMonthDays - i,
-        month: viewMonth === 0 ? 11 : viewMonth - 1,
-        year: viewMonth === 0 ? viewYear - 1 : viewYear,
-        isCurrentMonth: false,
+    for (let i = 0; i < 14; i++) {
+      const futureDate = new Date();
+      futureDate.setDate(today.getDate() + i);
+      
+      dates.push({
+        day: futureDate.getDate().toString(),
+        name: weekdayNames[futureDate.getDay()],
+        month: monthNamesShort[futureDate.getMonth()],
+        year: futureDate.getFullYear().toString(),
+        fullDateStr: `${futureDate.getDate()} ${monthNamesShort[futureDate.getMonth()]} ${futureDate.getFullYear()}`,
       });
     }
-    
-    // Current month days
-    for (let i = 1; i <= daysInMonth; i++) {
-      cells.push({
-        day: i,
-        month: viewMonth,
-        year: viewYear,
-        isCurrentMonth: true,
-      });
-    }
-    
-    // Next month days padding (up to 42 cells)
-    const remaining = 42 - cells.length;
-    for (let i = 1; i <= remaining; i++) {
-      cells.push({
-        day: i,
-        month: viewMonth === 11 ? 0 : viewMonth + 1,
-        year: viewMonth === 11 ? viewYear + 1 : viewYear,
-        isCurrentMonth: false,
-      });
-    }
-    return cells;
-  }, [viewYear, viewMonth]);
+    return dates;
+  }, []);
 
   // Redesigned premium time slots
   const timeSlots = [
@@ -738,47 +692,23 @@ const Layout = () => {
                       <div className="scheduler-box">
                         <span className="scheduler-title">Select Date & Time</span>
                         
-                        {/* Interactive Monthly Calendar */}
-                        <div className="modern-calendar-container">
-                          <div className="calendar-header">
-                            <button type="button" className="cal-nav-btn" onClick={handlePrevMonth} title="Previous Month">
-                              <ChevronLeft size={16} />
-                            </button>
-                            <span className="cal-month-title">
-                              {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][viewMonth]} {viewYear}
-                            </span>
-                            <button type="button" className="cal-nav-btn" onClick={handleNextMonth} title="Next Month">
-                              <ChevronRight size={16} />
-                            </button>
-                          </div>
-                          
-                          <div className="calendar-weekdays">
-                            {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
-                              <div key={d} className="weekday-lbl">{d}</div>
-                            ))}
-                          </div>
-                          
-                          <div className="calendar-days-grid">
-                            {calendarCells.map((cell, idx) => {
-                              const cellDateStr = formatDateString(cell.year, cell.month, cell.day);
-                              const isSelected = selectedDate === cellDateStr;
-                              const isPast = isPastDate(cell.year, cell.month, cell.day);
-                              const isToday = new Date().toDateString() === new Date(cell.year, cell.month, cell.day).toDateString();
-                              
-                              return (
-                                <button
-                                  key={idx}
-                                  type="button"
-                                  className={`calendar-day-cell ${cell.isCurrentMonth ? 'current-month' : 'other-month'} ${isSelected ? 'active' : ''} ${isToday ? 'today' : ''}`}
-                                  disabled={isPast}
-                                  onClick={() => setSelectedDate(cellDateStr)}
-                                >
-                                  <span className="day-number">{cell.day}</span>
-                                  {isToday && <span className="today-dot"></span>}
-                                </button>
-                              );
-                            })}
-                          </div>
+                        {/* Interactive Horizontal Coming Dates Carousel */}
+                        <div className="upcoming-dates-scroll">
+                          {upcomingDatesList.map((item, idx) => {
+                            const isSelected = selectedDate === item.fullDateStr;
+                            return (
+                              <button 
+                                key={idx} 
+                                type="button"
+                                className={`upcoming-date-pill ${isSelected ? 'active' : ''}`}
+                                onClick={() => setSelectedDate(item.fullDateStr)}
+                              >
+                                <span className="date-pill-month">{item.month}</span>
+                                <span className="date-pill-day">{item.day}</span>
+                                <span className="date-pill-name">{item.name}</span>
+                              </button>
+                            );
+                          })}
                         </div>
 
                         {/* Selected Date Indicator */}
