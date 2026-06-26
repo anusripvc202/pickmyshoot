@@ -577,7 +577,7 @@ const Layout = () => {
                             </div>
                             <div className="metric-pill">
                               <span className="metric-label">Job Format</span>
-                              <span className="metric-value">{selectedItem.type}</span>
+                              <span className="metric-value">{selectedItem.jobType || selectedItem.type}</span>
                             </div>
                             <div className="metric-pill">
                               <span className="metric-label">Location</span>

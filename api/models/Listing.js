@@ -32,6 +32,7 @@ const listingSchema = new mongoose.Schema({
   
   skills: [String],     // for jobs
   company: String,      // for jobs
+  jobType: String,      // e.g. "Full Time", "Part Time", "Freelance"
   
   instructor: String,   // for workshops
   date: String,         // for workshops

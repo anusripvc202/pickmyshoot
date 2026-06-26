@@ -418,7 +418,7 @@ const ExplorePage = () => {
                       <span className="job-comp">{job.company}</span>
                     </div>
                   </div>
-                  <span className="job-type-pill">{job.type}</span>
+                  <span className="job-type-pill">{job.jobType || job.type}</span>
                 </div>
                 <div className="job-skills">
                   {job.skills.map((sk, idx) => (

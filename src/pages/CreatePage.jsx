@@ -23,6 +23,7 @@ const CreatePage = () => {
     setStudios,
     setModels,
     setGear,
+    setJobs,
     setExploreTab,
     triggerToast,
     activeProfileId
@@ -42,6 +43,10 @@ const CreatePage = () => {
   const [newSpecialization, setNewSpecialization] = useState('Wedding Photography');
   const [newExperience, setNewExperience] = useState('');
   const [newPortfolio, setNewPortfolio] = useState('');
+  // Job-specific fields
+  const [newCompany, setNewCompany] = useState('');
+  const [newSkills, setNewSkills] = useState('');
+  const [newJobType, setNewJobType] = useState('Full Time');
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -64,9 +69,11 @@ const CreatePage = () => {
       return;
     }
 
-    const priceVal = parseFloat(newPrice);
+    const priceVal = newCategory === 'jobs' ? newPrice : parseFloat(newPrice);
     const generatedId = `custom-${Date.now()}`;
-    const defaultImg = newImage || "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=500&q=80";
+    const defaultImg = newImage || (newCategory === 'jobs' 
+      ? "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=500&q=80"
+      : "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=500&q=80");
 
     // Map frontend category to DB type value
     const typeMap = { 
@@ -77,7 +84,8 @@ const CreatePage = () => {
       photography: 'service',
       makeup: 'service',
       lighting: 'gear',
-      locations: 'studio'
+      locations: 'studio',
+      jobs: 'job'
     };
 
     const newItem = {
@@ -129,6 +137,12 @@ const CreatePage = () => {
       newItem.amenities = [newSpecialization, 'Professional Gear', 'Edited Deliverables'];
       setServices(prev => [newItem, ...prev]);
       setExploreTab('services');
+    } else if (newCategory === 'jobs') {
+      newItem.company = newCompany || "Independent Recruiter";
+      newItem.skills = newSkills ? newSkills.split(',').map(s => s.trim()) : ["Video Editing"];
+      newItem.jobType = newJobType || "Full Time";
+      setJobs(prev => [newItem, ...prev]);
+      setExploreTab('jobs');
     } else {
       setServices(prev => [newItem, ...prev]);
       setExploreTab('services');
@@ -153,6 +167,9 @@ const CreatePage = () => {
     setNewImage('');
     setNewExperience('');
     setNewPortfolio('');
+    setNewCompany('');
+    setNewSkills('');
+    setNewJobType('Full Time');
     
     navigate('/explore');
   };
@@ -171,8 +188,7 @@ const CreatePage = () => {
           </div>
 
           <form onSubmit={handleCreateSubmit} className="premium-form-layout">
-            
-            {/* 1. Category Selector Visual Grid */}
+                       {/* 1. Category Selector Visual Grid */}
             <div className="form-group">
               <label className="form-label">Choose Asset Category *</label>
               <div className="category-select-grid">
@@ -184,7 +200,8 @@ const CreatePage = () => {
                   { id: 'makeup', label: 'Makeup & Styling', icon: Sparkles, desc: 'Professional MUAs & hair stylists' },
                   { id: 'lighting', label: 'Lighting & Props', icon: Lightbulb, desc: 'Studio flashes, modifiers & props' },
                   { id: 'locations', label: 'Shooting Locations', icon: MapPin, desc: 'Resorts, villas & outdoor sets' },
-                  { id: 'services', label: 'Shoot Package', icon: Video, desc: 'Post production & editing' }
+                  { id: 'services', label: 'Shoot Package', icon: Video, desc: 'Post production & editing' },
+                  { id: 'jobs', label: 'Jobs & Gigs', icon: FileText, desc: 'Post job offers and freelance gigs' }
                 ].map(cat => {
                   const Icon = cat.icon;
                   const isActive = newCategory === cat.id;
@@ -197,6 +214,7 @@ const CreatePage = () => {
                         if (cat.id === 'studios' || cat.id === 'locations') setNewPriceUnit('hr');
                         else if (cat.id === 'gear' || cat.id === 'lighting') setNewPriceUnit('day');
                         else if (cat.id === 'models') setNewPriceUnit('day');
+                        else if (cat.id === 'jobs') setNewPriceUnit('month');
                         else setNewPriceUnit('booking');
                       }}
                     >
@@ -213,12 +231,12 @@ const CreatePage = () => {
 
             {/* 2. Listing Title */}
             <div className="form-group">
-              <label className="form-label">Asset Title / Name *</label>
+              <label className="form-label">{newCategory === 'jobs' ? 'Job Title / Role *' : 'Asset Title / Name *'}</label>
               <div className="input-with-icon-wrap">
                 <div className="input-icon-left"><FileText size={16} /></div>
                 <input 
                   type="text" 
-                  placeholder="e.g. Industrial Warehouse Space Banjara Hills, Canon EOS R5 Cinematic Package" 
+                  placeholder={newCategory === 'jobs' ? "e.g. Video Editor, Fashion Photographer, Production Manger" : "e.g. Industrial Warehouse Space Banjara Hills, Canon EOS R5 Cinematic Package"} 
                   className="form-input-premium"
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
@@ -230,19 +248,17 @@ const CreatePage = () => {
             {/* 3. Pricing Rate & Unit */}
             <div className="form-row-premium">
               <div className="form-group">
-                <label className="form-label">Pricing Rate (INR) *</label>
+                <label className="form-label">{newCategory === 'jobs' ? 'Salary / Pay Rate *' : 'Pricing Rate (INR) *'}</label>
                 <div className="input-with-icon-wrap">
                   <div className="input-icon-left"><IndianRupee size={16} /></div>
                   <input 
                     type="text" 
-                    inputMode="decimal"
-                    pattern="[0-9]*\.?[0-9]*"
-                    placeholder="e.g. 1500" 
+                    placeholder={newCategory === 'jobs' ? "e.g. ₹30K - ₹50K/Month, ₹15K - ₹25K/Project" : "e.g. 1500"} 
                     className="form-input-premium"
                     value={newPrice}
                     onChange={(e) => {
                       const val = e.target.value;
-                      if (val === '' || /^\d*\.?\d*$/.test(val)) {
+                      if (newCategory === 'jobs' || val === '' || /^\d*\.?\d*$/.test(val)) {
                         setNewPrice(val);
                       }
                     }}
@@ -251,28 +267,30 @@ const CreatePage = () => {
                 </div>
               </div>
 
-              <div className="form-group">
-                <label className="form-label">Billing Price Unit</label>
-                <div className="billing-pill-group">
-                  {[
-                    { id: 'hr', label: 'Per Hour' },
-                    { id: 'day', label: 'Per Day' },
-                    { id: 'booking', label: 'Per Session' }
-                  ].map(unit => {
-                    const isActive = newPriceUnit === unit.id;
-                    return (
-                      <button
-                        key={unit.id}
-                        type="button"
-                        className={`billing-pill-btn ${isActive ? 'active' : ''}`}
-                        onClick={() => setNewPriceUnit(unit.id)}
-                      >
-                        {unit.label}
-                      </button>
-                    );
-                  })}
+              {newCategory !== 'jobs' && (
+                <div className="form-group">
+                  <label className="form-label">Billing Price Unit</label>
+                  <div className="billing-pill-group">
+                    {[
+                      { id: 'hr', label: 'Per Hour' },
+                      { id: 'day', label: 'Per Day' },
+                      { id: 'booking', label: 'Per Session' }
+                    ].map(unit => {
+                      const isActive = newPriceUnit === unit.id;
+                      return (
+                        <button
+                          key={unit.id}
+                          type="button"
+                          className={`billing-pill-btn ${isActive ? 'active' : ''}`}
+                          onClick={() => setNewPriceUnit(unit.id)}
+                        >
+                          {unit.label}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
             {/* 4. Location & Image Cover */}
@@ -396,6 +414,69 @@ const CreatePage = () => {
                   </div>
                 </div>
               </>
+            {/* Job-specific fields (only shown for Jobs & Gigs) */}
+            {newCategory === 'jobs' && (
+              <>
+                <div className="form-row-premium">
+                  <div className="form-group">
+                    <label className="form-label">Company / Studio Name *</label>
+                    <div className="input-with-icon-wrap">
+                      <div className="input-icon-left"><Building2 size={16} /></div>
+                      <input
+                        type="text"
+                        placeholder="e.g. EditX Studios"
+                        className="form-input-premium"
+                        value={newCompany}
+                        onChange={(e) => setNewCompany(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Job Type</label>
+                    <div className="auth-input-wrap">
+                      <select
+                        className="auth-select-input"
+                        value={newJobType}
+                        onChange={(e) => setNewJobType(e.target.value)}
+                        style={{
+                          width: '100%',
+                          background: 'var(--bg-card)',
+                          border: '1px solid var(--border)',
+                          borderRadius: '10px',
+                          padding: '12px 14px',
+                          color: 'var(--text-main)',
+                          outline: 'none',
+                          fontSize: '13px',
+                          height: '46px'
+                        }}
+                      >
+                        <option value="Full Time">Full Time</option>
+                        <option value="Part Time">Part Time</option>
+                        <option value="Freelance">Freelance</option>
+                        <option value="Contract">Contract</option>
+                        <option value="Internship">Internship</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Required Skills (Comma separated) *</label>
+                  <div className="input-with-icon-wrap">
+                    <div className="input-icon-left"><Sparkles size={16} /></div>
+                    <input
+                      type="text"
+                      placeholder="e.g. Premiere Pro, After Effects, Sound Mixing"
+                      className="form-input-premium"
+                      value={newSkills}
+                      onChange={(e) => setNewSkills(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+              </>
             )}
 
             <button type="submit" className="form-submit-premium-btn">
@@ -417,25 +498,33 @@ const CreatePage = () => {
             <div className="service-card preview-card-actual">
               <div className="card-img-wrap">
                 <img 
-                  src={newImage || "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=500&q=80"} 
+                  src={newImage || (newCategory === 'jobs' 
+                    ? "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=500&q=80"
+                    : "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=500&q=80")} 
                   className="card-image" 
                   alt="Listing Sandbox Preview" 
                   onError={(e) => {
-                    e.currentTarget.src = "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=500&q=80";
+                    e.currentTarget.src = newCategory === 'jobs' 
+                      ? "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=500&q=80"
+                      : "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=500&q=80";
                   }}
                 />
                 <span className="live-preview-tag">Live Sandbox</span>
               </div>
               
               <div className="card-info">
-                <span className="card-title">{newTitle || "Your Asset Title Displayed Here"}</span>
+                <span className="card-title">{newTitle || (newCategory === 'jobs' ? "Job Title Displayed Here" : "Your Asset Title Displayed Here")}</span>
                 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '4px' }}>
                   <div className="card-sub-info" style={{ marginTop: 0 }}>
-                    <span className="card-price-label">Rate</span>
+                    <span className="card-price-label">{newCategory === 'jobs' ? 'Salary' : 'Rate'}</span>
                     <span className="card-price-value">
-                      ₹{newPrice ? parseFloat(newPrice).toLocaleString('en-IN') : '0'}
-                      <span style={{ fontSize: '11px', fontWeight: '500' }}>/{newPriceUnit}</span>
+                      {newCategory === 'jobs' 
+                        ? (newPrice || '₹30K - ₹50K/Month') 
+                        : `₹${newPrice ? parseFloat(newPrice).toLocaleString('en-IN') : '0'}`}
+                      {newCategory !== 'jobs' && (
+                        <span style={{ fontSize: '11px', fontWeight: '500' }}>/{newPriceUnit}</span>
+                      )}
                     </span>
                   </div>
                   <span className="preview-loc-pill">
