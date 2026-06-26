@@ -347,7 +347,7 @@ export const AppProvider = ({ children }) => {
   };
 
   // Book Item action
-  const handleBookingSubmit = (autoClose = true) => {
+  const handleBookingSubmit = (autoClose = true, extraFields = {}) => {
     if (!selectedItem) return;
 
     let cost = selectedItem.price || 'Free';
@@ -367,7 +367,8 @@ export const AppProvider = ({ children }) => {
       // Client details for email notification
       clientName: currentUser?.name || "",
       clientEmail: currentUser?.email || "",
-      clientPhone: currentUser?.phone || ""
+      clientPhone: currentUser?.phone || "",
+      ...extraFields
     };
 
     // Sync with backend

@@ -118,6 +118,15 @@ const Layout = () => {
   const [cardExpiry, setCardExpiry] = React.useState('');
   const [cardCvv, setCardCvv] = React.useState('');
 
+  // Job Application States
+  const [isApplyingForJob, setIsApplyingForJob] = React.useState(false);
+  const [appResumeUrl, setAppResumeUrl] = React.useState('');
+  const [appPortfolioUrl, setAppPortfolioUrl] = React.useState('');
+  const [appCoverLetter, setAppCoverLetter] = React.useState('');
+  const [appContactName, setAppContactName] = React.useState('');
+  const [appContactEmail, setAppContactEmail] = React.useState('');
+  const [appContactPhone, setAppContactPhone] = React.useState('');
+
   const getPriceNumeric = (price) => {
     if (typeof price === 'number') return price;
     if (!price) return 0;
@@ -182,6 +191,14 @@ const Layout = () => {
 
   React.useEffect(() => {
     if (selectedItem) {
+      setAppContactName(currentUser?.name || '');
+      setAppContactEmail(currentUser?.email || '');
+      setAppContactPhone(currentUser?.phone || '');
+      setAppResumeUrl('');
+      setAppPortfolioUrl('');
+      setAppCoverLetter('');
+      setIsApplyingForJob(false);
+
       // Force scroll position to top on next render frame to handle layout shifts / focus resets
       const timer = setTimeout(() => {
         if (scrollRef.current) {
@@ -192,8 +209,9 @@ const Layout = () => {
     } else {
       setBookingStatus('idle');
       setShowFullDesc(false);
+      setIsApplyingForJob(false);
     }
-  }, [selectedItem]);
+  }, [selectedItem, currentUser]);
 
   const handleSearchSubmit = (e) => {
     if (e) e.preventDefault();
@@ -207,8 +225,15 @@ const Layout = () => {
       navigate('/login');
       return;
     }
-    // If it is free (job/institute), bypass payment!
-    if (selectedItemType === 'job' || selectedItemType === 'institute') {
+    // If it is a job, trigger application form modal view!
+    if (selectedItemType === 'job') {
+      setIsApplyingForJob(true);
+      setTimeout(() => {
+        if (scrollRef.current) {
+          scrollRef.current.scrollTop = 0;
+        }
+      }, 0);
+    } else if (selectedItemType === 'institute') {
       if (bookingStatus !== 'idle') return;
       setBookingStatus('processing');
       setTimeout(() => {
@@ -223,6 +248,35 @@ const Layout = () => {
       // Transition to payment step!
       setBookingStatus('payment');
     }
+  };
+
+  const handleJobApplicationSubmit = (e) => {
+    if (e) e.preventDefault();
+    if (!appContactName || !appContactEmail) {
+      triggerToast("Please provide your name and email.");
+      return;
+    }
+    if (bookingStatus !== 'idle') return;
+
+    const extraFields = {
+      clientName: appContactName,
+      clientEmail: appContactEmail,
+      clientPhone: appContactPhone,
+      resumeUrl: appResumeUrl,
+      portfolioUrl: appPortfolioUrl,
+      coverLetter: appCoverLetter
+    };
+
+    setBookingStatus('processing');
+    setTimeout(() => {
+      handleBookingSubmit(false, extraFields);
+      setBookingStatus('success');
+      setTimeout(() => {
+        setSelectedItem(null);
+        setIsApplyingForJob(false);
+        navigate('/bookings');
+      }, 1800);
+    }, 1500);
   };
 
   const handlePaymentSubmit = () => {
@@ -467,7 +521,85 @@ const Layout = () => {
               {bookingStatus === 'idle' && (
                 <>
                   <div className="detail-scrollable-content" ref={scrollRef}>
-                    <div className="detail-title-section">
+                    {isApplyingForJob ? (
+                      <div className="job-application-form-container" style={{ padding: '10px 0' }}>
+                        <h4 className="detail-desc-title" style={{ fontSize: '18px', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <Briefcase size={20} color="var(--primary)" />
+                          Apply for {selectedItem.title}
+                        </h4>
+                        <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>at {selectedItem.company} • {selectedItem.location}</span>
+                        
+                        <form onSubmit={handleJobApplicationSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginTop: '16px' }}>
+                          <div className="form-group">
+                            <label className="form-label">Full Name *</label>
+                            <input 
+                              type="text" 
+                              value={appContactName} 
+                              onChange={(e) => setAppContactName(e.target.value)} 
+                              className="form-input-pro"
+                              required 
+                            />
+                          </div>
+                          <div className="form-group-row" style={{ display: 'flex', gap: '12px' }}>
+                            <div className="form-group" style={{ flex: 1 }}>
+                              <label className="form-label">Email Address *</label>
+                              <input 
+                                type="email" 
+                                value={appContactEmail} 
+                                onChange={(e) => setAppContactEmail(e.target.value)} 
+                                className="form-input-pro"
+                                required 
+                              />
+                            </div>
+                            <div className="form-group" style={{ flex: 1 }}>
+                              <label className="form-label">Contact Number</label>
+                              <input 
+                                type="text" 
+                                value={appContactPhone} 
+                                onChange={(e) => setAppContactPhone(e.target.value)} 
+                                className="form-input-pro"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="form-group">
+                            <label className="form-label">Resume Link / URL</label>
+                            <input 
+                              type="url" 
+                              placeholder="e.g. https://drive.google.com/file/d/your-resume" 
+                              value={appResumeUrl} 
+                              onChange={(e) => setAppResumeUrl(e.target.value)} 
+                              className="form-input-pro"
+                            />
+                          </div>
+
+                          <div className="form-group">
+                            <label className="form-label">Portfolio / Website Link</label>
+                            <input 
+                              type="url" 
+                              placeholder="e.g. https://behance.net/username" 
+                              value={appPortfolioUrl} 
+                              onChange={(e) => setAppPortfolioUrl(e.target.value)} 
+                              className="form-input-pro"
+                            />
+                          </div>
+
+                          <div className="form-group">
+                            <label className="form-label">Why are you a good fit? (Cover Letter)</label>
+                            <textarea 
+                              rows="4" 
+                              placeholder="Introduce yourself and explain why you're perfect for this gig..." 
+                              value={appCoverLetter} 
+                              onChange={(e) => setAppCoverLetter(e.target.value)} 
+                              className="form-input-pro"
+                              style={{ resize: 'vertical' }}
+                            />
+                          </div>
+                        </form>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="detail-title-section">
                       {selectedItem.isFeatured && (
                         <span className="detail-featured-badge">Featured Space</span>
                       )}
@@ -793,27 +925,40 @@ const Layout = () => {
                         </div>
                       </div>
                     )}
+                  </>
+                )}
                   </div>
 
                   {/* Fixed bottom action panel */}
                   <div className="detail-fixed-checkout-bar">
                     <div className="checkout-price-col">
                       <span className="checkout-price-val">
-                        {selectedItemType === 'institute' 
+                        {selectedItemType === 'institute' || selectedItemType === 'job'
                           ? 'Free to Apply' 
                           : (typeof selectedItem.price === 'number' 
                               ? `₹${selectedItem.price.toLocaleString('en-IN')}${selectedItem.priceUnit ? ` /${selectedItem.priceUnit}` : ''}` 
                               : selectedItem.price || 'Free')}
                       </span>
                       <span className="checkout-price-unit">
-                        {selectedItemType === 'institute' ? 'No application fee' : 'Total (incl. taxes)'}
+                        {selectedItemType === 'institute' || selectedItemType === 'job' ? 'No application fee' : 'Total (incl. taxes)'}
                       </span>
                     </div>
 
-                    <button className="checkout-submit-btn" onClick={handleBookingClick}>
-                      {selectedItemType === 'job' || selectedItemType === 'institute' ? 'Apply Now' : 
-                       selectedItemType === 'workshop' ? 'Register Now' : 'Book Now'}
-                    </button>
+                    {isApplyingForJob ? (
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                        <button className="modal-cancel-btn" onClick={() => setIsApplyingForJob(false)} style={{ padding: '10px 16px', borderRadius: '12px' }}>
+                          Cancel
+                        </button>
+                        <button className="checkout-submit-btn" onClick={handleJobApplicationSubmit}>
+                          Submit Application
+                        </button>
+                      </div>
+                    ) : (
+                      <button className="checkout-submit-btn" onClick={handleBookingClick}>
+                        {selectedItemType === 'job' || selectedItemType === 'institute' ? 'Apply Now' : 
+                         selectedItemType === 'workshop' ? 'Register Now' : 'Book Now'}
+                      </button>
+                    )}
                   </div>
                 </>
               )}

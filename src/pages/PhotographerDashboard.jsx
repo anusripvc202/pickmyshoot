@@ -464,30 +464,50 @@ const PhotographerDashboard = () => {
                             <img src={clientAvatar} alt={clientName} className="req-client-avatar" />
                             <div>
                               <span className="req-client-name">{clientName}</span>
-                              <span className="req-time-slot">{b.date} • {b.time}</span>
+                              <span className="req-time-slot">{b.itemType === 'Job' ? 'Job Application' : `${b.date} • ${b.time}`}</span>
                             </div>
                           </div>
-                          <span className={`status-badge-chip ${b.status}`}>{b.status}</span>
+                          <span className={`status-badge-chip ${b.status}`}>{b.status === 'pending' && b.itemType === 'Job' ? 'Applied' : b.status}</span>
                         </div>
                       
-                      <span className="request-listing-title">{b.item?.title || 'Photoshoot Package Session'}</span>
-                      <span className="request-price-tag">Amount Due: <strong>{typeof b.price === 'number' ? `₹${b.price.toLocaleString('en-IN')}` : b.price}</strong></span>
+                      <span className="request-listing-title">{b.itemType === 'Job' ? `Job Position: ${b.item?.title || b.title}` : (b.item?.title || 'Photoshoot Package Session')}</span>
+                      {b.itemType === 'Job' ? (
+                        <div style={{ marginTop: '8px', fontSize: '11.5px', display: 'flex', flexDirection: 'column', gap: '4px', background: 'var(--bg-app)', padding: '10px', borderRadius: '8px', border: '1px solid var(--border)', width: '100%' }}>
+                          {b.item?.location && <span>📍 Job Location: <strong>{b.item.location}</strong></span>}
+                          {b.clientEmail && <span>📧 Contact Email: <strong><a href={`mailto:${b.clientEmail}`} style={{ color: 'var(--primary)' }}>{b.clientEmail}</a></strong></span>}
+                          {b.clientPhone && <span>📞 Phone: <strong>{b.clientPhone}</strong></span>}
+                          {b.resumeUrl && (
+                            <span>📄 Candidate Resume: <strong><a href={b.resumeUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>View Resume</a></strong></span>
+                          )}
+                          {b.portfolioUrl && (
+                            <span>🌐 Candidate Portfolio: <strong><a href={b.portfolioUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>View Portfolio</a></strong></span>
+                          )}
+                          {b.coverLetter && (
+                            <div style={{ marginTop: '4px', borderTop: '1px dashed var(--border)', paddingTop: '4px' }}>
+                              <strong style={{ color: 'var(--text-muted)' }}>Cover Note:</strong>
+                              <p style={{ margin: '2px 0 0 0', fontStyle: 'italic', color: 'var(--text-main)' }}>"{b.coverLetter}"</p>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="request-price-tag">Amount Due: <strong>{typeof b.price === 'number' ? `₹${b.price.toLocaleString('en-IN')}` : b.price}</strong></span>
+                      )}
                       
-                      <div className="request-actions-row">
+                      <div className="request-actions-row" style={{ marginTop: b.itemType === 'Job' ? '12px' : '0' }}>
                         {b.status === 'pending' && (
                           <>
-                            <button className="action-btn-sm confirm-btn" onClick={() => updateBookingStatus(b.id, 'confirmed')}>Accept Session</button>
-                            <button className="action-btn-sm decline-btn" onClick={() => updateBookingStatus(b.id, 'cancelled')}>Decline</button>
+                            <button className="action-btn-sm confirm-btn" onClick={() => updateBookingStatus(b.id, 'confirmed')}>{b.itemType === 'Job' ? 'Accept Candidate' : 'Accept Session'}</button>
+                            <button className="action-btn-sm decline-btn" onClick={() => updateBookingStatus(b.id, 'cancelled')}>{b.itemType === 'Job' ? 'Reject' : 'Decline'}</button>
                           </>
                         )}
                         {b.status === 'confirmed' && (
-                          <button className="action-btn-sm confirm-btn" onClick={() => updateBookingStatus(b.id, 'completed')}>Complete Shoot</button>
+                          <button className="action-btn-sm confirm-btn" onClick={() => updateBookingStatus(b.id, 'completed')}>{b.itemType === 'Job' ? 'Hire Candidate' : 'Complete Shoot'}</button>
                         )}
                         {b.status === 'completed' && (
-                          <span className="completed-success-tag">Completed ✓ Paid</span>
+                          <span className="completed-success-tag">{b.itemType === 'Job' ? 'Hired ✓' : 'Completed ✓ Paid'}</span>
                         )}
                         {b.status === 'cancelled' && (
-                          <span className="cancelled-fail-tag">Declined</span>
+                          <span className="cancelled-fail-tag">{b.itemType === 'Job' ? 'Rejected' : 'Declined'}</span>
                         )}
                       </div>
                     </div>

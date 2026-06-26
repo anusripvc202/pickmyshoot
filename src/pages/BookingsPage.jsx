@@ -80,11 +80,36 @@ const BookingsPage = () => {
                 <span className="booking-card-title">{book.item?.title || book.title || 'Reserved Item'}</span>
                 <div className="booking-card-details">
                   <span>🏷️ Category: <strong>{book.itemType || 'Service'}</strong></span>
-                  <span>📅 Reserved Date: <strong>{book.date}</strong></span>
-                  <span>⏰ Time Slot: <strong>{book.time || 'To be confirmed'}</strong></span>
+                  {book.itemType === 'Job' ? (
+                    <>
+                      <span>🏢 Company: <strong>{book.item?.company || 'Creative Studio'}</strong></span>
+                      <span>📍 Job Location: <strong>{book.item?.location || 'Remote'}</strong></span>
+                      {book.resumeUrl && (
+                        <span>📄 Resume: <strong><a href={book.resumeUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>View Resume</a></strong></span>
+                      )}
+                      {book.portfolioUrl && (
+                        <span>🌐 Portfolio: <strong><a href={book.portfolioUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>View Portfolio</a></strong></span>
+                      )}
+                      {book.coverLetter && (
+                        <div style={{ marginTop: '8px', fontSize: '11px', background: 'var(--bg-app)', padding: '8px', borderRadius: '6px', border: '1px solid var(--border)' }}>
+                          <strong style={{ color: 'var(--text-muted)' }}>Cover Letter:</strong>
+                          <p style={{ margin: '2px 0 0 0', fontStyle: 'italic', color: 'var(--text-main)' }}>"{book.coverLetter}"</p>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <span>📅 Reserved Date: <strong>{book.date}</strong></span>
+                      <span>⏰ Time Slot: <strong>{book.time || 'To be confirmed'}</strong></span>
+                    </>
+                  )}
                 </div>
                 <span className="booking-card-price">
-                  Total Invoiced: <strong>₹{typeof book.price === 'number' ? book.price.toLocaleString('en-IN') : book.price}</strong>
+                  {book.itemType === 'Job' ? (
+                    <span>Compensation rate: <strong>{book.price}</strong></span>
+                  ) : (
+                    <span>Total Invoiced: <strong>₹{typeof book.price === 'number' ? book.price.toLocaleString('en-IN') : book.price}</strong></span>
+                  )}
                 </span>
               </div>
               <div className="booking-card-right-col" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center', gap: '10px' }}>
@@ -101,7 +126,7 @@ const BookingsPage = () => {
                          book.status === 'pending' ? '#ffa500' :
                          book.status === 'cancelled' ? '#C8102E' : 'var(--text-muted)'
                 }}>
-                  {book.status}
+                  {book.status === 'pending' && book.itemType === 'Job' ? 'Applied' : book.status}
                 </span>
 
                 {(book.status === 'pending' || book.status === 'confirmed') && (currentRole === 'client' || currentRole === 'admin') && (
@@ -121,7 +146,7 @@ const BookingsPage = () => {
                       whiteSpace: 'nowrap'
                     }}
                   >
-                    Cancel Booking
+                    {book.itemType === 'Job' ? 'Withdraw Application' : 'Cancel Booking'}
                   </button>
                 )}
               </div>

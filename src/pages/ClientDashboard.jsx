@@ -368,26 +368,42 @@ const ClientDashboard = () => {
                     <img src={b.item?.image || 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=180&q=80'} className="timeline-row-img" alt={b.item?.title} />
                     <div className="timeline-row-info">
                       <div className="row-title-badge-flex">
-                        <span className="row-title-main">{b.item?.title}</span>
-                        <span className={`status-badge-chip ${b.status}`}>{b.status}</span>
+                        <span className="row-title-main">{b.itemType === 'Job' ? `Applied for: ${b.item?.title || b.title}` : b.item?.title}</span>
+                        <span className={`status-badge-chip ${b.status}`}>{b.status === 'pending' && b.itemType === 'Job' ? 'Applied' : b.status}</span>
                       </div>
-                      <span className="row-sub-info">Reserved: {b.date} • {b.time} | Category: {b.itemType}</span>
-                      <span className="row-price">Invoiced Amount: <strong>{typeof b.price === 'number' ? `₹${b.price.toLocaleString('en-IN')}` : b.price}</strong></span>
+                      {b.itemType === 'Job' ? (
+                        <>
+                          <span className="row-sub-info">Company: {b.item?.company || 'Creative Studio'} | Location: {b.item?.location || 'Remote'} | Category: Job</span>
+                          <span className="row-price">Compensation: <strong>{b.price}</strong></span>
+                          <div style={{ marginTop: '8px', fontSize: '11px', display: 'flex', flexDirection: 'column', gap: '3px', background: 'var(--bg-app)', padding: '8px', borderRadius: '8px', border: '1px solid var(--border)' }}>
+                            {b.resumeUrl && <span>📄 Resume: <a href={b.resumeUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>View Resume</a></span>}
+                            {b.portfolioUrl && <span>🌐 Portfolio: <a href={b.portfolioUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>View Portfolio</a></span>}
+                            {b.coverLetter && <p style={{ margin: '2px 0 0 0', fontStyle: 'italic' }}>Cover: "{b.coverLetter}"</p>}
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <span className="row-sub-info">Reserved: {b.date} • {b.time} | Category: {b.itemType}</span>
+                          <span className="row-price">Invoiced Amount: <strong>{typeof b.price === 'number' ? `₹${b.price.toLocaleString('en-IN')}` : b.price}</strong></span>
+                        </>
+                      )}
                     </div>
                     <div className="row-action-buttons">
-                      <button 
-                        className="receipt-btn-icon" 
-                        onClick={() => { setSelectedBooking(b); setShowReceiptModal(true); }}
-                        title="View Invoiced Receipt"
-                      >
-                        <FileText size={14} /> Receipt
-                      </button>
+                      {b.itemType !== 'Job' && (
+                        <button 
+                          className="receipt-btn-icon" 
+                          onClick={() => { setSelectedBooking(b); setShowReceiptModal(true); }}
+                          title="View Invoiced Receipt"
+                        >
+                          <FileText size={14} /> Receipt
+                        </button>
+                      )}
                       {(b.status === 'confirmed' || b.status === 'pending') && (
                         <button 
                           className="cancel-btn-action" 
                           onClick={() => { updateBookingStatus(b.id, 'cancelled'); }}
                         >
-                          Cancel Booking
+                          {b.itemType === 'Job' ? 'Withdraw Application' : 'Cancel Booking'}
                         </button>
                       )}
                     </div>
