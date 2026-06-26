@@ -1001,12 +1001,24 @@ const Layout = () => {
                   <div className="success-badge-pulse">
                     <CheckCircle size={48} color="var(--primary)" />
                   </div>
-                  <h4>Booking Confirmed!</h4>
-                  <p className="success-tagline">Your reservation is secured successfully.</p>
+                  <h4>
+                    {selectedItemType === 'job' || selectedItemType === 'institute' 
+                      ? 'Application Submitted!' 
+                      : 'Booking Confirmed!'}
+                  </h4>
+                  <p className="success-tagline">
+                    {selectedItemType === 'job' 
+                      ? `Your application for ${selectedItem.title} has been sent successfully.` 
+                      : (selectedItemType === 'institute' 
+                          ? `Your query has been sent to ${selectedItem.title}.` 
+                          : 'Your reservation is secured successfully.')}
+                  </p>
                   
                   <div className="success-summary-card">
                     <div className="summary-row">
-                      <span className="summary-label">Listing</span>
+                      <span className="summary-label">
+                        {selectedItemType === 'job' ? 'Position' : (selectedItemType === 'institute' ? 'Institute' : 'Listing')}
+                      </span>
                       <span className="summary-value">{selectedItem.title}</span>
                     </div>
                     {selectedItemType !== 'job' && selectedItemType !== 'workshop' && selectedItemType !== 'institute' && (
@@ -1023,7 +1035,9 @@ const Layout = () => {
                     )}
                     <div className="summary-row total">
                       <span className="summary-label">
-                        {selectedItemType === 'institute' ? 'Application' : 'Total Invoiced'}
+                        {selectedItemType === 'job' 
+                          ? 'Salary Range' 
+                          : (selectedItemType === 'institute' ? 'Application Status' : 'Total Invoiced')}
                       </span>
                       <span className="summary-value">
                         {selectedItemType === 'institute' 
@@ -1032,7 +1046,11 @@ const Layout = () => {
                       </span>
                     </div>
                   </div>
-                  <p className="redirect-note">Redirecting to your bookings dashboard...</p>
+                  <p className="redirect-note">
+                    {selectedItemType === 'job' 
+                      ? 'Redirecting to your applications dashboard...' 
+                      : 'Redirecting to your bookings dashboard...'}
+                  </p>
                 </div>
               )}
 
