@@ -124,9 +124,13 @@ const Layout = () => {
   const [selectedPhotographer, setSelectedPhotographer] = React.useState(null);
 
   React.useEffect(() => {
-    setSelectedPhotographer(null);
+    if (selectedItem && selectedItemType === 'service') {
+      setSelectedPhotographer(selectedItem);
+    } else {
+      setSelectedPhotographer(null);
+    }
     setBookingStatus('idle');
-  }, [selectedItem]);
+  }, [selectedItem, selectedItemType]);
   const scrollRef = React.useRef(null);
 
   // Payment UI States

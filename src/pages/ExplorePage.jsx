@@ -174,7 +174,14 @@ const ExplorePage = () => {
         const titleMatch = item.title.toLowerCase().includes(selectedOccasion.toLowerCase());
         const descMatch = item.description && item.description.toLowerCase().includes(selectedOccasion.toLowerCase());
         const catMatch = item.category && item.category.toLowerCase().includes(selectedOccasion.toLowerCase());
-        return titleMatch || descMatch || catMatch;
+        const specMatch = item.specialties && item.specialties.some(s => s.toLowerCase().includes(selectedOccasion.toLowerCase()));
+        
+        // Also support partial matches for keywords like "prewedding", "pre-wedding", "wedding"
+        const normalizedOccasion = selectedOccasion.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const normalizedTitle = item.title.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const normMatch = normalizedTitle.includes(normalizedOccasion);
+        
+        return titleMatch || descMatch || catMatch || specMatch || normMatch;
       });
     }
 
