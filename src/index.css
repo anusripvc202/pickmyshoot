@@ -13,9 +13,9 @@
 .light-theme {
   --bg-app: #f6f8fb;
   --bg-container: #ffffff;
-  --primary: #C8102E;
-  --primary-hover: #990B1E;
-  --primary-rgb: 200, 16, 46;
+  --primary: #c7100d;
+  --primary-hover: #a30d0b;
+  --primary-rgb: 199, 16, 13;
   --accent-pink: #fff0f2;
   --primary-sec: #FF4D5A;
   --text-main: #141724;
@@ -51,9 +51,9 @@
 .dark-theme {
   --bg-app: #08090d;
   --bg-container: #0f1017;
-  --primary: #C8102E;
-  --primary-hover: #990B1E;
-  --primary-rgb: 200, 16, 46;
+  --primary: #c7100d;
+  --primary-hover: #a30d0b;
+  --primary-rgb: 199, 16, 13;
   --accent-pink: rgba(200, 16, 46, 0.12);
   --primary-sec: #FF4D5A;
   --text-main: #f3f5f9;
@@ -11855,7 +11855,7 @@ input:checked + .slider:before {
 
 /* App Header Red Premium Override */
 .app-header {
-  background: linear-gradient(135deg, #C8102E 0%, #9B0C1E 100%) !important;
+  background: linear-gradient(135deg, #c7100d 0%, #a30d0b 100%) !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.15) !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12) !important;
   backdrop-filter: none !important;
@@ -11989,7 +11989,7 @@ input:checked + .slider:before {
 /* Sign In button on red navbar — white pill with red text */
 .app-header .header-secondary-cta {
   background: #ffffff !important;
-  color: #C8102E !important;
+  color: #c7100d !important;
   border: none !important;
   font-weight: 700 !important;
   font-size: 13px !important;
