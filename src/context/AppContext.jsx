@@ -155,7 +155,7 @@ export const AppProvider = ({ children }) => {
   const [portfolioItems, setPortfolioItems] = useState([
     {
       id: "pf-1",
-      ownerId: "prof-photographer",
+      ownerId: "6a380b8173c0e340a6bf3a42", // Nikhil
       title: "Royal Bridal Lookbook",
       category: "Bridal / Ethnic Wear",
       image: "/pre_wedding_shoot_new.png",
@@ -164,7 +164,7 @@ export const AppProvider = ({ children }) => {
     },
     {
       id: "pf-2",
-      ownerId: "prof-1",
+      ownerId: "6a391527c8fbd2d7e85f0d92", // Jaideepvarma
       title: "E-Commerce Gadget Shoot",
       category: "Product / Commercial",
       image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80",
@@ -173,7 +173,7 @@ export const AppProvider = ({ children }) => {
     },
     {
       id: "pf-3",
-      ownerId: "prof-photographer",
+      ownerId: "6a380b8173c0e340a6bf3a42", // Nikhil
       title: "Daylight Fashion Editorial",
       category: "High-Fashion / Western",
       image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=600&q=80",
@@ -182,7 +182,7 @@ export const AppProvider = ({ children }) => {
     },
     {
       id: "pf-4",
-      ownerId: "prof-photographer",
+      ownerId: "6a391527c8fbd2d7e85f0d92", // Jaideepvarma
       title: "Premium SUV Advertising",
       category: "Automotive / Action",
       image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=600&q=80",
@@ -191,7 +191,7 @@ export const AppProvider = ({ children }) => {
     },
     {
       id: "pf-5",
-      ownerId: "prof-photographer",
+      ownerId: "6a380b8173c0e340a6bf3a42", // Nikhil
       title: "Gourmet Dessert Catalog",
       category: "Food / Styling",
       image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80",
@@ -200,7 +200,7 @@ export const AppProvider = ({ children }) => {
     },
     {
       id: "pf-6",
-      ownerId: "prof-1",
+      ownerId: "6a391527c8fbd2d7e85f0d92", // Jaideepvarma
       title: "Minimalist Portrait Studies",
       category: "Fine Art / Studio Studio",
       image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
@@ -209,7 +209,7 @@ export const AppProvider = ({ children }) => {
     },
     {
       id: "pf-7",
-      ownerId: "prof-photographer",
+      ownerId: "6a391527c8fbd2d7e85f0d92", // Jaideepvarma
       title: "Nature Cinematography",
       category: "Cinematography / Nature",
       image: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=600&q=80",
@@ -486,16 +486,17 @@ export const AppProvider = ({ children }) => {
   };
 
   // Book Item action
-  const handleBookingSubmit = (autoClose = true) => {
+  const handleBookingSubmit = (autoClose = true, customOwnerId = null) => {
     if (!selectedItem) return;
 
     let cost = selectedItem.price || 'Free';
+    const finalOwnerId = customOwnerId || selectedItem.ownerId || (selectedItemType === "service" ? "prof-photographer" : (selectedItemType === "institute" ? "admin" : "prof-1"));
 
     const dbBooking = {
       listingId: selectedItem.id || selectedItem._id || "",
       clientId: activeProfileId || "prof-client",
-      creatorId: selectedItem.ownerId || (selectedItemType === "service" ? "prof-photographer" : (selectedItemType === "institute" ? "admin" : "prof-1")),
-      ownerId: selectedItem.ownerId || (selectedItemType === "service" ? "prof-photographer" : (selectedItemType === "institute" ? "admin" : "prof-1")),
+      creatorId: finalOwnerId,
+      ownerId: finalOwnerId,
       itemType: selectedItemType.charAt(0).toUpperCase() + selectedItemType.slice(1),
       title: selectedItem.title || "",
       date: selectedItemType === 'workshop' ? selectedItem.date : (selectedItemType === 'institute' ? 'Immediate' : selectedDate),

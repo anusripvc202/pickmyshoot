@@ -102,7 +102,9 @@ const Layout = () => {
     changeUserRole,
     setExploreTab,
     bookings,
-    activeProfileId
+    activeProfileId,
+    profiles,
+    portfolioItems
   } = useAppContext();
 
   const navigate = useNavigate();
@@ -119,6 +121,12 @@ const Layout = () => {
   });
   const [bookingStatus, setBookingStatus] = React.useState('idle'); // 'idle' | 'processing' | 'success'
   const [showFullDesc, setShowFullDesc] = React.useState(false);
+  const [selectedPhotographer, setSelectedPhotographer] = React.useState(null);
+
+  React.useEffect(() => {
+    setSelectedPhotographer(null);
+    setBookingStatus('idle');
+  }, [selectedItem]);
   const scrollRef = React.useRef(null);
 
   // Payment UI States
@@ -333,7 +341,7 @@ const Layout = () => {
       if (bookingStatus !== 'idle') return;
       setBookingStatus('processing');
       setTimeout(() => {
-        handleBookingSubmit(false);
+        handleBookingSubmit(false, selectedPhotographer?.id);
         setBookingStatus('success');
         setTimeout(() => {
           setSelectedItem(null);
@@ -350,7 +358,7 @@ const Layout = () => {
     if (bookingStatus !== 'payment') return;
     setBookingStatus('processing');
     setTimeout(() => {
-      handleBookingSubmit(false); // registers the booking without closing modal
+      handleBookingSubmit(false, selectedPhotographer?.id); // registers the booking without closing modal
       setBookingStatus('success');
       setTimeout(() => {
         setSelectedItem(null);
@@ -622,21 +630,58 @@ const Layout = () => {
         <div className="detail-modal-overlay" onClick={() => setSelectedItem(null)}>
           <div className="detail-modal-body" onClick={(e) => e.stopPropagation()}>
             
-            {/* Left Column: Image gallery */}
-            <div className="detail-header-image-box">
-              <img src={selectedItem.image || selectedItem.coverImage} className="card-image" alt={selectedItem.title} />
-              
-              <button 
-                className={`card-like-btn ${likedItems[selectedItem.id] ? 'liked' : ''}`}
-                onClick={(e) => toggleLike(selectedItem.id, e)}
-                style={{ top: '20px', left: '20px' }}
-              >
-                <Heart size={16} fill={likedItems[selectedItem.id] ? 'var(--primary)' : 'none'} />
-              </button>
+             {/* Left Column: Image gallery */}
+            <div className="detail-header-image-box" style={{ position: 'relative', overflow: 'hidden' }}>
+              {selectedPhotographer ? (
+                <div style={{ padding: '24px', height: '100%', overflowY: 'auto', background: 'var(--bg-card)' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '20px' }}>
+                    <img 
+                      src={selectedPhotographer.avatar} 
+                      style={{ width: '120px', height: '120px', borderRadius: '50%', objectFit: 'cover', border: '3px solid var(--primary)', marginBottom: '12px', boxShadow: 'var(--shadow-md)' }} 
+                      alt={selectedPhotographer.name} 
+                    />
+                    <h4 style={{ fontFamily: 'var(--font-heading)', fontSize: '24px', fontWeight: 'bold', color: 'var(--text-main)', margin: '0 0 4px 0' }}>
+                      {selectedPhotographer.name}
+                    </h4>
+                    <span style={{ fontSize: '13px', color: 'var(--text-muted)', fontWeight: '600' }}>
+                      📍 {selectedPhotographer.location || 'Hyderabad, TS'}
+                    </span>
+                  </div>
+                  
+                  <h5 style={{ fontFamily: 'var(--font-heading)', fontSize: '16px', fontWeight: 'bold', marginBottom: '12px', borderBottom: '1px solid var(--border)', paddingBottom: '6px', color: 'var(--text-main)' }}>
+                    Portfolio Gallery
+                  </h5>
+                  
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                    {portfolioItems.filter(p => p.ownerId === selectedPhotographer.id).map(p => (
+                      <div key={p.id} className="portfolio-gallery-item" style={{ borderRadius: '10px', overflow: 'hidden', height: '120px', boxShadow: 'var(--shadow-sm)' }}>
+                        <img src={p.image} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={p.title} />
+                      </div>
+                    ))}
+                    {portfolioItems.filter(p => p.ownerId === selectedPhotographer.id).length === 0 && (
+                      <span style={{ gridColumn: 'span 2', textAlign: 'center', color: 'var(--text-muted)', fontSize: '13px', padding: '20px 0' }}>
+                        No portfolio photos uploaded yet.
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <img src={selectedItem.image || selectedItem.coverImage} className="card-image" alt={selectedItem.title} />
+                  
+                  <button 
+                    className={`card-like-btn ${likedItems[selectedItem.id] ? 'liked' : ''}`}
+                    onClick={(e) => toggleLike(selectedItem.id, e)}
+                    style={{ top: '20px', left: '20px' }}
+                  >
+                    <Heart size={16} fill={likedItems[selectedItem.id] ? 'var(--primary)' : 'none'} />
+                  </button>
 
-              <div className="detail-image-count">
-                1 / 15 High-res Photos
-              </div>
+                  <div className="detail-image-count">
+                    1 / 15 Photos
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Right Column: details content */}
@@ -650,330 +695,343 @@ const Layout = () => {
               {bookingStatus === 'idle' && (
                 <>
                   <div className="detail-scrollable-content" ref={scrollRef}>
-                    <div className="detail-title-section">
-                      {selectedItem.isFeatured && (
-                        <span className="detail-featured-badge">Featured Space</span>
-                      )}
-                      <h3 className="detail-main-title">{selectedItem.title}</h3>
-                      
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '6px' }}>
-                        <div className="detail-rating-row">
-                          <Star size={13} fill="#ffaa00" color="#ffaa00" />
-                          <span>{selectedItem.rating}</span>
-                          <span style={{ color: 'var(--text-muted)', fontWeight: '500', fontSize: '12px' }}>
-                            ({selectedItem.reviews} Reviews)
-                          </span>
-                        </div>
-
-                        {selectedItem.location && (
-                          <span className="detail-sub-header">
-                            <MapPin size={13} color="var(--primary)" />
-                            <span>{selectedItem.location}</span>
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Metrics specifications blocks */}
-                    {selectedItemType === 'studio' && (
-                      <div className="detail-specs-row">
-                        <div className="spec-icon-card">
-                          <div className="spec-icon-wrap"><Maximize2 size={20} /></div>
-                          <span className="spec-icon-label">{selectedItem.area || '1500 Sq.ft'}</span>
-                        </div>
-                        <div className="spec-icon-card">
-                          <div className="spec-icon-wrap"><Users size={20} /></div>
-                          <span className="spec-icon-label">{selectedItem.capacity ? `${selectedItem.capacity.split(' ')[0]} Capacity` : '15 Capacity'}</span>
-                        </div>
-                        {selectedItem.features && selectedItem.features.map((feat, idx) => (
-                          <div key={idx} className="spec-icon-card">
-                            <div className="spec-icon-wrap">{featureIconMap[feat] || <CheckCircle size={20} />}</div>
-                            <span className="spec-icon-label">{feat}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {selectedItemType !== 'studio' && (
-                      <div className="detail-metrics-grid">
-                        {selectedItemType === 'model' && (
-                          <>
-                            <div className="metric-pill">
-                              <span className="metric-label">Height</span>
-                              <span className="metric-value">{selectedItem.height}</span>
-                            </div>
-                            <div className="metric-pill">
-                              <span className="metric-label">Gender</span>
-                              <span className="metric-value">{selectedItem.gender || 'Female'}</span>
-                            </div>
-                            <div className="metric-pill">
-                              <span className="metric-label">Location</span>
-                              <span className="metric-value">{selectedItem.location || 'Hyderabad'}</span>
-                            </div>
-                            <div className="metric-pill">
-                              <span className="metric-label">Experience</span>
-                              <span className="metric-value">4+ Years</span>
-                            </div>
-                          </>
-                        )}
-                        {selectedItemType === 'gear' && (
-                          <>
-                            <div className="metric-pill">
-                              <span className="metric-label">Rental Type</span>
-                              <span className="metric-value">{selectedItem.category}</span>
-                            </div>
-                            <div className="metric-pill">
-                              <span className="metric-label">Status</span>
-                              <span className="metric-value">Available</span>
-                            </div>
-                            <div className="metric-pill">
-                              <span className="metric-label">Includes</span>
-                              <span className="metric-value">Standard Kit</span>
-                            </div>
-                          </>
-                        )}
-                        {selectedItemType === 'workshop' && (
-                          <>
-                            <div className="metric-pill">
-                              <span className="metric-label">Instructor</span>
-                              <span className="metric-value">{selectedItem.instructor}</span>
-                            </div>
-                            <div className="metric-pill">
-                              <span className="metric-label">Date</span>
-                              <span className="metric-value">{selectedItem.date}</span>
-                            </div>
-                            <div className="metric-pill">
-                              <span className="metric-label">Timing</span>
-                              <span className="metric-value">{selectedItem.timing}</span>
-                            </div>
-                            <div className="metric-pill">
-                              <span className="metric-label">Location</span>
-                              <span className="metric-value">{selectedItem.location.split(',')[0]}</span>
-                            </div>
-                          </>
-                        )}
-                        {selectedItemType === 'job' && (
-                          <>
-                            <div className="metric-pill">
-                              <span className="metric-label">Company</span>
-                              <span className="metric-value">{selectedItem.company}</span>
-                            </div>
-                            <div className="metric-pill">
-                              <span className="metric-label">Job Format</span>
-                              <span className="metric-value">{selectedItem.jobType || selectedItem.type}</span>
-                            </div>
-                            <div className="metric-pill">
-                              <span className="metric-label">Location</span>
-                              <span className="metric-value">{selectedItem.location}</span>
-                            </div>
-                            <div className="metric-pill">
-                              <span className="metric-label">Salary Rate</span>
-                              <span className="metric-value">{selectedItem.price}</span>
-                            </div>
-                          </>
-                        )}
-                        {selectedItemType === 'service' && (
-                          <>
-                            <div className="metric-pill">
-                              <span className="metric-label">Category</span>
-                              <span className="metric-value">{selectedItem.category || 'Book Shoot'}</span>
-                            </div>
-                            <div className="metric-pill">
-                              <span className="metric-label">Deliverables</span>
-                              <span className="metric-value">High-Res Photos</span>
-                            </div>
-                            <div className="metric-pill">
-                              <span className="metric-label">Location</span>
-                              <span className="metric-value">Hyderabad, TS</span>
-                            </div>
-                          </>
-                        )}
-                        {selectedItemType === 'institute' && (
-                          <>
-                            <div className="metric-pill">
-                              <span className="metric-label">Offered Course</span>
-                              <span className="metric-value">{selectedItem.course}</span>
-                            </div>
-                            <div className="metric-pill">
-                              <span className="metric-label">Admissions</span>
-                              <span className="metric-value">{selectedItem.status || 'Open'}</span>
-                            </div>
-                            <div className="metric-pill">
-                              <span className="metric-label">Rating</span>
-                              <span className="metric-value">{selectedItem.rating} ★</span>
-                            </div>
-                            <div className="metric-pill">
-                              <span className="metric-label">Campus Location</span>
-                              <span className="metric-value">{selectedItem.location}</span>
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    )}
-
-                    {/* Description */}
-                    <div className="detail-desc-box">
-                      <span className="detail-desc-title">
-                        {selectedItemType === 'studio' ? 'About Studio' :
-                         selectedItemType === 'model' ? 'About Model' :
-                         selectedItemType === 'gear' ? 'About Gear Rental' :
-                         selectedItemType === 'workshop' ? 'About Workshop' :
-                         selectedItemType === 'job' ? 'About Job Opening' :
-                         selectedItemType === 'service' ? 'About Shoot Package' :
-                         selectedItemType === 'institute' ? 'About Institute' : 'About Listing'}
-                      </span>
-                      <p className="detail-desc-text">
-                        {showFullDesc || !selectedItem.description || selectedItem.description.length <= 110 
-                          ? (selectedItem.description || "No description available.") 
-                          : `${selectedItem.description.slice(0, 110)}...`}
-                      </p>
-                      {selectedItem.description && selectedItem.description.length > 110 && (
-                        <button 
-                          className="read-more-btn-link" 
-                          onClick={() => setShowFullDesc(!showFullDesc)}
-                        >
-                          {showFullDesc ? 'Read Less' : 'Read More'}
-                        </button>
-                      )}
-                      {selectedItem.specs && (
-                        <div style={{ marginTop: '12px', borderTop: '1px dashed var(--border)', paddingTop: '10px' }}>
-                          <span className="detail-desc-title" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Technical Specifications</span>
-                          <p className="detail-desc-text" style={{ marginTop: '2px', color: 'var(--text-main)' }}>
-                            {selectedItem.specs}
+                    
+                    {selectedItemType === 'service' && !selectedPhotographer ? (
+                      // 1. Photographer selection view
+                      <div>
+                        <div className="detail-title-section">
+                          <h3 className="detail-main-title">{selectedItem.title}</h3>
+                          <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginTop: '6px' }}>
+                            {selectedItem.description}
                           </p>
                         </div>
-                      )}
-                      {selectedItem.includes && (
-                        <div style={{ marginTop: '12px', borderTop: '1px dashed var(--border)', paddingTop: '10px' }}>
-                          <span className="detail-desc-title" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>What's Included</span>
-                          <p className="detail-desc-text" style={{ marginTop: '2px', color: 'var(--text-main)' }}>
-                            {selectedItem.includes}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Model Categories */}
-                    {selectedItemType === 'model' && selectedItem.categories && (
-                      <div className="detail-amenities-section" style={{ borderTop: '1px solid var(--border)', paddingTop: '14px', marginTop: '14px' }}>
-                        <span className="detail-desc-title">Specialization Categories</span>
-                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '8px' }}>
-                          {selectedItem.categories.map((cat, idx) => (
-                            <span key={idx} className="skill-tag" style={{
-                              background: 'var(--bg-app)',
-                              border: '1px solid var(--border)',
-                              color: 'var(--text-main)',
-                              padding: '5px 12px',
-                              borderRadius: '8px',
-                              fontSize: '11px',
-                              fontWeight: '700'
-                            }}>{cat}</span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Job Skills */}
-                    {selectedItemType === 'job' && selectedItem.skills && (
-                      <div className="detail-amenities-section" style={{ borderTop: '1px solid var(--border)', paddingTop: '14px', marginTop: '14px' }}>
-                        <span className="detail-desc-title">Required Skills & Expertise</span>
-                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '8px' }}>
-                          {selectedItem.skills.map((skill, idx) => (
-                            <span key={idx} className="skill-tag" style={{
-                              background: 'var(--bg-app)',
-                              border: '1px solid var(--border)',
-                              color: 'var(--text-main)',
-                              padding: '5px 12px',
-                              borderRadius: '8px',
-                              fontSize: '11px',
-                              fontWeight: '700'
-                            }}>{skill}</span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Amenities tags */}
-                    {selectedItem.amenities && (
-                      <div className="detail-amenities-section">
-                        <span className="detail-desc-title">Amenities</span>
-                        <div className="amenities-icons-row">
-                          {selectedItem.amenities.map((amen, idx) => (
-                            <div key={idx} className="amenity-icon-card">
-                              <div className="amenity-icon-wrap">
-                                {amenityIconMap[amen] || <CheckCircle size={22} />}
-                              </div>
-                              <span className="amenity-icon-label">{amen}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Schedulers (for booking items) */}
-                    {selectedItemType !== 'job' && selectedItemType !== 'workshop' && (
-                      <div className="scheduler-box">
-                        <span className="scheduler-title">Select Date & Time</span>
                         
-                        {/* Interactive Horizontal Coming Dates Carousel */}
-                        <div className="upcoming-dates-scroll">
-                          {upcomingDatesList.map((item, idx) => {
-                            const isSelected = selectedDate === item.fullDateStr;
-                            return (
-                              <button 
-                                key={idx} 
-                                type="button"
-                                className={`upcoming-date-pill ${isSelected ? 'active' : ''}`}
-                                onClick={() => setSelectedDate(item.fullDateStr)}
-                              >
-                                <span className="date-pill-month">{item.month}</span>
-                                <span className="date-pill-day">{item.day}</span>
-                                <span className="date-pill-name">{item.name}</span>
-                              </button>
-                            );
-                          })}
-                        </div>
-
-                        {/* Selected Date Indicator */}
-                        <div className="selected-date-indicator">
-                          <span>📅 Selected Date: <strong>{selectedDate}</strong></span>
-                        </div>
-
-                        {/* Redesigned Premium Categorized Time Slots */}
-                        <div className="time-slots-container">
-                          <span className="scheduler-subtitle">Select Time Slot</span>
+                        <div style={{ borderTop: '1px solid var(--border)', marginTop: '20px', paddingTop: '20px' }}>
+                          <h4 style={{ fontFamily: 'var(--font-heading)', fontSize: '18px', fontWeight: 'bold', marginBottom: '16px', color: 'var(--text-main)' }}>
+                            Choose Your Photographer
+                          </h4>
                           
-                          {/* Group by category */}
-                          {['Morning', 'Afternoon', 'Evening'].map((category) => {
-                            const categorySlots = timeSlots.filter(s => s.category === category);
-                            return (
-                              <div key={category} className="time-category-group">
-                                <span className="time-category-title">{category}</span>
-                                <div className="time-slot-subgrid">
-                                  {categorySlots.map((slot, idx) => {
-                                    const isSelected = selectedTime === slot.time;
-                                    const isBooked = slot.status === 'Booked';
-                                    
-                                    return (
-                                      <button
-                                        key={idx}
-                                        type="button"
-                                        className={`premium-time-slot ${isSelected ? 'active' : ''} ${isBooked ? 'booked' : ''}`}
-                                        disabled={isBooked}
-                                        onClick={() => setSelectedTime(slot.time)}
-                                      >
-                                        <span className="slot-time">{slot.time}</span>
-                                        <span className={`slot-status-lbl status-${slot.status.toLowerCase().replace(' ', '-')}`}>
-                                          {slot.status}
-                                        </span>
-                                      </button>
-                                    );
-                                  })}
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                            {(() => {
+                              const photographerSpecialties = {
+                                "ps-1": ["6a380b8173c0e340a6bf3a42", "6a391527c8fbd2d7e85f0d92"], // Pre Wedding
+                                "ps-2": ["6a380b8173c0e340a6bf3a42"], // Baby
+                                "ps-3": ["6a380b8173c0e340a6bf3a42"], // Product
+                                "ps-4": ["6a380b8173c0e340a6bf3a42", "6a391527c8fbd2d7e85f0d92"], // Real Estate
+                                "ps-5": ["6a391527c8fbd2d7e85f0d92"], // Reels
+                                "ps-6": ["6a380b8173c0e340a6bf3a42", "6a391527c8fbd2d7e85f0d92"], // Maternity
+                                "ps-7": ["6a380b8173c0e340a6bf3a42"], // Corporate
+                                "ps-8": ["6a380b8173c0e340a6bf3a42", "6a391527c8fbd2d7e85f0d92"], // Birthday
+                                "ps-9": ["6a380b8173c0e340a6bf3a42"], // Fashion
+                                "ps-10": ["6a380b8173c0e340a6bf3a42"], // Food
+                                "ps-11": ["6a391527c8fbd2d7e85f0d92"] // Commercial Film
+                              };
+                              const specialtiesMap = photographerSpecialties[selectedItem.id] || [];
+                              const matchedPhotographers = profiles.filter(p => p.role === 'photographer' && (specialtiesMap.length === 0 || specialtiesMap.includes(p.id)));
+                              
+                              return matchedPhotographers.map(photog => (
+                                <div 
+                                  key={photog.id} 
+                                  style={{ 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    padding: '16px', 
+                                    borderRadius: '12px', 
+                                    border: '1.5px solid var(--border)', 
+                                    background: 'var(--bg-card)',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease',
+                                    gap: '16px'
+                                  }}
+                                  onClick={() => setSelectedPhotographer(photog)}
+                                  className="photog-select-card"
+                                >
+                                  <img 
+                                    src={photog.avatar} 
+                                    style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover' }} 
+                                    alt={photog.name} 
+                                  />
+                                  <div style={{ flex: 1 }}>
+                                    <h5 style={{ fontSize: '15px', fontWeight: 'bold', margin: '0 0 4px 0', color: 'var(--text-main)' }}>
+                                      {photog.name}
+                                    </h5>
+                                    <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: '0 0 6px 0', lineBreak: 'anywhere' }}>
+                                      {photog.bio.length > 60 ? `${photog.bio.substring(0, 60)}...` : photog.bio}
+                                    </p>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px', color: '#ffaa00', fontWeight: '600' }}>
+                                      <Star size={12} fill="#ffaa00" />
+                                      <span>4.9 (42 reviews)</span>
+                                    </div>
+                                  </div>
+                                  <button 
+                                    className="checkout-submit-btn" 
+                                    style={{ padding: '8px 14px', fontSize: '12px', borderRadius: '8px', minWidth: 'auto', width: 'auto' }}
+                                  >
+                                    Select
+                                  </button>
                                 </div>
-                              </div>
-                            );
-                          })}
+                              ));
+                            })()}
+                          </div>
                         </div>
+                      </div>
+                    ) : (
+                      // 2. Original or photographer detail view
+                      <div>
+                        {selectedItemType === 'service' && selectedPhotographer && (
+                          <button 
+                            type="button" 
+                            onClick={() => setSelectedPhotographer(null)}
+                            style={{ 
+                              display: 'flex', 
+                              alignItems: 'center', 
+                              gap: '6px', 
+                              background: 'none', 
+                              border: 'none', 
+                              color: 'var(--primary)', 
+                              fontWeight: '600', 
+                              fontSize: '13px', 
+                              cursor: 'pointer',
+                              marginBottom: '16px',
+                              padding: 0
+                            }}
+                          >
+                            <ArrowLeft size={16} /> Back to Photographers
+                          </button>
+                        )}
+
+                        <div className="detail-title-section">
+                          {selectedItem.isFeatured && (
+                            <span className="detail-featured-badge">Featured Space</span>
+                          )}
+                          <h3 className="detail-main-title">
+                            {selectedItemType === 'service' && selectedPhotographer 
+                              ? `${selectedPhotographer.name} - ${selectedItem.title}` 
+                              : selectedItem.title}
+                          </h3>
+                          
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '6px' }}>
+                            <div className="detail-rating-row">
+                              <Star size={13} fill="#ffaa00" color="#ffaa00" />
+                              <span>{selectedItem.rating}</span>
+                              <span style={{ color: 'var(--text-muted)', fontWeight: '500', fontSize: '12px' }}>
+                                ({selectedItem.reviews} Reviews)
+                              </span>
+                            </div>
+
+                            {(selectedPhotographer?.location || selectedItem.location) && (
+                              <span className="detail-sub-header">
+                                <MapPin size={13} color="var(--primary)" />
+                                <span>{selectedPhotographer ? selectedPhotographer.location : selectedItem.location}</span>
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Metrics specifications blocks */}
+                        {selectedItemType === 'studio' && (
+                          <div className="detail-specs-row">
+                            <div className="spec-icon-card">
+                              <div className="spec-icon-wrap"><Maximize2 size={20} /></div>
+                              <span className="spec-icon-label">{selectedItem.area || '1500 Sq.ft'}</span>
+                            </div>
+                            <div className="spec-icon-card">
+                              <div className="spec-icon-wrap"><Users size={20} /></div>
+                              <span className="spec-icon-label">{selectedItem.capacity ? `${selectedItem.capacity.split(' ')[0]} Capacity` : '15 Capacity'}</span>
+                            </div>
+                            {selectedItem.features && selectedItem.features.map((feat, idx) => (
+                              <div key={idx} className="spec-icon-card">
+                                <div className="spec-icon-wrap">{featureIconMap[feat] || <CheckCircle size={20} />}</div>
+                                <span className="spec-icon-label">{feat}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {selectedItemType !== 'studio' && (
+                          <div className="detail-metrics-grid">
+                            {selectedItemType === 'model' && (
+                              <>
+                                <div className="metric-pill">
+                                  <span className="metric-label">Height</span>
+                                  <span className="metric-value">{selectedItem.height}</span>
+                                </div>
+                                <div className="metric-pill">
+                                  <span className="metric-label">Gender</span>
+                                  <span className="metric-value">{selectedItem.gender || 'Female'}</span>
+                                </div>
+                                <div className="metric-pill">
+                                  <span className="metric-label">Location</span>
+                                  <span className="metric-value">{selectedItem.location || 'Hyderabad'}</span>
+                                </div>
+                                <div className="metric-pill">
+                                  <span className="metric-label">Experience</span>
+                                  <span className="metric-value">4+ Years</span>
+                                </div>
+                              </>
+                            )}
+                            {selectedItemType === 'gear' && (
+                              <>
+                                <div className="metric-pill">
+                                  <span className="metric-label">Rental Type</span>
+                                  <span className="metric-value">{selectedItem.category}</span>
+                                </div>
+                                <div className="metric-pill">
+                                  <span className="metric-label">Status</span>
+                                  <span className="metric-value">Available</span>
+                                </div>
+                                <div className="metric-pill">
+                                  <span className="metric-label">Includes</span>
+                                  <span className="metric-value">Standard Kit</span>
+                                </div>
+                              </>
+                            )}
+                            {selectedItemType === 'workshop' && (
+                              <>
+                                <div className="metric-pill">
+                                  <span className="metric-label">Instructor</span>
+                                  <span className="metric-value">{selectedItem.instructor}</span>
+                                </div>
+                                <div className="metric-pill">
+                                  <span className="metric-label">Date</span>
+                                  <span className="metric-value">{selectedItem.date}</span>
+                                </div>
+                                <div className="metric-pill">
+                                  <span className="metric-label">Timing</span>
+                                  <span className="metric-value">{selectedItem.timing}</span>
+                                </div>
+                                <div className="metric-pill">
+                                  <span className="metric-label">Location</span>
+                                  <span className="metric-value">{selectedItem.location.split(',')[0]}</span>
+                                </div>
+                              </>
+                            )}
+                            {selectedItemType === 'job' && (
+                              <>
+                                <div className="metric-pill">
+                                  <span className="metric-label">Company</span>
+                                  <span className="metric-value">{selectedItem.company}</span>
+                                </div>
+                                <div className="metric-pill">
+                                  <span className="metric-label">Job Format</span>
+                                  <span className="metric-value">{selectedItem.jobType || selectedItem.type}</span>
+                                </div>
+                                <div className="metric-pill">
+                                  <span className="metric-label">Location</span>
+                                  <span className="metric-value">{selectedItem.location}</span>
+                                </div>
+                                <div className="metric-pill">
+                                  <span className="metric-label">Salary Rate</span>
+                                  <span className="metric-value">{selectedItem.price}</span>
+                                </div>
+                              </>
+                            )}
+                            {selectedItemType === 'service' && (
+                              <>
+                                <div className="metric-pill">
+                                  <span className="metric-label">Category</span>
+                                  <span className="metric-value">{selectedItem.category || 'Book Shoot'}</span>
+                                </div>
+                                <div className="metric-pill">
+                                  <span className="metric-label">Deliverables</span>
+                                  <span className="metric-value">High-Res Photos</span>
+                                </div>
+                                <div className="metric-pill">
+                                  <span className="metric-label">Location</span>
+                                  <span className="metric-value">Hyderabad, TS</span>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Description */}
+                        <div className="detail-desc-box">
+                          <span className="detail-desc-title">
+                            {selectedItemType === 'service' && selectedPhotographer ? 'About Photographer' :
+                             selectedItemType === 'studio' ? 'About Studio' :
+                             selectedItemType === 'model' ? 'About Model' :
+                             selectedItemType === 'gear' ? 'About Gear Rental' :
+                             selectedItemType === 'workshop' ? 'About Workshop' :
+                             selectedItemType === 'job' ? 'About Job Opening' : 'About Listing'}
+                          </span>
+                          <p className="detail-desc-text">
+                            {selectedItemType === 'service' && selectedPhotographer 
+                              ? selectedPhotographer.bio 
+                              : (showFullDesc || !selectedItem.description || selectedItem.description.length <= 110 
+                                  ? (selectedItem.description || "No description available.") 
+                                  : `${selectedItem.description.slice(0, 110)}...`)}
+                          </p>
+                          {(!selectedPhotographer || selectedItemType !== 'service') && selectedItem.description && selectedItem.description.length > 110 && (
+                            <button 
+                              className="read-more-btn-link" 
+                              onClick={() => setShowFullDesc(!showFullDesc)}
+                            >
+                              {showFullDesc ? 'Read Less' : 'Read More'}
+                            </button>
+                          )}
+                        </div>
+
+                        {/* Date/Time Schedulers */}
+                        {selectedItemType !== 'job' && selectedItemType !== 'workshop' && (
+                          <div className="scheduler-box" style={{ marginTop: '20px' }}>
+                            <span className="scheduler-title">Select Date & Time</span>
+                            
+                            <div className="upcoming-dates-scroll">
+                              {upcomingDatesList.map((item, idx) => {
+                                const isSelected = selectedDate === item.fullDateStr;
+                                return (
+                                  <button 
+                                    key={idx} 
+                                    type="button"
+                                    className={`upcoming-date-pill ${isSelected ? 'active' : ''}`}
+                                    onClick={() => setSelectedDate(item.fullDateStr)}
+                                  >
+                                    <span className="date-pill-month">{item.month}</span>
+                                    <span className="date-pill-day">{item.day}</span>
+                                    <span className="date-pill-name">{item.name}</span>
+                                  </button>
+                                );
+                              })}
+                            </div>
+
+                            <div className="selected-date-indicator">
+                              <span>📅 Selected Date: <strong>{selectedDate}</strong></span>
+                            </div>
+
+                            <div className="time-slots-container">
+                              <span className="scheduler-subtitle">Select Time Slot</span>
+                              {['Morning', 'Afternoon', 'Evening'].map((category) => {
+                                const categorySlots = timeSlots.filter(s => s.category === category);
+                                return (
+                                  <div key={category} className="time-category-group">
+                                    <span className="time-category-title">{category}</span>
+                                    <div className="time-slot-subgrid">
+                                      {categorySlots.map((slot, idx) => {
+                                        const isSelected = selectedTime === slot.time;
+                                        const isBooked = slot.status === 'Booked';
+                                        return (
+                                          <button
+                                            key={idx}
+                                            type="button"
+                                            className={`premium-time-slot ${isSelected ? 'active' : ''} ${isBooked ? 'booked' : ''}`}
+                                            disabled={isBooked}
+                                            onClick={() => setSelectedTime(slot.time)}
+                                          >
+                                            <span className="slot-time">{slot.time}</span>
+                                            <span className={`slot-status-lbl status-${slot.status.toLowerCase().replace(' ', '-')}`}>
+                                              {slot.status}
+                                            </span>
+                                          </button>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
@@ -993,10 +1051,20 @@ const Layout = () => {
                       </span>
                     </div>
 
-                    <button className="checkout-submit-btn" onClick={handleBookingClick}>
-                      {selectedItemType === 'job' || selectedItemType === 'institute' ? 'Apply Now' : 
-                       selectedItemType === 'workshop' ? 'Register Now' : 'Book Now'}
-                    </button>
+                    {selectedItemType === 'service' && !selectedPhotographer ? (
+                      <button 
+                        className="checkout-submit-btn" 
+                        disabled 
+                        style={{ opacity: 0.6, cursor: 'not-allowed', background: '#ccc', color: '#666' }}
+                      >
+                        Choose Photographer
+                      </button>
+                    ) : (
+                      <button className="checkout-submit-btn" onClick={handleBookingClick}>
+                        {selectedItemType === 'job' || selectedItemType === 'institute' ? 'Apply Now' : 
+                         selectedItemType === 'workshop' ? 'Register Now' : 'Book Now'}
+                      </button>
+                    )}
                   </div>
                 </>
               )}
