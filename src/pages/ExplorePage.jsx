@@ -248,11 +248,43 @@ const ExplorePage = () => {
 
     // Search Query Filter
     if (searchQuery) {
-      list = list.filter(item => 
-        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (item.description && item.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        (item.location && item.location.toLowerCase().includes(searchQuery.toLowerCase()))
-      );
+      const queryLower = searchQuery.toLowerCase().trim();
+      list = list.filter(item => {
+        // 1. Direct match on title, description, location
+        if (item.title.toLowerCase().includes(queryLower)) return true;
+        if (item.description && item.description.toLowerCase().includes(queryLower)) return true;
+        if (item.location && item.location.toLowerCase().includes(queryLower)) return true;
+
+        // 2. Match on type/subtype
+        const subtype = getItemSubtype(item);
+        if (subtype && subtype.toLowerCase().includes(queryLower)) return true;
+
+        // 3. Match on category
+        if (item.category && item.category.toLowerCase().includes(queryLower)) return true;
+
+        // 4. Match on tags
+        if (Array.isArray(item.tags) && item.tags.some(tag => tag.toLowerCase().includes(queryLower))) return true;
+
+        // 5. If the search query is very broad (e.g. "photography services", "studios & locations", "gear rentals") 
+        // and matches the active tab label, let's keep all listings in the active tab
+        const activeTabObj = categoriesList.find(c => c.id === exploreTab);
+        if (activeTabObj && activeTabObj.label.toLowerCase().includes(queryLower)) return true;
+        
+        // 6. Split the search query into individual words and verify if they match active tab label or item fields
+        const queryWords = queryLower.split(/\s+/).filter(w => w.length > 2); // filter out tiny words
+        if (queryWords.length > 0) {
+          const labelLower = activeTabObj ? activeTabObj.label.toLowerCase() : '';
+          const matchesWords = queryWords.every(word => 
+            labelLower.includes(word) ||
+            item.title.toLowerCase().includes(word) ||
+            (item.description && item.description.toLowerCase().includes(word)) ||
+            (subtype && subtype.toLowerCase().includes(word))
+          );
+          if (matchesWords) return true;
+        }
+
+        return false;
+      });
     }
 
     // Price Filter
