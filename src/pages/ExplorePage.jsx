@@ -22,6 +22,7 @@ const ExplorePage = () => {
   // 1. Expanded/Collapsed state for left accordion filters
   const [expandedFilters, setExpandedFilters] = useState({
     categories: true,
+    subtypes: true,
     price: true,
     ratings: true,
     location: true
@@ -31,6 +32,7 @@ const ExplorePage = () => {
   const [selectedPrice, setSelectedPrice] = useState(null); // null, 'budget', 'mid', 'premium'
   const [selectedRating, setSelectedRating] = useState(null); // null, 4.5, 4.0
   const [selectedLocation, setSelectedLocation] = useState(null); // null, string
+  const [selectedSubtype, setSelectedSubtype] = useState(null); // dynamic sub-category type filter
   const [sortBy, setSortBy] = useState('popularity'); // 'popularity', 'price_asc', 'price_desc', 'rating'
   
   // Mobile filter drawer visibility toggle
@@ -47,6 +49,7 @@ const ExplorePage = () => {
     setSelectedPrice(null);
     setSelectedRating(null);
     setSelectedLocation(null);
+    setSelectedSubtype(null);
     setSearchQuery('');
   };
 
@@ -92,12 +95,76 @@ const ExplorePage = () => {
     }
   };
 
+  // Helper to dynamically compile subtypes/subcategories from active listings
+  const getSubtypes = () => {
+    const list = getRawList();
+    const subTypesSet = new Set();
+    
+    list.forEach(item => {
+      if (exploreTab === 'services') {
+        if (item.title) subTypesSet.add(item.title);
+      } else if (exploreTab === 'studios') {
+        if (item.title) subTypesSet.add(item.title);
+      } else if (exploreTab === 'models') {
+        if (Array.isArray(item.categories)) {
+          item.categories.forEach(cat => subTypesSet.add(cat));
+        } else if (item.type) {
+          subTypesSet.add(item.type);
+        }
+      } else if (exploreTab === 'rentals') {
+        if (item.category) subTypesSet.add(item.category);
+      } else if (exploreTab === 'workshops') {
+        if (item.title) subTypesSet.add(item.title);
+      } else if (exploreTab === 'jobs') {
+        if (Array.isArray(item.skills)) {
+          item.skills.forEach(skill => subTypesSet.add(skill));
+        }
+      }
+    });
+
+    return Array.from(subTypesSet);
+  };
+
+  const subTypes = getSubtypes();
+
   // Main filter and sorting calculator
   const getFilteredAndSortedList = () => {
     let list = [...getRawList()];
 
-    // Exclude inactive listings
+    // Exclude only explicitly inactive listings (active: false). Mock data has no active field — always show it.
     list = list.filter(item => item.active !== false);
+
+    // Subtype/Subcategory Filter
+    if (selectedSubtype) {
+      list = list.filter(item => {
+        if (exploreTab === 'services') {
+          return item.title === selectedSubtype;
+        }
+        if (exploreTab === 'studios') {
+          return item.title === selectedSubtype;
+        }
+        if (exploreTab === 'models') {
+          if (Array.isArray(item.categories)) {
+            return item.categories.includes(selectedSubtype);
+          }
+          return item.type === selectedSubtype;
+        }
+        if (exploreTab === 'rentals') {
+          return item.category === selectedSubtype;
+        }
+        if (exploreTab === 'workshops') {
+          return item.title === selectedSubtype;
+        }
+        if (exploreTab === 'jobs') {
+          if (Array.isArray(item.skills)) {
+            return item.skills.includes(selectedSubtype);
+          }
+          return false;
+        }
+        return true;
+      });
+    }
+
 
     // Search Query Filter
     if (searchQuery) {
@@ -160,7 +227,7 @@ const ExplorePage = () => {
     <div className="explore-sidebar-inner">
       <div className="sidebar-header-row">
         <h3>Filters</h3>
-        {(selectedPrice || selectedRating || selectedLocation || searchQuery) && (
+        {(selectedPrice || selectedRating || selectedLocation || selectedSubtype || searchQuery) && (
           <button className="clear-all-btn-link" onClick={clearAllFilters}>Clear All</button>
         )}
       </div>
@@ -184,6 +251,7 @@ const ExplorePage = () => {
                     setSelectedPrice(null);
                     setSelectedRating(null);
                     setSelectedLocation(null);
+                    setSelectedSubtype(null);
                   }}
                 >
                   {cat.label}
@@ -193,6 +261,35 @@ const ExplorePage = () => {
           </div>
         )}
       </div>
+
+      {/* Accordion 1.5: Specific Types / Subcategories */}
+      {subTypes.length > 0 && (
+        <div className="filter-accordion">
+          <button className="accordion-header" onClick={() => toggleAccordion('subtypes')}>
+            <span>{exploreTab === 'services' ? 'Service Type' : 
+                   exploreTab === 'studios' ? 'Studio Name' : 
+                   exploreTab === 'models' ? 'Model Category' : 
+                   exploreTab === 'rentals' ? 'Gear Category' : 
+                   exploreTab === 'workshops' ? 'Workshop Topic' : 'Required Skills'}</span>
+            {expandedFilters.subtypes ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          </button>
+          {expandedFilters.subtypes && (
+            <div className="accordion-content">
+              <div className="filter-pills-wrap">
+                {subTypes.map(type => (
+                  <button
+                    key={type}
+                    className={`filter-pill-btn ${selectedSubtype === type ? 'active' : ''}`}
+                    onClick={() => setSelectedSubtype(t => t === type ? null : type)}
+                  >
+                    {type}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Accordion 2: Price Filters */}
       {exploreTab !== 'jobs' && (
@@ -315,7 +412,7 @@ const ExplorePage = () => {
         </div>
 
         {/* Active Filters Chips row */}
-        {(selectedPrice || selectedRating || selectedLocation || searchQuery) && (
+        {(selectedPrice || selectedRating || selectedLocation || selectedSubtype || searchQuery) && (
           <div className="active-filters-chips-row">
             <span className="active-chips-title">Active Filters:</span>
             <div className="active-chips-list">
@@ -323,6 +420,12 @@ const ExplorePage = () => {
                 <span className="filter-active-chip">
                   Search: "{searchQuery}"
                   <button className="chip-remove-btn" onClick={() => setSearchQuery('')}><X size={10} /></button>
+                </span>
+              )}
+              {selectedSubtype && (
+                <span className="filter-active-chip">
+                  Type: "{selectedSubtype}"
+                  <button className="chip-remove-btn" onClick={() => setSelectedSubtype(null)}><X size={10} /></button>
                 </span>
               )}
               {selectedPrice && (

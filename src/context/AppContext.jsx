@@ -377,7 +377,7 @@ export const AppProvider = ({ children }) => {
     return () => clearInterval(interval);
   }, [activeProfileId]);
 
-  // Load listings from MongoDB on startup
+  // Load listings from MongoDB on startup — merge with mock data (mock is always kept as baseline)
   useEffect(() => {
     fetch('/api/listings')
       .then(res => {
@@ -385,7 +385,7 @@ export const AppProvider = ({ children }) => {
         return res.json();
       })
       .then(data => {
-        if (Array.isArray(data)) {
+        if (Array.isArray(data) && data.length > 0) {
           const dbServices = [];
           const dbStudios = [];
           const dbModels = [];
@@ -394,6 +394,8 @@ export const AppProvider = ({ children }) => {
           const dbJobs = [];
 
           data.forEach(item => {
+            // Only include active DB listings
+            if (item.active === false) return;
             const mappedItem = {
               ...item,
               id: item.id || item._id,
@@ -407,6 +409,7 @@ export const AppProvider = ({ children }) => {
             else if (item.type === 'job') dbJobs.push(mappedItem);
           });
 
+          // Merge: DB items first (newest), then keep existing mock data that doesn't clash by id
           if (dbServices.length > 0) {
             setServices(prev => {
               const filteredPrev = prev.filter(p => !dbServices.some(d => d.id === p.id));
@@ -444,9 +447,12 @@ export const AppProvider = ({ children }) => {
             });
           }
         }
+        // If DB returns nothing or empty — mock data stays as-is (no replacement)
       })
-      .catch(err => console.warn('Failed to load listings from DB:', err));
+      .catch(err => console.warn('Failed to load listings from DB — showing mock data:', err));
   }, []);
+
+
 
 
   // Toggle Like state

@@ -133,9 +133,31 @@ const HomePage = () => {
     navigate('/explore');
   };
 
+  // ---- Booking Widget State ----
+  const [bookEvent, setBookEvent]       = React.useState('Wedding Photography');
+  const [bookLocation, setBookLocation] = React.useState('Hyderabad');
+  const [bookPrice, setBookPrice]       = React.useState(1000000);
+  const [bookDate, setBookDate]         = React.useState('');
+
+  const eventOptions = [
+    'Wedding Photography', 'Pre-Wedding Shoot', 'Baby & Maternity',
+    'Fashion Editorial', 'Corporate Events', 'Product Photography',
+    'Real Estate', 'Food Photography', 'Music Videos', 'Reels & Ads'
+  ];
+
+  const formatPrice = (val) => {
+    if (val >= 100000) return `₹${(val / 100000).toFixed(val % 100000 === 0 ? 0 : 1)} L`;
+    return `₹${val.toLocaleString('en-IN')}`;
+  };
+
+  const handleBookingSearch = () => {
+    setExploreTab('services');
+    navigate('/explore');
+  };
+
   return (
     <>
-      {/* ======= FULL-WIDTH CINEMATIC HERO SLIDER ======= */}
+      {/* ======= FULL-WIDTH SPLIT HERO SLIDER ======= */}
       <div className="hero-carousel-container">
 
         {/* Slide Background Image (full bleed) */}
@@ -145,7 +167,7 @@ const HomePage = () => {
           style={{ backgroundImage: `url(${import.meta.env.BASE_URL}${slides[currentSlide].image})` }}
         />
 
-        {/* Dark gradient overlay for readability */}
+        {/* Dark gradient overlay */}
         <div className="hero-overlay" />
 
         {/* Navigation Arrows */}
@@ -156,52 +178,123 @@ const HomePage = () => {
           <ChevronRight size={22} />
         </button>
 
-        {/* Center Content */}
-        <div className="hero-center-content active-slide" key={`content-${currentSlide}`}>
+        {/* ===== SPLIT LAYOUT: Left text | Right widget ===== */}
+        <div className="hero-split-layout active-slide" key={`content-${currentSlide}`}>
 
-          {/* Pill Tags */}
-          <div className="hero-tags-row">
-            <span className="hero-tag">{slides[currentSlide].tag}</span>
-            <span className="hero-tag-green">{slides[currentSlide].tagGreen}</span>
+          {/* ---- LEFT: Text Content ---- */}
+          <div className="hero-left-col">
+            <div className="hero-tags-row">
+              <span className="hero-tag">{slides[currentSlide].tag}</span>
+              <span className="hero-tag-green">{slides[currentSlide].tagGreen}</span>
+            </div>
+
+            <h1 className="hero-title">{slides[currentSlide].title}</h1>
+            <p className="hero-subtitle">{slides[currentSlide].subtitle}</p>
+
+            <div className="hero-cta-row">
+              <button className="hero-btn"
+                onClick={() => { setExploreTab(slides[currentSlide].cta1Tab); navigate('/explore'); }}>
+                {slides[currentSlide].cta1Text}
+              </button>
+              <button className="hero-btn-outline"
+                onClick={() => { setExploreTab(slides[currentSlide].cta2Tab); navigate('/explore'); }}>
+                {slides[currentSlide].cta2Text}
+              </button>
+            </div>
+
+            <div className="hero-trust-strip">{slides[currentSlide].trustText}</div>
+
+            {/* Stats inline */}
+            <div className="hero-stats-inline">
+              {slides[currentSlide].stats.map((stat, idx) => (
+                <React.Fragment key={idx}>
+                  {idx > 0 && <div className="hero-stat-divider" />}
+                  <div className="hero-stat-pill">
+                    <span className="hero-stat-num">{stat.num}</span>
+                    <span className="hero-stat-label">{stat.label}</span>
+                  </div>
+                </React.Fragment>
+              ))}
+            </div>
           </div>
 
-          {/* Main Headline */}
-          <h1 className="hero-title">{slides[currentSlide].title}</h1>
+          {/* ---- RIGHT: Booking Widget ---- */}
+          <div className="hero-booking-widget">
+            <div className="booking-widget-header">
+              <span className="booking-widget-title">Find &amp; Book Instantly</span>
+              <span className="booking-widget-sub">Fill in your requirements below</span>
+            </div>
 
-          {/* Subtitle */}
-          <p className="hero-subtitle">{slides[currentSlide].subtitle}</p>
+            <div className="booking-widget-body">
+              {/* Row 1: Event + Location */}
+              <div className="booking-row">
+                <div className="booking-field">
+                  <label className="booking-label">
+                    <span className="booking-label-icon">🎬</span> EVENT
+                  </label>
+                  <div className="booking-select-wrap">
+                    <select
+                      className="booking-select"
+                      value={bookEvent}
+                      onChange={e => setBookEvent(e.target.value)}
+                    >
+                      {eventOptions.map(opt => (
+                        <option key={opt} value={opt}>{opt}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
 
-          {/* CTA Buttons */}
-          <div className="hero-cta-row">
-            <button
-              className="hero-btn"
-              onClick={() => { setExploreTab(slides[currentSlide].cta1Tab); navigate('/explore'); }}
-            >
-              {slides[currentSlide].cta1Text}
-            </button>
-            <button
-              className="hero-btn-outline"
-              onClick={() => { setExploreTab(slides[currentSlide].cta2Tab); navigate('/explore'); }}
-            >
-              {slides[currentSlide].cta2Text}
-            </button>
-          </div>
-
-          {/* Trust Strip */}
-          <div className="hero-trust-strip">{slides[currentSlide].trustText}</div>
-        </div>
-
-        {/* Floating Stats Bar at bottom */}
-        <div className="hero-stats-bar active-slide" key={`stats-${currentSlide}`}>
-          {slides[currentSlide].stats.map((stat, idx) => (
-            <React.Fragment key={idx}>
-              {idx > 0 && <div className="hero-stat-divider" />}
-              <div className="hero-stat-pill">
-                <span className="hero-stat-num">{stat.num}</span>
-                <span className="hero-stat-label">{stat.label}</span>
+                <div className="booking-field">
+                  <label className="booking-label">
+                    <span className="booking-label-icon">📍</span> LOCATION
+                  </label>
+                  <input
+                    className="booking-input"
+                    type="text"
+                    value={bookLocation}
+                    onChange={e => setBookLocation(e.target.value)}
+                    placeholder="City or Area"
+                  />
+                </div>
               </div>
-            </React.Fragment>
-          ))}
+
+              {/* Row 2: Price + Date */}
+              <div className="booking-row">
+                <div className="booking-field">
+                  <label className="booking-label">
+                    <span className="booking-label-icon">₹</span>
+                    MAX PRICE: <strong style={{ color: '#C8102E' }}>{formatPrice(bookPrice)}</strong>
+                  </label>
+                  <input
+                    className="booking-range"
+                    type="range"
+                    min={5000}
+                    max={1000000}
+                    step={5000}
+                    value={bookPrice}
+                    onChange={e => setBookPrice(Number(e.target.value))}
+                  />
+                </div>
+
+                <div className="booking-field">
+                  <label className="booking-label">
+                    <span className="booking-label-icon">📅</span> PHOTOSHOOT DATE
+                  </label>
+                  <input
+                    className="booking-input booking-date"
+                    type="date"
+                    value={bookDate}
+                    onChange={e => setBookDate(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <button className="booking-search-btn" onClick={handleBookingSearch}>
+              Search
+            </button>
+          </div>
         </div>
 
         {/* Slide Indicators */}
@@ -215,6 +308,7 @@ const HomePage = () => {
           ))}
         </div>
       </div>
+
 
 
       {/* Category Grid Row */}
