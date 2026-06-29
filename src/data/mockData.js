@@ -33,7 +33,7 @@ export const popularServices = [
     rating: 4.7,
     reviews: 88,
     category: "Book Shoot",
-    image: "https://images.unsplash.com/photo-1507504038482-762fe9a8be8f?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=500&q=80",
     description: "Cinematic romantic beach photoshoot at sunrise/sunset with drone b-rolls, custom props, and slow-motion video coordination.",
     tags: ["Beach"]
   },
