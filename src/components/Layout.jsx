@@ -42,7 +42,9 @@ import {
   Sliders,
   Award,
   Video,
-  Briefcase
+  Briefcase,
+  Info,
+  AlertCircle
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 
@@ -106,6 +108,15 @@ const Layout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [userDropdownOpen, setUserDropdownOpen] = React.useState(false);
+  const [notificationDropdownOpen, setNotificationDropdownOpen] = React.useState(false);
+  const [readNotificationIds, setReadNotificationIds] = React.useState(() => {
+    try {
+      const stored = localStorage.getItem('read_notification_ids');
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
   const [bookingStatus, setBookingStatus] = React.useState('idle'); // 'idle' | 'processing' | 'success'
   const [showFullDesc, setShowFullDesc] = React.useState(false);
   const scrollRef = React.useRef(null);
@@ -164,17 +175,127 @@ const Layout = () => {
     { time: '07:00 PM', status: 'Available', category: 'Evening' }
   ];
 
-  // Calculate pending booking notification count
-  const pendingCount = bookings.filter(b => {
-    if (!currentUser) return false;
-    if (currentUser.role === 'photographer') {
-      return (b.ownerId === activeProfileId || b.creatorId === activeProfileId) && b.status === 'pending';
+  // Derive notifications from bookings based on active workspace role
+  const activeNotifications = React.useMemo(() => {
+    if (!currentUser) return [];
+    
+    const list = [];
+    
+    if (currentRole === 'photographer') {
+      bookings.forEach(b => {
+        if (b.ownerId === activeProfileId || b.creatorId === activeProfileId) {
+          if (b.status === 'pending') {
+            list.push({
+              id: `photographer-pending-${b.id}`,
+              type: 'pending',
+              title: 'New Booking Request',
+              message: `"${b.title}" requested by ${b.clientName || 'Client'}.`,
+              timestamp: b.date || 'Upcoming',
+              link: '/dashboard/photographer',
+              bookingId: b.id
+            });
+          } else if (b.status === 'approved') {
+            list.push({
+              id: `photographer-approved-${b.id}`,
+              type: 'success',
+              title: 'Booking Approved',
+              message: `You approved "${b.title}" for ${b.clientName || 'Client'}.`,
+              timestamp: b.date || 'Upcoming',
+              link: '/dashboard/photographer',
+              bookingId: b.id
+            });
+          } else if (b.status === 'rejected' || b.status === 'declined') {
+            list.push({
+              id: `photographer-rejected-${b.id}`,
+              type: 'danger',
+              title: 'Booking Declined',
+              message: `You declined "${b.title}" request.`,
+              timestamp: b.date || 'Upcoming',
+              link: '/dashboard/photographer',
+              bookingId: b.id
+            });
+          }
+        }
+      });
+    } else if (currentRole === 'admin') {
+      bookings.forEach(b => {
+        if (b.status === 'pending') {
+          list.push({
+            id: `admin-pending-${b.id}`,
+            type: 'pending',
+            title: 'Pending Booking Request',
+            message: `"${b.title}" requires admin review.`,
+            timestamp: b.date || 'Upcoming',
+            link: '/dashboard/admin',
+            bookingId: b.id
+          });
+        }
+      });
+    } else if (currentRole === 'client') {
+      bookings.forEach(b => {
+        if (b.clientId === activeProfileId || (currentUser && (b.clientId === currentUser.id || b.clientId === currentUser._id))) {
+          if (b.status === 'pending') {
+            list.push({
+              id: `client-pending-${b.id}`,
+              type: 'info',
+              title: 'Booking Request Sent',
+              message: `Booking for "${b.title}" is pending approval.`,
+              timestamp: b.date || 'Upcoming',
+              link: '/dashboard/client',
+              bookingId: b.id
+            });
+          } else if (b.status === 'approved') {
+            list.push({
+              id: `client-approved-${b.id}`,
+              type: 'success',
+              title: 'Booking Confirmed 🎉',
+              message: `"${b.title}" has been approved!`,
+              timestamp: b.date || 'Upcoming',
+              link: '/dashboard/client',
+              bookingId: b.id
+            });
+          } else if (b.status === 'rejected' || b.status === 'declined') {
+            list.push({
+              id: `client-rejected-${b.id}`,
+              type: 'danger',
+              title: 'Booking Declined',
+              message: `"${b.title}" was declined by host.`,
+              timestamp: b.date || 'Upcoming',
+              link: '/dashboard/client',
+              bookingId: b.id
+            });
+          }
+        }
+      });
     }
-    if (currentUser.role === 'admin') {
-      return b.status === 'pending';
+    
+    return list;
+  }, [bookings, currentRole, currentUser, activeProfileId]);
+
+  const unreadNotifications = activeNotifications.filter(n => !readNotificationIds.includes(n.id));
+  const unreadCount = unreadNotifications.length;
+
+  const markAllAsRead = () => {
+    const allIds = activeNotifications.map(n => n.id);
+    setReadNotificationIds(allIds);
+    try {
+      localStorage.setItem('read_notification_ids', JSON.stringify(allIds));
+    } catch (e) {
+      console.error(e);
     }
-    return false;
-  }).length;
+  };
+
+  const markAsRead = (id) => {
+    if (!readNotificationIds.includes(id)) {
+      const updated = [...readNotificationIds, id];
+      setReadNotificationIds(updated);
+      try {
+        localStorage.setItem('read_notification_ids', JSON.stringify(updated));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
 
   React.useEffect(() => {
     document.body.className = `${theme}-theme`;
@@ -317,18 +438,86 @@ const Layout = () => {
                 {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
               </button>
 
-              <button 
-                className="icon-btn-wrap"
-                onClick={() => {
-                  if (currentRole === 'photographer') navigate('/dashboard/photographer');
-                  else if (currentRole === 'admin') navigate('/dashboard/admin');
-                  else if (currentRole === 'client') navigate('/dashboard/client');
-                }}
-                title={pendingCount > 0 ? `${pendingCount} Pending Bookings` : 'Notifications'}
+              <div 
+                className="notification-dropdown-container"
+                onMouseLeave={() => setNotificationDropdownOpen(false)}
               >
-                <Bell size={18} />
-                {pendingCount > 0 && <span className="badge-count">{pendingCount}</span>}
-              </button>
+                <button 
+                  className={`icon-btn-wrap ${notificationDropdownOpen ? 'active' : ''}`}
+                  onClick={() => setNotificationDropdownOpen(!notificationDropdownOpen)}
+                  title="Notifications"
+                >
+                  <Bell size={18} />
+                  {unreadCount > 0 && <span className="badge-count">{unreadCount}</span>}
+                </button>
+                
+                {notificationDropdownOpen && (
+                  <div className="header-notification-dropdown-card">
+                    <div className="notification-dropdown-header">
+                      <span className="notification-title">Notifications</span>
+                      {unreadCount > 0 && (
+                        <button className="mark-all-read-btn" onClick={markAllAsRead}>
+                          Mark all read
+                        </button>
+                      )}
+                    </div>
+                    
+                    <div className="notification-dropdown-body">
+                      {activeNotifications.length === 0 ? (
+                        <div className="notification-empty-state">
+                          <Bell size={32} style={{ opacity: 0.3, marginBottom: '8px' }} />
+                          <p className="empty-title">All caught up!</p>
+                          <p className="empty-subtitle">No notifications for your current workspace role.</p>
+                        </div>
+                      ) : (
+                        activeNotifications.map(n => {
+                          const isUnread = !readNotificationIds.includes(n.id);
+                          return (
+                            <div 
+                              key={n.id} 
+                              className={`notification-item ${n.type} ${isUnread ? 'unread' : ''}`}
+                              onClick={() => {
+                                markAsRead(n.id);
+                                setNotificationDropdownOpen(false);
+                                navigate(n.link);
+                              }}
+                            >
+                              <div className="notification-item-icon">
+                                {n.type === 'success' && <CheckCircle size={14} />}
+                                {n.type === 'pending' && <Bell size={14} />}
+                                {n.type === 'danger' && <X size={14} />}
+                                {n.type === 'info' && <Info size={14} />}
+                              </div>
+                              <div className="notification-item-text">
+                                <div className="notification-item-title-row">
+                                  <span className="notification-item-title">{n.title}</span>
+                                  {isUnread && <span className="unread-dot"></span>}
+                                </div>
+                                <p className="notification-item-msg">{n.message}</p>
+                                <span className="notification-item-time">{n.timestamp}</span>
+                              </div>
+                            </div>
+                          );
+                        })
+                      )}
+                    </div>
+                    
+                    <div className="notification-dropdown-footer">
+                      <button 
+                        className="view-dashboard-link-btn"
+                        onClick={() => {
+                          setNotificationDropdownOpen(false);
+                          if (currentRole === 'photographer') navigate('/dashboard/photographer');
+                          else if (currentRole === 'admin') navigate('/dashboard/admin');
+                          else if (currentRole === 'client') navigate('/dashboard/client');
+                        }}
+                      >
+                        Go to Workspace Dashboard
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
 
               <button 
                 className="header-primary-cta"
