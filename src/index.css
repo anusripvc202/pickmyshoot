@@ -2421,6 +2421,63 @@ body {
   box-shadow: var(--shadow-md);
 }
 
+/* Active state when card's subtype filter is selected */
+.explore-card-item.card-subtype-active {
+  border: 2px solid var(--primary);
+  box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.12);
+  transform: translateY(-4px);
+}
+
+/* View Details button — shown on highlighted/filtered card */
+.card-view-details-btn {
+  width: 100%;
+  margin-top: 6px;
+  padding: 8px 12px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+.card-view-details-btn:hover {
+  background: #a50d25;
+  transform: scale(1.02);
+}
+
+/* Contextual drill-down filter accordion — visually distinct */
+.context-filter-accordion {
+  background: linear-gradient(135deg, rgba(200, 16, 46, 0.04), rgba(200, 16, 46, 0.08));
+  border-radius: 10px;
+  border: 1px dashed rgba(200, 16, 46, 0.25);
+  margin-top: 2px;
+}
+.context-filter-accordion .accordion-header {
+  font-size: 12.5px;
+  color: var(--primary);
+}
+.filter-pill-btn.context-pill {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-color: rgba(200, 16, 46, 0.2);
+  color: #555;
+}
+.filter-pill-btn.context-pill.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+.filter-active-chip.context-chip {
+  background: rgba(200, 16, 46, 0.08);
+  border: 1px solid rgba(200, 16, 46, 0.3);
+  color: var(--primary);
+}
+
+
+
 .explore-img-wrap {
   width: 100%;
   height: 180px;

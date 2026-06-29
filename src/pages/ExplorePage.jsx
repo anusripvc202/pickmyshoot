@@ -23,20 +23,57 @@ const ExplorePage = () => {
   const [expandedFilters, setExpandedFilters] = useState({
     categories: true,
     subtypes: true,
+    context: true,
     price: true,
     ratings: true,
     location: true
   });
 
   // 2. Active filter states
-  const [selectedPrice, setSelectedPrice] = useState(null); // null, 'budget', 'mid', 'premium'
-  const [selectedRating, setSelectedRating] = useState(null); // null, 4.5, 4.0
-  const [selectedLocation, setSelectedLocation] = useState(null); // null, string
-  const [selectedSubtype, setSelectedSubtype] = useState(null); // dynamic sub-category type filter
-  const [sortBy, setSortBy] = useState('popularity'); // 'popularity', 'price_asc', 'price_desc', 'rating'
+  const [selectedPrice, setSelectedPrice] = useState(null);
+  const [selectedRating, setSelectedRating] = useState(null);
+  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [selectedSubtype, setSelectedSubtype] = useState(null);
+  const [selectedContextTag, setSelectedContextTag] = useState(null); // contextual drill-down filter
+  const [sortBy, setSortBy] = useState('popularity');
   
   // Mobile filter drawer visibility toggle
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+
+  // Contextual filters — shown when a specific subtype is selected
+  const contextualFiltersMap = {
+    // Photography Services
+    'Product Photography':     { label: 'Shoot Style',      options: ['White Background', 'Lifestyle Setup', 'Flat Lay', 'Packaging', '360° Product'] },
+    'Pre Wedding Shoot':       { label: 'Location Theme',   options: ['Outdoor / Nature', 'Indoor Studio', 'Beach', 'Garden', 'Mountains'] },
+    'Baby Photoshoot':         { label: 'Session Type',     options: ['Newborn (0–4 wks)', '3–6 Months', 'Cake Smash', 'Indoor Studio', 'Outdoor'] },
+    'Real Estate Photography': { label: 'Property Type',   options: ['Apartment', 'Villa / Bungalow', 'Office Space', 'Commercial', 'Aerial HDR'] },
+    'Reels & Social Media Shoot': { label: 'Platform',     options: ['Instagram Reels', 'TikTok', 'YouTube Shorts', 'LinkedIn'] },
+    'Maternity Shoot':         { label: 'Session Style',   options: ['Studio', 'Outdoor Garden', 'Home Setup', 'Gown Session', 'Couple Shoot'] },
+    'Corporate Shoot':         { label: 'Shoot Type',      options: ['Headshots', 'Team Group Photo', 'Office Culture', 'Event Coverage', 'Annual Report'] },
+    'Birthday Shoot':          { label: 'Theme',           options: ["Kids' Party", 'Adult Milestone', 'Cake Smash', 'Outdoor Fun', 'Surprise Party'] },
+    'Fashion Catalog Shoot':   { label: 'Fashion Style',   options: ['Ethnic / Traditional', 'Western', 'Bridal', 'Sportswear', 'Casual Lifestyle'] },
+    'Food & Culinary Shoot':   { label: 'Purpose',         options: ['Restaurant Menu', 'Packaging Design', 'Social Media', 'Cookbook / Editorial'] },
+    'Commercial Film Shoot':   { label: 'Video Type',      options: ['Brand Ad Film', 'Corporate Video', 'Client Testimonials', 'Product Demo'] },
+    // Gear Rentals
+    'Camera':  { label: 'Camera Type',  options: ['Full Frame Mirrorless', 'APS-C / Crop', 'Cinema / Film', 'Action Cam'] },
+    'Lens':    { label: 'Lens Type',    options: ['Wide Angle', 'Standard Zoom', 'Telephoto', 'Macro', 'Prime / Fixed'] },
+    'Lights':  { label: 'Light Type',   options: ['LED Continuous', 'Strobe / Flash', 'Ring Light', 'Softbox Panel'] },
+    'Drones':  { label: 'Drone Use',    options: ['Aerial Photography', 'Video Mapping', 'Events & Weddings', 'Real Estate'] },
+    'Gimbal':  { label: 'Gimbal Use',   options: ['Handheld Video', '3-Axis Motorized', 'Smartphone Mount', 'Run & Gun'] },
+    // Models
+    'Fashion':    { label: 'Model Style',   options: ['Editorial', 'Runway', 'Catalog Shoot', 'Lookbook'] },
+    'Commercial': { label: 'Project Type',  options: ['E-commerce', 'Brand Campaign', 'Corporate', 'Print Ad'] },
+    'Ethnic':     { label: 'Wear Type',     options: ['Saree / Lehenga', 'Salwar / Kurta', 'Bridal Jewelry', 'Indo-western'] },
+    'Fitness':    { label: 'Fitness Type',  options: ['Gym / Athletic', 'Yoga', 'Outdoor Sports', 'Nutrition Brand'] },
+    'Bridal':     { label: 'Bridal Style',  options: ['Hindu Wedding', 'Muslim Wedding', 'Christian Wedding', 'Mehendi / Pre-wedding'] },
+    // Workshops
+    'Cinematography Masterclass': { label: 'Format',  options: ['In-person Workshop', 'Online / Zoom', 'Weekend Batch', 'Hands-on Practicals'] },
+    'Drone Photography Workshop': { label: 'Format',  options: ['In-person Workshop', 'Outdoor Flight Session', 'Beginner Friendly'] },
+    'Video Editing with Premiere Pro': { label: 'Format', options: ['Online / Virtual', 'Evening Batch', 'One-on-One Mentoring'] },
+    'Portrait Photography Bootcamp':   { label: 'Format', options: ['In-person Studio', 'Live Model Session', 'Weekend Bootcamp'] },
+    'Reels Creation & IG Growth':       { label: 'Format', options: ['Virtual / Online', 'Evening Class', 'Live Q&A Included'] },
+    'Wedding Photography Bootcamp':    { label: 'Format', options: ['In-person', 'Lightroom Editing Included', 'Certificate Course'] },
+  };
 
   const toggleAccordion = (section) => {
     setExpandedFilters(prev => ({
@@ -50,6 +87,7 @@ const ExplorePage = () => {
     setSelectedRating(null);
     setSelectedLocation(null);
     setSelectedSubtype(null);
+    setSelectedContextTag(null);
     setSearchQuery('');
   };
 
@@ -126,6 +164,22 @@ const ExplorePage = () => {
   };
 
   const subTypes = getSubtypes();
+
+  // Helper to get the filter key for a given card item (used for click-to-filter)
+  const getItemSubtype = (item) => {
+    if (exploreTab === 'services' || exploreTab === 'studios' || exploreTab === 'workshops') {
+      return item.title || null;
+    }
+    if (exploreTab === 'models') {
+      if (Array.isArray(item.categories) && item.categories.length > 0) return item.categories[0];
+      return item.type || null;
+    }
+    if (exploreTab === 'rentals') return item.category || null;
+    if (exploreTab === 'jobs') {
+      if (Array.isArray(item.skills) && item.skills.length > 0) return item.skills[0];
+    }
+    return null;
+  };
 
   // Main filter and sorting calculator
   const getFilteredAndSortedList = () => {
@@ -280,9 +334,37 @@ const ExplorePage = () => {
                   <button
                     key={type}
                     className={`filter-pill-btn ${selectedSubtype === type ? 'active' : ''}`}
-                    onClick={() => setSelectedSubtype(t => t === type ? null : type)}
+                    onClick={() => {
+                      setSelectedSubtype(t => t === type ? null : type);
+                      setSelectedContextTag(null); // reset contextual filter when subtype changes
+                    }}
                   >
                     {type}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Accordion 1.75: Contextual drill-down filters (appear only when a subtype is selected) */}
+      {selectedSubtype && contextualFiltersMap[selectedSubtype] && (
+        <div className="filter-accordion context-filter-accordion">
+          <button className="accordion-header" onClick={() => toggleAccordion('context')}>
+            <span>🎯 {contextualFiltersMap[selectedSubtype].label}</span>
+            {expandedFilters.context ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          </button>
+          {expandedFilters.context && (
+            <div className="accordion-content">
+              <div className="filter-pills-wrap">
+                {contextualFiltersMap[selectedSubtype].options.map(opt => (
+                  <button
+                    key={opt}
+                    className={`filter-pill-btn context-pill ${selectedContextTag === opt ? 'active' : ''}`}
+                    onClick={() => setSelectedContextTag(t => t === opt ? null : opt)}
+                  >
+                    {opt}
                   </button>
                 ))}
               </div>
@@ -412,7 +494,7 @@ const ExplorePage = () => {
         </div>
 
         {/* Active Filters Chips row */}
-        {(selectedPrice || selectedRating || selectedLocation || selectedSubtype || searchQuery) && (
+        {(selectedPrice || selectedRating || selectedLocation || selectedSubtype || selectedContextTag || searchQuery) && (
           <div className="active-filters-chips-row">
             <span className="active-chips-title">Active Filters:</span>
             <div className="active-chips-list">
@@ -425,7 +507,13 @@ const ExplorePage = () => {
               {selectedSubtype && (
                 <span className="filter-active-chip">
                   Type: "{selectedSubtype}"
-                  <button className="chip-remove-btn" onClick={() => setSelectedSubtype(null)}><X size={10} /></button>
+                  <button className="chip-remove-btn" onClick={() => { setSelectedSubtype(null); setSelectedContextTag(null); }}><X size={10} /></button>
+                </span>
+              )}
+              {selectedContextTag && (
+                <span className="filter-active-chip context-chip">
+                  🎯 {selectedContextTag}
+                  <button className="chip-remove-btn" onClick={() => setSelectedContextTag(null)}><X size={10} /></button>
                 </span>
               )}
               {selectedPrice && (
@@ -457,9 +545,24 @@ const ExplorePage = () => {
             {filteredItems.map(item => {
               // Calculate a simulated likes percentage based on rating (e.g. 4.8 / 5 -> 96%)
               const likesPercentage = Math.round((item.rating || 4.5) * 20);
-              
+              const itemSubtype = getItemSubtype(item);
+              const isFilterSelected = selectedSubtype === itemSubtype;
+
               return (
-                <div key={item.id} className="explore-card-item bms-style" onClick={() => openDetails(item, exploreTab === 'rentals' ? 'gear' : exploreTab.slice(0, -1))}>
+                <div
+                  key={item.id}
+                  className={`explore-card-item bms-style ${isFilterSelected ? 'card-subtype-active' : ''}`}
+                  onClick={() => {
+                    // First click: apply the subtype filter to show related cards
+                    if (itemSubtype && selectedSubtype !== itemSubtype) {
+                      setSelectedSubtype(itemSubtype);
+                      setSelectedContextTag(null); // reset contextual filter for new subtype
+                    } else {
+                      // Second click (or no subtype): open details modal
+                      openDetails(item, exploreTab === 'rentals' ? 'gear' : exploreTab.slice(0, -1));
+                    }
+                  }}
+                >
                   <div className="explore-img-wrap">
                     <img src={item.image} className="card-image" alt={item.title} />
                     
@@ -503,6 +606,18 @@ const ExplorePage = () => {
                         <span>{item.rating || '4.5'}</span>
                       </div>
                     </div>
+                    {/* View Details button — appears when this card's filter is already selected */}
+                    {isFilterSelected && (
+                      <button
+                        className="card-view-details-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openDetails(item, exploreTab === 'rentals' ? 'gear' : exploreTab.slice(0, -1));
+                        }}
+                      >
+                        View Details →
+                      </button>
+                    )}
                   </div>
                 </div>
               );
