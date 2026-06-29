@@ -140,9 +140,9 @@ const ExplorePage = () => {
     
     list.forEach(item => {
       if (exploreTab === 'services') {
-        if (item.title) subTypesSet.add(item.title);
+        if (item.serviceType || item.title) subTypesSet.add(item.serviceType || item.title);
       } else if (exploreTab === 'studios') {
-        if (item.title) subTypesSet.add(item.title);
+        if (item.studioType || item.title) subTypesSet.add(item.studioType || item.title);
       } else if (exploreTab === 'models') {
         if (Array.isArray(item.categories)) {
           item.categories.forEach(cat => subTypesSet.add(cat));
@@ -152,7 +152,7 @@ const ExplorePage = () => {
       } else if (exploreTab === 'rentals') {
         if (item.category) subTypesSet.add(item.category);
       } else if (exploreTab === 'workshops') {
-        if (item.title) subTypesSet.add(item.title);
+        if (item.workshopType || item.title) subTypesSet.add(item.workshopType || item.title);
       } else if (exploreTab === 'jobs') {
         if (Array.isArray(item.skills)) {
           item.skills.forEach(skill => subTypesSet.add(skill));
@@ -167,8 +167,14 @@ const ExplorePage = () => {
 
   // Helper to get the filter key for a given card item (used for click-to-filter)
   const getItemSubtype = (item) => {
-    if (exploreTab === 'services' || exploreTab === 'studios' || exploreTab === 'workshops') {
-      return item.title || null;
+    if (exploreTab === 'services') {
+      return item.serviceType || item.title || null;
+    }
+    if (exploreTab === 'studios') {
+      return item.studioType || item.title || null;
+    }
+    if (exploreTab === 'workshops') {
+      return item.workshopType || item.title || null;
     }
     if (exploreTab === 'models') {
       if (Array.isArray(item.categories) && item.categories.length > 0) return item.categories[0];
@@ -192,10 +198,10 @@ const ExplorePage = () => {
     if (selectedSubtype) {
       list = list.filter(item => {
         if (exploreTab === 'services') {
-          return item.title === selectedSubtype;
+          return (item.serviceType || item.title) === selectedSubtype;
         }
         if (exploreTab === 'studios') {
-          return item.title === selectedSubtype;
+          return (item.studioType || item.title) === selectedSubtype;
         }
         if (exploreTab === 'models') {
           if (Array.isArray(item.categories)) {
@@ -207,7 +213,7 @@ const ExplorePage = () => {
           return item.category === selectedSubtype;
         }
         if (exploreTab === 'workshops') {
-          return item.title === selectedSubtype;
+          return (item.workshopType || item.title) === selectedSubtype;
         }
         if (exploreTab === 'jobs') {
           if (Array.isArray(item.skills)) {
@@ -218,6 +224,20 @@ const ExplorePage = () => {
         return true;
       });
     }
+
+    // Contextual Tag Filter (Drill-down)
+    if (selectedContextTag) {
+      list = list.filter(item => {
+        if (Array.isArray(item.tags) && item.tags.includes(selectedContextTag)) {
+          return true;
+        }
+        if (item.description && item.description.toLowerCase().includes(selectedContextTag.toLowerCase())) {
+          return true;
+        }
+        return false;
+      });
+    }
+
 
 
     // Search Query Filter

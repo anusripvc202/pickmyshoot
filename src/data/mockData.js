@@ -1,114 +1,251 @@
 // High-quality representational images from Unsplash to ensure high visual excellence
 export const popularServices = [
+  // --- PRE WEDDING SHOOTS ---
   {
     id: "ps-1",
-    title: "Pre Wedding Shoot",
+    title: "Scenic Outdoor Pre-Wedding Shoot",
+    serviceType: "Pre Wedding Shoot",
     price: 12999,
     rating: 4.8,
     reviews: 320,
     category: "Book Shoot",
     image: "/pre_wedding_shoot_new.png",
-    description: "Capture the chemistry before the big day with professional photographers, custom styling advice, and scenic outdoor locations."
+    description: "Capture the chemistry before the big day with professional photographers, custom styling advice, and scenic outdoor locations like lakes or parks.",
+    tags: ["Outdoor / Nature"]
   },
   {
+    id: "ps-1-2",
+    title: "Royal Palace Indoor Pre-Wedding",
+    serviceType: "Pre Wedding Shoot",
+    price: 19999,
+    rating: 4.9,
+    reviews: 145,
+    category: "Book Shoot",
+    image: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=500&q=80",
+    description: "Premium indoor studio pre-wedding shoot featuring grand heritage pillars, retro backdrops, royal themes, and cinematic dynamic lighting.",
+    tags: ["Indoor Studio"]
+  },
+  {
+    id: "ps-1-3",
+    title: "Golden Sands Beach Pre-Wedding",
+    serviceType: "Pre Wedding Shoot",
+    price: 15999,
+    rating: 4.7,
+    reviews: 88,
+    category: "Book Shoot",
+    image: "https://images.unsplash.com/photo-1507504038482-762fe9a8be8f?auto=format&fit=crop&w=500&q=80",
+    description: "Cinematic romantic beach photoshoot at sunrise/sunset with drone b-rolls, custom props, and slow-motion video coordination.",
+    tags: ["Beach"]
+  },
+  {
+    id: "ps-1-4",
+    title: "Mountain & Valley Pre-Wedding",
+    serviceType: "Pre Wedding Shoot",
+    price: 24999,
+    rating: 4.9,
+    reviews: 62,
+    category: "Book Shoot",
+    image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=500&q=80",
+    description: "An adventurous shoot in mountain ranges. High-altitude landscape portrait photography, heavy mist, and custom dramatic bridal outfits.",
+    tags: ["Mountains"]
+  },
+
+  // --- BABY PHOTOSHOOTS ---
+  {
     id: "ps-2",
-    title: "Baby Photoshoot",
+    title: "Cozy Studio Baby Portrait",
+    serviceType: "Baby Photoshoot",
     price: 5999,
     rating: 4.7,
     reviews: 210,
     category: "Book Shoot",
     image: "/baby_photoshoot.png",
-    description: "Adorable baby portrait session with creative themes, baby-safe props, and professional lighting in a comfortable temperature-controlled environment."
+    description: "Adorable baby portrait session with creative themes, baby-safe props, and professional lighting in a comfortable temperature-controlled studio environment.",
+    tags: ["Indoor Studio"]
   },
   {
+    id: "ps-2-2",
+    title: "Sweet Newborn Basket Session",
+    serviceType: "Baby Photoshoot",
+    price: 6999,
+    rating: 4.8,
+    reviews: 95,
+    category: "Book Shoot",
+    image: "https://images.unsplash.com/photo-1544126592-807adc26cc7d?auto=format&fit=crop&w=500&q=80",
+    description: "Delicate newborn baby photography (under 4 weeks). Includes basket setups, soft wraps, floral rings, and careful posture support experts.",
+    tags: ["Newborn (0–4 wks)"]
+  },
+  {
+    id: "ps-2-3",
+    title: "Outdoor Garden Baby Picnic",
+    serviceType: "Baby Photoshoot",
+    price: 4999,
+    rating: 4.6,
+    reviews: 130,
+    category: "Book Shoot",
+    image: "https://images.unsplash.com/photo-1519689680058-324335c77ebe?auto=format&fit=crop&w=500&q=80",
+    description: "Fun outdoor photoshoot on a picnic setup. Features colorful balloons, wooden toys, lush green background, and bright natural sunshine.",
+    tags: ["Outdoor"]
+  },
+  {
+    id: "ps-2-4",
+    title: "First Birthday Cake Smash",
+    serviceType: "Baby Photoshoot",
+    price: 7999,
+    rating: 4.9,
+    reviews: 182,
+    category: "Book Shoot",
+    image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=500&q=80",
+    description: "Capture the messy joy! First birthday custom cake-smash backdrop, premium cream cake included, bubbly tub bath portraits after the smash.",
+    tags: ["Cake Smash"]
+  },
+
+  // --- PRODUCT PHOTOGRAPHY ---
+  {
     id: "ps-3",
-    title: "Product Photography",
+    title: "E-Commerce White Background Studio",
+    serviceType: "Product Photography",
     price: 2999,
     rating: 4.9,
     reviews: 512,
     category: "Book Shoot",
     image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=500&q=80",
-    description: "High-resolution studio product photos with clean white background or styled lifestyle setups, perfect for e-commerce, websites, and marketing."
+    description: "High-resolution studio product photos with clean white background, perfect for Amazon, Flipkart, Shopify, and standard catalog listing guidelines.",
+    tags: ["White Background"]
   },
+  {
+    id: "ps-3-2",
+    title: "Aesthetic Lifestyle Product Shoot",
+    serviceType: "Product Photography",
+    price: 4499,
+    rating: 4.8,
+    reviews: 215,
+    category: "Book Shoot",
+    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=500&q=80",
+    description: "Creative product photos inside styled lifestyle setups, outdoor environments, or hands-on user layouts. Elevates brand premium perception.",
+    tags: ["Lifestyle Setup"]
+  },
+  {
+    id: "ps-3-3",
+    title: "Flat Lay & Creative Top-Down",
+    serviceType: "Product Photography",
+    price: 3499,
+    rating: 4.7,
+    reviews: 140,
+    category: "Book Shoot",
+    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=500&q=80",
+    description: "Modern top-down flat lay styling for cosmetics, electronics, apparel, and stationery. Includes artistic props matching your brand palette.",
+    tags: ["Flat Lay"]
+  },
+  {
+    id: "ps-3-4",
+    title: "360° Interactive Product Spin",
+    serviceType: "Product Photography",
+    price: 6999,
+    rating: 4.9,
+    reviews: 96,
+    category: "Book Shoot",
+    image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=500&q=80",
+    description: "Interactive 360-degree product spins shot using automated turntable rigs. High-definition output files for dynamic interactive websites.",
+    tags: ["360° Product"]
+  },
+
+  // --- OTHER SERVICES ---
   {
     id: "ps-4",
     title: "Real Estate Photography",
+    serviceType: "Real Estate Photography",
     price: 2499,
     rating: 4.6,
     reviews: 120,
     category: "Book Shoot",
     image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=500&q=80",
-    description: "Ultra-wide-angle HDR photography highlighting property layouts, natural light, and architecture to attract high-value buyers or renters."
+    description: "Ultra-wide-angle HDR photography highlighting property layouts, natural light, and architecture to attract high-value buyers or renters.",
+    tags: ["Apartment"]
   },
   {
     id: "ps-5",
     title: "Reels & Social Media Shoot",
+    serviceType: "Reels & Social Media Shoot",
     price: 3999,
     rating: 4.8,
     reviews: 245,
     category: "Book Shoot",
     image: "https://images.unsplash.com/photo-1598550874175-4d0ef436c909?auto=format&fit=crop&w=500&q=80",
-    description: "Create viral short-form videos with professional cinematography, dynamic transitions, audio synchronization, and editing tailored for Instagram and TikTok."
+    description: "Create viral short-form videos with professional cinematography, dynamic transitions, audio synchronization, and editing tailored for Instagram Reels.",
+    tags: ["Instagram Reels"]
   },
   {
     id: "ps-6",
     title: "Maternity Shoot",
+    serviceType: "Maternity Shoot",
     price: 8000,
     rating: 4.9,
     reviews: 185,
     category: "Book Shoot",
     image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=500&q=80",
-    description: "Celebrate motherhood with artistic maternity sessions. Beautiful gowns, professional posing guide, and private studio setting."
+    description: "Celebrate motherhood with artistic maternity sessions. Beautiful gowns, professional posing guide, and private studio setting.",
+    tags: ["Studio"]
   },
   {
     id: "ps-7",
     title: "Corporate Shoot",
+    serviceType: "Corporate Shoot",
     price: 8000,
     rating: 4.7,
     reviews: 95,
     category: "Book Shoot",
     image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=500&q=80",
-    description: "High-quality corporate headshots, team group photographs, and workspace lifestyle content suitable for LinkedIn profiles and annual reports."
+    description: "High-quality corporate headshots, team group photographs, and workspace lifestyle content suitable for LinkedIn profiles and annual reports.",
+    tags: ["Headshots"]
   },
   {
     id: "ps-8",
     title: "Birthday Shoot",
+    serviceType: "Birthday Shoot",
     price: 4999,
     rating: 4.8,
     reviews: 142,
     category: "Book Shoot",
     image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=500&q=80",
-    description: "Vibrant birthday celebration coverage. Includes cake-smash setups for kids or sleek portraits for adults, capturing candid joy and setup details."
+    description: "Vibrant birthday celebration coverage. Includes cake-smash setups for kids or sleek portraits for adults, capturing candid joy and setup details.",
+    tags: ["Adult Milestone"]
   },
   {
     id: "ps-9",
     title: "Fashion Catalog Shoot",
+    serviceType: "Fashion Catalog Shoot",
     price: 14999,
     rating: 4.8,
     reviews: 110,
     category: "Book Shoot",
     image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=500&q=80",
-    description: "Professional fashion editorial and lookbook photography. High-end lighting setups with focus on clothing textures and model poses."
+    description: "Professional fashion editorial and lookbook photography. High-end lighting setups with focus on clothing textures and Western style outfits.",
+    tags: ["Western"]
   },
   {
     id: "ps-10",
     title: "Food & Culinary Shoot",
+    serviceType: "Food & Culinary Shoot",
     price: 4499,
     rating: 4.9,
     reviews: 130,
     category: "Book Shoot",
     image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=500&q=80",
-    description: "Stunning food styling and commercial photography for restaurant menus, packaging, cookbooks, and high-impact social media promotions."
+    description: "Stunning food styling and commercial photography for restaurant menus, packaging, cookbooks, and high-impact social media promotions.",
+    tags: ["Restaurant Menu"]
   },
   {
     id: "ps-11",
     title: "Commercial Film Shoot",
+    serviceType: "Commercial Film Shoot",
     price: 24999,
     rating: 4.9,
     reviews: 85,
     category: "Book Shoot",
     image: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=500&q=80",
-    description: "Full-scale corporate video production. Focus on company core values, client testimonials, cinematic b-rolls, and high-definition narrative edits."
+    description: "Full-scale corporate video production. Focus on company core values, client testimonials, cinematic b-rolls, and brand ad film production.",
+    tags: ["Brand Ad Film"]
   }
 ];
 
