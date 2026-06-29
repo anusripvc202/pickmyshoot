@@ -171,7 +171,7 @@ body {
 
 /* Logo sizing — matches reference image */
 .header-brand-logo {
-  height: 56px;
+  height: 100px;
   width: auto;
   transition: height var(--transition-normal), transform var(--transition-fast);
   object-fit: contain;
@@ -189,7 +189,7 @@ body {
     height: 64px;
   }
   .header-brand-logo {
-    height: 40px;
+    height: 50px;
   }
   .header-nav-tabs {
     display: none;
@@ -208,7 +208,7 @@ body {
     height: 68px;
   }
   .header-brand-logo {
-    height: 46px;
+    height: 56px;
   }
   .header-nav-tabs {
     display: none;
@@ -227,7 +227,7 @@ body {
     height: 72px;
   }
   .header-brand-logo {
-    height: 48px;
+    height: 60px;
   }
   .header-nav-tabs {
     display: none;
@@ -243,7 +243,7 @@ body {
     height: 76px;
   }
   .header-brand-logo {
-    height: 52px;
+    height: 70px;
   }
   .header-nav-tabs {
     gap: 1px;
@@ -260,7 +260,7 @@ body {
     height: 130px;
   }
   .header-brand-logo {
-    height: 56px;
+    height: 100px;
   }
 }
 
@@ -11789,7 +11789,7 @@ input:checked + .slider:before {
 
 /* Brand Logo Image */
 .header-brand-logo-img {
-  height: 40px;
+  height: 100px;
   width: auto;
   object-fit: contain;
   display: block;
