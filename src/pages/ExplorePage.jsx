@@ -102,7 +102,7 @@ const ExplorePage = () => {
   ];
 
   const occasionOptions = [
-    { id: 'Pre Wedding Shoot', label: 'Wedding Shoot' },
+    { id: 'Pre Wedding Shoot', label: 'Pre Wedding Shoot' },
     { id: 'Baby Photoshoot', label: 'Baby Photoshoot' },
     { id: 'Product Photography', label: 'Product Photography' },
     { id: 'Real Estate Photography', label: 'Real Estate Shoot' },

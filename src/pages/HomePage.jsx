@@ -86,7 +86,7 @@ const HomePage = () => {
   ];
 
   const occasionsList = [
-    { label: 'Wedding Shoot', value: 'Pre Wedding Shoot' },
+    { label: 'Pre Wedding Shoot', value: 'Pre Wedding Shoot' },
     { label: 'Baby Photoshoot', value: 'Baby Photoshoot' },
     { label: 'Product Photography', value: 'Product Photography' },
     { label: 'Real Estate Shoot', value: 'Real Estate Photography' },
@@ -101,6 +101,12 @@ const HomePage = () => {
 
   const handleCategoryClick = (tabName) => {
     setExploreTab(tabName);
+    navigate('/explore');
+  };
+
+  const handleQuickSearch = (occasionName) => {
+    setGlobalCategory(occasionName);
+    setExploreTab('services');
     navigate('/explore');
   };
 
@@ -354,13 +360,13 @@ const HomePage = () => {
 
               {/* Trust Strip */}
               <div className="hero-trust-strip">
-                <span>📸 Wedding Shoots</span>
+                <span onClick={() => handleQuickSearch('Pre Wedding Shoot')} style={{ cursor: 'pointer', hover: { textDecoration: 'underline' } }}>📸 Wedding Shoots</span>
                 <span>•</span>
-                <span>🎥 Reels &amp; Ads</span>
+                <span onClick={() => handleQuickSearch('Reels & Social Media Shoot')} style={{ cursor: 'pointer' }}>🎥 Reels &amp; Ads</span>
                 <span>•</span>
-                <span>🏢 Corporate Events</span>
+                <span onClick={() => handleQuickSearch('Corporate Shoot')} style={{ cursor: 'pointer' }}>🏢 Corporate Events</span>
                 <span>•</span>
-                <span>👗 Fashion &amp; Editorial</span>
+                <span onClick={() => handleQuickSearch('Fashion Catalog Shoot')} style={{ cursor: 'pointer' }}>👗 Fashion &amp; Editorial</span>
               </div>
             </div>
 
