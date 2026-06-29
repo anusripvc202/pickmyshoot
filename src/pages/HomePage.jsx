@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Camera, 
@@ -17,7 +17,10 @@ import {
   Star,
   Film,
   Clapperboard,
-  Palette
+  Palette,
+  ChevronDown,
+  CalendarDays,
+  Search
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { institutes } from '../data/mockData';
@@ -30,15 +33,102 @@ const HomePage = () => {
     likedItems,
     toggleLike,
     openDetails,
-    setExploreTab
+    setExploreTab,
+    setGlobalLocation,
+    setGlobalCategory,
+    setGlobalDate
   } = useAppContext();
 
   const navigate = useNavigate();
+
+  // Widget popover visibility states
+  const [showLocation, setShowLocation] = useState(false);
+  const [showCategory, setShowCategory] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
+
+  // Widget selected options
+  const [selectedLoc, setSelectedLoc] = useState(null);
+  const [selectedCat, setSelectedCat] = useState(null);
+  const [selectedDt, setSelectedDt] = useState(null);
+
+  // Calendar states
+  const [currentYear, setCurrentYear] = useState(2026);
+  const [currentMonth, setCurrentMonth] = useState(5); // June (0-indexed: 0-11, so 5 is June)
+
+  const locationRef = useRef(null);
+  const categoryRef = useRef(null);
+  const calendarRef = useRef(null);
+
+  // Close popovers when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (locationRef.current && !locationRef.current.contains(event.target)) {
+        setShowLocation(false);
+      }
+      if (categoryRef.current && !categoryRef.current.contains(event.target)) {
+        setShowCategory(false);
+      }
+      if (calendarRef.current && !calendarRef.current.contains(event.target)) {
+        setShowCalendar(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const locationsList = [
+    'Banjara Hills',
+    'Madhapur',
+    'Jubilee Hills',
+    'Gachibowli',
+    'Begumpet',
+    'Remote'
+  ];
+
+  const occasionsList = [
+    { label: 'Wedding Shoot', value: 'Pre Wedding Shoot' },
+    { label: 'Baby Photoshoot', value: 'Baby Photoshoot' },
+    { label: 'Product Photography', value: 'Product Photography' },
+    { label: 'Real Estate Shoot', value: 'Real Estate Photography' },
+    { label: 'Reels & Shorts Creator', value: 'Reels & Social Media Shoot' },
+    { label: 'Maternity Portraits', value: 'Maternity Shoot' },
+    { label: 'Corporate Headshots', value: 'Corporate Shoot' },
+    { label: 'Birthday Event Shoot', value: 'Birthday Shoot' },
+    { label: 'Fashion Catalog Lookbook', value: 'Fashion Catalog Shoot' },
+    { label: 'Food & Restaurant', value: 'Food & Culinary Shoot' },
+    { label: 'Commercial Corporate Video', value: 'Commercial Film Shoot' }
+  ];
 
   const handleCategoryClick = (tabName) => {
     setExploreTab(tabName);
     navigate('/explore');
   };
+
+  const handleSearchSubmit = (e) => {
+    if (e) e.preventDefault();
+    setGlobalLocation(selectedLoc);
+    setGlobalCategory(selectedCat);
+    setGlobalDate(selectedDt);
+    setExploreTab('services'); // Redirect to search photography services
+    navigate('/explore');
+  };
+
+  // Generate days in a month helper for calendar
+  const getDaysInMonth = (month, year) => {
+    return new Date(year, month + 1, 0).getDate();
+  };
+
+  const getFirstDayOfMonth = (month, year) => {
+    return new Date(year, month, 1).getDay();
+  };
+
+  const daysInMonth = getDaysInMonth(currentMonth, currentYear);
+  const firstDay = getFirstDayOfMonth(currentMonth, currentYear);
+  
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
 
   return (
     <>
@@ -55,9 +145,9 @@ const HomePage = () => {
 
               {/* Main headline */}
               <h1 className="hero-title">
-                Book Studios,<br />
-                Gear &amp; Talent<br />
-                <span className="hero-title-accent">Instantly.</span>
+                Find the perfect<br />
+                photographer for<br />
+                <span className="hero-title-accent">every moment.</span>
               </h1>
 
               {/* Sub-headline */}
@@ -84,21 +174,183 @@ const HomePage = () => {
                 </div>
               </div>
 
-              {/* Dual CTA Buttons */}
-              <div className="hero-cta-row">
-                <button
-                  className="hero-btn"
-                  onClick={() => { setExploreTab('studios'); navigate('/explore'); }}
+              {/* Redesigned Search Widget */}
+              <form onSubmit={handleSearchSubmit} className="search-widget-container">
+                {/* 1. Location Selector */}
+                <div 
+                  ref={locationRef} 
+                  className="search-widget-col"
+                  onClick={() => {
+                    setShowLocation(!showLocation);
+                    setShowCategory(false);
+                    setShowCalendar(false);
+                  }}
                 >
-                  🎬 Book a Studio
-                </button>
-                <button
-                  className="hero-btn-outline"
-                  onClick={() => { setExploreTab('services'); navigate('/explore'); }}
+                  <span className="search-widget-label">Location</span>
+                  <div className="search-widget-value-row">
+                    <MapPin size={16} color="var(--primary)" />
+                    {selectedLoc ? (
+                      <span className="search-widget-value">{selectedLoc}</span>
+                    ) : (
+                      <span className="search-widget-placeholder">Select City / Area</span>
+                    )}
+                  </div>
+                  
+                  {showLocation && (
+                    <div className="search-widget-dropdown">
+                      {locationsList.map(loc => (
+                        <button
+                          key={loc}
+                          type="button"
+                          className={`search-widget-dropdown-item ${selectedLoc === loc ? 'active' : ''}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedLoc(loc);
+                            setShowLocation(false);
+                          }}
+                        >
+                          <MapPin size={14} />
+                          <span>{loc}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* 2. Occasion/Category Selector */}
+                <div 
+                  ref={categoryRef} 
+                  className="search-widget-col"
+                  onClick={() => {
+                    setShowCategory(!showCategory);
+                    setShowLocation(false);
+                    setShowCalendar(false);
+                  }}
                 >
-                  Find a Photographer
+                  <span className="search-widget-label">Occasion / Category</span>
+                  <div className="search-widget-value-row">
+                    <Camera size={16} color="var(--primary)" />
+                    {selectedCat ? (
+                      <span className="search-widget-value">
+                        {occasionsList.find(o => o.value === selectedCat)?.label || selectedCat}
+                      </span>
+                    ) : (
+                      <span className="search-widget-placeholder">What are you shooting?</span>
+                    )}
+                  </div>
+
+                  {showCategory && (
+                    <div className="search-widget-dropdown" style={{ width: '280px' }}>
+                      {occasionsList.map(occ => (
+                        <button
+                          key={occ.value}
+                          type="button"
+                          className={`search-widget-dropdown-item ${selectedCat === occ.value ? 'active' : ''}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedCat(occ.value);
+                            setShowCategory(false);
+                          }}
+                        >
+                          <Camera size={14} />
+                          <span>{occ.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* 3. Date / Calendar Picker */}
+                <div 
+                  ref={calendarRef} 
+                  className="search-widget-col"
+                  onClick={() => {
+                    setShowCalendar(!showCalendar);
+                    setShowLocation(false);
+                    setShowCategory(false);
+                  }}
+                >
+                  <span className="search-widget-label">Date</span>
+                  <div className="search-widget-value-row">
+                    <CalendarDays size={16} color="var(--primary)" />
+                    {selectedDt ? (
+                      <span className="search-widget-value">{selectedDt}</span>
+                    ) : (
+                      <span className="search-widget-placeholder">Select Date</span>
+                    )}
+                  </div>
+
+                  {showCalendar && (
+                    <div className="custom-calendar-popover" onClick={(e) => e.stopPropagation()}>
+                      <div className="calendar-header">
+                        <button 
+                          type="button" 
+                          className="calendar-nav-btn"
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}
+                          onClick={() => {
+                            if (currentMonth === 0) {
+                              setCurrentMonth(11);
+                              setCurrentYear(y => y - 1);
+                            } else {
+                              setCurrentMonth(m => m - 1);
+                            }
+                          }}
+                        >
+                          &lt;
+                        </button>
+                        <span className="calendar-month-title">{monthNames[currentMonth]} {currentYear}</span>
+                        <button 
+                          type="button" 
+                          className="calendar-nav-btn"
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}
+                          onClick={() => {
+                            if (currentMonth === 11) {
+                              setCurrentMonth(0);
+                              setCurrentYear(y => y + 1);
+                            } else {
+                              setCurrentMonth(m => m + 1);
+                            }
+                          }}
+                        >
+                          &gt;
+                        </button>
+                      </div>
+
+                      <div className="calendar-grid">
+                        {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(day => (
+                          <div key={day} className="calendar-day-label">{day}</div>
+                        ))}
+                        {Array.from({ length: firstDay }).map((_, idx) => (
+                          <div key={`empty-${idx}`} />
+                        ))}
+                        {Array.from({ length: daysInMonth }).map((_, idx) => {
+                          const dayNum = idx + 1;
+                          const dateString = `${dayNum} ${monthNames[currentMonth].substring(0, 3)} ${currentYear}`;
+                          const isSelected = selectedDt === dateString;
+                          return (
+                            <button
+                              key={`day-${dayNum}`}
+                              type="button"
+                              className={`calendar-day-btn ${isSelected ? 'active' : ''}`}
+                              onClick={() => {
+                                setSelectedDt(dateString);
+                                setShowCalendar(false);
+                              }}
+                            >
+                              {dayNum}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* 4. Search Submit Button */}
+                <button type="submit" className="search-widget-submit-btn">
+                  <Search size={22} color="white" />
                 </button>
-              </div>
+              </form>
 
               {/* Trust Strip */}
               <div className="hero-trust-strip">

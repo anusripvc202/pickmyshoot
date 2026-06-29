@@ -221,6 +221,9 @@ export const AppProvider = ({ children }) => {
   // Search & Filter State
   const [searchQuery, setSearchQuery] = useState('');
   const [exploreTab, setExploreTab] = useState('services');
+  const [globalLocation, setGlobalLocation] = useState(null);
+  const [globalCategory, setGlobalCategory] = useState(null);
+  const [globalDate, setGlobalDate] = useState(null);
 
   // Bookings list state - initialized to empty array (clean dashboard)
   const [bookings, setBookings] = useState([]);
@@ -785,6 +788,9 @@ export const AppProvider = ({ children }) => {
       jobs, setJobs,
       searchQuery, setSearchQuery,
       exploreTab, setExploreTab,
+      globalLocation, setGlobalLocation,
+      globalCategory, setGlobalCategory,
+      globalDate, setGlobalDate,
       bookings, setBookings,
       bookingFilter, setBookingFilter,
       likedItems, setLikedItems,

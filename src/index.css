@@ -1,9 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Dancing+Script:wght@700&family=Montserrat:wght@900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap');
 
 :root {
   /* Common variables */
-  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sans: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-heading: var(--font-serif);
+  --font-body: var(--font-sans);
   --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -10964,4 +10966,361 @@ input:checked + .slider:before {
   background-color: var(--border);
   color: var(--primary);
   border-color: rgba(var(--primary-rgb), 0.2);
+}
+
+/* Brand Logo Image */
+.header-brand-logo-img {
+  height: 58px !important; /* Increase logo height inside taller navbar */
+  width: auto;
+  object-fit: contain;
+  display: block;
+  filter: brightness(1.2) drop-shadow(0 2px 8px rgba(255, 255, 255, 0.35)) !important; /* Brighter white and glowing shadow */
+  transition: transform var(--transition-fast) !important;
+}
+
+.logo-container:hover .header-brand-logo-img {
+  transform: scale(1.05);
+}
+
+/* App Header Brand Red Override */
+.app-header {
+  height: 84px !important;
+  background: linear-gradient(135deg, #C8102E 0%, #B00E26 100%) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.app-header::after {
+  display: none !important; /* Hide the accent bottom border gradient on red header */
+}
+
+/* Header Elements Contrast Adjustments on Red Background */
+.app-header .header-tab-btn {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.app-header .header-tab-btn:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+
+.app-header .header-tab-btn.active {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  font-weight: 750 !important;
+}
+
+.app-header .header-tab-btn.active::after {
+  background: #ffffff !important; /* White indicator for active tab */
+  width: 50% !important;
+}
+
+/* White search wrapper on Red header for premium visual hierarchy */
+.app-header .header-search-wrap {
+  background: #ffffff !important;
+  border: 1.5px solid transparent !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+.app-header .header-search-wrap:hover {
+  background: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12) !important;
+}
+
+.app-header .header-search-wrap:focus-within {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35), 0 6px 18px rgba(0, 0, 0, 0.15) !important;
+}
+
+.app-header .search-input {
+  color: var(--text-main) !important; /* Dark text inside white search input */
+}
+
+.app-header .search-input::placeholder {
+  color: rgba(0, 0, 0, 0.45) !important;
+}
+
+.app-header .header-search-wrap svg {
+  color: rgba(0, 0, 0, 0.5) !important; /* Darker search icon */
+}
+
+/* Action Icons */
+.app-header .icon-btn-wrap {
+  color: #ffffff !important;
+}
+
+.app-header .icon-btn-wrap:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+/* User dropdown avatar in red header */
+.app-header .header-user-avatar {
+  border: 2px solid rgba(255, 255, 255, 0.8) !important;
+}
+
+.app-header .header-user-avatar:hover {
+  border-color: #ffffff !important;
+}
+
+/* Premium Primary CTA Button on Red Background */
+.app-header .header-primary-cta {
+  background: #ffffff !important;
+  color: var(--primary) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+.app-header .header-primary-cta svg {
+  color: var(--primary) !important;
+}
+
+.app-header .header-primary-cta:hover {
+  background: rgba(255, 255, 255, 0.95) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Redesigned Homepage Search Widget */
+.search-widget-container {
+  display: flex;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  max-width: 900px;
+  margin: 32px auto 0 auto;
+  padding: 10px;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  z-index: 10;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.search-widget-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 16px;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  position: relative;
+  cursor: pointer;
+  text-align: left;
+}
+
+.search-widget-col:last-child {
+  border-right: none;
+}
+
+.search-widget-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 4px;
+}
+
+.search-widget-value-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-widget-value {
+  font-family: var(--font-sans);
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-widget-placeholder {
+  font-family: var(--font-sans);
+  font-size: 14.5px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.35);
+}
+
+.search-widget-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 0;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border: 1.5px solid var(--border);
+  width: 250px;
+  max-height: 280px;
+  overflow-y: auto;
+  z-index: 100;
+  padding: 8px;
+  animation: dropdownSimpleFadeIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-widget-dropdown-item {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-widget-dropdown-item:hover {
+  background: rgba(var(--primary-rgb), 0.05);
+  color: var(--primary);
+}
+
+.search-widget-dropdown-item.active {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.search-widget-submit-btn {
+  background: var(--primary);
+  border: none;
+  color: white;
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 14px rgba(var(--primary-rgb), 0.3);
+  flex-shrink: 0;
+}
+
+.search-widget-submit-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(var(--primary-rgb), 0.4);
+}
+
+/* Custom Calendar Styles */
+.custom-calendar-popover {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1.5px solid var(--border);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  width: 300px;
+  padding: 16px;
+  z-index: 100;
+  animation: dropdownSimpleFadeIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.calendar-month-title {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-main);
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  text-align: center;
+}
+
+.calendar-day-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.calendar-day-btn {
+  background: none;
+  border: none;
+  font-size: 12.5px;
+  font-weight: 600;
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  color: var(--text-main);
+}
+
+.calendar-day-btn:hover {
+  background: rgba(var(--primary-rgb), 0.05);
+  color: var(--primary);
+}
+
+.calendar-day-btn.active {
+  background: var(--primary) !important;
+  color: white !important;
+}
+
+.calendar-day-btn.disabled {
+  color: rgba(0,0,0,0.15) !important;
+  pointer-events: none;
+}
+
+/* Category Grid adjustments */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 991px) {
+  .categories-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .search-widget-container {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px;
+    gap: 8px;
+  }
+  .search-widget-col {
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 8px 4px;
+  }
+  .search-widget-submit-btn {
+    width: 100%;
+    height: 48px;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Star, Heart, ChevronDown, ChevronUp, MapPin, SlidersHorizontal, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Star, Heart, ChevronDown, ChevronUp, MapPin, SlidersHorizontal, X, CalendarDays, Camera } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 
 const ExplorePage = () => {
@@ -16,7 +16,13 @@ const ExplorePage = () => {
     setExploreTab,
     likedItems,
     toggleLike,
-    openDetails
+    openDetails,
+    globalLocation,
+    setGlobalLocation,
+    globalCategory,
+    setGlobalCategory,
+    globalDate,
+    setGlobalDate
   } = useAppContext();
 
   // 1. Expanded/Collapsed state for left accordion filters
@@ -24,15 +30,26 @@ const ExplorePage = () => {
     categories: true,
     price: true,
     ratings: true,
-    location: true
+    location: true,
+    occasion: true,
+    date: true
   });
 
   // 2. Active filter states
   const [selectedPrice, setSelectedPrice] = useState(null); // null, 'budget', 'mid', 'premium'
   const [selectedRating, setSelectedRating] = useState(null); // null, 4.5, 4.0
   const [selectedLocation, setSelectedLocation] = useState(null); // null, string
+  const [selectedOccasion, setSelectedOccasion] = useState(null); // null, string
+  const [selectedDateFilter, setSelectedDateFilter] = useState(null); // null, string
   const [sortBy, setSortBy] = useState('popularity'); // 'popularity', 'price_asc', 'price_desc', 'rating'
   
+  // Sync global filters
+  useEffect(() => {
+    if (globalLocation) setSelectedLocation(globalLocation);
+    if (globalCategory) setSelectedOccasion(globalCategory);
+    if (globalDate) setSelectedDateFilter(globalDate);
+  }, [globalLocation, globalCategory, globalDate]);
+
   // Mobile filter drawer visibility toggle
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
@@ -47,7 +64,12 @@ const ExplorePage = () => {
     setSelectedPrice(null);
     setSelectedRating(null);
     setSelectedLocation(null);
+    setSelectedOccasion(null);
+    setSelectedDateFilter(null);
     setSearchQuery('');
+    setGlobalLocation(null);
+    setGlobalCategory(null);
+    setGlobalDate(null);
   };
 
   const categoriesList = [
@@ -77,6 +99,20 @@ const ExplorePage = () => {
     { id: 'Gachibowli', label: 'Gachibowli' },
     { id: 'Begumpet', label: 'Begumpet' },
     { id: 'Remote', label: 'Remote / Online' }
+  ];
+
+  const occasionOptions = [
+    { id: 'Pre Wedding Shoot', label: 'Wedding Shoot' },
+    { id: 'Baby Photoshoot', label: 'Baby Photoshoot' },
+    { id: 'Product Photography', label: 'Product Photography' },
+    { id: 'Real Estate Photography', label: 'Real Estate Shoot' },
+    { id: 'Reels & Social Media Shoot', label: 'Reels & Shorts' },
+    { id: 'Maternity Shoot', label: 'Maternity Portraits' },
+    { id: 'Corporate Shoot', label: 'Corporate Headshots' },
+    { id: 'Birthday Shoot', label: 'Birthday Event' },
+    { id: 'Fashion Catalog Shoot', label: 'Fashion Catalog' },
+    { id: 'Food & Culinary Shoot', label: 'Food & Culinary' },
+    { id: 'Commercial Film Shoot', label: 'Commercial Film' }
   ];
 
   // Helper to determine the active array to display
@@ -132,6 +168,16 @@ const ExplorePage = () => {
       });
     }
 
+    // Occasion/Shoot Category Filter
+    if (selectedOccasion) {
+      list = list.filter(item => {
+        const titleMatch = item.title.toLowerCase().includes(selectedOccasion.toLowerCase());
+        const descMatch = item.description && item.description.toLowerCase().includes(selectedOccasion.toLowerCase());
+        const catMatch = item.category && item.category.toLowerCase().includes(selectedOccasion.toLowerCase());
+        return titleMatch || descMatch || catMatch;
+      });
+    }
+
     // Sorting Calculator
     list.sort((a, b) => {
       if (sortBy === 'popularity') {
@@ -160,15 +206,28 @@ const ExplorePage = () => {
     <div className="explore-sidebar-inner">
       <div className="sidebar-header-row">
         <h3>Filters</h3>
-        {(selectedPrice || selectedRating || selectedLocation || searchQuery) && (
+        {(selectedPrice || selectedRating || selectedLocation || selectedOccasion || selectedDateFilter || searchQuery) && (
           <button className="clear-all-btn-link" onClick={clearAllFilters}>Clear All</button>
         )}
       </div>
 
+      {/* Selected Date Indicator */}
+      {selectedDateFilter && (
+        <div className="filter-accordion">
+          <div className="selected-date-badge" style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(var(--primary-rgb), 0.08)', padding: '10px 14px', borderRadius: '10px', color: 'var(--primary)', fontSize: '13px', fontWeight: '600' }}>
+            <CalendarDays size={14} />
+            <span>Date: {selectedDateFilter}</span>
+            <button onClick={() => { setSelectedDateFilter(null); setGlobalDate(null); }} style={{ marginLeft: 'auto', background: 'none', border: 'none', color: 'var(--primary)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+              <X size={14} />
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Accordion 1: Categories Selector */}
       <div className="filter-accordion">
         <button className="accordion-header" onClick={() => toggleAccordion('categories')}>
-          <span>Categories</span>
+          <span>Workspace Categories</span>
           {expandedFilters.categories ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </button>
         {expandedFilters.categories && (
@@ -184,6 +243,11 @@ const ExplorePage = () => {
                     setSelectedPrice(null);
                     setSelectedRating(null);
                     setSelectedLocation(null);
+                    setSelectedOccasion(null);
+                    setSelectedDateFilter(null);
+                    setGlobalLocation(null);
+                    setGlobalCategory(null);
+                    setGlobalDate(null);
                   }}
                 >
                   {cat.label}
@@ -193,6 +257,31 @@ const ExplorePage = () => {
           </div>
         )}
       </div>
+
+      {/* Accordion 1.5: Occasions Selector */}
+      {exploreTab === 'services' && (
+        <div className="filter-accordion">
+          <button className="accordion-header" onClick={() => toggleAccordion('occasion')}>
+            <span>Occasions</span>
+            {expandedFilters.occasion ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          </button>
+          {expandedFilters.occasion && (
+            <div className="accordion-content">
+              <div className="filter-pills-wrap">
+                {occasionOptions.map(opt => (
+                  <button
+                    key={opt.id}
+                    className={`filter-pill-btn ${selectedOccasion === opt.id ? 'active' : ''}`}
+                    onClick={() => setSelectedOccasion(o => o === opt.id ? null : opt.id)}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Accordion 2: Price Filters */}
       {exploreTab !== 'jobs' && (
@@ -315,7 +404,7 @@ const ExplorePage = () => {
         </div>
 
         {/* Active Filters Chips row */}
-        {(selectedPrice || selectedRating || selectedLocation || searchQuery) && (
+        {(selectedPrice || selectedRating || selectedLocation || selectedOccasion || selectedDateFilter || searchQuery) && (
           <div className="active-filters-chips-row">
             <span className="active-chips-title">Active Filters:</span>
             <div className="active-chips-list">
@@ -341,6 +430,18 @@ const ExplorePage = () => {
                 <span className="filter-active-chip">
                   📍 {selectedLocation}
                   <button className="chip-remove-btn" onClick={() => setSelectedLocation(null)}><X size={10} /></button>
+                </span>
+              )}
+              {selectedOccasion && (
+                <span className="filter-active-chip">
+                  📸 {selectedOccasion}
+                  <button className="chip-remove-btn" onClick={() => setSelectedOccasion(null)}><X size={10} /></button>
+                </span>
+              )}
+              {selectedDateFilter && (
+                <span className="filter-active-chip">
+                  📅 {selectedDateFilter}
+                  <button className="chip-remove-btn" onClick={() => { setSelectedDateFilter(null); setGlobalDate(null); }}><X size={10} /></button>
                 </span>
               )}
               <button className="clear-all-chips-link" onClick={clearAllFilters}>Clear All</button>
