@@ -376,7 +376,7 @@ const Layout = () => {
             
             {/* Logo */}
             <div className="logo-container" onClick={() => { navigate('/'); setSelectedItem(null); }} style={{ cursor: 'pointer' }}>
-              <img src="/logo.png" className="header-brand-logo-img" alt="PickMyShoot" />
+              <img src="/logo.png" className="header-brand-logo" alt="PickMyShoot" />
             </div>
 
             {/* Search Bar */}
