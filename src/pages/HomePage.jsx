@@ -473,7 +473,7 @@ const HomePage = () => {
         </div>
         <div className="desktop-card-grid-5 mobile-scroll-row">
           {services.slice(0, 7).map(service => (
-            <div key={service.id} className="service-card" onClick={() => openDetails(service, 'service')}>
+            <div key={service.id} className="service-card" onClick={() => { setExploreTab('services'); navigate('/explore'); }}>
               <div className="card-img-wrap">
                 <img src={service.image} className="card-image" alt={service.title} />
                 <button 
@@ -510,7 +510,7 @@ const HomePage = () => {
         </div>
         <div className="desktop-card-grid-5 mobile-scroll-row">
           {studios.map(studio => (
-            <div key={studio.id} className="near-you-card" onClick={() => openDetails(studio, 'studio')}>
+            <div key={studio.id} className="near-you-card" onClick={() => { setExploreTab('studios'); navigate('/explore'); }}>
               <div className="near-you-img-wrap">
                 <img src={studio.image} className="card-image" alt={studio.title} />
                 <span className="near-you-badge">Featured</span>
@@ -624,7 +624,7 @@ const HomePage = () => {
         </div>
         <div className="desktop-card-grid-5 mobile-scroll-row">
           {workshops.slice(0, 7).map(wk => (
-            <div key={wk.id} className="workshop-card" onClick={() => openDetails(wk, 'workshop')}>
+            <div key={wk.id} className="workshop-card" onClick={() => { setExploreTab('workshops'); navigate('/explore'); }}>
               <div className="workshop-img-wrap">
                 <img src={wk.image} className="card-image" alt={wk.title} />
                 <div className="date-badge">
