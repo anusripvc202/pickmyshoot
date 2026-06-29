@@ -135,110 +135,76 @@ const HomePage = () => {
 
   return (
     <>
-      {/* Full-width Hero Banner Slider */}
+      {/* ======= FULL-WIDTH CINEMATIC HERO SLIDER ======= */}
       <div className="hero-carousel-container">
+
+        {/* Slide Background Image (full bleed) */}
+        <div
+          className="hero-bg-image active-slide"
+          key={`bg-${currentSlide}`}
+          style={{ backgroundImage: `url(${import.meta.env.BASE_URL}${slides[currentSlide].image})` }}
+        />
+
+        {/* Dark gradient overlay for readability */}
+        <div className="hero-overlay" />
+
         {/* Navigation Arrows */}
         <button className="carousel-arrow prev" onClick={prevSlide} aria-label="Previous Slide">
-          <ChevronLeft size={20} />
+          <ChevronLeft size={22} />
         </button>
         <button className="carousel-arrow next" onClick={nextSlide} aria-label="Next Slide">
-          <ChevronRight size={20} />
+          <ChevronRight size={22} />
         </button>
 
-        <div className="hero-banner" style={{ background: slides[currentSlide].background }}>
-          <div className="hero-banner-inner">
-            {/* Key attribute ensures fresh render/animation on slide index change */}
-            <div className="hero-banner-content active-slide" key={`content-${currentSlide}`}>
-              {/* Concept Tag */}
-              <div className="hero-tags-row">
-                <span className="hero-tag">{slides[currentSlide].tag}</span>
-                <span className="hero-tag-green">{slides[currentSlide].tagGreen}</span>
-              </div>
+        {/* Center Content */}
+        <div className="hero-center-content active-slide" key={`content-${currentSlide}`}>
 
-              {/* Main headline */}
-              <h1 className="hero-title">
-                {slides[currentSlide].title}
-              </h1>
-
-              {/* Sub-headline */}
-              <p className="hero-subtitle">
-                {slides[currentSlide].subtitle}
-              </p>
-
-              {/* Live Stats Row */}
-              <div className="hero-stats-row">
-                {slides[currentSlide].stats.map((stat, idx) => (
-                  <React.Fragment key={idx}>
-                    {idx > 0 && <div className="hero-stat-divider" />}
-                    <div className="hero-stat-pill">
-                      <span className="hero-stat-num">{stat.num}</span>
-                      <span className="hero-stat-label">{stat.label}</span>
-                    </div>
-                  </React.Fragment>
-                ))}
-              </div>
-
-              {/* Dual CTA Buttons */}
-              <div className="hero-cta-row">
-                <button
-                  className="hero-btn"
-                  onClick={() => { setExploreTab(slides[currentSlide].cta1Tab); navigate('/explore'); }}
-                >
-                  {slides[currentSlide].cta1Text}
-                </button>
-                <button
-                  className="hero-btn-outline"
-                  onClick={() => { setExploreTab(slides[currentSlide].cta2Tab); navigate('/explore'); }}
-                >
-                  {slides[currentSlide].cta2Text}
-                </button>
-              </div>
-
-              {/* Trust Strip */}
-              <div className="hero-trust-strip">
-                {slides[currentSlide].trustText}
-              </div>
-            </div>
-
-            {/* Photographer/Asset Center Overlay */}
-            <div className="hero-banner-image-wrap active-slide" key={`image-${currentSlide}`}>
-              <img
-                src={`${import.meta.env.BASE_URL}${slides[currentSlide].image}`}
-                className="hero-banner-image"
-                alt="Hero banner illustration"
-              />
-            </div>
-
-            {/* Right column: How it Works */}
-            <div className="hero-how-col">
-              <span className="hero-how-label">How it works</span>
-              <div className="hero-how-steps">
-                <div className="hero-how-step">
-                  <span className="hero-how-num">01</span>
-                  <div>
-                    <span className="hero-how-title">Search &amp; Filter</span>
-                    <span className="hero-how-desc">Browse studios, gear &amp; talent by location, category &amp; budget.</span>
-                  </div>
-                </div>
-                <div className="hero-how-step">
-                  <span className="hero-how-num">02</span>
-                  <div>
-                    <span className="hero-how-title">Instant Booking</span>
-                    <span className="hero-how-desc">Pick your date &amp; time slot. Confirm with secure payment in seconds.</span>
-                  </div>
-                </div>
-                <div className="hero-how-step">
-                  <span className="hero-how-num">03</span>
-                  <div>
-                    <span className="hero-how-title">Shoot &amp; Deliver</span>
-                    <span className="hero-how-desc">Show up, create magic. Receive edited content on time, every time.</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
+          {/* Pill Tags */}
+          <div className="hero-tags-row">
+            <span className="hero-tag">{slides[currentSlide].tag}</span>
+            <span className="hero-tag-green">{slides[currentSlide].tagGreen}</span>
           </div>
+
+          {/* Main Headline */}
+          <h1 className="hero-title">{slides[currentSlide].title}</h1>
+
+          {/* Subtitle */}
+          <p className="hero-subtitle">{slides[currentSlide].subtitle}</p>
+
+          {/* CTA Buttons */}
+          <div className="hero-cta-row">
+            <button
+              className="hero-btn"
+              onClick={() => { setExploreTab(slides[currentSlide].cta1Tab); navigate('/explore'); }}
+            >
+              {slides[currentSlide].cta1Text}
+            </button>
+            <button
+              className="hero-btn-outline"
+              onClick={() => { setExploreTab(slides[currentSlide].cta2Tab); navigate('/explore'); }}
+            >
+              {slides[currentSlide].cta2Text}
+            </button>
+          </div>
+
+          {/* Trust Strip */}
+          <div className="hero-trust-strip">{slides[currentSlide].trustText}</div>
         </div>
+
+        {/* Floating Stats Bar at bottom */}
+        <div className="hero-stats-bar active-slide" key={`stats-${currentSlide}`}>
+          {slides[currentSlide].stats.map((stat, idx) => (
+            <React.Fragment key={idx}>
+              {idx > 0 && <div className="hero-stat-divider" />}
+              <div className="hero-stat-pill">
+                <span className="hero-stat-num">{stat.num}</span>
+                <span className="hero-stat-label">{stat.label}</span>
+              </div>
+            </React.Fragment>
+          ))}
+        </div>
+
+        {/* Slide Indicators */}
         <div className="carousel-indicators">
           {slides.map((_, index) => (
             <span
@@ -249,6 +215,7 @@ const HomePage = () => {
           ))}
         </div>
       </div>
+
 
       {/* Category Grid Row */}
       <section style={{ marginTop: '48px', marginBottom: '24px' }}>
