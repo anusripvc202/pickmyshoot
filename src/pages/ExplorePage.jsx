@@ -231,38 +231,50 @@ const ExplorePage = () => {
         </div>
       )}
 
-      {/* Accordion 1: Categories Selector */}
-      <div className="filter-accordion">
-        <button className="accordion-header" onClick={() => toggleAccordion('categories')}>
-          <span>Workspace Categories</span>
-          {expandedFilters.categories ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-        </button>
-        {expandedFilters.categories && (
-          <div className="accordion-content">
-            <div className="filter-pills-wrap">
-              {categoriesList.map(cat => (
-                <button
-                  key={cat.id}
-                  className={`filter-pill-btn ${exploreTab === cat.id ? 'active' : ''}`}
-                  onClick={() => {
-                    setExploreTab(cat.id);
-                    // Reset filter selections when changing tabs
-                    setSelectedPrice(null);
-                    setSelectedRating(null);
-                    setSelectedLocation(null);
-                    setSelectedOccasion(null);
-                    setSelectedDateFilter(null);
-                    setGlobalLocation(null);
-                    setGlobalCategory(null);
-                    setGlobalDate(null);
-                  }}
-                >
-                  {cat.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
+      {/* Categories Vertical Stack List Selector (matching screenshot) */}
+      <div className="filter-accordion" style={{ border: 'none', padding: '0 0 16px 0', background: 'transparent', borderBottom: '1px solid var(--border)' }}>
+        <h4 style={{ fontFamily: 'var(--font-heading)', fontSize: '14px', fontWeight: 'bold', marginBottom: '12px', color: 'var(--text-main)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+          Categories
+        </h4>
+        <div className="sidebar-category-list" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {categoriesList.map(cat => {
+            const isActive = exploreTab === cat.id;
+            return (
+              <button
+                key={cat.id}
+                className={`sidebar-category-item ${isActive ? 'active' : ''}`}
+                style={{
+                  width: '100%',
+                  textAlign: 'left',
+                  padding: '10px 16px',
+                  borderRadius: '8px',
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '14px',
+                  fontWeight: '600',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  background: isActive ? 'var(--primary)' : 'rgba(200, 16, 46, 0.04)',
+                  color: isActive ? '#ffffff' : '#334e68'
+                }}
+                onClick={() => {
+                  setExploreTab(cat.id);
+                  // Reset filter selections when changing tabs
+                  setSelectedPrice(null);
+                  setSelectedRating(null);
+                  setSelectedLocation(null);
+                  setSelectedOccasion(null);
+                  setSelectedDateFilter(null);
+                  setGlobalLocation(null);
+                  setGlobalCategory(null);
+                  setGlobalDate(null);
+                }}
+              >
+                {cat.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Accordion 1.5: Occasions Selector */}

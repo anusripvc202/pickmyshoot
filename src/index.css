@@ -5895,27 +5895,27 @@ input:checked + .slider:before {
 }
 
 .filter-pill-btn {
-  border: 1px solid var(--border);
-  background-color: var(--bg-app);
-  color: var(--text-muted);
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 500;
+  border: none;
+  background-color: rgba(200, 16, 46, 0.04);
+  color: #334e68;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   transition: all var(--transition-fast);
 }
 
 .filter-pill-btn:hover {
-  border-color: var(--primary);
+  background-color: rgba(200, 16, 46, 0.08);
   color: var(--primary);
 }
 
 .filter-pill-btn.active {
   background-color: var(--primary);
-  border-color: var(--primary);
   color: #ffffff;
+  font-weight: 700;
 }
 
 /* Listings Results Container */
