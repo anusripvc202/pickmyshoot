@@ -45,6 +45,7 @@ const ExplorePage = () => {
     // Photography Services
     'Product Photography':     { label: 'Shoot Style',      options: ['White Background', 'Lifestyle Setup', 'Flat Lay', 'Packaging', '360° Product'] },
     'Pre Wedding Shoot':       { label: 'Location Theme',   options: ['Outdoor / Nature', 'Indoor Studio', 'Beach', 'Garden', 'Mountains'] },
+    'Wedding Shoot':           { label: 'Wedding Theme',    options: ['Traditional Ceremony', 'Candid Wedding', 'Reception Coverage', 'Bridal Portrait', 'Pre-Wedding Event'] },
     'Baby Photoshoot':         { label: 'Session Type',     options: ['Newborn (0–4 wks)', '3–6 Months', 'Cake Smash', 'Indoor Studio', 'Outdoor'] },
     'Real Estate Photography': { label: 'Property Type',   options: ['Apartment', 'Villa / Bungalow', 'Office Space', 'Commercial', 'Aerial HDR'] },
     'Reels & Social Media Shoot': { label: 'Platform',     options: ['Instagram Reels', 'TikTok', 'YouTube Shorts', 'LinkedIn'] },

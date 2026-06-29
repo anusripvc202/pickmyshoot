@@ -50,6 +50,68 @@ export const popularServices = [
     tags: ["Mountains"]
   },
 
+  // --- WEDDING SHOOTS ---
+  {
+    id: "ps-w1",
+    title: "Royal Traditional Wedding Coverage",
+    serviceType: "Wedding Shoot",
+    price: 49999,
+    rating: 4.9,
+    reviews: 580,
+    category: "Book Shoot",
+    image: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=500&q=80",
+    description: "Complete traditional ceremony wedding photography. Includes cinematic multi-cam angles, high-end flash coverage, and customized leather album printing.",
+    tags: ["Traditional Ceremony"]
+  },
+  {
+    id: "ps-w2",
+    title: "Cinematic Candid Wedding Film & Frame",
+    serviceType: "Wedding Shoot",
+    price: 64999,
+    rating: 4.8,
+    reviews: 245,
+    category: "Book Shoot",
+    image: "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=500&q=80",
+    description: "Artistic candid moments, cinematic wedding movie trailer with drone b-rolls, emotional closeups, and color-graded custom prints.",
+    tags: ["Candid Wedding"]
+  },
+  {
+    id: "ps-w3",
+    title: "Grand Reception Portrait & Event Coverage",
+    serviceType: "Wedding Shoot",
+    price: 34999,
+    rating: 4.7,
+    reviews: 188,
+    category: "Book Shoot",
+    image: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=500&q=80",
+    description: "Sleek coverage of wedding receptions, corporate cocktail dinners, guest stage snaps, and grand dinner decorations.",
+    tags: ["Reception Coverage"]
+  },
+  {
+    id: "ps-w4",
+    title: "Fine Art Bridal Portraiture",
+    serviceType: "Wedding Shoot",
+    price: 19999,
+    rating: 4.9,
+    reviews: 112,
+    category: "Book Shoot",
+    image: "https://images.unsplash.com/photo-1591604466107-ec97de577aff?auto=format&fit=crop&w=500&q=80",
+    description: "High-fashion bridal solo portrait session with soft diffused lighting, focus on bridal jewelry, traditional dress details, and creative studio backdrops.",
+    tags: ["Bridal Portrait"]
+  },
+  {
+    id: "ps-w5",
+    title: "Haldi & Sangeet Pre-Wedding Celebrations",
+    serviceType: "Wedding Shoot",
+    price: 24999,
+    rating: 4.8,
+    reviews: 156,
+    category: "Book Shoot",
+    image: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=500&q=80",
+    description: "Energetic and colorful candid coverage of Haldi, Mehendi, Sangeet, and family dance events with custom party props and instant photo printing options.",
+    tags: ["Pre-Wedding Event"]
+  },
+
   // --- BABY PHOTOSHOOTS ---
   {
     id: "ps-2",
