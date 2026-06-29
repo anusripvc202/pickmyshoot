@@ -140,7 +140,7 @@ body {
   background: linear-gradient(135deg, #C8102E 0%, #9B0C1E 100%);
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
   padding: 0;
-  height: 70px;
+  height: 80px;
   display: flex;
   align-items: center;
   transition: all var(--transition-normal);
@@ -186,7 +186,7 @@ body {
 /* Extra-small phones (< 480px) */
 @media (max-width: 479px) {
   .app-header {
-    height: 56px;
+    height: 64px;
   }
   .header-brand-logo {
     height: 40px;
@@ -205,7 +205,7 @@ body {
 /* Small phones (480px - 639px) */
 @media (min-width: 480px) and (max-width: 639px) {
   .app-header {
-    height: 60px;
+    height: 68px;
   }
   .header-brand-logo {
     height: 46px;
@@ -224,7 +224,7 @@ body {
 /* Tablets (640px - 768px) */
 @media (min-width: 640px) and (max-width: 768px) {
   .app-header {
-    height: 64px;
+    height: 72px;
   }
   .header-brand-logo {
     height: 48px;
@@ -240,7 +240,7 @@ body {
 /* Large tablets / small desktops (769px - 1023px) */
 @media (min-width: 769px) and (max-width: 1023px) {
   .app-header {
-    height: 68px;
+    height: 76px;
   }
   .header-brand-logo {
     height: 52px;
@@ -257,7 +257,7 @@ body {
 /* Desktop (1024px+) — matches reference image */
 @media (min-width: 1024px) {
   .app-header {
-    height: 70px;
+    height: 80px;
   }
   .header-brand-logo {
     height: 56px;
