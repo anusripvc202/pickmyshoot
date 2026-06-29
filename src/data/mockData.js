@@ -695,6 +695,54 @@ export const workshops = [
     image: "https://images.unsplash.com/photo-1473968512647-3e447244af8f?auto=format&fit=crop&w=500&q=80",
     isUpcoming: true,
     tags: ["Outdoor Flight Session"]
+  },
+  {
+    id: "wk-3",
+    title: "Portrait Photography Bootcamp",
+    workshopType: "Portrait Photography Bootcamp",
+    price: 799,
+    date: "05 JUL",
+    instructor: "Lens Academy",
+    rating: 4.8,
+    reviews: 42,
+    timing: "2:00 PM - 6:00 PM",
+    location: "Banjara Hills, Hyderabad",
+    description: "Hands-on studio lighting techniques for dramatic portraits, handling professional models, and setting up multi-point strobe lights.",
+    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=500&q=80",
+    isUpcoming: true,
+    tags: ["In-person Studio", "Live Model Session"]
+  },
+  {
+    id: "wk-4",
+    title: "Video Editing with Premiere Pro",
+    workshopType: "Video Editing with Premiere Pro",
+    price: 1299,
+    date: "12 JUL",
+    instructor: "EditX Studios",
+    rating: 4.9,
+    reviews: 95,
+    timing: "4:00 PM - 7:00 PM",
+    location: "Online / Virtual",
+    description: "Learn color grading (LUMETRI), audio mixing, dynamic typography, transitions, and storyboarding workflows in Premiere Pro.",
+    image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=500&q=80",
+    isUpcoming: true,
+    tags: ["Online / Virtual", "Evening Batch"]
+  },
+  {
+    id: "wk-5",
+    title: "Reels Creation & IG Growth",
+    workshopType: "Reels Creation & IG Growth",
+    price: 399,
+    date: "18 JUL",
+    instructor: "ViralMedia",
+    rating: 4.6,
+    reviews: 130,
+    timing: "7:00 PM - 9:00 PM",
+    location: "Virtual / Online",
+    description: "Master viral hooks, editing with CapCut, selecting trending audio, and content scheduling strategies to double your IG reach.",
+    image: "https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?auto=format&fit=crop&w=500&q=80",
+    isUpcoming: true,
+    tags: ["Virtual / Online", "Live Q&A Included"]
   }
 ];
 
