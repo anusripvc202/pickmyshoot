@@ -318,6 +318,22 @@ const Layout = () => {
 
   const handleSearchSubmit = (e) => {
     if (e) e.preventDefault();
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase().trim();
+      // Auto-switch to the most relevant category tab based on keywords
+      if (q.includes('gear') || q.includes('camera') || q.includes('lens') || q.includes('drone') || q.includes('light') || q.includes('gimbal') || q.includes('rental')) {
+        setExploreTab('rentals');
+      } else if (q.includes('studio') || q.includes('location') || q.includes('cyclorama') || q.includes('daylight') || q.includes('outdoor space')) {
+        setExploreTab('studios');
+      } else if (q.includes('model') || q.includes('talent') || q.includes('actor') || q.includes('fashion model')) {
+        setExploreTab('models');
+      } else if (q.includes('workshop') || q.includes('course') || q.includes('masterclass') || q.includes('bootcamp') || q.includes('training')) {
+        setExploreTab('workshops');
+      } else if (q.includes('job') || q.includes('gig') || q.includes('hiring') || q.includes('freelance') || q.includes('vacancy')) {
+        setExploreTab('jobs');
+      }
+      // else: stay on current tab (photography services or whatever is active)
+    }
     navigate('/explore');
   };
 
