@@ -21,6 +21,7 @@ const listingSchema = new mongoose.Schema({
   features: [String],  // for studio
   capacity: String,    // for studio
   area: String,        // for studio
+  studioType: String,  // for studio subtypes
   
   categories: [String], // for models
   gender: String,       // for models
@@ -37,11 +38,13 @@ const listingSchema = new mongoose.Schema({
   instructor: String,   // for workshops
   date: String,         // for workshops
   timing: String,       // for workshops
+  workshopType: String, // for workshop subtypes
   
   // Photography-specific fields
   specialization: String, // e.g. Wedding Photography, Fashion Photography
   experience: String,     // e.g. "5 years"
   portfolio: String,      // portfolio or Instagram URL
+  serviceType: String,    // for photography service subtypes
   
   createdAt: { type: Date, default: Date.now },
 });
