@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Camera, 
@@ -12,15 +12,13 @@ import {
   Briefcase, 
   GraduationCap, 
   LayoutGrid, 
+  ChevronLeft,
   ChevronRight, 
   Heart, 
   Star,
   Film,
   Clapperboard,
-  Palette,
-  ChevronDown,
-  CalendarDays,
-  Search
+  Palette
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { institutes } from '../data/mockData';
@@ -33,349 +31,181 @@ const HomePage = () => {
     likedItems,
     toggleLike,
     openDetails,
-    setExploreTab,
-    setGlobalLocation,
-    setGlobalCategory,
-    setGlobalDate
+    setExploreTab
   } = useAppContext();
 
   const navigate = useNavigate();
 
-  // Widget popover visibility states
-  const [showLocation, setShowLocation] = useState(false);
-  const [showCategory, setShowCategory] = useState(false);
-  const [showCalendar, setShowCalendar] = useState(false);
-
-  // Widget selected options
-  const [selectedLoc, setSelectedLoc] = useState(null);
-  const [selectedCat, setSelectedCat] = useState(null);
-  const [selectedDt, setSelectedDt] = useState(null);
-
-  // Calendar states
-  const [currentYear, setCurrentYear] = useState(2026);
-  const [currentMonth, setCurrentMonth] = useState(5); // June (0-indexed: 0-11, so 5 is June)
-
-  const locationRef = useRef(null);
-  const categoryRef = useRef(null);
-  const calendarRef = useRef(null);
-
-  // Close popovers when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (locationRef.current && !locationRef.current.contains(event.target)) {
-        setShowLocation(false);
-      }
-      if (categoryRef.current && !categoryRef.current.contains(event.target)) {
-        setShowCategory(false);
-      }
-      if (calendarRef.current && !calendarRef.current.contains(event.target)) {
-        setShowCalendar(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const locationsList = [
-    'Banjara Hills',
-    'Madhapur',
-    'Jubilee Hills',
-    'Gachibowli',
-    'Begumpet',
-    'Remote'
+  const slides = [
+    {
+      tag: "India's #1 Creator Marketplace",
+      tagGreen: "✓ Verified Listings",
+      title: (
+        <>
+          Book Studios,<br />
+          Gear &amp; Talent<br />
+          <span className="hero-title-accent">Instantly.</span>
+        </>
+      ),
+      subtitle: "Connect with top-rated photographers, premium studio spaces, professional models & camera gear — all in one place.",
+      image: "banner_photographer.png",
+      cta1Text: "🎬 Book a Studio",
+      cta1Tab: "studios",
+      cta2Text: "Find a Photographer",
+      cta2Tab: "services",
+      trustText: "📸 Wedding Shoots • 🎥 Reels & Ads • 🏢 Corporate Events • 👗 Fashion & Editorial",
+      stats: [
+        { num: "2,800+", label: "Verified Studios" },
+        { num: "15K+", label: "Creators" },
+        { num: "4.9★", label: "Avg. Rating" }
+      ],
+      background: "linear-gradient(135deg, #C8102E 0%, #800A1A 100%)"
+    },
+    {
+      tag: "Save on Production Costs",
+      tagGreen: "✓ Standard Insurance",
+      title: (
+        <>
+          Top-Tier Cameras<br />
+          &amp; Gear Rentals<br />
+          <span className="hero-title-accent">Insured.</span>
+        </>
+      ),
+      subtitle: "Rent professional cinema packages, high-end DSLRs, prime lenses, and specialized lighting with flexible daily rates.",
+      image: "banner_cameras.png",
+      cta1Text: "🎥 Rent Gear",
+      cta1Tab: "rentals",
+      cta2Text: "Explore Packages",
+      cta2Tab: "rentals",
+      trustText: "🎥 RED & Arri • 📸 Prime Lenses • 💡 Studio Lights • 🛸 Professional Drones",
+      stats: [
+        { num: "500+", label: "Camera Kits" },
+        { num: "100%", label: "Quality Inspected" },
+        { num: "Free", label: "Delivery Options" }
+      ],
+      background: "linear-gradient(135deg, #1E293B 0%, #0F172A 100%)"
+    },
+    {
+      tag: "Work with the Best",
+      tagGreen: "✓ Trusted by Brands",
+      title: (
+        <>
+          Capture Your Vision<br />
+          With Top Talent<br />
+          <span className="hero-title-accent">Perfected.</span>
+        </>
+      ),
+      subtitle: "Hire pre-screened professionals for weddings, high-fashion editorials, e-commerce, commercial ads, and post-production.",
+      image: "pre_wedding_shoot_new.png",
+      cta1Text: "💍 Book a Shoot",
+      cta1Tab: "services",
+      cta2Text: "View Creative Portfolios",
+      cta2Tab: "services",
+      trustText: "👰 Weddings • 👕 E-Commerce • 🎬 Music Videos • 🍔 Food Photography",
+      stats: [
+        { num: "1,200+", label: "Photo Shoots" },
+        { num: "48hr", label: "Average Delivery" },
+        { num: "100%", label: "Secure Payments" }
+      ],
+      background: "linear-gradient(135deg, #8C6239 0%, #4A3B32 100%)"
+    }
   ];
 
-  const occasionsList = [
-    { label: 'Pre Wedding Shoot', value: 'Pre Wedding Shoot' },
-    { label: 'Baby Photoshoot', value: 'Baby Photoshoot' },
-    { label: 'Product Photography', value: 'Product Photography' },
-    { label: 'Real Estate Shoot', value: 'Real Estate Photography' },
-    { label: 'Reels & Shorts Creator', value: 'Reels & Social Media Shoot' },
-    { label: 'Maternity Portraits', value: 'Maternity Shoot' },
-    { label: 'Corporate Headshots', value: 'Corporate Shoot' },
-    { label: 'Birthday Event Shoot', value: 'Birthday Shoot' },
-    { label: 'Fashion Catalog Lookbook', value: 'Fashion Catalog Shoot' },
-    { label: 'Food & Restaurant', value: 'Food & Culinary Shoot' },
-    { label: 'Commercial Corporate Video', value: 'Commercial Film Shoot' }
-  ];
+  const [currentSlide, setCurrentSlide] = React.useState(0);
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [slides.length]);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
 
   const handleCategoryClick = (tabName) => {
     setExploreTab(tabName);
     navigate('/explore');
   };
 
-  const handleQuickSearch = (occasionName) => {
-    setGlobalCategory(occasionName);
-    setExploreTab('services');
-    navigate('/explore');
-  };
-
-  const handleSearchSubmit = (e) => {
-    if (e) e.preventDefault();
-    setGlobalLocation(selectedLoc);
-    setGlobalCategory(selectedCat);
-    setGlobalDate(selectedDt);
-    setExploreTab('services'); // Redirect to search photography services
-    navigate('/explore');
-  };
-
-  // Generate days in a month helper for calendar
-  const getDaysInMonth = (month, year) => {
-    return new Date(year, month + 1, 0).getDate();
-  };
-
-  const getFirstDayOfMonth = (month, year) => {
-    return new Date(year, month, 1).getDay();
-  };
-
-  const daysInMonth = getDaysInMonth(currentMonth, currentYear);
-  const firstDay = getFirstDayOfMonth(currentMonth, currentYear);
-  
-  const monthNames = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
-
   return (
     <>
       {/* Full-width Hero Banner Slider */}
       <div className="hero-carousel-container">
-        <div className="hero-banner">
+        {/* Navigation Arrows */}
+        <button className="carousel-arrow prev" onClick={prevSlide} aria-label="Previous Slide">
+          <ChevronLeft size={20} />
+        </button>
+        <button className="carousel-arrow next" onClick={nextSlide} aria-label="Next Slide">
+          <ChevronRight size={20} />
+        </button>
+
+        <div className="hero-banner" style={{ background: slides[currentSlide].background }}>
           <div className="hero-banner-inner">
-            <div className="hero-banner-content">
+            {/* Key attribute ensures fresh render/animation on slide index change */}
+            <div className="hero-banner-content active-slide" key={`content-${currentSlide}`}>
               {/* Concept Tag */}
               <div className="hero-tags-row">
-                <span className="hero-tag">India's #1 Creator Marketplace</span>
-                <span className="hero-tag-green">✓ Verified Listings</span>
+                <span className="hero-tag">{slides[currentSlide].tag}</span>
+                <span className="hero-tag-green">{slides[currentSlide].tagGreen}</span>
               </div>
 
               {/* Main headline */}
               <h1 className="hero-title">
-                Find the perfect<br />
-                photographer for<br />
-                <span className="hero-title-accent">every moment.</span>
+                {slides[currentSlide].title}
               </h1>
 
               {/* Sub-headline */}
               <p className="hero-subtitle">
-                Connect with top-rated photographers, premium studio spaces,
-                professional models &amp; camera gear — all in one place.
+                {slides[currentSlide].subtitle}
               </p>
 
               {/* Live Stats Row */}
               <div className="hero-stats-row">
-                <div className="hero-stat-pill">
-                  <span className="hero-stat-num">2,800+</span>
-                  <span className="hero-stat-label">Verified Studios</span>
-                </div>
-                <div className="hero-stat-divider" />
-                <div className="hero-stat-pill">
-                  <span className="hero-stat-num">15K+</span>
-                  <span className="hero-stat-label">Creators</span>
-                </div>
-                <div className="hero-stat-divider" />
-                <div className="hero-stat-pill">
-                  <span className="hero-stat-num">4.9★</span>
-                  <span className="hero-stat-label">Avg. Rating</span>
-                </div>
+                {slides[currentSlide].stats.map((stat, idx) => (
+                  <React.Fragment key={idx}>
+                    {idx > 0 && <div className="hero-stat-divider" />}
+                    <div className="hero-stat-pill">
+                      <span className="hero-stat-num">{stat.num}</span>
+                      <span className="hero-stat-label">{stat.label}</span>
+                    </div>
+                  </React.Fragment>
+                ))}
               </div>
 
-              {/* Redesigned Search Widget */}
-              <form onSubmit={handleSearchSubmit} className="search-widget-container">
-                {/* 1. Location Selector */}
-                <div 
-                  ref={locationRef} 
-                  className="search-widget-col"
-                  onClick={() => {
-                    setShowLocation(!showLocation);
-                    setShowCategory(false);
-                    setShowCalendar(false);
-                  }}
+              {/* Dual CTA Buttons */}
+              <div className="hero-cta-row">
+                <button
+                  className="hero-btn"
+                  onClick={() => { setExploreTab(slides[currentSlide].cta1Tab); navigate('/explore'); }}
                 >
-                  <span className="search-widget-label">Location</span>
-                  <div className="search-widget-value-row">
-                    <MapPin size={16} color="var(--primary)" />
-                    {selectedLoc ? (
-                      <span className="search-widget-value">{selectedLoc}</span>
-                    ) : (
-                      <span className="search-widget-placeholder">Select City / Area</span>
-                    )}
-                  </div>
-                  
-                  {showLocation && (
-                    <div className="search-widget-dropdown">
-                      {locationsList.map(loc => (
-                        <button
-                          key={loc}
-                          type="button"
-                          className={`search-widget-dropdown-item ${selectedLoc === loc ? 'active' : ''}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedLoc(loc);
-                            setShowLocation(false);
-                          }}
-                        >
-                          <MapPin size={14} />
-                          <span>{loc}</span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* 2. Occasion/Category Selector */}
-                <div 
-                  ref={categoryRef} 
-                  className="search-widget-col"
-                  onClick={() => {
-                    setShowCategory(!showCategory);
-                    setShowLocation(false);
-                    setShowCalendar(false);
-                  }}
-                >
-                  <span className="search-widget-label">Occasion / Category</span>
-                  <div className="search-widget-value-row">
-                    <Camera size={16} color="var(--primary)" />
-                    {selectedCat ? (
-                      <span className="search-widget-value">
-                        {occasionsList.find(o => o.value === selectedCat)?.label || selectedCat}
-                      </span>
-                    ) : (
-                      <span className="search-widget-placeholder">What are you shooting?</span>
-                    )}
-                  </div>
-
-                  {showCategory && (
-                    <div className="search-widget-dropdown" style={{ width: '280px' }}>
-                      {occasionsList.map(occ => (
-                        <button
-                          key={occ.value}
-                          type="button"
-                          className={`search-widget-dropdown-item ${selectedCat === occ.value ? 'active' : ''}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedCat(occ.value);
-                            setShowCategory(false);
-                          }}
-                        >
-                          <Camera size={14} />
-                          <span>{occ.label}</span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* 3. Date / Calendar Picker */}
-                <div 
-                  ref={calendarRef} 
-                  className="search-widget-col"
-                  onClick={() => {
-                    setShowCalendar(!showCalendar);
-                    setShowLocation(false);
-                    setShowCategory(false);
-                  }}
-                >
-                  <span className="search-widget-label">Date</span>
-                  <div className="search-widget-value-row">
-                    <CalendarDays size={16} color="var(--primary)" />
-                    {selectedDt ? (
-                      <span className="search-widget-value">{selectedDt}</span>
-                    ) : (
-                      <span className="search-widget-placeholder">Select Date</span>
-                    )}
-                  </div>
-
-                  {showCalendar && (
-                    <div className="custom-calendar-popover" onClick={(e) => e.stopPropagation()}>
-                      <div className="calendar-header">
-                        <button 
-                          type="button" 
-                          className="calendar-nav-btn"
-                          style={{ background: 'none', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}
-                          onClick={() => {
-                            if (currentMonth === 0) {
-                              setCurrentMonth(11);
-                              setCurrentYear(y => y - 1);
-                            } else {
-                              setCurrentMonth(m => m - 1);
-                            }
-                          }}
-                        >
-                          &lt;
-                        </button>
-                        <span className="calendar-month-title">{monthNames[currentMonth]} {currentYear}</span>
-                        <button 
-                          type="button" 
-                          className="calendar-nav-btn"
-                          style={{ background: 'none', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}
-                          onClick={() => {
-                            if (currentMonth === 11) {
-                              setCurrentMonth(0);
-                              setCurrentYear(y => y + 1);
-                            } else {
-                              setCurrentMonth(m => m + 1);
-                            }
-                          }}
-                        >
-                          &gt;
-                        </button>
-                      </div>
-
-                      <div className="calendar-grid">
-                        {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(day => (
-                          <div key={day} className="calendar-day-label">{day}</div>
-                        ))}
-                        {Array.from({ length: firstDay }).map((_, idx) => (
-                          <div key={`empty-${idx}`} />
-                        ))}
-                        {Array.from({ length: daysInMonth }).map((_, idx) => {
-                          const dayNum = idx + 1;
-                          const dateString = `${dayNum} ${monthNames[currentMonth].substring(0, 3)} ${currentYear}`;
-                          const isSelected = selectedDt === dateString;
-                          return (
-                            <button
-                              key={`day-${dayNum}`}
-                              type="button"
-                              className={`calendar-day-btn ${isSelected ? 'active' : ''}`}
-                              onClick={() => {
-                                setSelectedDt(dateString);
-                                setShowCalendar(false);
-                              }}
-                            >
-                              {dayNum}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* 4. Search Submit Button */}
-                <button type="submit" className="search-widget-submit-btn">
-                  <Search size={22} color="white" />
+                  {slides[currentSlide].cta1Text}
                 </button>
-              </form>
+                <button
+                  className="hero-btn-outline"
+                  onClick={() => { setExploreTab(slides[currentSlide].cta2Tab); navigate('/explore'); }}
+                >
+                  {slides[currentSlide].cta2Text}
+                </button>
+              </div>
 
               {/* Trust Strip */}
               <div className="hero-trust-strip">
-                <span onClick={() => handleQuickSearch('Pre Wedding Shoot')} style={{ cursor: 'pointer', hover: { textDecoration: 'underline' } }}>📸 Wedding Shoots</span>
-                <span>•</span>
-                <span onClick={() => handleQuickSearch('Reels & Social Media Shoot')} style={{ cursor: 'pointer' }}>🎥 Reels &amp; Ads</span>
-                <span>•</span>
-                <span onClick={() => handleQuickSearch('Corporate Shoot')} style={{ cursor: 'pointer' }}>🏢 Corporate Events</span>
-                <span>•</span>
-                <span onClick={() => handleQuickSearch('Fashion Catalog Shoot')} style={{ cursor: 'pointer' }}>👗 Fashion &amp; Editorial</span>
+                {slides[currentSlide].trustText}
               </div>
             </div>
 
-            {/* Photographer Center Overlay */}
-            <div className="hero-banner-image-wrap">
+            {/* Photographer/Asset Center Overlay */}
+            <div className="hero-banner-image-wrap active-slide" key={`image-${currentSlide}`}>
               <img
-                src={`${import.meta.env.BASE_URL}banner_photographer.png`}
+                src={`${import.meta.env.BASE_URL}${slides[currentSlide].image}`}
                 className="hero-banner-image"
-                alt="Photographer"
+                alt="Hero banner illustration"
               />
             </div>
 
@@ -410,10 +240,13 @@ const HomePage = () => {
           </div>
         </div>
         <div className="carousel-indicators">
-          <span className="indicator active"></span>
-          <span className="indicator"></span>
-          <span className="indicator"></span>
-          <span className="indicator"></span>
+          {slides.map((_, index) => (
+            <span
+              key={index}
+              className={`indicator ${index === currentSlide ? 'active' : ''}`}
+              onClick={() => setCurrentSlide(index)}
+            />
+          ))}
         </div>
       </div>
 
