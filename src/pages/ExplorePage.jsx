@@ -60,6 +60,11 @@ const ExplorePage = () => {
     'Lights':  { label: 'Light Type',   options: ['LED Continuous', 'Strobe / Flash', 'Ring Light', 'Softbox Panel'] },
     'Drones':  { label: 'Drone Use',    options: ['Aerial Photography', 'Video Mapping', 'Events & Weddings', 'Real Estate'] },
     'Gimbal':  { label: 'Gimbal Use',   options: ['Handheld Video', '3-Axis Motorized', 'Smartphone Mount', 'Run & Gun'] },
+    // Studios & Locations
+    'Daylight Studio':        { label: 'Lighting Theme', options: ['Natural Sunbeam', 'Overcast Soft', 'Golden Hour Props', 'Minimalist Shadows'] },
+    'Cyclorama Studio':       { label: 'Cyc Backdrop',   options: ['Seamless White', 'Chroma Green', 'Controllable RGB', 'Studio Blackout'] },
+    'Vintage & Retro Studio': { label: 'Props Theme',    options: ['1970s Neon', 'Royal Heritage', 'Bohemian Chic', 'Rustic Wooden'] },
+    'Outdoor & Garden Space': { label: 'Natural Theme',  options: ['Lush Greenery', 'Floral Arch', 'Water Fountain', 'English Villa'] },
     // Models
     'Fashion':    { label: 'Model Style',   options: ['Editorial', 'Runway', 'Catalog Shoot', 'Lookbook'] },
     'Commercial': { label: 'Project Type',  options: ['E-commerce', 'Brand Campaign', 'Corporate', 'Print Ad'] },

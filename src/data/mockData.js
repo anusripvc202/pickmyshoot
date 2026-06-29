@@ -250,9 +250,11 @@ export const popularServices = [
 ];
 
 export const studios = [
+  // --- DAYLIGHT STUDIOS ---
   {
     id: "st-1",
     title: "The Loft Studio",
+    studioType: "Daylight Studio",
     price: 1500,
     priceUnit: "hr",
     rating: 4.8,
@@ -265,79 +267,13 @@ export const studios = [
     amenities: ["Lighting Equipment", "Backdrops", "Makeup Room", "Changing Room", "Pantry"],
     features: ["Parking", "AC", "Wi-Fi"],
     isFeatured: true,
-    description: "A premium daylight studio with modern interiors, perfect for fashion, product and portrait shoots. Features tall industrial windows, high ceilings, custom brick wall layouts, and state-of-the-art booking spaces."
-  },
-  {
-    id: "st-2",
-    title: "Infinity Studio",
-    price: 2000,
-    priceUnit: "hr",
-    rating: 4.7,
-    reviews: 96,
-    location: "Madhapur, Hyderabad",
-    distance: "3.5 km away",
-    image: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=500&q=80",
-    area: "1200 Sq.ft",
-    capacity: "10 People",
-    amenities: ["Cyc Wall", "Studio Lights", "Changing Room", "Pantry"],
-    features: ["AC", "Wi-Fi"],
-    isFeatured: false,
-    description: "A minimalist studio with a large white cyclorama wall, ideal for commercial videos, fashion photography, and high-impact catalog shoots. Offers fully controllable RGB ceiling ambient lights."
-  },
-  {
-    id: "st-3",
-    title: "Retro Vibe Space",
-    price: 1800,
-    priceUnit: "hr",
-    rating: 4.9,
-    reviews: 78,
-    location: "Jubilee Hills, Hyderabad",
-    distance: "2.1 km away",
-    image: "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=500&q=80",
-    area: "900 Sq.ft",
-    capacity: "8 People",
-    amenities: ["Vintage Props", "Colored Backgrounds", "Makeup Room"],
-    features: ["Parking", "Wi-Fi"],
-    isFeatured: false,
-    description: "Step back in time with our themed retro space, complete with mid-century furniture, vintage record players, neon signs, and textured wallpaper. Perfect for creative concept photography and reels."
-  },
-  {
-    id: "st-4",
-    title: "Rustic Warehouse",
-    price: 1200,
-    priceUnit: "hr",
-    rating: 4.8,
-    reviews: 64,
-    location: "Gachibowli, Hyderabad",
-    distance: "4.8 km away",
-    image: "https://images.unsplash.com/photo-1595515106969-1ce29566ff1c?auto=format&fit=crop&w=500&q=80",
-    area: "1800 Sq.ft",
-    capacity: "20 People",
-    amenities: ["Industrial Props", "High Ceilings", "Makeup Room", "AC"],
-    features: ["Parking", "Wi-Fi"],
-    isFeatured: true,
-    description: "A large industrial warehouse studio featuring exposed pipes, brick walls, and multiple rustic props. Great for music videos, cinematic films, and grunge fashion shoots."
-  },
-  {
-    id: "st-5",
-    title: "Chroma Green Room",
-    price: 1000,
-    priceUnit: "hr",
-    rating: 4.6,
-    reviews: 42,
-    location: "Begumpet, Hyderabad",
-    distance: "5.1 km away",
-    image: "https://images.unsplash.com/photo-1601506521937-0121a7fc2a6b?auto=format&fit=crop&w=500&q=80",
-    area: "800 Sq.ft",
-    capacity: "6 People",
-    amenities: ["Full Cyc Green Screen", "Soundproofing", "Controllable LED Grid", "Makeup Room"],
-    features: ["AC", "Wi-Fi"],
-    isFeatured: false,
-    description: "Professional virtual production green screen room with fully integrated lighting grids, ideal for vfx composition, interviews, and reels creator edits."
+    description: "A premium daylight studio with modern interiors, perfect for fashion, product and portrait shoots. Features tall industrial windows, high ceilings, custom brick wall layouts, and state-of-the-art booking spaces with gorgeous natural sunbeams.",
+    tags: ["Natural Sunbeam"]
   },
   {
     id: "st-6",
     title: "Daylight Minimalist Space",
+    studioType: "Daylight Studio",
     price: 2200,
     priceUnit: "hr",
     rating: 4.9,
@@ -350,11 +286,74 @@ export const studios = [
     amenities: ["Softbox Panels", "Textured Backdrops", "Changing Room", "Lounge Area"],
     features: ["Parking", "AC", "Wi-Fi"],
     isFeatured: true,
-    description: "Bright and airy high-ceiling studio featuring clean scandinavian styling, natural wooden floorboards, and huge floor-to-ceiling north facing windows."
+    description: "Bright and airy high-ceiling studio featuring clean scandinavian styling, natural wooden floorboards, minimal shadows, and huge floor-to-ceiling north facing windows.",
+    tags: ["Minimalist Shadows"]
+  },
+
+  // --- CYCLORAMA STUDIOS ---
+  {
+    id: "st-2",
+    title: "Infinity Studio",
+    studioType: "Cyclorama Studio",
+    price: 2000,
+    priceUnit: "hr",
+    rating: 4.7,
+    reviews: 96,
+    location: "Madhapur, Hyderabad",
+    distance: "3.5 km away",
+    image: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=500&q=80",
+    area: "1200 Sq.ft",
+    capacity: "10 People",
+    amenities: ["Cyc Wall", "Studio Lights", "Changing Room", "Pantry"],
+    features: ["AC", "Wi-Fi"],
+    isFeatured: false,
+    description: "A minimalist studio with a large white cyclorama wall, ideal for commercial videos, fashion photography, and high-impact catalog shoots. Offers fully controllable seamless white layout and RGB ceiling ambient lights.",
+    tags: ["Seamless White"]
+  },
+  {
+    id: "st-5",
+    title: "Chroma Green Room",
+    studioType: "Cyclorama Studio",
+    price: 1000,
+    priceUnit: "hr",
+    rating: 4.6,
+    reviews: 42,
+    location: "Begumpet, Hyderabad",
+    distance: "5.1 km away",
+    image: "https://images.unsplash.com/photo-1601506521937-0121a7fc2a6b?auto=format&fit=crop&w=500&q=80",
+    area: "800 Sq.ft",
+    capacity: "6 People",
+    amenities: ["Full Cyc Green Screen", "Soundproofing", "Controllable LED Grid", "Makeup Room"],
+    features: ["AC", "Wi-Fi"],
+    isFeatured: false,
+    description: "Professional virtual production green screen room with fully integrated chroma green cyc walls and lighting grids, ideal for vfx composition, interviews, and reels creator edits.",
+    tags: ["Chroma Green"]
+  },
+
+  // --- VINTAGE STUDIOS ---
+  {
+    id: "st-3",
+    title: "Retro Vibe Space",
+    studioType: "Vintage & Retro Studio",
+    price: 1800,
+    priceUnit: "hr",
+    rating: 4.9,
+    reviews: 78,
+    location: "Jubilee Hills, Hyderabad",
+    distance: "2.1 km away",
+    image: "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=500&q=80",
+    area: "900 Sq.ft",
+    capacity: "8 People",
+    amenities: ["Vintage Props", "Colored Backgrounds", "Makeup Room"],
+    features: ["Parking", "Wi-Fi"],
+    isFeatured: false,
+    description: "Step back in time with our themed retro space, complete with mid-century furniture, vintage record players, neon signs, and textured 1970s neon wallpaper. Perfect for creative concept photography and reels.",
+    tags: ["1970s Neon"]
   },
   {
     id: "st-7",
     title: "Vintage Library Lot",
+    studioType: "Vintage & Retro Studio",
     price: 1900,
     priceUnit: "hr",
     rating: 4.8,
@@ -367,7 +366,29 @@ export const studios = [
     amenities: ["Classic Mahogany Bookshelves", "Leather Sofas", "Retro Table Lamps", "Backdrops"],
     features: ["Parking", "Wi-Fi"],
     isFeatured: false,
-    description: "Elegant library-themed layout decorated with vintage bookshelves, leather bound books, mahogany desk, and warm ambient lighting. Perfect for academic interviews and portrait shoots."
+    description: "Elegant library-themed layout decorated with vintage bookshelves, leather bound books, royal heritage props, mahogany desk, and warm ambient lighting. Perfect for academic interviews and portrait shoots.",
+    tags: ["Royal Heritage"]
+  },
+
+  // --- OUTDOOR STUDIOS ---
+  {
+    id: "st-8",
+    title: "Green Secret Garden Location",
+    studioType: "Outdoor & Garden Space",
+    price: 2500,
+    priceUnit: "hr",
+    rating: 4.9,
+    reviews: 34,
+    location: "Gachibowli, Hyderabad",
+    distance: "4.2 km away",
+    image: "https://images.unsplash.com/photo-1508849789987-4e5333c12b78?auto=format&fit=crop&w=500&q=80",
+    area: "3000 Sq.ft",
+    capacity: "30 People",
+    amenities: ["Changing Room", "Natural Flora Props", "Outdoor Light Deflectors"],
+    features: ["Parking", "Wi-Fi"],
+    isFeatured: true,
+    description: "Beautiful open-air lush greenery location featuring custom floral arches, cobblestone pathways, and deep private garden corners. Ideal for couples, wedding, and maternity portraits.",
+    tags: ["Lush Greenery"]
   }
 ];
 
@@ -385,22 +406,24 @@ export const models = [
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=500&q=80",
     height: "5'7\"",
     categories: ["Fashion", "Commercial", "Ethnic"],
-    description: "Professional model with over 4 years of experience working with top fashion brands, ethnic wear labels, and e-commerce campaigns."
+    description: "Professional model with over 4 years of experience working with top fashion brands, ethnic wear labels, and e-commerce campaigns.",
+    tags: ["Editorial", "E-commerce", "Saree / Lehenga"]
   },
   {
     id: "md-2",
     title: "Riya Sharma",
-    price: 6000,
+    price: 8000,
     priceUnit: "day",
     rating: 4.9,
     reviews: 53,
     gender: "Female",
-    type: "Fashion Model",
+    type: "Model",
     location: "Hyderabad",
     image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=500&q=80",
     height: "5'8\"",
-    categories: ["Editorial", "Runway", "Western"],
-    description: "Editorial runway model specializing in high-fashion shoots, luxury accessories, and western brand campaigns. Versatile expressions and poses."
+    categories: ["Fashion", "Commercial"],
+    description: "Editorial runway model specializing in high-fashion shoots, luxury accessories, and western brand campaigns. Versatile expressions and runway styling.",
+    tags: ["Runway", "Brand Campaign"]
   },
   {
     id: "md-3",
@@ -410,61 +433,50 @@ export const models = [
     rating: 4.8,
     reviews: 44,
     gender: "Male",
-    type: "Commercial Model",
+    type: "Model",
     location: "Hyderabad",
     image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=500&q=80",
     height: "6'0\"",
-    categories: ["Fitness", "Corporate", "Casual"],
-    description: "Dynamic male commercial and fitness model. Experienced in athletic apparel marketing, corporate lookbooks, and casual print ads."
-  },
-  {
-    id: "md-4",
-    title: "Vihaan Mehta",
-    price: 3500,
-    priceUnit: "day",
-    rating: 4.7,
-    reviews: 22,
-    gender: "Male",
-    type: "Young Model",
-    location: "Hyderabad",
-    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=500&q=80",
-    height: "5'11\"",
-    categories: ["Casual", "Streetwear", "Reels"],
-    description: "Enthusiastic new-generation model specializing in Gen-Z streetwear, casual college aesthetics, and trendy short video creation."
+    categories: ["Fitness", "Commercial"],
+    description: "Dynamic male commercial and fitness model. Experienced in athletic apparel marketing, Gym / Athletic photo shoots, corporate lookbooks, and casual print ads.",
+    tags: ["Gym / Athletic", "Corporate"]
   },
   {
     id: "md-5",
-    title: "Priya Sharma",
-    price: 5000,
+    title: "Priya Sen",
+    price: 5500,
     priceUnit: "day",
     rating: 4.8,
     reviews: 61,
     gender: "Female",
-    type: "Fashion Model",
+    type: "Model",
     location: "Hyderabad",
     image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500&q=80",
     height: "5'6\"",
-    categories: ["Ethnic", "Commercial"],
-    description: "Ethnic photoshoot expert with extensive experience in bridal jewelry, designer sarees, and traditional Indian attire campaigns."
+    categories: ["Ethnic", "Bridal"],
+    description: "Ethnic photoshoot expert with extensive experience in bridal jewelry, designer sarees, and traditional Indian wedding attire campaigns.",
+    tags: ["Bridal Jewelry", "Hindu Wedding"]
   },
   {
     id: "md-6",
     title: "Ananya Reddy",
-    price: 6000,
+    price: 6500,
     priceUnit: "day",
     rating: 4.8,
     reviews: 41,
     gender: "Female",
-    type: "Commercial Model",
+    type: "Model",
     location: "Hyderabad",
     image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=500&q=80",
     height: "5'7\"",
-    categories: ["Bridal", "Social Media"],
-    description: "Sought-after creator and model. Perfect for direct-to-consumer cosmetics, skincare, and bridal lookbooks with a massive digital presence."
+    categories: ["Bridal", "Commercial"],
+    description: "Sought-after creator and model. Perfect for direct-to-consumer cosmetics, skincare, and bridal lookbooks with a massive digital presence.",
+    tags: ["Mehendi / Pre-wedding", "E-commerce"]
   }
 ];
 
 export const gearRentals = [
+  // --- CAMERAS ---
   {
     id: "gr-1",
     title: "Canon R6 Mark II",
@@ -476,7 +488,8 @@ export const gearRentals = [
     image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=500&q=80",
     specs: "24.2 MP, 4K 60p, Dual Pixel AF II, up to 40 fps raw burst",
     includes: "Camera Body, 2 LP-E6NH Batteries, Dual Charger, 128GB UHS-II SD Card",
-    description: "A highly versatile hybrid mirrorless camera offering ground-breaking autofocus speeds, exceptional low-light ISO range, and 4K uncropped cinematic video recording."
+    description: "A highly versatile hybrid mirrorless camera offering ground-breaking autofocus speeds, exceptional low-light ISO range, and 4K uncropped cinematic video recording.",
+    tags: ["Full Frame Mirrorless"]
   },
   {
     id: "gr-2",
@@ -489,8 +502,11 @@ export const gearRentals = [
     image: "https://images.unsplash.com/photo-1616440347437-b1c73416efc2?auto=format&fit=crop&w=500&q=80",
     specs: "33.0 MP Full-Frame Exmor R CMOS, 4K 60p, Real-time Eye AF",
     includes: "Sony A7IV Body, 2 NP-FZ100 Batteries, Charger, 128GB High-Speed SD Card, Body Cap",
-    description: "The benchmark hybrid camera. Delivering stunning 33MP photos and 10-bit 4:2:2 video capability with Sony's industry-leading real-time eye tracking autofocus."
+    description: "The benchmark hybrid camera. Delivering stunning 33MP photos and 10-bit 4:2:2 video capability with Sony's industry-leading real-time eye tracking full frame mirrorless autofocus.",
+    tags: ["Full Frame Mirrorless"]
   },
+
+  // --- LENSES ---
   {
     id: "gr-3",
     title: "Canon RF 24-70mm f/2.8L",
@@ -502,11 +518,14 @@ export const gearRentals = [
     image: "https://images.unsplash.com/photo-1617005082133-548c4dd27f35?auto=format&fit=crop&w=500&q=80",
     specs: "Constant f/2.8 Max Aperture, 5 Stops Optical Image Stabilization",
     includes: "Lens, Lens Hood, Front Cap, Rear Cap, Padded Lens Pouch",
-    description: "The workhorse zoom lens for the Canon EOS R system. Delivers edge-to-edge sharpness, constant f/2.8 light transmission, and fast, silent Nano USM focusing."
+    description: "The workhorse standard zoom lens for the Canon EOS R system. Delivers edge-to-edge sharpness, constant f/2.8 light transmission, and fast, silent Nano USM focusing.",
+    tags: ["Standard Zoom"]
   },
+
+  // --- GIMBALS ---
   {
     id: "gr-4",
-    title: "DJI Ronin RS 3",
+    title: "DJI Ronin RS 3 Pro",
     price: 1200,
     priceUnit: "day",
     rating: 4.8,
@@ -515,11 +534,14 @@ export const gearRentals = [
     image: "https://images.unsplash.com/photo-1621252179027-94459d278660?auto=format&fit=crop&w=500&q=80",
     specs: "3.0 kg Tested Payload, Automated Axis Locks, 1.8\" OLED Touchscreen",
     includes: "RS 3 Gimbal, BG21 Grip, Briefcase Handle, Lens Support, Focus Gear, USB-C Cables, Carrying Case",
-    description: "Professional camera stabilizer offering incredible stabilization performance, automatic lock/unlock mechanisms, and intuitive touch screen operation."
+    description: "Professional camera stabilizer offering incredible 3-axis motorized stabilization performance, automatic lock/unlock mechanisms, and intuitive touch screen operation.",
+    tags: ["3-Axis Motorized"]
   },
+
+  // --- LIGHTS ---
   {
     id: "gr-5",
-    title: "Godox SL60W",
+    title: "Godox SL60W Duo Setup",
     price: 600,
     priceUnit: "day",
     rating: 4.9,
@@ -528,8 +550,25 @@ export const gearRentals = [
     image: "https://images.unsplash.com/photo-1560169897-fc0cdbdfa4d5?auto=format&fit=crop&w=500&q=80",
     specs: "60W LED Continuous Video Light, 5600K Color Temperature, Bowens Mount",
     includes: "Light Unit, Standard Reflector, Power Cord, Wireless Remote, 8ft Light Stand",
-    description: "An incredibly popular daylight-balanced continuous LED light source. Offers high color accuracy (CRI 95+) and soft light, ideal for talking head videos and streaming."
+    description: "An incredibly popular daylight-balanced continuous LED light source. Offers high color accuracy (CRI 95+) and soft light, ideal for talking head videos, softbox panels, and streaming.",
+    tags: ["LED Continuous"]
   },
+  {
+    id: "gr-7",
+    title: "Godox AD200 Pro Strobe",
+    price: 900,
+    priceUnit: "day",
+    rating: 4.7,
+    reviews: 33,
+    category: "Lights",
+    image: "https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=500&q=80",
+    specs: "200Ws TTL Pocket Flash, High-Speed Sync (HSS) up to 1/8000s, 2.4G Wireless System",
+    includes: "AD200 Pro Flash Body, Speedlite Flash Head, Bare Bulb Head, Lithium Battery Pack, Charger, Bracket, Carry Case",
+    description: "A pocket-sized 200W strobe flash light combining power, portability, and studio flexibility. Fully compatible with Canon, Sony, and Nikon TTL wireless triggers.",
+    tags: ["Strobe / Flash"]
+  },
+
+  // --- DRONES ---
   {
     id: "gr-6",
     title: "DJI Mavic 3 Pro",
@@ -541,33 +580,8 @@ export const gearRentals = [
     image: "https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=500&q=80",
     specs: "Hasselblad Main Camera (4/3 CMOS), Triple Camera System, 43 Min Flight Time",
     includes: "DJI Mavic 3 Pro, DJI RC Controller, 3 Intelligent Flight Batteries, Battery Charging Hub, ND Filter Set, Case",
-    description: "The ultimate cinema drone featuring three distinct optical camera sensors. Capture majestic master shots with extreme detail, professional color profiles (D-Log), and advanced obstacle sensing."
-  },
-  {
-    id: "gr-7",
-    title: "Godox AD200 Pro",
-    price: 900,
-    priceUnit: "day",
-    rating: 4.7,
-    reviews: 33,
-    category: "Lights",
-    image: "https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=500&q=80",
-    specs: "200Ws TTL Pocket Flash, High-Speed Sync (HSS) up to 1/8000s, 2.4G Wireless System",
-    includes: "AD200 Pro Flash Body, Speedlite Flash Head, Bare Bulb Head, Lithium Battery Pack, Charger, Bracket, Carry Case",
-    description: "A pocket-sized 200W strobe light combining power, portability, and studio flexibility. Fully compatible with Canon, Sony, and Nikon TTL wireless triggers."
-  },
-  {
-    id: "gr-8",
-    title: "Aputure 300D II",
-    price: 1500,
-    priceUnit: "day",
-    rating: 4.8,
-    reviews: 29,
-    category: "Lights",
-    image: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=500&q=80",
-    specs: "350W COB LED, 5500K Daylight, Bowens Mount, 0-100% Stepless Dimming",
-    includes: "LS C300d II Light, Control Box, Hyper Reflector, Quick Release Clamp, Heavy Duty Light Stand, Remote, Safe Case",
-    description: "Industry-standard point source LED fixture. Highly powerful, daylight-balanced output that rivals traditional 575W HMI lights, featuring built-in lighting effects."
+    description: "The ultimate cinema drone featuring three distinct optical camera sensors. Capture majestic aerial photography master shots with extreme detail, professional color profiles (D-Log), and advanced obstacle sensing.",
+    tags: ["Aerial Photography"]
   }
 ];
 
@@ -575,6 +589,7 @@ export const workshops = [
   {
     id: "wk-1",
     title: "Cinematography Masterclass",
+    workshopType: "Cinematography Masterclass",
     price: 999,
     date: "20 JUN",
     instructor: "Vijay Kartik",
@@ -582,13 +597,31 @@ export const workshops = [
     reviews: 56,
     timing: "10:00 AM - 5:00 PM",
     location: "HICC, Hyderabad",
-    description: "Learn professional camera movement, lighting setups, cinematic framing, and visual storytelling secrets from industry veteran Vijay Kartik.",
+    description: "Learn professional camera movement, lighting setups, cinematic framing, and visual storytelling secrets in this special in-person workshop from industry veteran Vijay Kartik.",
     image: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=500&q=80",
-    isUpcoming: true
+    isUpcoming: true,
+    tags: ["In-person Workshop"]
+  },
+  {
+    id: "wk-1-2",
+    title: "Cinematography Live Zoom Session",
+    workshopType: "Cinematography Masterclass",
+    price: 499,
+    date: "22 JUN",
+    instructor: "Vijay Kartik",
+    rating: 4.7,
+    reviews: 38,
+    timing: "6:00 PM - 8:00 PM",
+    location: "Virtual (Zoom Live)",
+    description: "Online Zoom class covering cinematic editing workflows, screenplay conversion, lighting ratios, color palettes, and interactive student Q&As.",
+    image: "https://images.unsplash.com/photo-1515169067868-5387ec356754?auto=format&fit=crop&w=500&q=80",
+    isUpcoming: true,
+    tags: ["Online / Zoom"]
   },
   {
     id: "wk-2",
     title: "Drone Photography Workshop",
+    workshopType: "Drone Photography Workshop",
     price: 1499,
     date: "27 JUN",
     instructor: "Aerial India",
@@ -596,107 +629,10 @@ export const workshops = [
     reviews: 64,
     timing: "9:00 AM - 1:00 PM",
     location: "Gachibowli, Hyderabad",
-    description: "Master aerial composition, flight safety regulations, weather planning, and advanced cinematic camera panning with the DJI Mavic series.",
+    description: "Master aerial composition, outdoor flight safety regulations, weather planning, and advanced cinematic camera panning with the DJI Mavic series during this hands-on outdoor flight session.",
     image: "https://images.unsplash.com/photo-1473968512647-3e447244af8f?auto=format&fit=crop&w=500&q=80",
-    isUpcoming: true
-  },
-  {
-    id: "wk-3",
-    title: "Video Editing with Premiere Pro",
-    price: 799,
-    date: "05 JUL",
-    instructor: "EditX Studios",
-    rating: 4.7,
-    reviews: 83,
-    timing: "2:00 PM - 6:00 PM",
-    location: "Virtual (Google Meet)",
-    description: "Go from beginner to advanced editing workflows, keyboard shortcuts, color grading (LUTs), keyframing, and quick exporting in Adobe Premiere.",
-    image: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=500&q=80",
-    isUpcoming: true
-  },
-  {
-    id: "wk-4",
-    title: "Portrait Photography Bootcamp",
-    price: 1199,
-    date: "12 JUL",
-    instructor: "Kunal Malhotra",
-    rating: 4.8,
-    reviews: 72,
-    timing: "11:00 AM - 4:00 PM",
-    location: "The Loft Studio, Hyderabad",
-    description: "Master indoor and outdoor lighting ratios for dramatic portraiture. Includes a hands-on live model session and raw conversion workflow tips.",
-    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=500&q=80",
-    isUpcoming: true
-  },
-  {
-    id: "wk-5",
-    title: "Reels Creation & IG Growth",
-    price: 499,
-    date: "19 JUL",
-    instructor: "Social Creators",
-    rating: 4.9,
-    reviews: 110,
-    timing: "6:00 PM - 8:00 PM",
-    location: "Virtual (Zoom Live)",
-    description: "Learn viral video scripting, hooks, mobile transitions, trending audio algorithms, and organic hashtag strategies to explosive growth.",
-    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=500&q=80",
-    isUpcoming: true
-  },
-  {
-    id: "wk-6",
-    title: "Wedding Photography Bootcamp",
-    price: 1499,
-    date: "27 JUL",
-    instructor: "Magic Motion",
-    rating: 4.8,
-    reviews: 49,
-    timing: "10:00 AM - 5:00 PM",
-    location: "Begumpet, Hyderabad",
-    description: "Learn how to capture candid wedding moments, handle tricky lighting at venues, manage clients, and streamline batch edits in Lightroom.",
-    image: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=500&q=80",
-    isUpcoming: true
-  },
-  {
-    id: "wk-7",
-    title: "Fashion Styling Secrets",
-    price: 1299,
-    date: "24 JUL",
-    instructor: "Nisha Sen",
-    rating: 4.8,
-    reviews: 42,
-    timing: "1:00 PM - 5:00 PM",
-    location: "Jubilee Hills, Hyderabad",
-    description: "Learn fashion lookbook styling, coordinate colors, match clothing styles, and collaborate with makeup artists for high-impact model catalogs.",
-    image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=500&q=80",
-    isUpcoming: true
-  },
-  {
-    id: "wk-8",
-    title: "Lightroom Mastery Course",
-    price: 699,
-    date: "30 JUL",
-    instructor: "EditX Studios",
-    rating: 4.7,
-    reviews: 95,
-    timing: "3:00 PM - 7:00 PM",
-    location: "Virtual (Zoom Live)",
-    description: "Master bulk photo importing, preset creation, color profiles calibration, color grading, skin tone correction, and fast batch-exporting presets.",
-    image: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&w=500&q=80",
-    isUpcoming: true
-  },
-  {
-    id: "wk-9",
-    title: "The Creative Agency Business",
-    price: 1999,
-    date: "03 AUG",
-    instructor: "Kunal Malhotra",
-    rating: 4.9,
-    reviews: 58,
-    timing: "10:00 AM - 4:00 PM",
-    location: "HICC, Hyderabad",
-    description: "Learn how to price photography packages, build high-converting client proposals, close deals, scale studio operations, and draft digital copyrights licensing contracts.",
-    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=500&q=80",
-    isUpcoming: true
+    isUpcoming: true,
+    tags: ["Outdoor Flight Session"]
   }
 ];
 
@@ -823,3 +759,4 @@ export const institutes = [
     description: "Arena Animation is a pioneer in animation and multimedia education, providing highly specialized vocational courses in VFX, game design, web design, and 3D animation across various global campus branches."
   }
 ];
+
