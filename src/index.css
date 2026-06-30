@@ -137,8 +137,8 @@ body {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: #ffffff;
-  border-bottom: 1px solid #e8ebf3;
+  background: var(--navbar-bg);
+  border-bottom: 1px solid var(--border);
   padding: 0;
   height: 80px;
   display: flex;
@@ -175,7 +175,7 @@ body {
   width: auto;
   transition: height var(--transition-normal), transform var(--transition-fast);
   object-fit: contain;
-  filter: invert(16%) sepia(87%) saturate(6320%) hue-rotate(352deg) brightness(85%) contrast(105%);
+  filter: brightness(0) saturate(100%) invert(16%) sepia(87%) saturate(6320%) hue-rotate(352deg) brightness(85%) contrast(105%);
 }
 
 .logo-container:hover .header-brand-logo {
@@ -11920,7 +11920,7 @@ input:checked + .slider:before {
   object-fit: contain;
   display: block;
   transition: transform var(--transition-fast);
-  filter: invert(16%) sepia(87%) saturate(6320%) hue-rotate(352deg) brightness(85%) contrast(105%);
+  filter: brightness(0) saturate(100%) invert(16%) sepia(87%) saturate(6320%) hue-rotate(352deg) brightness(85%) contrast(105%);
 }
 
 .logo-container:hover .header-brand-logo-img {
