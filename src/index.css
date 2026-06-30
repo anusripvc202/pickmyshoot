@@ -12035,4 +12035,392 @@ input:checked + .slider:before {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
 }
 
+/* =============================================
+   SUPERADMIN CENTRAL OPERATIONS CONSOLE
+   ============================================= */
+
+.admin-console-page {
+  background-color: #f4f4f4;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+/* Header bar */
+.admin-console-header {
+  background-color: #c7100d;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+}
+
+.admin-console-header-inner {
+  width: 100%;
+}
+
+.admin-console-header-inner .header-brand-logo {
+  height: 48px;
+  object-fit: contain;
+}
+
+/* Subheader toolbar */
+.admin-console-toolbar {
+  background-color: #1a1a1a;
+  height: 45px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  color: #ccc;
+  font-size: 13px;
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toolbar-link.active {
+  color: #ff3333;
+  font-weight: 700;
+}
+
+.toolbar-sep {
+  color: #444;
+}
+
+.toolbar-btn {
+  background: none;
+  border: none;
+  color: #ccc;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  font-size: 13px;
+  transition: color 0.2s;
+}
+
+.toolbar-btn:hover {
+  color: #fff;
+}
+
+.superadmin-access-badge {
+  color: #ffb81c;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.5px;
+}
+
+/* Title block */
+.console-title-card {
+  background-color: #ffffff;
+  border-bottom: 1.5px solid #dcdcdc;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.console-main-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: #222;
+  letter-spacing: -0.3px;
+}
+
+.console-role-desc {
+  font-size: 13.5px;
+  color: #555;
+}
+
+/* Console Section styling */
+.console-section {
+  background-color: #ffffff;
+  border: 1px solid #d3d3d3;
+  margin: 24px;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.console-section-header {
+  background-color: #c7100d;
+  color: white;
+  padding: 12px 24px;
+}
+
+.console-section-header.flex-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 24px;
+}
+
+.section-title-text {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
+.console-section-body {
+  padding: 24px;
+}
+
+/* Overview KPIs */
+.overview-kpi-container {
+  display: flex;
+  gap: 24px;
+}
+
+.overview-kpi-card {
+  flex: 1;
+  border-radius: 8px;
+  padding: 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  min-height: 120px;
+}
+
+.border-dashed-red {
+  border: 2px dashed #ff4d4d;
+  background-color: #fff9f9;
+}
+
+.border-dashed-green {
+  border: 2px dashed #00c864;
+}
+
+.bg-green-light {
+  background-color: #f1fbf6;
+}
+
+.kpi-number {
+  font-size: 42px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.kpi-number.text-red {
+  color: #c7100d;
+}
+
+.kpi-number.text-green {
+  color: #009e4f;
+}
+
+.kpi-number.text-dark {
+  color: #222;
+}
+
+.kpi-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #555;
+  letter-spacing: 0.5px;
+}
+
+/* Filter/Search Row */
+.filter-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.filter-label {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: white;
+}
+
+.filter-input {
+  background-color: #ffffff;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 13px;
+  width: 250px;
+  outline: none;
+}
+
+.filter-input::placeholder {
+  color: #999;
+}
+
+/* Table styling */
+.table-container-no-pad {
+  padding: 0;
+}
+
+.console-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.console-data-table th {
+  background-color: #f9f9f9;
+  color: #8c1a18;
+  font-weight: 700;
+  font-size: 13.5px;
+  padding: 14px 24px;
+  border-bottom: 2px solid #ddd;
+}
+
+.console-data-table td {
+  padding: 16px 24px;
+  border-bottom: 1.5px solid #eee;
+  vertical-align: middle;
+}
+
+.console-data-table tr:hover {
+  background-color: #fdfdfd;
+}
+
+/* Photographer Cell */
+.photographer-info-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.photographer-name {
+  color: #c7100d;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.photographer-slug {
+  font-size: 11px;
+  color: #666;
+}
+
+.location-cell {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #444;
+}
+
+/* Verification Cell */
+.verification-cell {
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.status-icon {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+.status-icon.orange {
+  color: #e67e22;
+}
+
+.status-icon.green {
+  color: #27ae60;
+}
+
+.unverified-status-text {
+  color: #d35400;
+  display: flex;
+  align-items: center;
+}
+
+.verified-status-text {
+  color: #27ae60;
+  display: flex;
+  align-items: center;
+}
+
+/* Code cell */
+.code-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+}
+
+.code-value.no-code {
+  color: #e67e22;
+  font-weight: 700;
+}
+
+.code-value.has-code {
+  color: #2980b9;
+  font-weight: 700;
+}
+
+.status-value.active {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+/* Actions group */
+.actions-cell {
+  width: 320px;
+}
+
+.action-buttons-group {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.console-action-btn {
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+}
+
+.console-action-btn:hover {
+  opacity: 0.9;
+}
+
+.claim-btn {
+  background-color: #00c864;
+}
+
+.mail-btn {
+  background-color: #c7100d;
+}
+
+.delete-btn {
+  background-color: #111111;
+}
+
+.empty-row-text {
+  text-align: center;
+  color: #777;
+  font-style: italic;
+  padding: 32px !important;
+}
+
+/* Clean overrides for parent components */
+.role-admin-mode .page-content-body {
+  padding: 0 !important;
+  margin: 0 !important;
+  max-width: none !important;
+}
+
+
 
