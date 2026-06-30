@@ -221,7 +221,7 @@ const HomePage = () => {
         </div>
       </div>
 
-
+      <div className="max-width-wrapper">
 
       {/* Category Grid Row */}
       <section style={{ marginTop: '48px', marginBottom: '24px' }}>
@@ -551,6 +551,7 @@ const HomePage = () => {
           ))}
         </div>
       </section>
+      </div>
     </>
   );
 };

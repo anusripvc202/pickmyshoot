@@ -625,10 +625,16 @@ const Layout = () => {
       </header>
 
       {/* MAIN CONTENT BODY */}
-      <main className="max-width-wrapper page-content-body">
+      <main className="page-content-body">
         <AnimatePresence mode="wait">
           <PageTransition key={location.pathname}>
-            <Outlet />
+            {location.pathname === '/' ? (
+              <Outlet />
+            ) : (
+              <div className="max-width-wrapper">
+                <Outlet />
+              </div>
+            )}
           </PageTransition>
         </AnimatePresence>
       </main>
