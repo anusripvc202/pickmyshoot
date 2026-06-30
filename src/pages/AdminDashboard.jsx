@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+﻿import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import {
@@ -19,7 +19,7 @@ const AdminDashboard = () => {
   const { logoutUser, triggerToast } = useAppContext();
   const navigate = useNavigate();
 
-  // ── Photographer Partner Directory (MongoDB via /api/photographers) ─────────
+  // â”€â”€ Photographer Partner Directory (MongoDB via /api/photographers) â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const [photographers, setPhotographers] = useState([]);
   const [dirLoading, setDirLoading] = useState(false);
   const [dirError, setDirError] = useState(null);
@@ -42,7 +42,7 @@ const AdminDashboard = () => {
 
   useEffect(() => { fetchPhotographers(); }, [fetchPhotographers]);
 
-  // Toggle verified → persisted to MongoDB
+  // Toggle verified â†’ persisted to MongoDB
   const handleToggleVerify = async (p) => {
     const newVal = !p.isVerified;
     try {
@@ -54,13 +54,13 @@ const AdminDashboard = () => {
       if (!res.ok) throw new Error(`API error ${res.status}`);
       const updated = await res.json();
       setPhotographers(prev => prev.map(x => x._id === updated._id ? updated : x));
-      triggerToast(newVal ? `✓ ${p.name} verified!` : `✓ ${p.name} unverified.`);
+      triggerToast(newVal ? `âœ“ ${p.name} verified!` : `âœ“ ${p.name} unverified.`);
     } catch (err) {
       triggerToast('Failed to update verification: ' + err.message);
     }
   };
 
-  // Generate & persist code → MongoDB
+  // Generate & persist code â†’ MongoDB
   const handleGenerateCode = async (p) => {
     const randomCode = `PMS-${Math.floor(1000 + Math.random() * 9000)}`;
     try {
@@ -72,7 +72,7 @@ const AdminDashboard = () => {
       if (!res.ok) throw new Error(`API error ${res.status}`);
       const updated = await res.json();
       setPhotographers(prev => prev.map(x => x._id === updated._id ? updated : x));
-      triggerToast(`✓ Code ${randomCode} saved to database!`);
+      triggerToast(`âœ“ Code ${randomCode} saved to database!`);
     } catch (err) {
       triggerToast('Failed to save code: ' + err.message);
     }
@@ -85,7 +85,7 @@ const AdminDashboard = () => {
       const res = await fetch(`/api/photographers?id=${p._id}`, { method: 'DELETE' });
       if (!res.ok) throw new Error(`API error ${res.status}`);
       setPhotographers(prev => prev.filter(x => x._id !== p._id));
-      triggerToast('✓ Photographer removed from directory.');
+      triggerToast('âœ“ Photographer removed from directory.');
     } catch (err) {
       triggerToast('Failed to delete: ' + err.message);
     }
@@ -93,10 +93,10 @@ const AdminDashboard = () => {
 
   const handleClaimLink = (slug) => {
     navigator.clipboard.writeText(`${window.location.origin}/claim/${slug}`);
-    triggerToast('✓ Claim link copied to clipboard!');
+    triggerToast('âœ“ Claim link copied to clipboard!');
   };
 
-  // ── Login Activity (MongoDB via /api/login-activity) ────────────────────────
+  // â”€â”€ Login Activity (MongoDB via /api/login-activity) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const [loginActivity, setLoginActivity] = useState([]);
   const [activityLoading, setActivityLoading] = useState(false);
   const [activityError, setActivityError] = useState(null);
@@ -130,7 +130,7 @@ const AdminDashboard = () => {
       const res = await fetch('/api/login-activity', { method: 'DELETE' });
       if (!res.ok) throw new Error(`API error ${res.status}`);
       setLoginActivity([]);
-      triggerToast('✓ Login activity log cleared.');
+      triggerToast('âœ“ Login activity log cleared.');
     } catch (err) {
       triggerToast('Failed to clear activity log.');
     }
@@ -203,7 +203,7 @@ const AdminDashboard = () => {
           </div>
           <div className="overview-kpi-card border-dashed-green bg-green-light">
             <span className="kpi-number text-green">{verifiedCount}</span>
-            <span className="kpi-label">✓ VERIFIED PARTNER BADGES</span>
+            <span className="kpi-label">âœ“ VERIFIED PARTNER BADGES</span>
           </div>
           <div className="overview-kpi-card border-dashed-red">
             <span className="kpi-number text-dark">11</span>
@@ -211,7 +211,7 @@ const AdminDashboard = () => {
           </div>
           <div className="overview-kpi-card" style={{ border: '2px dashed #2980b9', background: '#f0f7ff' }}>
             <span className="kpi-number" style={{ color: '#2980b9' }}>{activeSessions}</span>
-            <span className="kpi-label">🟢 ACTIVE NOW (30 MIN)</span>
+            <span className="kpi-label">ðŸŸ¢ ACTIVE NOW (30 MIN)</span>
           </div>
           <div className="overview-kpi-card" style={{ border: '2px dashed #8e44ad', background: '#fdf5ff' }}>
             <span className="kpi-number" style={{ color: '#8e44ad' }}>{loginActivity.length}</span>
@@ -219,114 +219,6 @@ const AdminDashboard = () => {
           </div>
         </div>
       </section>
-
-      {/* Login Activity Table */}
-      <section className="console-section" style={{ marginTop: '24px' }}>
-        <div className="console-section-header flex-header">
-          <h3 className="section-title-text">
-            <Wifi size={14} style={{ marginRight: '6px', verticalAlign: 'middle' }} />
-            Photographer Login Activity (Live)
-          </h3>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            {lastRefreshed && (
-              <span style={{ color: 'rgba(255,255,255,0.65)', fontSize: '11px' }}>
-                <Clock size={11} style={{ marginRight: '3px', verticalAlign: 'middle' }} />
-                Updated {lastRefreshed.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
-              </span>
-            )}
-            <button
-              className="console-action-btn"
-              style={{ background: '#2980b9', fontSize: '11px', padding: '6px 12px' }}
-              onClick={fetchLoginActivity}
-              disabled={activityLoading}
-            >
-              <RefreshCw size={12} style={{ marginRight: '4px' }} />
-              {activityLoading ? 'Loadingâ€¦' : 'Refresh'}
-            </button>
-            {loginActivity.length > 0 && (
-              <button
-                className="console-action-btn delete-btn"
-                style={{ fontSize: '11px', padding: '6px 12px' }}
-                onClick={handleClearActivity}
-              >
-                <Trash2 size={12} style={{ marginRight: '4px' }} />
-                Clear Log
-              </button>
-            )}
-          </div>
-        </div>
-
-        <div className="console-section-body table-container-no-pad">
-          {activityError ? (
-            <p style={{ padding: '24px', color: '#c0392b', fontStyle: 'italic' }}>{activityError}</p>
-          ) : (
-            <table className="console-data-table">
-              <thead>
-                <tr>
-                  <th>User</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Login Time</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {activityLoading && loginActivity.length === 0 ? (
-                  <tr><td colSpan="5" className="empty-row-text">Loading login activityâ€¦</td></tr>
-                ) : loginActivity.length === 0 ? (
-                  <tr>
-                    <td colSpan="5" className="empty-row-text">
-                      No login activity yet. When any user logs in on the live site, they appear here automatically.
-                    </td>
-                  </tr>
-                ) : (
-                  loginActivity.map((a, idx) => (
-                    <tr key={a._id || idx}>
-                      <td>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          {a.avatar ? (
-                            <img src={a.avatar} alt={a.name}
-                              style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover', border: '2px solid #eee' }}
-                              onError={e => { e.target.style.display = 'none'; }} />
-                          ) : (
-                            <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#c7100d', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 13 }}>
-                              {(a.name || '?').charAt(0).toUpperCase()}
-                            </div>
-                          )}
-                          <span className="photographer-name">{a.name}</span>
-                        </div>
-                      </td>
-                      <td style={{ color: '#444', fontSize: '13.5px' }}>{a.email}</td>
-                      <td>
-                        <span style={{
-                          padding: '3px 10px', borderRadius: '100px', fontSize: '11px',
-                          fontWeight: 700, textTransform: 'uppercase',
-                          background: a.role === 'photographer' ? '#fff3e0' : a.role === 'admin' ? '#fdecea' : '#e8f5e9',
-                          color: a.role === 'photographer' ? '#e67e22' : a.role === 'admin' ? '#c7100d' : '#27ae60'
-                        }}>
-                          {a.role}
-                        </span>
-                      </td>
-                      <td style={{ color: '#444', fontSize: '13px' }}>{formatTime(a.loginTime)}</td>
-                      <td>
-                        {isOnline(a.loginTime) ? (
-                          <span style={{ color: '#27ae60', fontWeight: 700, fontSize: '12px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#27ae60', display: 'inline-block', animation: 'pulse 1.5s infinite' }} />
-                            Online
-                          </span>
-                        ) : (
-                          <span style={{ color: '#95a5a6', fontWeight: 600, fontSize: '12px' }}>Recent</span>
-                        )}
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          )}
-        </div>
-      </section>
-
       {/* Photographer Partner Directory */}
       <section className="console-section" style={{ marginTop: '24px' }}>
         <div className="console-section-header flex-header">
@@ -349,7 +241,7 @@ const AdminDashboard = () => {
               disabled={dirLoading}
             >
               <RefreshCw size={12} style={{ marginRight: '4px' }} />
-              {dirLoading ? 'Loading…' : 'Refresh'}
+              {dirLoading ? 'Loadingâ€¦' : 'Refresh'}
             </button>
           </div>
         </div>
@@ -370,7 +262,7 @@ const AdminDashboard = () => {
               </thead>
               <tbody>
                 {dirLoading && photographers.length === 0 ? (
-                  <tr><td colSpan="5" className="empty-row-text">Loading photographers…</td></tr>
+                  <tr><td colSpan="5" className="empty-row-text">Loading photographersâ€¦</td></tr>
                 ) : photographers.filter(p =>
                     p.name.toLowerCase().includes(filterText.toLowerCase()) ||
                     (p.location || '').toLowerCase().includes(filterText.toLowerCase()) ||
