@@ -54,7 +54,7 @@ const HomePage = () => {
     rightCta: "Book Now",
     rightDate: "20-22 JULY",
     rightVenue: "HICC, HYDERABAD",
-    background: "radial-gradient(circle at 60% 40%, rgba(255, 30, 86, 0.25) 0%, transparent 60%), linear-gradient(135deg, #f0144d 0%, #9c0022 100%)"
+    background: "radial-gradient(circle at 60% 40%, rgba(199, 16, 13, 0.25) 0%, transparent 60%), linear-gradient(135deg, #c7100d 0%, #a30d0b 100%)"
   };
 
   const handleCategoryClick = (tabName) => {
