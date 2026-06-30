@@ -12416,7 +12416,8 @@ input:checked + .slider:before {
 }
 
 /* Clean overrides for parent components */
-.role-admin-mode .page-content-body {
+.role-admin-mode .page-content-body,
+.role-photographer-mode .page-content-body {
   padding: 0 !important;
   margin: 0 !important;
   max-width: none !important;
