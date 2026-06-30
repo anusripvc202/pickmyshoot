@@ -957,13 +957,14 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 50px 28px 60px;
-    gap: 32px;
+    padding: 30px 24px !important;
+    gap: 20px !important;
     text-align: center;
   }
   .hero-left-col {
     max-width: 600px;
     align-items: center;
+    gap: 16px !important;
   }
   .hero-left-col .hero-tags-row,
   .hero-left-col .hero-title,
@@ -973,15 +974,55 @@ body {
     text-align: center;
     justify-content: center;
   }
-  .hero-stats-inline { align-self: center; }
+  .hero-stats-inline { 
+    align-self: center; 
+    gap: 12px !important;
+  }
+  .hero-stat-pill {
+    padding: 6px 12px !important;
+  }
   .hero-booking-widget { width: 100%; max-width: 520px; }
 }
 
 @media (max-width: 639px) {
   .hero-split-layout {
-    padding: 40px 16px 48px;
-    gap: 24px;
+    padding: 24px 16px !important;
+    gap: 16px !important;
     overflow-y: auto;
+  }
+  .hero-left-col {
+    gap: 12px !important;
+  }
+  .hero-left-col .hero-title {
+    font-size: clamp(24px, 5.5vw, 36px) !important;
+    letter-spacing: -0.8px !important;
+    line-height: 1.2 !important;
+  }
+  .hero-left-col .hero-subtitle {
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+    max-width: 100% !important;
+    opacity: 0.85 !important;
+  }
+  .hero-left-col .hero-cta-row {
+    gap: 10px !important;
+    margin-top: 4px !important;
+  }
+  .hero-btn {
+    padding: 10px 20px !important;
+    font-size: 12.5px !important;
+    border-radius: 30px !important;
+  }
+  .hero-btn-outline {
+    padding: 9px 18px !important;
+    font-size: 12.5px !important;
+    border-radius: 30px !important;
+  }
+  .hero-stats-inline {
+    display: none !important;
+  }
+  .hero-trust-strip {
+    display: none !important;
   }
   .hero-booking-widget { width: 100%; }
   .booking-row { grid-template-columns: 1fr; }
