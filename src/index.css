@@ -137,7 +137,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: linear-gradient(135deg, #c7100d 0%, #a30d0b 100%);
+  background: linear-gradient(135deg, #f0144d 0%, #9c0022 100%);
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
   padding: 0;
   height: 80px;
@@ -11927,7 +11927,7 @@ input:checked + .slider:before {
 
 /* App Header Red Premium Override */
 .app-header {
-  background: linear-gradient(135deg, #c7100d 0%, #a30d0b 100%) !important;
+  background: linear-gradient(135deg, #f0144d 0%, #9c0022 100%) !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.15) !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12) !important;
   backdrop-filter: none !important;
@@ -12557,7 +12557,7 @@ input:checked + .slider:before {
 
 .fest-explore-btn {
   background: #ffffff;
-  color: #c7100d;
+  color: #f0144d;
   border: none;
   padding: 14px 32px;
   font-size: 14px;
