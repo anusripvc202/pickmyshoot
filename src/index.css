@@ -1110,7 +1110,7 @@ body {
   font-weight: 800;
   font-size: 14px;
   padding: 14px 32px;
-  border-radius: 8px;
+  border-radius: 8px !important;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 6px 24px rgba(200, 16, 46, 0.5);
@@ -1131,7 +1131,7 @@ body {
   font-weight: 700;
   font-size: 14px;
   padding: 13px 30px;
-  border-radius: 8px;
+  border-radius: 8px !important;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(8px);
@@ -1482,7 +1482,7 @@ body {
   font-weight: 800;
   font-size: 14px;
   padding: 12px 28px;
-  border-radius: 8px;
+  border-radius: 8px !important;
   cursor: pointer;
   transition: all var(--transition-fast);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -1580,7 +1580,7 @@ body {
   font-weight: 700;
   font-size: 13px;
   padding: 10px 22px;
-  border-radius: 8px;
+  border-radius: 8px !important;
   cursor: pointer;
   transition: all var(--transition-fast);
 }
