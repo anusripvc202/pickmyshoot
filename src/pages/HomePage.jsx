@@ -48,7 +48,7 @@ const HomePage = () => {
     tag: "BIGGEST CREATOR FEST",
     title: (
       <>
-        CREATOR <br />FEST <span className="fest-title-year">2026</span>
+        CREATOR FEST <span className="fest-title-year">2026</span>
       </>
     ),
     subtitle: "Workshops | Gear Deals | Meetups\nNetworking | Awards",
@@ -60,7 +60,7 @@ const HomePage = () => {
     rightDate: "20-22 JULY",
     rightVenue: "HICC, HYDERABAD",
     urgencyText: "⚡ Only 45 Passes Left!",
-    background: "radial-gradient(circle at 60% 40%, rgba(250, 20, 77, 0.25) 0%, transparent 60%), linear-gradient(135deg, #f0144d 0%, #9c0022 100%)"
+    background: "radial-gradient(circle at 60% 40%, rgba(199, 16, 13, 0.25) 0%, transparent 60%), linear-gradient(135deg, #c7100d 0%, #a30d0b 100%)"
   };
 
   const handleCategoryClick = (tabName) => {
@@ -107,29 +107,11 @@ const HomePage = () => {
               {heroData.description}
             </p>
 
-            {/* Premium Highlights Grid */}
-            <div className="fest-features-grid">
-              <div className="fest-feature-card">
-                <div className="fest-feature-icon-wrap">🎓</div>
-                <div className="fest-feature-text-wrap">
-                  <span className="fest-feature-title">20+ Masterclasses</span>
-                  <span className="fest-feature-desc">Learn lighting & composition</span>
-                </div>
-              </div>
-              <div className="fest-feature-card">
-                <div className="fest-feature-icon-wrap">🎥</div>
-                <div className="fest-feature-text-wrap">
-                  <span className="fest-feature-title">Gear Showroom</span>
-                  <span className="fest-feature-desc">Try RED, Arri & Sony setups</span>
-                </div>
-              </div>
-              <div className="fest-feature-card">
-                <div className="fest-feature-icon-wrap">🤝</div>
-                <div className="fest-feature-text-wrap">
-                  <span className="fest-feature-title">Networking Hub</span>
-                  <span className="fest-feature-desc">Connect with major brands</span>
-                </div>
-              </div>
+            {/* Clean Premium Highlights Row */}
+            <div className="fest-highlights-row">
+              <span className="fest-highlight-item"><span className="fest-hl-icon">🎓</span> 20+ Masterclasses</span>
+              <span className="fest-highlight-item"><span className="fest-hl-icon">🎥</span> Gear Showroom</span>
+              <span className="fest-highlight-item"><span className="fest-hl-icon">🤝</span> Networking Hub</span>
             </div>
 
             <div className="fest-subtags-row">

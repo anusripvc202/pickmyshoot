@@ -137,14 +137,14 @@ body {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: var(--navbar-bg);
-  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, #c7100d 0%, #a30d0b 100%) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
   padding: 0;
   height: 80px;
   display: flex;
   align-items: center;
   transition: all var(--transition-normal);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
 }
 
 /* Gradient accent line at the bottom of the navbar */
@@ -12836,5 +12836,151 @@ input:checked + .slider:before {
     align-items: center;
     text-align: center;
   }
+}
+
+/* Header Elements Contrast Adjustments on Red Background */
+.app-header .header-tab-btn {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.app-header .header-tab-btn:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+
+.app-header .header-tab-btn.active {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  font-weight: 700 !important;
+}
+
+.app-header .header-tab-btn.active::after {
+  background: #ffffff !important;
+  width: 60% !important;
+}
+
+/* Search Box Stylings on Red Background */
+.app-header .header-search-wrap {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.22) !important;
+}
+
+.app-header .header-search-wrap:hover {
+  background: rgba(255, 255, 255, 0.22) !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+}
+
+.app-header .header-search-wrap:focus-within {
+  background: #ffffff !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25) !important;
+}
+
+.app-header .search-input {
+  color: #ffffff !important;
+}
+
+.app-header .header-search-wrap:focus-within .search-input {
+  color: var(--text-main) !important;
+}
+
+.app-header .search-input::placeholder {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.app-header .header-search-wrap:focus-within .search-input::placeholder {
+  color: var(--text-muted) !important;
+}
+
+.app-header .header-search-wrap svg {
+  color: #ffffff !important;
+}
+
+.app-header .header-search-wrap:focus-within svg {
+  color: var(--text-muted) !important;
+}
+
+.app-header .search-action-btn {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+.app-header .search-action-btn:hover {
+  background: rgba(255, 255, 255, 0.3) !important;
+}
+
+.app-header .header-search-wrap:focus-within .search-action-btn {
+  background: var(--primary) !important;
+  color: #ffffff !important;
+}
+
+.app-header .header-search-wrap:focus-within .search-action-btn:hover {
+  background: var(--primary-hover) !important;
+}
+
+/* Icon Buttons on Red Background */
+.app-header .icon-btn-wrap {
+  color: #ffffff !important;
+}
+
+.app-header .icon-btn-wrap:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+.app-header .badge-count {
+  background-color: #ffffff !important;
+  color: var(--primary) !important;
+  border: 2px solid #c7100d !important;
+}
+
+/* Primary CTA styling in Red Header */
+.app-header .header-primary-cta {
+  background: #ffffff !important;
+  color: var(--primary) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+}
+
+.app-header .header-primary-cta:hover {
+  background: #f8f9fa !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* User dropdown image border adjustment in header */
+.app-header .header-user-avatar {
+  border: 2px solid rgba(255, 255, 255, 0.4) !important;
+}
+
+.app-header .header-user-avatar:hover {
+  border-color: #ffffff !important;
+}
+
+/* Sign In button on red navbar — white pill with red text */
+.app-header .header-secondary-cta {
+  background: #ffffff !important;
+  color: #c7100d !important;
+  border: none !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  padding: 10px 22px !important;
+  border-radius: 100px !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
+  transition: all 0.2s ease !important;
+  white-space: nowrap !important;
+}
+
+.app-header .header-secondary-cta:hover {
+  background: #f0f0f0 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Force brand logo to render solid white on red app-header background */
+.app-header .header-brand-logo,
+.app-header .header-brand-logo-img {
+  filter: brightness(0) invert(1) !important;
 }
 
