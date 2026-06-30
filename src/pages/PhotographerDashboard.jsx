@@ -21,8 +21,10 @@ import {
   Lock,
   CheckCircle,
   LogOut,
-  ArrowLeft
+  ArrowLeft,
+  Shield
 } from 'lucide-react';
+
 import { useAppContext } from '../context/AppContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -86,6 +88,43 @@ const PhotographerDashboard = () => {
   const [invoiceNotes, setInvoiceNotes] = useState('Thank you for choosing PickMyShoot! We look forward to working together.');
   const [invoiceDiscount, setInvoiceDiscount] = useState(0);
   const [showInvoicePreview, setShowInvoicePreview] = useState(false);
+
+  // Partner Verification states
+  const [verifyCode, setVerifyCode] = useState('');
+  const [verifyLoading, setVerifyLoading] = useState(false);
+  const [verifyMessage, setVerifyMessage] = useState(null);
+  const [isVerified, setIsVerified] = useState(!!(currentUser?.isVerified));
+
+  const handleVerifySubmit = async (e) => {
+    e.preventDefault();
+    if (!verifyCode.trim()) {
+      setVerifyMessage({ type: 'error', text: 'Please enter your verification code.' });
+      return;
+    }
+    setVerifyLoading(true);
+    setVerifyMessage(null);
+    try {
+      const res = await fetch('/api/verify-photographer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: currentUser?.email, code: verifyCode.trim() })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setIsVerified(true);
+        setVerifyMessage({ type: 'success', text: data.message || 'Profile verified successfully!' });
+        triggerToast('✓ Profile verified! You are now a verified PickMyShoot partner.');
+      } else {
+        setVerifyMessage({ type: 'error', text: data.error || 'Verification failed. Please try again.' });
+      }
+    } catch (err) {
+      setVerifyMessage({ type: 'error', text: 'Network error. Please try again.' });
+    } finally {
+      setVerifyLoading(false);
+    }
+  };
+
+
 
   const handleSendChat = (e) => {
     e.preventDefault();
@@ -210,6 +249,11 @@ const PhotographerDashboard = () => {
           <button className={`toolbar-tab-btn ${activeTab === 'messages' ? 'active' : ''}`} onClick={() => setActiveTab('messages')}>messages</button>
           <span className="toolbar-sep">|</span>
           <button className={`toolbar-tab-btn ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => setActiveTab('settings')}>settings</button>
+          <span className="toolbar-sep">|</span>
+          <button className={`toolbar-tab-btn ${activeTab === 'verification' ? 'active' : ''}`} onClick={() => setActiveTab('verification')}>
+            verify {isVerified && <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#27ae60', display: 'inline-block', marginLeft: 4, verticalAlign: 'middle' }} />}
+          </button>
+
           <span className="toolbar-sep">|</span>
           <button className="toolbar-btn" onClick={() => { logoutUser(); navigate('/'); }}>
             <LogOut size={12} style={{ marginRight: '4px' }} />
@@ -756,7 +800,104 @@ const PhotographerDashboard = () => {
         </div>
       )}
 
+        {/* Verification Tab */}
+        {activeTab === 'verification' && (
+          <section className="console-section" style={{ margin: '24px 0 0 0' }}>
+            <div className="console-section-header">
+              <h3 className="section-title-text">
+                <Shield size={14} style={{ marginRight: '6px', verticalAlign: 'middle' }} />
+                Partner Profile Verification
+              </h3>
+            </div>
+            <div className="console-section-body" style={{ padding: '32px', maxWidth: 520 }}>
+
+              {/* Current status banner */}
+              {isVerified ? (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '20px 24px', borderRadius: '12px', background: '#e8f5e9', border: '1.5px solid #a5d6a7', marginBottom: '28px' }}>
+                  <CheckCircle size={28} color="#27ae60" />
+                  <div>
+                    <div style={{ fontWeight: 800, fontSize: '15px', color: '#1b5e20' }}>✓ Verified Partner Profile</div>
+                    <div style={{ fontSize: '13px', color: '#388e3c', marginTop: '3px' }}>Your PickMyShoot partner status is active and verified.</div>
+                  </div>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '20px 24px', borderRadius: '12px', background: '#fff3e0', border: '1.5px solid #ffcc80', marginBottom: '28px' }}>
+                  <Shield size={28} color="#e67e22" />
+                  <div>
+                    <div style={{ fontWeight: 800, fontSize: '15px', color: '#e65100' }}>⚠ Unverified Profile</div>
+                    <div style={{ fontSize: '13px', color: '#bf360c', marginTop: '3px' }}>Your profile is not yet verified. Enter the code you received by email from the admin below.</div>
+                  </div>
+                </div>
+              )}
+
+              {/* Steps */}
+              <div style={{ marginBottom: '28px' }}>
+                <div style={{ fontWeight: 700, fontSize: '12px', color: '#888', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '14px' }}>How verification works</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  {[
+                    { step: '1', text: 'Admin reviews your profile and clicks "Generate & Mail Code" in the Partner Directory' },
+                    { step: '2', text: 'You receive an email with a unique code (e.g. PMS-6789)' },
+                    { step: '3', text: 'Enter the code below to activate your verified partner status' },
+                    { step: '4', text: 'Verified badge appears on your profile and in the admin directory' },
+                  ].map(s => (
+                    <div key={s.step} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                      <span style={{ minWidth: 26, height: 26, borderRadius: '50%', background: '#c7100d', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '12px', flexShrink: 0 }}>{s.step}</span>
+                      <span style={{ fontSize: '13.5px', color: '#444', lineHeight: 1.5, paddingTop: '3px' }}>{s.text}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Code Entry Form */}
+              {!isVerified && (
+                <form onSubmit={handleVerifySubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontWeight: 700, fontSize: '13px', marginBottom: '6px', color: '#333' }}>Enter Your Verification Code</label>
+                    <input
+                      type="text"
+                      value={verifyCode}
+                      onChange={e => setVerifyCode(e.target.value.toUpperCase())}
+                      placeholder="e.g. PMS-6789"
+                      maxLength={10}
+                      style={{
+                        width: '100%', padding: '14px 16px', borderRadius: '10px',
+                        border: '2px solid #e0e0e0', fontSize: '22px', fontWeight: 800,
+                        letterSpacing: '4px', textAlign: 'center', boxSizing: 'border-box',
+                        fontFamily: 'monospace', textTransform: 'uppercase',
+                        outline: 'none'
+                      }}
+                    />
+                  </div>
+
+                  {verifyMessage && (
+                    <div style={{
+                      padding: '12px 16px', borderRadius: '8px', fontSize: '13px', fontWeight: 600,
+                      background: verifyMessage.type === 'success' ? '#e8f5e9' : '#fdecea',
+                      color: verifyMessage.type === 'success' ? '#1b5e20' : '#c0392b',
+                      border: `1px solid ${verifyMessage.type === 'success' ? '#a5d6a7' : '#f5c6cb'}`
+                    }}>
+                      {verifyMessage.type === 'success' ? '✓ ' : '✗ '}{verifyMessage.text}
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={verifyLoading || !verifyCode.trim()}
+                    className="console-action-btn claim-btn"
+                    style={{ padding: '13px 24px', fontSize: '14px', fontWeight: 700, justifyContent: 'center', opacity: verifyLoading ? 0.7 : 1 }}
+                  >
+                    <Shield size={15} style={{ marginRight: '8px' }} />
+                    {verifyLoading ? 'Verifying…' : 'Verify My Profile'}
+                  </button>
+                </form>
+              )}
+
+            </div>
+          </section>
+        )}
+
     </div>
+
   );
 };
 

@@ -87,7 +87,7 @@ const defaultMockProfiles = [
     bio: 'Wedding cinematographer and event shooter.',
     location: 'Hyderabad, TS',
     phone: '+91 66666 55555',
-    isVerified: true,
+    isVerified: false,
     shoots: "0",
     rating: "5.0 ★",
     followers: "0",

@@ -8,6 +8,8 @@ import { fileURLToPath } from 'url';
 import usersHandler from './api/users.js';
 import listingsHandler from './api/listings.js';
 import bookingsHandler from './api/bookings.js';
+import photographersHandler from './api/photographers.js';
+import verifyPhotographerHandler from './api/verify-photographer.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,6 +25,8 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.all('/api/users', (req, res) => usersHandler(req, res));
 app.all('/api/listings', (req, res) => listingsHandler(req, res));
 app.all('/api/bookings', (req, res) => bookingsHandler(req, res));
+app.all('/api/photographers', (req, res) => photographersHandler(req, res));
+app.all('/api/verify-photographer', (req, res) => verifyPhotographerHandler(req, res));
 
 // Health check
 app.get('/api/health', (req, res) => {

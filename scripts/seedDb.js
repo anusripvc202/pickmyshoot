@@ -3,6 +3,9 @@ import mongoose from 'mongoose';
 import User from '../api/models/User.js';
 import Listing from '../api/models/Listing.js';
 import Booking from '../api/models/Booking.js';
+import Photographer from '../api/models/Photographer.js';
+import LoginActivity from '../api/models/LoginActivity.js';
+
 import { popularServices, studios, models, gearRentals, workshops, jobs } from '../src/data/mockData.js';
 
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -66,7 +69,7 @@ const defaultUsers = [
     bio: 'Wedding cinematographer and event shooter.',
     location: 'Hyderabad, TS',
     phone: '+91 66666 55555',
-    isVerified: true
+    isVerified: false
   },
   {
     _id: new mongoose.Types.ObjectId('6a3920c7454a6492befc0840'),
@@ -164,6 +167,9 @@ async function seed() {
     await User.deleteMany({});
     await Listing.deleteMany({});
     await Booking.deleteMany({});
+    await Photographer.deleteMany({});
+    await LoginActivity.deleteMany({});
+
 
     // 2. Insert Users
     console.log('👤 Seeding default users...');
