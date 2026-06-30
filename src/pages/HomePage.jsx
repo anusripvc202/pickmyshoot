@@ -44,87 +44,17 @@ const HomePage = () => {
     return babyShoot ? [otherShoots[0], babyShoot, ...otherShoots.slice(1, 6)] : services.slice(0, 7);
   }, [services]);
 
-  const slides = [
-    {
-      type: "creator_fest",
-      tag: "BIGGEST CREATOR FEST",
-      title: "CREATOR FEST 2024",
-      subtitle: "Workshops | Gear Deals | Meetups\nNetworking | Awards",
-      image: "banner_photographer.png",
-      rightOffer: "Early Bird Offer",
-      rightDiscount: "Upto 30% OFF",
-      rightCta: "Book Now",
-      rightDate: "20-22 JULY",
-      rightVenue: "HICC, HYDERABAD",
-      background: "radial-gradient(circle at 60% 40%, rgba(255, 30, 86, 0.25) 0%, transparent 60%), linear-gradient(135deg, #f0144d 0%, #9c0022 100%)"
-    },
-    {
-      type: "standard",
-      tag: "Save on Production Costs",
-      tagGreen: "✓ Standard Insurance",
-      title: (
-        <>
-          Top-Tier Cameras<br />
-          &amp; Gear Rentals<br />
-          <span className="hero-title-accent">Insured.</span>
-        </>
-      ),
-      subtitle: "Rent professional cinema packages, high-end DSLRs, prime lenses, and specialized lighting with flexible daily rates.",
-      image: "banner_cameras.png",
-      cta1Text: "🎥 Rent Gear",
-      cta1Tab: "rentals",
-      cta2Text: "Explore Packages",
-      cta2Tab: "rentals",
-      trustText: "🎥 RED & Arri • 📸 Prime Lenses • 💡 Studio Lights • 🛸 Professional Drones",
-      stats: [
-        { num: "500+", label: "Camera Kits" },
-        { num: "100%", label: "Quality Inspected" },
-        { num: "Free", label: "Delivery Options" }
-      ],
-      background: "linear-gradient(135deg, #1E293B 0%, #0F172A 100%)"
-    },
-    {
-      type: "standard",
-      tag: "Work with the Best",
-      tagGreen: "✓ Trusted by Brands",
-      title: (
-        <>
-          Capture Your Vision<br />
-          With Top Talent<br />
-          <span className="hero-title-accent">Perfected.</span>
-        </>
-      ),
-      subtitle: "Hire pre-screened professionals for weddings, high-fashion editorials, e-commerce, commercial ads, and post-production.",
-      image: "pre_wedding_shoot_new.png",
-      cta1Text: "💍 Book a Shoot",
-      cta1Tab: "services",
-      cta2Text: "View Creative Portfolios",
-      cta2Tab: "services",
-      trustText: "👰 Weddings • 👕 E-Commerce • 🎬 Music Videos • 🍔 Food Photography",
-      stats: [
-        { num: "1,200+", label: "Photo Shoots" },
-        { num: "48hr", label: "Average Delivery" },
-        { num: "100%", label: "Secure Payments" }
-      ],
-      background: "linear-gradient(135deg, #8C6239 0%, #4A3B32 100%)"
-    }
-  ];
-
-  const [currentSlide, setCurrentSlide] = React.useState(0);
-
-  React.useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [slides.length]);
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  const heroData = {
+    tag: "BIGGEST CREATOR FEST",
+    title: "CREATOR FEST 2024",
+    subtitle: "Workshops | Gear Deals | Meetups\nNetworking | Awards",
+    image: "banner_photographer.png",
+    rightOffer: "Early Bird Offer",
+    rightDiscount: "Upto 30% OFF",
+    rightCta: "Book Now",
+    rightDate: "20-22 JULY",
+    rightVenue: "HICC, HYDERABAD",
+    background: "radial-gradient(circle at 60% 40%, rgba(255, 30, 86, 0.25) 0%, transparent 60%), linear-gradient(135deg, #f0144d 0%, #9c0022 100%)"
   };
 
   const handleCategoryClick = (tabName) => {
@@ -132,149 +62,78 @@ const HomePage = () => {
     navigate('/explore');
   };
 
-
-
   return (
     <>
-      {/* ======= FULL-WIDTH SPLIT HERO SLIDER ======= */}
+      {/* ======= STATIC HERO BANNER SECTION ======= */}
       <div className="hero-carousel-container">
 
-        {/* Slide Background (full bleed or colored gradient) */}
+        {/* Slide Background (colored gradient) */}
         <div
           className="hero-bg-image active-slide"
-          key={`bg-${currentSlide}`}
           style={{ 
-            background: slides[currentSlide].background, 
-            backgroundImage: slides[currentSlide].type !== 'creator_fest' ? `url(${import.meta.env.BASE_URL}${slides[currentSlide].image})` : 'none',
+            background: heroData.background, 
             backgroundSize: 'cover',
             backgroundPosition: 'center center'
           }}
         />
 
         {/* Dynamic Abstract background curves for Creator Fest */}
-        {slides[currentSlide].type === 'creator_fest' && (
-          <div className="fest-bg-pattern-overlay">
-            <svg viewBox="0 0 1440 800" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
-              <path opacity="0.06" d="M-100 350C120 220 380 580 600 350C820 120 1080 470 1340 350" stroke="white" strokeWidth="50" strokeLinecap="round" />
-              <path opacity="0.04" d="M-50 450C190 320 450 680 670 450C890 220 1150 570 1370 450" stroke="white" strokeWidth="30" strokeLinecap="round" />
-              <path opacity="0.05" d="M80 180C300 400 560 50 780 270C1000 490 1260 140 1510 270" stroke="white" strokeWidth="70" strokeLinecap="round" />
-            </svg>
+        <div className="fest-bg-pattern-overlay">
+          <svg viewBox="0 0 1440 800" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
+            <path opacity="0.06" d="M-100 350C120 220 380 580 600 350C820 120 1080 470 1340 350" stroke="white" strokeWidth="50" strokeLinecap="round" />
+            <path opacity="0.04" d="M-50 450C190 320 450 680 670 450C890 220 1150 570 1370 450" stroke="white" strokeWidth="30" strokeLinecap="round" />
+            <path opacity="0.05" d="M80 180C300 400 560 50 780 270C1000 490 1260 140 1510 270" stroke="white" strokeWidth="70" strokeLinecap="round" />
+          </svg>
+        </div>
+
+        {/* ===== SPLIT LAYOUT: Left text | Center Image | Right widget ===== */}
+        <div className="hero-fest-layout active-slide">
+          
+          {/* ---- LEFT: Creator Fest Details ---- */}
+          <div className="fest-left-col">
+            <div className="fest-tag-badge">
+              {heroData.tag}
+            </div>
+            <h1 className="fest-title">{heroData.title}</h1>
+            <div className="fest-subtags">
+              <span className="fest-subtag-line">Workshops | Gear Deals | Meetups</span>
+              <span className="fest-subtag-line">Networking | Awards</span>
+            </div>
+            <button className="fest-explore-btn" onClick={() => { setExploreTab('workshops'); navigate('/explore'); }}>
+              Explore Now
+            </button>
           </div>
-        )}
 
-        {/* Dark gradient overlay (only on standard slides) */}
-        {slides[currentSlide].type !== 'creator_fest' && <div className="hero-overlay" />}
+          {/* ---- CENTER: Photographer Image ---- */}
+          <div className="fest-center-col">
+            <img 
+              src={`${import.meta.env.BASE_URL}${heroData.image}`} 
+              className="fest-photographer-img" 
+              alt="Creator Fest Photographer" 
+            />
+          </div>
 
-        {/* Navigation Arrows */}
-        <button className="carousel-arrow prev" onClick={prevSlide} aria-label="Previous Slide">
-          <ChevronLeft size={22} />
-        </button>
-        <button className="carousel-arrow next" onClick={nextSlide} aria-label="Next Slide">
-          <ChevronRight size={22} />
-        </button>
-
-        {/* ===== SPLIT LAYOUT: Left text | Right widget ===== */}
-        {slides[currentSlide].type === 'creator_fest' ? (
-          <div className="hero-fest-layout active-slide" key={`content-${currentSlide}`}>
-            
-            {/* ---- LEFT: Creator Fest Details ---- */}
-            <div className="fest-left-col">
-              <div className="fest-tag-badge">
-                {slides[currentSlide].tag}
-              </div>
-              <h1 className="fest-title">{slides[currentSlide].title}</h1>
-              <div className="fest-subtags">
-                <span className="fest-subtag-line">Workshops | Gear Deals | Meetups</span>
-                <span className="fest-subtag-line">Networking | Awards</span>
-              </div>
-              <button className="fest-explore-btn" onClick={() => { setExploreTab('workshops'); navigate('/explore'); }}>
-                Explore Now
+          {/* ---- RIGHT: Ticket/Discount Details ---- */}
+          <div className="fest-right-col">
+            <div className="fest-offer-info">
+              <span className="fest-offer-label">{heroData.rightOffer}</span>
+              <span className="fest-offer-discount">{heroData.rightDiscount}</span>
+              <button className="fest-book-btn" onClick={() => { setExploreTab('workshops'); navigate('/explore'); }}>
+                {heroData.rightCta}
               </button>
             </div>
-
-            {/* ---- CENTER: Photographer Image ---- */}
-            <div className="fest-center-col">
-              <img 
-                src={`${import.meta.env.BASE_URL}${slides[currentSlide].image}`} 
-                className="fest-photographer-img" 
-                alt="Creator Fest Photographer" 
-              />
-            </div>
-
-            {/* ---- RIGHT: Ticket/Discount Details ---- */}
-            <div className="fest-right-col">
-              <div className="fest-offer-info">
-                <span className="fest-offer-label">{slides[currentSlide].rightOffer}</span>
-                <span className="fest-offer-discount">{slides[currentSlide].rightDiscount}</span>
-                <button className="fest-book-btn" onClick={() => { setExploreTab('workshops'); navigate('/explore'); }}>
-                  {slides[currentSlide].rightCta}
-                </button>
-              </div>
-              
-              <div className="fest-divider-line" />
-              
-              <div className="fest-event-details">
-                <Calendar size={20} className="fest-calendar-icon" />
-                <div className="fest-event-text">
-                  <div className="fest-date">{slides[currentSlide].rightDate}</div>
-                  <div className="fest-venue">{slides[currentSlide].rightVenue}</div>
-                </div>
+            
+            <div className="fest-divider-line" />
+            
+            <div className="fest-event-details">
+              <Calendar size={20} className="fest-calendar-icon" />
+              <div className="fest-event-text">
+                <div className="fest-date">{heroData.rightDate}</div>
+                <div className="fest-venue">{heroData.rightVenue}</div>
               </div>
             </div>
-
           </div>
-        ) : (
-          <div className="hero-split-layout active-slide" key={`content-${currentSlide}`}>
 
-            {/* ---- LEFT: Text Content ---- */}
-            <div className="hero-left-col">
-              <div className="hero-tags-row">
-                <span className="hero-tag">{slides[currentSlide].tag}</span>
-                <span className="hero-tag-green">{slides[currentSlide].tagGreen}</span>
-              </div>
-
-              <h1 className="hero-title">{slides[currentSlide].title}</h1>
-              <p className="hero-subtitle">{slides[currentSlide].subtitle}</p>
-
-              <div className="hero-cta-row">
-                <button className="hero-btn"
-                  onClick={() => { setExploreTab(slides[currentSlide].cta1Tab); navigate('/explore'); }}>
-                  {slides[currentSlide].cta1Text}
-                </button>
-                <button className="hero-btn-outline"
-                  onClick={() => { setExploreTab(slides[currentSlide].cta2Tab); navigate('/explore'); }}>
-                  {slides[currentSlide].cta2Text}
-                </button>
-              </div>
-
-              <div className="hero-trust-strip">{slides[currentSlide].trustText}</div>
-
-              {/* Stats inline */}
-              <div className="hero-stats-inline">
-                {slides[currentSlide].stats.map((stat, idx) => (
-                  <React.Fragment key={idx}>
-                    {idx > 0 && <div className="hero-stat-divider" />}
-                    <div className="hero-stat-pill">
-                      <span className="hero-stat-num">{stat.num}</span>
-                      <span className="hero-stat-label">{stat.label}</span>
-                    </div>
-                  </React.Fragment>
-                ))}
-              </div>
-            </div>
-
-          </div>
-        )}
-
-        {/* Slide Indicators */}
-        <div className="carousel-indicators">
-          {slides.map((_, index) => (
-            <span
-              key={index}
-              className={`indicator ${index === currentSlide ? 'active' : ''}`}
-              onClick={() => setCurrentSlide(index)}
-            />
-          ))}
         </div>
       </div>
 
