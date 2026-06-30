@@ -12372,13 +12372,14 @@ input:checked + .slider:before {
   display: inline-block;
   padding: 6px 16px;
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 193, 7, 0.5);
+  background: rgba(255, 193, 7, 0.08);
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: #ffffff;
+  color: #ffc107;
+  box-shadow: 0 0 15px rgba(255, 193, 7, 0.15);
 }
 
 .fest-title {
@@ -12464,13 +12465,41 @@ input:checked + .slider:before {
   z-index: 3;
 }
 
+.fest-center-col::before {
+  content: '';
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, rgba(255, 193, 7, 0.35) 0%, rgba(240, 20, 77, 0.6) 50%, transparent 100%);
+  filter: blur(40px);
+  z-index: -1;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: spotlightGlow 4s infinite ease-in-out;
+}
+
+@keyframes spotlightGlow {
+  0% { transform: translateX(-50%) scale(0.9); opacity: 0.8; }
+  50% { transform: translateX(-50%) scale(1.1); opacity: 1; }
+  100% { transform: translateX(-50%) scale(0.9); opacity: 0.8; }
+}
+
 .fest-photographer-img {
   max-height: 98%;
   max-width: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.45));
-  transform: translateY(12px);
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
   display: block;
+  animation: floatPhotographer 6s infinite ease-in-out;
+}
+
+@keyframes floatPhotographer {
+  0% { transform: translateY(12px) scale(1); }
+  50% { transform: translateY(4px) scale(1.015); }
+  100% { transform: translateY(12px) scale(1); }
 }
 
 /* Right Column */
@@ -12487,11 +12516,33 @@ input:checked + .slider:before {
 }
 
 .fest-offer-info {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 24px !important;
+  border-radius: 16px !important;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
   text-align: left;
+}
+
+.fest-offer-info::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 60%);
+  pointer-events: none;
 }
 
 .fest-offer-label {
@@ -12632,13 +12683,26 @@ input:checked + .slider:before {
 
 .fest-urgency-badge {
   font-size: 11.5px;
-  font-weight: 700;
-  color: #ffb81c;
-  background: rgba(255, 184, 28, 0.12);
-  padding: 5px 12px;
-  border-radius: 6px;
+  font-weight: 800;
+  color: #000000;
+  background: #ffb81c;
+  padding: 6px 16px;
+  border-radius: 20px;
   display: inline-block;
   letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(255, 184, 28, 0.35);
+  margin-top: 4px;
+  animation: pulseShake 3s infinite ease-in-out;
+}
+
+@keyframes pulseShake {
+  0% { transform: scale(1); }
+  45% { transform: scale(1); }
+  50% { transform: scale(1.05) rotate(2deg); }
+  55% { transform: scale(1.05) rotate(-2deg); }
+  60% { transform: scale(1.05) rotate(2deg); }
+  65% { transform: scale(1.05) rotate(0deg); }
+  100% { transform: scale(1); }
 }
 
 @media (max-width: 768px) {
