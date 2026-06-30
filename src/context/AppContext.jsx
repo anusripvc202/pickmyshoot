@@ -632,6 +632,22 @@ export const AppProvider = ({ children }) => {
     triggerToast(`Coupon ${newCoupon.code} created successfully!`);
   };
 
+  // Record login to MongoDB via Vercel API (photographer + all roles)
+  const recordLoginActivity = (profile, role) => {
+    if (!profile) return;
+    fetch('/api/login-activity', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId: profile.id || profile._id || `user-${Date.now()}`,
+        name:   profile.name  || 'Unknown',
+        email:  profile.email || '',
+        role:   role          || profile.role || 'client',
+        avatar: profile.avatar || ''
+      })
+    }).catch(err => console.warn('Failed to record login activity:', err));
+  };
+
   // Authenticate user session
   const loginUser = (email, password, demoProfileId = null) => {
     const getMappedRole = (profile) => {
@@ -645,11 +661,12 @@ export const AppProvider = ({ children }) => {
     if (demoProfileId) {
       const foundProfile = profiles.find(p => p.id === demoProfileId);
       if (foundProfile) {
+        const mappedRole = getMappedRole(foundProfile);
         setCurrentUser(foundProfile);
         setActiveProfileId(foundProfile.id);
         setIsAuthenticated(true);
-        // Sync role based on user profile
-        setCurrentRole(getMappedRole(foundProfile));
+        setCurrentRole(mappedRole);
+        recordLoginActivity(foundProfile, mappedRole);
         triggerToast(`Welcome back, ${foundProfile.name}!`);
         return true;
       }
@@ -658,10 +675,12 @@ export const AppProvider = ({ children }) => {
 
     const foundProfile = profiles.find(p => p.email.toLowerCase() === email.toLowerCase());
     if (foundProfile) {
+      const mappedRole = getMappedRole(foundProfile);
       setCurrentUser(foundProfile);
       setActiveProfileId(foundProfile.id);
       setIsAuthenticated(true);
-      setCurrentRole(getMappedRole(foundProfile));
+      setCurrentRole(mappedRole);
+      recordLoginActivity(foundProfile, mappedRole);
       triggerToast(`Welcome back, ${foundProfile.name}!`);
       return true;
     } else {
@@ -693,16 +712,14 @@ export const AppProvider = ({ children }) => {
     setCurrentUser(newProfile);
     setActiveProfileId(newProfileId);
     setIsAuthenticated(true);
-    
+
     // Set correct role
-    if (role === 'admin') {
-      setCurrentRole('admin');
-    } else if (role === 'photographer') {
-      setCurrentRole('photographer');
-    } else {
-      setCurrentRole('client');
-    }
-    
+    const assignedRole = role === 'admin' ? 'admin' : role === 'photographer' ? 'photographer' : 'client';
+    setCurrentRole(assignedRole);
+
+    // Record login activity
+    recordLoginActivity(newProfile, assignedRole);
+
     // Sync with backend
     fetch('/api/users', {
       method: 'POST',
@@ -733,12 +750,12 @@ export const AppProvider = ({ children }) => {
       setCurrentUser(existing);
       setActiveProfileId(existing.id);
       setIsAuthenticated(true);
-      
+
       const roleLower = existing.role.toLowerCase();
-      if (roleLower.includes('admin')) setCurrentRole('admin');
-      else if (roleLower.includes('photographer')) setCurrentRole('photographer');
-      else setCurrentRole('client');
-      
+      const mappedRole = roleLower.includes('admin') ? 'admin' : roleLower.includes('photographer') ? 'photographer' : 'client';
+      setCurrentRole(mappedRole);
+      recordLoginActivity(existing, mappedRole);
+
       triggerToast(`Welcome back, ${existing.name}!`);
       return true;
     } else {
@@ -764,6 +781,7 @@ export const AppProvider = ({ children }) => {
       setActiveProfileId(newProfileId);
       setIsAuthenticated(true);
       setCurrentRole(role);
+      recordLoginActivity(newProfile, role);
 
       try {
         await fetch('/api/users', {
