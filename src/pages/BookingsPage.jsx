@@ -96,10 +96,10 @@ const BookingsPage = () => {
                   borderRadius: '6px',
                   backgroundColor: book.status === 'confirmed' ? 'rgba(0, 180, 100, 0.12)' : 
                                    book.status === 'pending' ? 'rgba(255, 165, 0, 0.12)' :
-                                   book.status === 'cancelled' ? 'rgba(200, 16, 46, 0.12)' : 'var(--border)',
+                                   book.status === 'cancelled' ? 'rgba(199, 16, 13, 0.12)' : 'var(--border)',
                   color: book.status === 'confirmed' ? '#00b464' : 
                          book.status === 'pending' ? '#ffa500' :
-                         book.status === 'cancelled' ? '#C8102E' : 'var(--text-muted)'
+                         book.status === 'cancelled' ? '#c7100d' : 'var(--text-muted)'
                 }}>
                   {book.status}
                 </span>

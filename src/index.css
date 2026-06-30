@@ -137,7 +137,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: linear-gradient(135deg, #C8102E 0%, #9B0C1E 100%);
+  background: linear-gradient(135deg, #c7100d 0%, #a30d0b 100%);
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
   padding: 0;
   height: 130px;
@@ -869,7 +869,7 @@ body {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: #C8102E;
+  background: #c7100d;
   cursor: pointer;
   box-shadow: 0 0 10px rgba(200, 16, 46, 0.6);
   border: 3px solid white;
@@ -884,7 +884,7 @@ body {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: #C8102E;
+  background: #c7100d;
   cursor: pointer;
   box-shadow: 0 0 10px rgba(200, 16, 46, 0.6);
   border: 3px solid white;
@@ -899,7 +899,7 @@ body {
 .booking-search-btn {
   width: calc(100% - 48px);
   margin: 8px 24px 24px;
-  background: linear-gradient(135deg, #C8102E 0%, #A60D24 100%);
+  background: linear-gradient(135deg, #c7100d 0%, #a30d0b 100%);
   color: white;
   border: none;
   font-family: var(--font-heading);
@@ -1034,7 +1034,7 @@ body {
 }
 
 .hero-btn {
-  background: #C8102E;
+  background: #c7100d;
   color: white;
   border: none;
   font-family: var(--font-heading);
@@ -1049,7 +1049,7 @@ body {
 }
 
 .hero-btn:hover {
-  background: #a50d26;
+  background: #a30d0b;
   transform: translateY(-3px);
   box-shadow: 0 10px 32px rgba(200, 16, 46, 0.55);
 }
@@ -1212,7 +1212,7 @@ body {
 .indicator.active {
   width: 28px;
   border-radius: 6px;
-  background-color: #C8102E;
+  background-color: #c7100d;
   opacity: 1;
 }
 
@@ -3234,7 +3234,7 @@ body {
 
 .slot-status-lbl.status-booked {
   background-color: rgba(200, 16, 46, 0.12);
-  color: #C8102E;
+  color: #c7100d;
 }
 
 .premium-time-slot.active .slot-status-lbl {
@@ -5163,7 +5163,7 @@ input:checked + .slider:before {
 
 /* ---- TOP CTA STRIP ---- */
 .footer-cta-strip {
-  background: linear-gradient(135deg, #C8102E 0%, #8B0000 40%, #1a0308 100%);
+  background: linear-gradient(135deg, #c7100d 0%, #8B0000 40%, #1a0308 100%);
   padding: 60px 0;
   position: relative;
   overflow: hidden;
@@ -5232,7 +5232,7 @@ input:checked + .slider:before {
 
 .footer-cta-btn-primary {
   background: #ffffff;
-  color: #C8102E;
+  color: #c7100d;
   border: none;
   font-family: var(--font-heading);
   font-weight: 800;
@@ -5474,7 +5474,7 @@ input:checked + .slider:before {
   display: inline-block;
   width: 6px;
   height: 6px;
-  background: #C8102E;
+  background: #c7100d;
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -5507,7 +5507,7 @@ input:checked + .slider:before {
   opacity: 0;
   transform: translateX(-6px);
   transition: all 0.2s ease;
-  color: #C8102E;
+  color: #c7100d;
   font-size: 12px;
   flex-shrink: 0;
 }
@@ -5526,7 +5526,7 @@ input:checked + .slider:before {
 .footer-link-tag {
   font-size: 9px;
   font-weight: 700;
-  background: linear-gradient(135deg, #C8102E, #FF4D5A);
+  background: linear-gradient(135deg, #c7100d, #FF4D5A);
   color: white;
   padding: 2px 7px;
   border-radius: 20px;
@@ -5557,11 +5557,11 @@ input:checked + .slider:before {
 }
 
 .footer-contact-item:hover {
-  color: #C8102E;
+  color: #c7100d;
 }
 
 .footer-contact-item svg {
-  color: #C8102E;
+  color: #c7100d;
   flex-shrink: 0;
 }
 
@@ -5598,7 +5598,7 @@ input:checked + .slider:before {
 }
 
 .footer-email-input:focus {
-  border-color: #C8102E;
+  border-color: #c7100d;
   background: rgba(255,255,255,0.08);
   box-shadow: 0 0 0 3px rgba(200,16,46,0.15);
 }
@@ -5608,7 +5608,7 @@ input:checked + .slider:before {
 }
 
 .footer-subscribe-btn {
-  background: linear-gradient(135deg, #C8102E 0%, #FF4D5A 100%);
+  background: linear-gradient(135deg, #c7100d 0%, #FF4D5A 100%);
   border: none;
   padding: 12px 20px;
   border-radius: 12px;
@@ -5747,7 +5747,7 @@ input:checked + .slider:before {
 }
 
 .footer-bottom-links a:hover {
-  color: #C8102E;
+  color: #c7100d;
   opacity: 1;
 }
 
@@ -8279,16 +8279,16 @@ input:checked + .slider:before {
 
 /* 1. Dynamic Variable Overrides per Role Mode */
 .role-photographer-mode {
-  --primary: #C8102E;
-  --primary-hover: #990B1E;
+  --primary: #c7100d;
+  --primary-hover: #a30d0b;
   --primary-rgb: 200, 16, 46;
   --accent-pink: rgba(200, 16, 46, 0.08);
   --primary-sec: #FF4D5A;
 }
 
 .role-admin-mode {
-  --primary: #C8102E;
-  --primary-hover: #990B1E;
+  --primary: #c7100d;
+  --primary-hover: #a30d0b;
   --primary-rgb: 200, 16, 46;
   --accent-pink: rgba(200, 16, 46, 0.08);
   --primary-sec: #FF4D5A;
@@ -8330,19 +8330,19 @@ input:checked + .slider:before {
 }
 
 .role-switch-pill.active.client {
-  background: #C8102E;
+  background: #c7100d;
   color: white;
   box-shadow: 0 4px 12px rgba(200, 16, 46, 0.25);
 }
 
 .role-switch-pill.active.photographer {
-  background: #C8102E;
+  background: #c7100d;
   color: white;
   box-shadow: 0 4px 12px rgba(200, 16, 46, 0.25);
 }
 
 .role-switch-pill.active.admin {
-  background: #C8102E;
+  background: #c7100d;
   color: white;
   box-shadow: 0 4px 12px rgba(200, 16, 46, 0.25);
 }
@@ -8369,37 +8369,37 @@ input:checked + .slider:before {
 }
 
 .badge-verified.role-badge-client {
-  background: linear-gradient(135deg, #C8102E, #FF4D5A);
+  background: linear-gradient(135deg, #c7100d, #FF4D5A);
 }
 
 .badge-verified.role-badge-photographer {
-  background: linear-gradient(135deg, #C8102E, #FF4D5A);
+  background: linear-gradient(135deg, #c7100d, #FF4D5A);
 }
 
 .badge-verified.role-badge-admin {
-  background: linear-gradient(135deg, #C8102E, #FF4D5A);
+  background: linear-gradient(135deg, #c7100d, #FF4D5A);
 }
 
 /* 5. Custom Button Themes */
 .pro-btn-primary.theme-btn-client {
-  background: #C8102E;
+  background: #c7100d;
 }
 .pro-btn-primary.theme-btn-client:hover {
-  background: #990B1E;
+  background: #a30d0b;
 }
 
 .pro-btn-primary.theme-btn-photographer {
-  background: #C8102E;
+  background: #c7100d;
 }
 .pro-btn-primary.theme-btn-photographer:hover {
-  background: #990B1E;
+  background: #a30d0b;
 }
 
 .pro-btn-primary.theme-btn-admin {
-  background: #C8102E;
+  background: #c7100d;
 }
 .pro-btn-primary.theme-btn-admin:hover {
-  background: #990B1E;
+  background: #a30d0b;
 }
 
 /* 6. Dashboard KPI Card Overrides */
@@ -8640,7 +8640,7 @@ input:checked + .slider:before {
 }
 
 .action-btn-sm.confirm-btn {
-  background: #C8102E;
+  background: #c7100d;
   color: white;
   border: none;
   padding: 6px 12px;
@@ -8653,7 +8653,7 @@ input:checked + .slider:before {
 }
 
 .action-btn-sm.confirm-btn:hover {
-  background: #990B1E;
+  background: #a30d0b;
 }
 
 .action-btn-sm.decline-btn {
@@ -8750,11 +8750,11 @@ input:checked + .slider:before {
 
 .admin-action-btn.complete {
   background: rgba(200, 16, 46, 0.12);
-  color: #C8102E;
+  color: #c7100d;
 }
 
 .admin-action-btn.complete:hover {
-  background: #C8102E;
+  background: #c7100d;
   color: white;
 }
 
@@ -8884,14 +8884,14 @@ input:checked + .slider:before {
 
 /* 13. Dynamic SVG/CSS Graph components */
 .bar.bar.bar-photog {
-  background: #C8102E;
+  background: #c7100d;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   box-shadow: 0 2px 6px rgba(200, 16, 46, 0.3);
 }
 
 .bar.bar-admin {
-  background: #C8102E;
+  background: #c7100d;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   box-shadow: 0 2px 6px rgba(200, 16, 46, 0.3);
@@ -9609,15 +9609,15 @@ input:checked + .slider:before {
 /* 8. Admin Dashboard Layout & Sub-component Styling overrides */
 .kpi-icon-wrap.client-kpi {
   background: rgba(200, 16, 46, 0.1) !important;
-  color: #C8102E !important;
+  color: #c7100d !important;
 }
 .kpi-icon-wrap.photographer-kpi {
   background: rgba(200, 16, 46, 0.1) !important;
-  color: #C8102E !important;
+  color: #c7100d !important;
 }
 .kpi-icon-wrap.admin-kpi {
   background: rgba(200, 16, 46, 0.1) !important;
-  color: #C8102E !important;
+  color: #c7100d !important;
 }
 
 .bars-stack.admin-bars-stack {
@@ -9626,7 +9626,7 @@ input:checked + .slider:before {
 }
 
 .legend-color-dot.admin-dot {
-  background: #C8102E !important;
+  background: #c7100d !important;
 }
 
 /* Admin Log Row Styles */
@@ -9652,8 +9652,8 @@ input:checked + .slider:before {
   flex-shrink: 0;
 }
 .admin-log-dot.success {
-  background: #C8102E;
-  box-shadow: 0 0 6px #C8102E;
+  background: #c7100d;
+  box-shadow: 0 0 6px #c7100d;
 }
 .admin-log-dot.warning {
   background: #ff9c00;
@@ -11961,7 +11961,7 @@ input:checked + .slider:before {
 .app-header .badge-count {
   background-color: #ffffff !important;
   color: var(--primary) !important;
-  border: 2px solid #C8102E !important;
+  border: 2px solid #c7100d !important;
 }
 
 /* Primary CTA styling in Red Header */
@@ -12006,3 +12006,5 @@ input:checked + .slider:before {
   transform: translateY(-2px) !important;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
 }
+
+

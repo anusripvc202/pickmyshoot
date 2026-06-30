@@ -36,6 +36,14 @@ const HomePage = () => {
 
   const navigate = useNavigate();
 
+  // Ensure a baby photoshoot is included in the homepage list of services
+  const displayedServices = React.useMemo(() => {
+    const babyShoot = services.find(s => s.serviceType === 'Baby Photoshoot' || s.title.toLowerCase().includes('baby'));
+    const otherShoots = services.filter(s => s.id !== (babyShoot?.id || ''));
+    // Place the baby photoshoot as the second item so it is immediately visible on the home page without scrolling
+    return babyShoot ? [otherShoots[0], babyShoot, ...otherShoots.slice(1, 6)] : services.slice(0, 7);
+  }, [services]);
+
   const slides = [
     {
       tag: "India's #1 Creator Marketplace",
@@ -59,7 +67,7 @@ const HomePage = () => {
         { num: "15K+", label: "Creators" },
         { num: "4.9★", label: "Avg. Rating" }
       ],
-      background: "linear-gradient(135deg, #C8102E 0%, #800A1A 100%)"
+      background: "linear-gradient(135deg, #c7100d 0%, #800A1A 100%)"
     },
     {
       tag: "Save on Production Costs",
@@ -264,7 +272,7 @@ const HomePage = () => {
                 <div className="booking-field">
                   <label className="booking-label">
                     <span className="booking-label-icon">₹</span>
-                    MAX PRICE: <strong style={{ color: '#C8102E' }}>{formatPrice(bookPrice)}</strong>
+                    MAX PRICE: <strong style={{ color: 'var(--primary)' }}>{formatPrice(bookPrice)}</strong>
                   </label>
                   <input
                     className="booking-range"
@@ -466,13 +474,13 @@ const HomePage = () => {
       {/* Popular Services Section */}
       <section>
         <div className="section-header">
-          <h2 className="section-title">Popular Photography Packages</h2>
+          <h2 className="section-title">Popular Photography Shoots</h2>
           <span className="section-link" onClick={() => handleCategoryClick('services')}>
-            See All Packages <ChevronRight size={14} />
+            See All Shoots <ChevronRight size={14} />
           </span>
         </div>
         <div className="desktop-card-grid-5 mobile-scroll-row">
-          {services.slice(0, 7).map(service => (
+          {displayedServices.map(service => (
             <div key={service.id} className="service-card" onClick={() => { setExploreTab('services'); navigate('/explore'); }}>
               <div className="card-img-wrap">
                 <img src={service.image} className="card-image" alt={service.title} />
@@ -485,11 +493,7 @@ const HomePage = () => {
               </div>
               <div className="card-info">
                 <span className="card-title">{service.title}</span>
-                <div className="card-sub-info">
-                  <span className="card-price-label">From</span>
-                  <span className="card-price-value">₹{service.price.toLocaleString('en-IN')}</span>
-                </div>
-                <div className="card-rating-row">
+                <div className="card-rating-row" style={{ marginTop: '8px' }}>
                   <Star size={11} className="card-rating-star" />
                   <span>{service.rating}</span>
                   <span className="card-rating-count">({service.reviews} reviews)</span>
@@ -530,9 +534,6 @@ const HomePage = () => {
                   </div>
                 </div>
                 <span className="near-you-loc">📍 {studio.location} • {studio.distance}</span>
-                <div className="near-you-price-row">
-                  <span className="card-price-value">₹{studio.price.toLocaleString('en-IN')}<span style={{ fontSize: '11px', fontWeight: '500' }}>/{studio.priceUnit}</span></span>
-                </div>
               </div>
             </div>
           ))}
@@ -635,8 +636,7 @@ const HomePage = () => {
               <div className="workshop-info">
                 <span className="workshop-title">{wk.title}</span>
                 <span className="workshop-instructor">Instructor: <strong>{wk.instructor}</strong></span>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '4px' }}>
-                  <span className="workshop-price">₹{wk.price.toLocaleString('en-IN')}</span>
+                <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '4px' }}>
                   <div className="card-rating-row" style={{ marginTop: 0 }}>
                     <Star size={11} className="card-rating-star" />
                     <span>{wk.rating}</span>
