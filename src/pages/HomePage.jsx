@@ -141,27 +141,7 @@ const HomePage = () => {
     navigate('/explore');
   };
 
-  // ---- Booking Widget State ----
-  const [bookEvent, setBookEvent]       = React.useState('Wedding Photography');
-  const [bookLocation, setBookLocation] = React.useState('Hyderabad');
-  const [bookPrice, setBookPrice]       = React.useState(1000000);
-  const [bookDate, setBookDate]         = React.useState('');
 
-  const eventOptions = [
-    'Wedding Photography', 'Pre-Wedding Shoot', 'Baby & Maternity',
-    'Fashion Editorial', 'Corporate Events', 'Product Photography',
-    'Real Estate', 'Food Photography', 'Music Videos', 'Reels & Ads'
-  ];
-
-  const formatPrice = (val) => {
-    if (val >= 100000) return `₹${(val / 100000).toFixed(val % 100000 === 0 ? 0 : 1)} L`;
-    return `₹${val.toLocaleString('en-IN')}`;
-  };
-
-  const handleBookingSearch = () => {
-    setExploreTab('services');
-    navigate('/explore');
-  };
 
   return (
     <>
@@ -226,83 +206,7 @@ const HomePage = () => {
             </div>
           </div>
 
-          {/* ---- RIGHT: Booking Widget ---- */}
-          <div className="hero-booking-widget">
-            <div className="booking-widget-header">
-              <span className="booking-widget-title">Find &amp; Book Instantly</span>
-              <span className="booking-widget-sub">Fill in your requirements below</span>
-            </div>
 
-            <div className="booking-widget-body">
-              {/* Row 1: Event + Location */}
-              <div className="booking-row">
-                <div className="booking-field">
-                  <label className="booking-label">
-                    <span className="booking-label-icon">🎬</span> EVENT
-                  </label>
-                  <div className="booking-select-wrap">
-                    <select
-                      className="booking-select"
-                      value={bookEvent}
-                      onChange={e => setBookEvent(e.target.value)}
-                    >
-                      {eventOptions.map(opt => (
-                        <option key={opt} value={opt}>{opt}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div className="booking-field">
-                  <label className="booking-label">
-                    <span className="booking-label-icon">📍</span> LOCATION
-                  </label>
-                  <input
-                    className="booking-input"
-                    type="text"
-                    value={bookLocation}
-                    onChange={e => setBookLocation(e.target.value)}
-                    placeholder="City or Area"
-                  />
-                </div>
-              </div>
-
-              {/* Row 2: Price + Date */}
-              <div className="booking-row">
-                <div className="booking-field">
-                  <label className="booking-label">
-                    <span className="booking-label-icon">₹</span>
-                    MAX PRICE: <strong style={{ color: 'var(--primary)' }}>{formatPrice(bookPrice)}</strong>
-                  </label>
-                  <input
-                    className="booking-range"
-                    type="range"
-                    min={5000}
-                    max={1000000}
-                    step={5000}
-                    value={bookPrice}
-                    onChange={e => setBookPrice(Number(e.target.value))}
-                  />
-                </div>
-
-                <div className="booking-field">
-                  <label className="booking-label">
-                    <span className="booking-label-icon">📅</span> PHOTOSHOOT DATE
-                  </label>
-                  <input
-                    className="booking-input booking-date"
-                    type="date"
-                    value={bookDate}
-                    onChange={e => setBookDate(e.target.value)}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <button className="booking-search-btn" onClick={handleBookingSearch}>
-              Search
-            </button>
-          </div>
         </div>
 
         {/* Slide Indicators */}
