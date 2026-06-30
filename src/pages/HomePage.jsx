@@ -46,30 +46,20 @@ const HomePage = () => {
 
   const slides = [
     {
-      tag: "India's #1 Creator Marketplace",
-      tagGreen: "✓ Verified Listings",
-      title: (
-        <>
-          Book Studios,<br />
-          Gear &amp; Talent<br />
-          <span className="hero-title-accent">Instantly.</span>
-        </>
-      ),
-      subtitle: "Connect with top-rated photographers, premium studio spaces, professional models & camera gear — all in one place.",
+      type: "creator_fest",
+      tag: "BIGGEST CREATOR FEST",
+      title: "CREATOR FEST 2024",
+      subtitle: "Workshops | Gear Deals | Meetups\nNetworking | Awards",
       image: "banner_photographer.png",
-      cta1Text: "🎬 Book a Studio",
-      cta1Tab: "studios",
-      cta2Text: "Find a Photographer",
-      cta2Tab: "services",
-      trustText: "📸 Wedding Shoots • 🎥 Reels & Ads • 🏢 Corporate Events • 👗 Fashion & Editorial",
-      stats: [
-        { num: "2,800+", label: "Verified Studios" },
-        { num: "15K+", label: "Creators" },
-        { num: "4.9★", label: "Avg. Rating" }
-      ],
-      background: "linear-gradient(135deg, #c7100d 0%, #800A1A 100%)"
+      rightOffer: "Early Bird Offer",
+      rightDiscount: "Upto 30% OFF",
+      rightCta: "Book Now",
+      rightDate: "20-22 JULY",
+      rightVenue: "HICC, HYDERABAD",
+      background: "radial-gradient(circle at 60% 40%, rgba(255, 30, 86, 0.25) 0%, transparent 60%), linear-gradient(135deg, #f0144d 0%, #9c0022 100%)"
     },
     {
+      type: "standard",
       tag: "Save on Production Costs",
       tagGreen: "✓ Standard Insurance",
       title: (
@@ -94,6 +84,7 @@ const HomePage = () => {
       background: "linear-gradient(135deg, #1E293B 0%, #0F172A 100%)"
     },
     {
+      type: "standard",
       tag: "Work with the Best",
       tagGreen: "✓ Trusted by Brands",
       title: (
@@ -148,15 +139,31 @@ const HomePage = () => {
       {/* ======= FULL-WIDTH SPLIT HERO SLIDER ======= */}
       <div className="hero-carousel-container">
 
-        {/* Slide Background Image (full bleed) */}
+        {/* Slide Background (full bleed or colored gradient) */}
         <div
           className="hero-bg-image active-slide"
           key={`bg-${currentSlide}`}
-          style={{ backgroundImage: `url(${import.meta.env.BASE_URL}${slides[currentSlide].image})` }}
+          style={{ 
+            background: slides[currentSlide].background, 
+            backgroundImage: slides[currentSlide].type !== 'creator_fest' ? `url(${import.meta.env.BASE_URL}${slides[currentSlide].image})` : 'none',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center center'
+          }}
         />
 
-        {/* Dark gradient overlay */}
-        <div className="hero-overlay" />
+        {/* Dynamic Abstract background curves for Creator Fest */}
+        {slides[currentSlide].type === 'creator_fest' && (
+          <div className="fest-bg-pattern-overlay">
+            <svg viewBox="0 0 1440 800" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
+              <path opacity="0.06" d="M-100 350C120 220 380 580 600 350C820 120 1080 470 1340 350" stroke="white" strokeWidth="50" strokeLinecap="round" />
+              <path opacity="0.04" d="M-50 450C190 320 450 680 670 450C890 220 1150 570 1370 450" stroke="white" strokeWidth="30" strokeLinecap="round" />
+              <path opacity="0.05" d="M80 180C300 400 560 50 780 270C1000 490 1260 140 1510 270" stroke="white" strokeWidth="70" strokeLinecap="round" />
+            </svg>
+          </div>
+        )}
+
+        {/* Dark gradient overlay (only on standard slides) */}
+        {slides[currentSlide].type !== 'creator_fest' && <div className="hero-overlay" />}
 
         {/* Navigation Arrows */}
         <button className="carousel-arrow prev" onClick={prevSlide} aria-label="Previous Slide">
@@ -167,47 +174,97 @@ const HomePage = () => {
         </button>
 
         {/* ===== SPLIT LAYOUT: Left text | Right widget ===== */}
-        <div className="hero-split-layout active-slide" key={`content-${currentSlide}`}>
-
-          {/* ---- LEFT: Text Content ---- */}
-          <div className="hero-left-col">
-            <div className="hero-tags-row">
-              <span className="hero-tag">{slides[currentSlide].tag}</span>
-              <span className="hero-tag-green">{slides[currentSlide].tagGreen}</span>
-            </div>
-
-            <h1 className="hero-title">{slides[currentSlide].title}</h1>
-            <p className="hero-subtitle">{slides[currentSlide].subtitle}</p>
-
-            <div className="hero-cta-row">
-              <button className="hero-btn"
-                onClick={() => { setExploreTab(slides[currentSlide].cta1Tab); navigate('/explore'); }}>
-                {slides[currentSlide].cta1Text}
-              </button>
-              <button className="hero-btn-outline"
-                onClick={() => { setExploreTab(slides[currentSlide].cta2Tab); navigate('/explore'); }}>
-                {slides[currentSlide].cta2Text}
+        {slides[currentSlide].type === 'creator_fest' ? (
+          <div className="hero-fest-layout active-slide" key={`content-${currentSlide}`}>
+            
+            {/* ---- LEFT: Creator Fest Details ---- */}
+            <div className="fest-left-col">
+              <div className="fest-tag-badge">
+                {slides[currentSlide].tag}
+              </div>
+              <h1 className="fest-title">{slides[currentSlide].title}</h1>
+              <div className="fest-subtags">
+                <span className="fest-subtag-line">Workshops | Gear Deals | Meetups</span>
+                <span className="fest-subtag-line">Networking | Awards</span>
+              </div>
+              <button className="fest-explore-btn" onClick={() => { setExploreTab('workshops'); navigate('/explore'); }}>
+                Explore Now
               </button>
             </div>
 
-            <div className="hero-trust-strip">{slides[currentSlide].trustText}</div>
-
-            {/* Stats inline */}
-            <div className="hero-stats-inline">
-              {slides[currentSlide].stats.map((stat, idx) => (
-                <React.Fragment key={idx}>
-                  {idx > 0 && <div className="hero-stat-divider" />}
-                  <div className="hero-stat-pill">
-                    <span className="hero-stat-num">{stat.num}</span>
-                    <span className="hero-stat-label">{stat.label}</span>
-                  </div>
-                </React.Fragment>
-              ))}
+            {/* ---- CENTER: Photographer Image ---- */}
+            <div className="fest-center-col">
+              <img 
+                src={`${import.meta.env.BASE_URL}${slides[currentSlide].image}`} 
+                className="fest-photographer-img" 
+                alt="Creator Fest Photographer" 
+              />
             </div>
+
+            {/* ---- RIGHT: Ticket/Discount Details ---- */}
+            <div className="fest-right-col">
+              <div className="fest-offer-info">
+                <span className="fest-offer-label">{slides[currentSlide].rightOffer}</span>
+                <span className="fest-offer-discount">{slides[currentSlide].rightDiscount}</span>
+                <button className="fest-book-btn" onClick={() => { setExploreTab('workshops'); navigate('/explore'); }}>
+                  {slides[currentSlide].rightCta}
+                </button>
+              </div>
+              
+              <div className="fest-divider-line" />
+              
+              <div className="fest-event-details">
+                <Calendar size={20} className="fest-calendar-icon" />
+                <div className="fest-event-text">
+                  <div className="fest-date">{slides[currentSlide].rightDate}</div>
+                  <div className="fest-venue">{slides[currentSlide].rightVenue}</div>
+                </div>
+              </div>
+            </div>
+
           </div>
+        ) : (
+          <div className="hero-split-layout active-slide" key={`content-${currentSlide}`}>
 
+            {/* ---- LEFT: Text Content ---- */}
+            <div className="hero-left-col">
+              <div className="hero-tags-row">
+                <span className="hero-tag">{slides[currentSlide].tag}</span>
+                <span className="hero-tag-green">{slides[currentSlide].tagGreen}</span>
+              </div>
 
-        </div>
+              <h1 className="hero-title">{slides[currentSlide].title}</h1>
+              <p className="hero-subtitle">{slides[currentSlide].subtitle}</p>
+
+              <div className="hero-cta-row">
+                <button className="hero-btn"
+                  onClick={() => { setExploreTab(slides[currentSlide].cta1Tab); navigate('/explore'); }}>
+                  {slides[currentSlide].cta1Text}
+                </button>
+                <button className="hero-btn-outline"
+                  onClick={() => { setExploreTab(slides[currentSlide].cta2Tab); navigate('/explore'); }}>
+                  {slides[currentSlide].cta2Text}
+                </button>
+              </div>
+
+              <div className="hero-trust-strip">{slides[currentSlide].trustText}</div>
+
+              {/* Stats inline */}
+              <div className="hero-stats-inline">
+                {slides[currentSlide].stats.map((stat, idx) => (
+                  <React.Fragment key={idx}>
+                    {idx > 0 && <div className="hero-stat-divider" />}
+                    <div className="hero-stat-pill">
+                      <span className="hero-stat-num">{stat.num}</span>
+                      <span className="hero-stat-label">{stat.label}</span>
+                    </div>
+                  </React.Fragment>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        )}
 
         {/* Slide Indicators */}
         <div className="carousel-indicators">
