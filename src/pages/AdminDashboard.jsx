@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import {
@@ -19,49 +19,84 @@ const AdminDashboard = () => {
   const { logoutUser, triggerToast } = useAppContext();
   const navigate = useNavigate();
 
-  // Photographer Partner Directory
-  const [photographers, setPhotographers] = useState([
-    {
-      id: '1',
-      name: "24 Frames Photography - South India's Leading Luxury Wedding Photography Brand",
-      slug: '24-frames-photography-south-india-s-leading-luxury-wedding-photography-brand',
-      location: 'Banjara Hills, Hyderabad',
-      isVerified: false,
-      code: 'No Code',
-      status: 'Active'
-    },
-    {
-      id: '2',
-      name: '24mm | Best Photography & Videography in Hyderabad | Wedding Photographers',
-      slug: '24mm-best-photography-videography-in-hyderabad-wedding-photographers',
-      location: 'Hitech City, Hyderabad',
-      isVerified: false,
-      code: 'No Code',
-      status: 'Active'
-    },
-    {
-      id: '3',
-      name: '24mm | Best Photography & Videography in Hyderabad | Wedding Photographers',
-      slug: '24mm-best-photography-videography-in-hyderabad-wedding-photographers-1',
-      location: 'Jubilee Hills, Hyderabad',
-      isVerified: false,
-      code: 'No Code',
-      status: 'Active'
-    },
-    {
-      id: '4',
-      name: '5zaan photography',
-      slug: '5zaan-photography',
-      location: 'Banjara Hills, Hyderabad',
-      isVerified: false,
-      code: 'No Code',
-      status: 'Active'
-    }
-  ]);
-
+  // ── Photographer Partner Directory (MongoDB via /api/photographers) ─────────
+  const [photographers, setPhotographers] = useState([]);
+  const [dirLoading, setDirLoading] = useState(false);
+  const [dirError, setDirError] = useState(null);
   const [filterText, setFilterText] = useState('');
 
-  // Login Activity from MongoDB via Vercel API
+  const fetchPhotographers = useCallback(async () => {
+    setDirLoading(true);
+    setDirError(null);
+    try {
+      const res = await fetch('/api/photographers');
+      if (!res.ok) throw new Error(`API error ${res.status}`);
+      const data = await res.json();
+      setPhotographers(Array.isArray(data) ? data : []);
+    } catch (err) {
+      setDirError('Could not load photographers: ' + err.message);
+    } finally {
+      setDirLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { fetchPhotographers(); }, [fetchPhotographers]);
+
+  // Toggle verified → persisted to MongoDB
+  const handleToggleVerify = async (p) => {
+    const newVal = !p.isVerified;
+    try {
+      const res = await fetch('/api/photographers', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: p._id, isVerified: newVal })
+      });
+      if (!res.ok) throw new Error(`API error ${res.status}`);
+      const updated = await res.json();
+      setPhotographers(prev => prev.map(x => x._id === updated._id ? updated : x));
+      triggerToast(newVal ? `✓ ${p.name} verified!` : `✓ ${p.name} unverified.`);
+    } catch (err) {
+      triggerToast('Failed to update verification: ' + err.message);
+    }
+  };
+
+  // Generate & persist code → MongoDB
+  const handleGenerateCode = async (p) => {
+    const randomCode = `PMS-${Math.floor(1000 + Math.random() * 9000)}`;
+    try {
+      const res = await fetch('/api/photographers', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: p._id, code: randomCode })
+      });
+      if (!res.ok) throw new Error(`API error ${res.status}`);
+      const updated = await res.json();
+      setPhotographers(prev => prev.map(x => x._id === updated._id ? updated : x));
+      triggerToast(`✓ Code ${randomCode} saved to database!`);
+    } catch (err) {
+      triggerToast('Failed to save code: ' + err.message);
+    }
+  };
+
+  // Delete from MongoDB
+  const handleDelete = async (p) => {
+    if (!window.confirm(`Delete ${p.name}?`)) return;
+    try {
+      const res = await fetch(`/api/photographers?id=${p._id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error(`API error ${res.status}`);
+      setPhotographers(prev => prev.filter(x => x._id !== p._id));
+      triggerToast('✓ Photographer removed from directory.');
+    } catch (err) {
+      triggerToast('Failed to delete: ' + err.message);
+    }
+  };
+
+  const handleClaimLink = (slug) => {
+    navigator.clipboard.writeText(`${window.location.origin}/claim/${slug}`);
+    triggerToast('✓ Claim link copied to clipboard!');
+  };
+
+  // ── Login Activity (MongoDB via /api/login-activity) ────────────────────────
   const [loginActivity, setLoginActivity] = useState([]);
   const [activityLoading, setActivityLoading] = useState(false);
   const [activityError, setActivityError] = useState(null);
@@ -95,49 +130,23 @@ const AdminDashboard = () => {
       const res = await fetch('/api/login-activity', { method: 'DELETE' });
       if (!res.ok) throw new Error(`API error ${res.status}`);
       setLoginActivity([]);
-      triggerToast('âœ“ Login activity log cleared.');
+      triggerToast('✓ Login activity log cleared.');
     } catch (err) {
       triggerToast('Failed to clear activity log.');
     }
   };
 
-  const isOnline = (loginTime) => {
-    return Date.now() - new Date(loginTime).getTime() < 30 * 60 * 1000;
-  };
+  const isOnline = (loginTime) => Date.now() - new Date(loginTime).getTime() < 30 * 60 * 1000;
 
-  const formatTime = (loginTime) => {
-    return new Date(loginTime).toLocaleString('en-IN', {
-      day: '2-digit', month: 'short', year: 'numeric',
-      hour: '2-digit', minute: '2-digit', hour12: true
-    });
-  };
+  const formatTime = (loginTime) => new Date(loginTime).toLocaleString('en-IN', {
+    day: '2-digit', month: 'short', year: 'numeric',
+    hour: '2-digit', minute: '2-digit', hour12: true
+  });
 
-  // Photographer Directory Helpers
-  const filteredPhotographers = photographers.filter(p =>
-    p.name.toLowerCase().includes(filterText.toLowerCase()) ||
-    p.location.toLowerCase().includes(filterText.toLowerCase()) ||
-    p.slug.toLowerCase().includes(filterText.toLowerCase())
-  );
-
-  const handleClaimLink = (slug) => {
-    navigator.clipboard.writeText(`${window.location.origin}/claim/${slug}`);
-    triggerToast('âœ“ Claim link copied to clipboard!');
-  };
-
-  const handleGenerateCode = (id) => {
-    const randomCode = `PMS-${Math.floor(1000 + Math.random() * 9000)}`;
-    setPhotographers(prev => prev.map(p => p.id === id ? { ...p, code: randomCode } : p));
-    triggerToast(`âœ“ Verification code ${randomCode} generated!`);
-  };
-
-  const handleDelete = (id, name) => {
-    if (window.confirm(`Delete ${name}?`)) {
-      setPhotographers(prev => prev.filter(p => p.id !== id));
-      triggerToast('âœ“ Photographer profile removed.');
-    }
-  };
 
   const activeSessions = loginActivity.filter(a => isOnline(a.loginTime)).length;
+  const verifiedCount = photographers.filter(p => p.isVerified).length;
+
 
   return (
     <div className="admin-console-page">
@@ -189,12 +198,12 @@ const AdminDashboard = () => {
         </div>
         <div className="console-section-body overview-kpi-container">
           <div className="overview-kpi-card border-dashed-red">
-            <span className="kpi-number text-red">346</span>
+            <span className="kpi-number text-red">{photographers.length || 346}</span>
             <span className="kpi-label">TOTAL LISTED PHOTOGRAPHERS</span>
           </div>
           <div className="overview-kpi-card border-dashed-green bg-green-light">
-            <span className="kpi-number text-green">6</span>
-            <span className="kpi-label">âœ“ VERIFIED PARTNER BADGES</span>
+            <span className="kpi-number text-green">{verifiedCount}</span>
+            <span className="kpi-label">✓ VERIFIED PARTNER BADGES</span>
           </div>
           <div className="overview-kpi-card border-dashed-red">
             <span className="kpi-number text-dark">11</span>
@@ -202,7 +211,7 @@ const AdminDashboard = () => {
           </div>
           <div className="overview-kpi-card" style={{ border: '2px dashed #2980b9', background: '#f0f7ff' }}>
             <span className="kpi-number" style={{ color: '#2980b9' }}>{activeSessions}</span>
-            <span className="kpi-label">ðŸŸ¢ ACTIVE NOW (30 MIN)</span>
+            <span className="kpi-label">🟢 ACTIVE NOW (30 MIN)</span>
           </div>
           <div className="overview-kpi-card" style={{ border: '2px dashed #8e44ad', background: '#fdf5ff' }}>
             <span className="kpi-number" style={{ color: '#8e44ad' }}>{loginActivity.length}</span>
@@ -322,71 +331,114 @@ const AdminDashboard = () => {
       <section className="console-section" style={{ marginTop: '24px' }}>
         <div className="console-section-header flex-header">
           <h3 className="section-title-text">Photographer Partner Directory</h3>
-          <div className="filter-wrap">
-            <label className="filter-label">Quick Filter:</label>
-            <input
-              type="text"
-              placeholder="Search name, city or PMS ID..."
-              className="filter-input"
-              value={filterText}
-              onChange={(e) => setFilterText(e.target.value)}
-            />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div className="filter-wrap">
+              <label className="filter-label">Quick Filter:</label>
+              <input
+                type="text"
+                placeholder="Search name, city or PMS ID..."
+                className="filter-input"
+                value={filterText}
+                onChange={(e) => setFilterText(e.target.value)}
+              />
+            </div>
+            <button
+              className="console-action-btn"
+              style={{ background: '#2980b9', fontSize: '11px', padding: '6px 12px' }}
+              onClick={fetchPhotographers}
+              disabled={dirLoading}
+            >
+              <RefreshCw size={12} style={{ marginRight: '4px' }} />
+              {dirLoading ? 'Loading…' : 'Refresh'}
+            </button>
           </div>
         </div>
 
         <div className="console-section-body table-container-no-pad">
-          <table className="console-data-table">
-            <thead>
-              <tr>
-                <th>Photographer/Studio</th>
-                <th>City/Location</th>
-                <th>Verification Status</th>
-                <th>Active Code</th>
-                <th style={{ textAlign: 'center' }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredPhotographers.length === 0 ? (
-                <tr><td colSpan="5" className="empty-row-text">No photographer profiles found matching your search.</td></tr>
-              ) : (
-                filteredPhotographers.map(p => (
-                  <tr key={p.id}>
-                    <td className="photographer-info-cell">
-                      <span className="photographer-name">{p.name}</span>
-                      <span className="photographer-slug">ID Slug: {p.slug}</span>
-                    </td>
-                    <td className="location-cell">{p.location}</td>
-                    <td className="verification-cell">
-                      {p.isVerified ? (
-                        <span className="verified-status-text"><CheckCircle size={14} className="status-icon green" />Verified Profile</span>
-                      ) : (
-                        <span className="unverified-status-text"><AlertTriangle size={14} className="status-icon orange" />Unverified Profile</span>
-                      )}
-                    </td>
-                    <td className="code-cell">
-                      <span className={`code-value ${p.code === 'No Code' ? 'no-code' : 'has-code'}`}>{p.code}</span>
-                      <span className="status-value active">{p.status}</span>
-                    </td>
-                    <td className="actions-cell">
-                      <div className="action-buttons-group">
-                        <button className="console-action-btn claim-btn" onClick={() => handleClaimLink(p.slug)}>
-                          <Link size={13} style={{ marginRight: '4px' }} />Claim Link
-                        </button>
-                        <button className="console-action-btn mail-btn" onClick={() => handleGenerateCode(p.id)}>
-                          <Mail size={13} style={{ marginRight: '4px' }} />Generate & Mail Code
-                        </button>
-                        <button className="console-action-btn delete-btn" onClick={() => handleDelete(p.id, p.name)}>
-                          <Trash2 size={13} style={{ marginRight: '4px' }} />Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+          {dirError ? (
+            <p style={{ padding: '24px', color: '#c0392b', fontStyle: 'italic' }}>{dirError}</p>
+          ) : (
+            <table className="console-data-table">
+              <thead>
+                <tr>
+                  <th>Photographer/Studio</th>
+                  <th>City/Location</th>
+                  <th>Verification Status</th>
+                  <th>Active Code</th>
+                  <th style={{ textAlign: 'center' }}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {dirLoading && photographers.length === 0 ? (
+                  <tr><td colSpan="5" className="empty-row-text">Loading photographers…</td></tr>
+                ) : photographers.filter(p =>
+                    p.name.toLowerCase().includes(filterText.toLowerCase()) ||
+                    (p.location || '').toLowerCase().includes(filterText.toLowerCase()) ||
+                    (p.slug || '').toLowerCase().includes(filterText.toLowerCase())
+                  ).length === 0 ? (
+                  <tr><td colSpan="5" className="empty-row-text">No photographer profiles found matching your search.</td></tr>
+                ) : (
+                  photographers
+                    .filter(p =>
+                      p.name.toLowerCase().includes(filterText.toLowerCase()) ||
+                      (p.location || '').toLowerCase().includes(filterText.toLowerCase()) ||
+                      (p.slug || '').toLowerCase().includes(filterText.toLowerCase())
+                    )
+                    .map(p => (
+                      <tr key={p._id}>
+                        <td className="photographer-info-cell">
+                          <span className="photographer-name">{p.name}</span>
+                          <span className="photographer-slug">ID Slug: {p.slug}</span>
+                        </td>
+                        <td className="location-cell">{p.location}</td>
+                        <td className="verification-cell">
+                          <button
+                            onClick={() => handleToggleVerify(p)}
+                            style={{
+                              background: 'none', border: 'none', cursor: 'pointer',
+                              padding: 0, display: 'flex', alignItems: 'center', gap: '6px'
+                            }}
+                            title={p.isVerified ? 'Click to unverify' : 'Click to verify'}
+                          >
+                            {p.isVerified ? (
+                              <span className="verified-status-text">
+                                <CheckCircle size={14} className="status-icon green" />
+                                Verified Profile
+                              </span>
+                            ) : (
+                              <span className="unverified-status-text">
+                                <AlertTriangle size={14} className="status-icon orange" />
+                                Unverified Profile
+                              </span>
+                            )}
+                          </button>
+                        </td>
+                        <td className="code-cell">
+                          <span className={`code-value ${p.code === 'No Code' ? 'no-code' : 'has-code'}`}>{p.code}</span>
+                          <span className="status-value active">{p.status}</span>
+                        </td>
+                        <td className="actions-cell">
+                          <div className="action-buttons-group">
+                            <button className="console-action-btn claim-btn" onClick={() => handleClaimLink(p.slug)}>
+                              <Link size={13} style={{ marginRight: '4px' }} />Claim Link
+                            </button>
+                            <button className="console-action-btn mail-btn" onClick={() => handleGenerateCode(p)}>
+                              <Mail size={13} style={{ marginRight: '4px' }} />Generate & Mail Code
+                            </button>
+                            <button className="console-action-btn delete-btn" onClick={() => handleDelete(p)}>
+                              <Trash2 size={13} style={{ marginRight: '4px' }} />Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                )}
+              </tbody>
+            </table>
+          )}
         </div>
       </section>
+
 
     </div>
   );
