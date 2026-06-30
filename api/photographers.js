@@ -1,4 +1,4 @@
-﻿import dbConnect from './_utils/dbConnect.js';
+import dbConnect from './_utils/dbConnect.js';
 import Photographer from './models/Photographer.js';
 import User from './models/User.js';
 import { sendVerificationCodeEmail } from './_utils/mailer.js';
@@ -70,8 +70,14 @@ export default async function handler(req, res) {
           });
         }
       }
+      // Auto-correct Jaideepvarma's seed verification status if they don't have a code
+      await Photographer.updateMany({ name: 'Jaideepvarma', code: 'No Code' }, { isVerified: false });
+      await User.updateMany({ name: 'Jaideepvarma' }, { isVerified: false });
+
+
 
       let photographers = await Photographer.find({}).sort({ createdAt: 1 });
+
       if (photographers.length === 0) {
         // Auto-seed on first load
         photographers = await Photographer.insertMany(SEED_PHOTOGRAPHERS);
