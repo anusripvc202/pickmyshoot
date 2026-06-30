@@ -223,10 +223,8 @@ const HomePage = () => {
 
 
 
-      {/* Wrap home page sections below the hero in max-width-wrapper */}
-      <div className="max-width-wrapper" style={{ padding: '0 24px 48px 24px', boxSizing: 'border-box' }}>
-        {/* Category Grid Row */}
-        <section style={{ marginTop: '48px', marginBottom: '24px' }}>
+      {/* Category Grid Row */}
+      <section style={{ marginTop: '48px', marginBottom: '24px' }}>
         <div className="section-header" style={{ marginBottom: '20px' }}>
           <h2 className="section-title">Explore Categories</h2>
         </div>
@@ -553,7 +551,6 @@ const HomePage = () => {
           ))}
         </div>
       </section>
-      </div>
     </>
   );
 };
