@@ -175,6 +175,7 @@ body {
   width: auto;
   transition: height var(--transition-normal), transform var(--transition-fast);
   object-fit: contain;
+  filter: invert(16%) sepia(87%) saturate(6320%) hue-rotate(352deg) brightness(85%) contrast(105%);
 }
 
 .logo-container:hover .header-brand-logo {
@@ -297,7 +298,7 @@ body {
   background: var(--bg-app);
   border-radius: 14px;
   padding: 9px 14px;
-  border: 1.5px solid var(--border);
+  border: 1.5px solid rgba(var(--primary-rgb), 0.35);
   transition: all var(--transition-normal);
 }
 
@@ -11919,6 +11920,7 @@ input:checked + .slider:before {
   object-fit: contain;
   display: block;
   transition: transform var(--transition-fast);
+  filter: invert(16%) sepia(87%) saturate(6320%) hue-rotate(352deg) brightness(85%) contrast(105%);
 }
 
 .logo-container:hover .header-brand-logo-img {
