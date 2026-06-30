@@ -48,13 +48,15 @@ const HomePage = () => {
     tag: "BIGGEST CREATOR FEST",
     title: "CREATOR FEST 2024",
     subtitle: "Workshops | Gear Deals | Meetups\nNetworking | Awards",
+    description: "Join India's largest gathering of photographers, filmmakers, and digital creators. Level up your craft with hands-on masterclasses, exclusive gear deals, and premium networking.",
     image: "banner_photographer.png",
     rightOffer: "Early Bird Offer",
     rightDiscount: "Upto 30% OFF",
     rightCta: "Book Now",
     rightDate: "20-22 JULY",
     rightVenue: "HICC, HYDERABAD",
-    background: "radial-gradient(circle at 60% 40%, rgba(199, 16, 13, 0.25) 0%, transparent 60%), linear-gradient(135deg, #c7100d 0%, #a30d0b 100%)"
+    urgencyText: "⚡ Only 45 Passes Left!",
+    background: "radial-gradient(circle at 60% 40%, rgba(250, 20, 77, 0.25) 0%, transparent 60%), linear-gradient(135deg, #f0144d 0%, #9c0022 100%)"
   };
 
   const handleCategoryClick = (tabName) => {
@@ -95,6 +97,9 @@ const HomePage = () => {
               {heroData.tag}
             </div>
             <h1 className="fest-title">{heroData.title}</h1>
+            <p className="fest-description">
+              {heroData.description}
+            </p>
             <div className="fest-subtags">
               <span className="fest-subtag-line">Workshops | Gear Deals | Meetups</span>
               <span className="fest-subtag-line">Networking | Awards</span>
@@ -118,6 +123,11 @@ const HomePage = () => {
             <div className="fest-offer-info">
               <span className="fest-offer-label">{heroData.rightOffer}</span>
               <span className="fest-offer-discount">{heroData.rightDiscount}</span>
+              {heroData.urgencyText && (
+                <span className="fest-urgency-badge">
+                  {heroData.urgencyText}
+                </span>
+              )}
               <button className="fest-book-btn" onClick={() => { setExploreTab('workshops'); navigate('/explore'); }}>
                 {heroData.rightCta}
               </button>
