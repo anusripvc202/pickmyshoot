@@ -100,17 +100,63 @@ const HomePage = () => {
             <div className="fest-tag-badge">
               {heroData.tag}
             </div>
+            
             <h1 className="fest-title">{heroData.title}</h1>
+            
             <p className="fest-description">
               {heroData.description}
             </p>
-            <div className="fest-subtags">
-              <span className="fest-subtag-line">Workshops | Gear Deals | Meetups</span>
-              <span className="fest-subtag-line">Networking | Awards</span>
+
+            {/* Premium Highlights Grid */}
+            <div className="fest-features-grid">
+              <div className="fest-feature-card">
+                <div className="fest-feature-icon-wrap">🎓</div>
+                <div className="fest-feature-text-wrap">
+                  <span className="fest-feature-title">20+ Masterclasses</span>
+                  <span className="fest-feature-desc">Learn lighting & composition</span>
+                </div>
+              </div>
+              <div className="fest-feature-card">
+                <div className="fest-feature-icon-wrap">🎥</div>
+                <div className="fest-feature-text-wrap">
+                  <span className="fest-feature-title">Gear Showroom</span>
+                  <span className="fest-feature-desc">Try RED, Arri & Sony setups</span>
+                </div>
+              </div>
+              <div className="fest-feature-card">
+                <div className="fest-feature-icon-wrap">🤝</div>
+                <div className="fest-feature-text-wrap">
+                  <span className="fest-feature-title">Networking Hub</span>
+                  <span className="fest-feature-desc">Connect with major brands</span>
+                </div>
+              </div>
             </div>
-            <button className="fest-explore-btn" onClick={() => { setExploreTab('workshops'); navigate('/explore'); }}>
-              Explore Now
-            </button>
+
+            <div className="fest-subtags-row">
+              <span className="fest-pill-badge" onClick={() => { setExploreTab('workshops'); navigate('/explore'); }}>🎓 Workshops</span>
+              <span className="fest-pill-badge" onClick={() => { setExploreTab('rentals'); navigate('/explore'); }}>🎥 Gear Deals</span>
+              <span className="fest-pill-badge" onClick={() => { setExploreTab('workshops'); navigate('/explore'); }}>⚡ Meetups</span>
+              <span className="fest-pill-badge" onClick={() => { setExploreTab('services'); navigate('/explore'); }}>🤝 Networking</span>
+              <span className="fest-pill-badge" onClick={() => { setExploreTab('workshops'); navigate('/explore'); }}>🏆 Awards</span>
+            </div>
+
+            <div className="fest-cta-row">
+              <button className="fest-explore-btn" onClick={() => { setExploreTab('workshops'); navigate('/explore'); }}>
+                Explore Now
+              </button>
+              
+              <div className="fest-attendees-strip">
+                <div className="fest-avatar-group">
+                  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=60&q=80" className="fest-avatar-bubble" alt="Attendee" />
+                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=60&q=80" className="fest-avatar-bubble" alt="Attendee" />
+                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=60&q=80" className="fest-avatar-bubble" alt="Attendee" />
+                </div>
+                <div className="fest-attendees-text">
+                  <span className="fest-attendees-num">2,400+ Creators</span>
+                  <span className="fest-attendees-label">attending this year</span>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* ---- CENTER: Photographer Image ---- */}

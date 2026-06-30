@@ -12701,3 +12701,173 @@ input:checked + .slider:before {
   }
 }
 
+/* Premium Highlights Grid */
+.fest-features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  width: 100%;
+  margin: 16px 0;
+}
+
+.fest-feature-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  transition: all 0.25s ease-in-out;
+}
+
+.fest-feature-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.fest-feature-icon-wrap {
+  font-size: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.fest-feature-text-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fest-feature-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.fest-feature-desc {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* Subtags row */
+.fest-subtags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  margin-bottom: 24px;
+}
+
+.fest-pill-badge {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.fest-pill-badge:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #ffc107;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+}
+
+/* CTA & Social proof row */
+.fest-cta-row {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  margin-top: 8px;
+}
+
+.fest-attendees-strip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.fest-avatar-group {
+  display: flex;
+  align-items: center;
+}
+
+.fest-avatar-bubble {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid #9c0022;
+  margin-left: -10px;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.fest-avatar-bubble:first-child {
+  margin-left: 0;
+}
+
+.fest-attendees-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  text-align: left;
+}
+
+.fest-attendees-num {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #ffc107;
+  letter-spacing: 0.2px;
+}
+
+.fest-attendees-label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 991px) {
+  .fest-features-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .fest-features-grid {
+    grid-template-columns: 1fr;
+    max-width: 380px;
+    margin: 16px auto;
+  }
+  .fest-subtags-row {
+    justify-content: center;
+  }
+  .fest-cta-row {
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+  .fest-attendees-strip {
+    justify-content: center;
+  }
+  .fest-attendees-text {
+    align-items: center;
+    text-align: center;
+  }
+}
+
