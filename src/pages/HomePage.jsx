@@ -122,32 +122,6 @@ const HomePage = () => {
             />
           </div>
 
-          {/* ---- RIGHT: Ticket/Discount Details ---- */}
-          <div className="fest-right-col">
-            <div className="fest-offer-info">
-              <span className="fest-offer-label">{heroData.rightOffer}</span>
-              <span className="fest-offer-discount">{heroData.rightDiscount}</span>
-              {heroData.urgencyText && (
-                <span className="fest-urgency-badge">
-                  {heroData.urgencyText}
-                </span>
-              )}
-              <button className="fest-book-btn" onClick={() => { setExploreTab('workshops'); navigate('/explore'); }}>
-                {heroData.rightCta}
-              </button>
-            </div>
-            
-            <div className="fest-divider-line" />
-            
-            <div className="fest-event-details">
-              <Calendar size={20} className="fest-calendar-icon" />
-              <div className="fest-event-text">
-                <div className="fest-date">{heroData.rightDate}</div>
-                <div className="fest-venue">{heroData.rightVenue}</div>
-              </div>
-            </div>
-          </div>
-
         </div>
       </div>
 

@@ -12364,7 +12364,7 @@ input:checked + .slider:before {
   flex-direction: column;
   align-items: flex-start;
   gap: 20px;
-  max-width: 38%;
+  max-width: 55%;
   z-index: 5;
 }
 
@@ -12459,10 +12459,11 @@ input:checked + .slider:before {
   flex: 1;
   display: flex;
   align-items: flex-end;
-  justify-content: center;
+  justify-content: flex-end;
   height: 100%;
   position: relative;
   z-index: 3;
+  padding-right: 48px;
 }
 
 .fest-center-col::before {
@@ -12627,15 +12628,12 @@ input:checked + .slider:before {
     padding: 30px;
   }
   .fest-left-col {
-    max-width: 45%;
-    align-items: flex-start;
-  }
-  .fest-right-col {
-    max-width: 45%;
+    max-width: 60%;
     align-items: flex-start;
   }
   .fest-center-col {
-    display: none;
+    max-width: 38%;
+    padding-right: 12px;
   }
 }
 
@@ -12645,30 +12643,20 @@ input:checked + .slider:before {
     align-items: center;
     justify-content: center;
     text-align: center;
-    gap: 32px;
+    gap: 24px;
     padding: 40px 24px;
   }
-  .fest-left-col, .fest-right-col {
+  .fest-left-col {
     max-width: 100%;
     align-items: center;
     text-align: center;
     padding-left: 0;
   }
-  .fest-subtags {
-    text-align: center;
-  }
-  .fest-offer-info {
-    align-items: center;
-    text-align: center;
-  }
-  .fest-event-text {
-    text-align: center;
-  }
-  .fest-divider-line {
+  .fest-center-col {
     display: none;
   }
-  .fest-event-details {
-    justify-content: center;
+  .fest-subtags {
+    text-align: center;
   }
 }
 
