@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Camera, 
@@ -44,24 +44,82 @@ const HomePage = () => {
     return babyShoot ? [otherShoots[0], babyShoot, ...otherShoots.slice(1, 6)] : services.slice(0, 7);
   }, [services]);
 
-  const heroData = {
-    tag: "BIGGEST CREATOR FEST",
-    title: (
-      <>
-        CREATOR FEST <span className="fest-title-year">2026</span>
-      </>
-    ),
-    subtitle: "Workshops | Gear Deals | Meetups\nNetworking | Awards",
-    description: "Join India's largest gathering of photographers, filmmakers, and digital creators. Level up your craft with hands-on masterclasses, exclusive gear deals, and premium networking.",
-    image: "banner_photographer.png",
-    rightOffer: "Early Bird Offer",
-    rightDiscount: "Upto 30% OFF",
-    rightCta: "Book Now",
-    rightDate: "20-22 JULY",
-    rightVenue: "HICC, HYDERABAD",
-    urgencyText: "⚡ Only 45 Passes Left!",
-    background: "radial-gradient(circle at 60% 40%, rgba(199, 16, 13, 0.25) 0%, transparent 60%), linear-gradient(135deg, #c7100d 0%, #a30d0b 100%)"
-  };
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const heroSlides = [
+    {
+      tag: "BIGGEST CREATOR FEST",
+      title: (
+        <>
+          CREATOR FEST <span className="fest-title-year">2026</span>
+        </>
+      ),
+      description: "Join India's largest gathering of photographers, filmmakers, and digital creators. Level up your craft with hands-on masterclasses, exclusive gear deals, and premium networking.",
+      image: "banner_photographer.png",
+      background: "radial-gradient(circle at 60% 40%, rgba(199, 16, 13, 0.25) 0%, transparent 60%), linear-gradient(135deg, #c7100d 0%, #a30d0b 100%)",
+      highlights: [
+        { icon: "🎓", label: "20+ Masterclasses" },
+        { icon: "🎥", label: "Gear Showroom" },
+        { icon: "🤝", label: "Networking Hub" }
+      ],
+      pills: [
+        { label: "🎓 Workshops", tab: "workshops" },
+        { label: "🎥 Gear Deals", tab: "rentals" },
+        { label: "⚡ Meetups", tab: "workshops" },
+        { label: "🤝 Networking", tab: "services" },
+        { label: "🏆 Awards", tab: "workshops" }
+      ],
+      ctaLabel: "Explore Now",
+      ctaTab: "workshops",
+      attendeesNum: "2,400+ Creators",
+      attendeesLabel: "attending this year",
+      avatars: [
+        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=60&q=80",
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=60&q=80",
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=60&q=80"
+      ]
+    },
+    {
+      tag: "FIND YOUR PHOTOGRAPHER",
+      title: (
+        <>
+          BOOK YOUR PERFECT <span className="fest-title-year">SHOOT</span>
+        </>
+      ),
+      description: "Instantly discover and book verified professional photographers, videographers, fully-equipped studios, and professional models for any occasion, custom-tailored to your budget.",
+      image: "banner_cameras.png",
+      background: "radial-gradient(circle at 60% 40%, rgba(26, 54, 93, 0.3) 0%, transparent 60%), linear-gradient(135deg, #1a365d 0%, #0a192f 100%)",
+      highlights: [
+        { icon: "📸", label: "1,200+ Photographers" },
+        { icon: "🏢", label: "150+ Photo Studios" },
+        { icon: "👗", label: "300+ Models" }
+      ],
+      pills: [
+        { label: "📸 Photographers", tab: "services" },
+        { label: "🏢 Studios", tab: "studios" },
+        { label: "👗 Models", tab: "models" },
+        { label: "🎥 Gear Rentals", tab: "rentals" }
+      ],
+      ctaLabel: "Book Now",
+      ctaTab: "services",
+      attendeesNum: "⭐️ 4.9/5 Rating",
+      attendeesLabel: "from 1,800+ bookings",
+      avatars: [
+        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=60&q=80",
+        "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=60&q=80",
+        "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=60&q=80"
+      ]
+    }
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev === 0 ? 1 : 0));
+    }, 6000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const activeSlideData = heroSlides[currentSlide];
 
   const handleCategoryClick = (tabName) => {
     setExploreTab(tabName);
@@ -70,20 +128,21 @@ const HomePage = () => {
 
   return (
     <>
-      {/* ======= STATIC HERO BANNER SECTION ======= */}
+      {/* ======= HERO SLIDER SECTION ======= */}
       <div className="hero-carousel-container">
 
         {/* Slide Background (colored gradient) */}
         <div
           className="hero-bg-image active-slide"
           style={{ 
-            background: heroData.background, 
+            background: activeSlideData.background, 
             backgroundSize: 'cover',
-            backgroundPosition: 'center center'
+            backgroundPosition: 'center center',
+            transition: 'background 0.8s ease'
           }}
         />
 
-        {/* Dynamic Abstract background curves for Creator Fest */}
+        {/* Dynamic Abstract background curves */}
         <div className="fest-bg-pattern-overlay">
           <svg viewBox="0 0 1440 800" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
             <path opacity="0.06" d="M-100 350C120 220 380 580 600 350C820 120 1080 470 1340 350" stroke="white" strokeWidth="50" strokeLinecap="round" />
@@ -92,65 +151,82 @@ const HomePage = () => {
           </svg>
         </div>
 
-        {/* ===== SPLIT LAYOUT: Left text | Center Image | Right widget ===== */}
-        <div className="hero-fest-layout active-slide">
+        {/* ===== SPLIT LAYOUT: Left text | Right Image ===== */}
+        <div className="hero-fest-layout active-slide" key={currentSlide}>
           
-          {/* ---- LEFT: Creator Fest Details ---- */}
+          {/* ---- LEFT: Slide details ---- */}
           <div className="fest-left-col">
             <div className="fest-tag-badge">
-              {heroData.tag}
+              {activeSlideData.tag}
             </div>
             
-            <h1 className="fest-title">{heroData.title}</h1>
+            <h1 className="fest-title">{activeSlideData.title}</h1>
             
             <p className="fest-description">
-              {heroData.description}
+              {activeSlideData.description}
             </p>
 
-            {/* Clean Premium Highlights Row */}
+            {/* Premium Highlights Row */}
             <div className="fest-highlights-row">
-              <span className="fest-highlight-item"><span className="fest-hl-icon">🎓</span> 20+ Masterclasses</span>
-              <span className="fest-highlight-item"><span className="fest-hl-icon">🎥</span> Gear Showroom</span>
-              <span className="fest-highlight-item"><span className="fest-hl-icon">🤝</span> Networking Hub</span>
+              {activeSlideData.highlights.map((hl, i) => (
+                <span key={i} className="fest-highlight-item">
+                  <span className="fest-hl-icon">{hl.icon}</span> {hl.label}
+                </span>
+              ))}
             </div>
 
+            {/* Pill badges row */}
             <div className="fest-subtags-row">
-              <span className="fest-pill-badge" onClick={() => { setExploreTab('workshops'); navigate('/explore'); }}>🎓 Workshops</span>
-              <span className="fest-pill-badge" onClick={() => { setExploreTab('rentals'); navigate('/explore'); }}>🎥 Gear Deals</span>
-              <span className="fest-pill-badge" onClick={() => { setExploreTab('workshops'); navigate('/explore'); }}>⚡ Meetups</span>
-              <span className="fest-pill-badge" onClick={() => { setExploreTab('services'); navigate('/explore'); }}>🤝 Networking</span>
-              <span className="fest-pill-badge" onClick={() => { setExploreTab('workshops'); navigate('/explore'); }}>🏆 Awards</span>
+              {activeSlideData.pills.map((pill, i) => (
+                <span key={i} className="fest-pill-badge" onClick={() => { setExploreTab(pill.tab); navigate('/explore'); }}>
+                  {pill.label}
+                </span>
+              ))}
             </div>
 
+            {/* CTA & Attending row */}
             <div className="fest-cta-row">
-              <button className="fest-explore-btn" onClick={() => { setExploreTab('workshops'); navigate('/explore'); }}>
-                Explore Now
+              <button className="fest-explore-btn" onClick={() => { setExploreTab(activeSlideData.ctaTab); navigate('/explore'); }}>
+                {activeSlideData.ctaLabel}
               </button>
               
               <div className="fest-attendees-strip">
                 <div className="fest-avatar-group">
-                  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=60&q=80" className="fest-avatar-bubble" alt="Attendee" />
-                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=60&q=80" className="fest-avatar-bubble" alt="Attendee" />
-                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=60&q=80" className="fest-avatar-bubble" alt="Attendee" />
+                  {activeSlideData.avatars.map((url, i) => (
+                    <img key={i} src={url} className="fest-avatar-bubble" alt="User Profile" />
+                  ))}
                 </div>
                 <div className="fest-attendees-text">
-                  <span className="fest-attendees-num">2,400+ Creators</span>
-                  <span className="fest-attendees-label">attending this year</span>
+                  <span className="fest-attendees-num">{activeSlideData.attendeesNum}</span>
+                  <span className="fest-attendees-label">{activeSlideData.attendeesLabel}</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* ---- CENTER: Photographer Image ---- */}
+          {/* ---- RIGHT: Image ---- */}
           <div className="fest-center-col">
             <img 
-              src={`${import.meta.env.BASE_URL}${heroData.image}`} 
+              src={`${import.meta.env.BASE_URL}${activeSlideData.image}`} 
               className="fest-photographer-img" 
-              alt="Creator Fest Photographer" 
+              alt="Shoot Banner graphic" 
             />
           </div>
 
         </div>
+
+        {/* Carousel Indicators / Dots */}
+        <div className="hero-carousel-dots">
+          <button 
+            className={`hero-dot ${currentSlide === 0 ? 'active' : ''}`} 
+            onClick={() => setCurrentSlide(0)} 
+          />
+          <button 
+            className={`hero-dot ${currentSlide === 1 ? 'active' : ''}`} 
+            onClick={() => setCurrentSlide(1)} 
+          />
+        </div>
+
       </div>
 
       <div className="max-width-wrapper">
