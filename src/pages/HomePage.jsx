@@ -109,15 +109,75 @@ const HomePage = () => {
         "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=60&q=80",
         "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=60&q=80"
       ]
+    },
+    {
+      tag: "CAPTURE YOUR LOVE STORY",
+      title: (
+        <>
+          PRE-WEDDING & WEDDING <span className="fest-title-year">SHOOT</span>
+        </>
+      ),
+      description: "Book the country's top wedding & pre-wedding photographers. Premium cinematographic videos, aerial drone shoots, and custom theme layouts to make your special day eternal.",
+      image: "pre_wedding_shoot_new.png",
+      background: "radial-gradient(circle at 60% 40%, rgba(139, 92, 246, 0.25) 0%, transparent 60%), linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%)",
+      highlights: [
+        { icon: "✨", label: "Cinematic Teasers" },
+        { icon: "🛸", label: "Drone Videography" },
+        { icon: "📸", label: "Custom Albums" }
+      ],
+      pills: [
+        { label: "📸 Wedding Shoots", tab: "services" },
+        { label: "✈️ Outdoor Shoots", tab: "services" },
+        { label: "🎥 Cinematography", tab: "services" }
+      ],
+      ctaLabel: "Book Wedding Shoot",
+      ctaTab: "services",
+      attendeesNum: "💖 4.9/5 Rating",
+      attendeesLabel: "from 850+ love stories",
+      avatars: [
+        "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=60&q=80",
+        "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=60&q=80",
+        "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=60&q=80"
+      ]
+    },
+    {
+      tag: "CHERISH EVERY MILESTONE",
+      title: (
+        <>
+          BABY & KIDS PORTRAIT <span className="fest-title-year">SPECIALS</span>
+        </>
+      ),
+      description: "Create timeless memories with professional baby & maternity shoots. Safe, warm indoor studios, colorful prop setups, and gentle experienced children's photographers.",
+      image: "baby_photoshoot.png",
+      background: "radial-gradient(circle at 60% 40%, rgba(14, 165, 233, 0.25) 0%, transparent 60%), linear-gradient(135deg, #0284c7 0%, #0369a1 100%)",
+      highlights: [
+        { icon: "👶", label: "Safe Warm Studio" },
+        { icon: "🎈", label: "Prop Setup Packs" },
+        { icon: "🤰", label: "Maternity Shoots" }
+      ],
+      pills: [
+        { label: "👶 Baby Photoshoot", tab: "services" },
+        { label: "🤰 Maternity Shoots", tab: "services" },
+        { label: "🎂 Birthday Specials", tab: "services" }
+      ],
+      ctaLabel: "Book Baby Shoot",
+      ctaTab: "services",
+      attendeesNum: "🧸 100% Happy Parents",
+      attendeesLabel: "from 450+ portraits",
+      avatars: [
+        "https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=60&q=80",
+        "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=60&q=80",
+        "https://images.unsplash.com/photo-1516624683217-bf02fc6b6b7c?auto=format&fit=crop&w=60&q=80"
+      ]
     }
   ];
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev === 0 ? 1 : 0));
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
     }, 6000);
     return () => clearInterval(timer);
-  }, []);
+  }, [heroSlides.length]);
 
   const activeSlideData = heroSlides[currentSlide];
 
@@ -217,14 +277,13 @@ const HomePage = () => {
 
         {/* Carousel Indicators / Dots */}
         <div className="hero-carousel-dots">
-          <button 
-            className={`hero-dot ${currentSlide === 0 ? 'active' : ''}`} 
-            onClick={() => setCurrentSlide(0)} 
-          />
-          <button 
-            className={`hero-dot ${currentSlide === 1 ? 'active' : ''}`} 
-            onClick={() => setCurrentSlide(1)} 
-          />
+          {heroSlides.map((_, index) => (
+            <button 
+              key={index}
+              className={`hero-dot ${currentSlide === index ? 'active' : ''}`} 
+              onClick={() => setCurrentSlide(index)} 
+            />
+          ))}
         </div>
 
       </div>
