@@ -177,7 +177,7 @@ const HomePage = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-    }, 6000);
+    }, 3000);
     return () => clearInterval(timer);
   }, [heroSlides.length]);
 
