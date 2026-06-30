@@ -119,6 +119,7 @@ const HomePage = () => {
       ),
       description: "Book the country's top wedding & pre-wedding photographers. Premium cinematographic videos, aerial drone shoots, and custom theme layouts to make your special day eternal.",
       image: "pre_wedding_shoot_new.png",
+      isFramed: true,
       background: "radial-gradient(circle at 60% 40%, rgba(139, 92, 246, 0.25) 0%, transparent 60%), linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%)",
       highlights: [
         { icon: "✨", label: "Cinematic Teasers" },
@@ -149,6 +150,7 @@ const HomePage = () => {
       ),
       description: "Create timeless memories with professional baby & maternity shoots. Safe, warm indoor studios, colorful prop setups, and gentle experienced children's photographers.",
       image: "baby_photoshoot.png",
+      isFramed: true,
       background: "radial-gradient(circle at 60% 40%, rgba(14, 165, 233, 0.25) 0%, transparent 60%), linear-gradient(135deg, #0284c7 0%, #0369a1 100%)",
       highlights: [
         { icon: "👶", label: "Safe Warm Studio" },
@@ -266,11 +268,21 @@ const HomePage = () => {
 
           {/* ---- RIGHT: Image ---- */}
           <div className="fest-center-col">
-            <img 
-              src={`${import.meta.env.BASE_URL}${activeSlideData.image}`} 
-              className="fest-photographer-img" 
-              alt="Shoot Banner graphic" 
-            />
+            {activeSlideData.isFramed ? (
+              <div className="hero-image-frame-wrap">
+                <img 
+                  src={`${import.meta.env.BASE_URL}${activeSlideData.image}`} 
+                  className="fest-photographer-img-framed" 
+                  alt="Shoot Banner graphic" 
+                />
+              </div>
+            ) : (
+              <img 
+                src={`${import.meta.env.BASE_URL}${activeSlideData.image}`} 
+                className="fest-photographer-img" 
+                alt="Shoot Banner graphic" 
+              />
+            )}
           </div>
 
         </div>
