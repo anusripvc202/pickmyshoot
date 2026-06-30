@@ -12384,11 +12384,36 @@ input:checked + .slider:before {
 .fest-title {
   font-size: clamp(32px, 4.5vw, 56px);
   font-weight: 900;
-  line-height: 1.05;
+  line-height: 1.1;
   margin: 0;
   text-transform: uppercase;
   letter-spacing: -1.5px;
-  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.fest-title-year {
+  display: inline-block;
+  background: linear-gradient(135deg, #ffc107 0%, #ff8f00 100%);
+  color: #000000;
+  padding: 4px 18px;
+  border-radius: 12px;
+  font-size: 0.85em;
+  font-weight: 900;
+  margin-top: 6px;
+  box-shadow: 0 8px 24px rgba(255, 143, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  text-shadow: none;
+  letter-spacing: 0.5px;
+  animation: yearPulse 2s infinite ease-in-out;
+}
+
+@keyframes yearPulse {
+  0% { transform: scale(1); box-shadow: 0 8px 24px rgba(255, 143, 0, 0.35); }
+  50% { transform: scale(1.02); box-shadow: 0 12px 32px rgba(255, 143, 0, 0.55); }
+  100% { transform: scale(1); box-shadow: 0 8px 24px rgba(255, 143, 0, 0.35); }
 }
 
 .fest-subtags {

@@ -46,7 +46,11 @@ const HomePage = () => {
 
   const heroData = {
     tag: "BIGGEST CREATOR FEST",
-    title: "CREATOR FEST 2024",
+    title: (
+      <>
+        CREATOR <br />FEST <span className="fest-title-year">2026</span>
+      </>
+    ),
     subtitle: "Workshops | Gear Deals | Meetups\nNetworking | Awards",
     description: "Join India's largest gathering of photographers, filmmakers, and digital creators. Level up your craft with hands-on masterclasses, exclusive gear deals, and premium networking.",
     image: "banner_photographer.png",
