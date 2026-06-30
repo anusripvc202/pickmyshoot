@@ -140,7 +140,7 @@ body {
   background: linear-gradient(135deg, #c7100d 0%, #a30d0b 100%);
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
   padding: 0;
-  height: 130px;
+  height: 80px;
   display: flex;
   align-items: center;
   transition: all var(--transition-normal);
@@ -171,7 +171,7 @@ body {
 
 /* Logo sizing — matches reference image */
 .header-brand-logo {
-  height: 100px;
+  height: 55px;
   width: auto;
   transition: height var(--transition-normal), transform var(--transition-fast);
   object-fit: contain;
@@ -257,10 +257,10 @@ body {
 /* Desktop (1024px+) — matches reference image */
 @media (min-width: 1024px) {
   .app-header {
-    height: 130px;
+    height: 80px;
   }
   .header-brand-logo {
-    height: 100px;
+    height: 55px;
   }
 }
 
@@ -11911,7 +11911,7 @@ input:checked + .slider:before {
 
 /* Brand Logo Image */
 .header-brand-logo-img {
-  height: 100px;
+  height: 55px;
   width: auto;
   object-fit: contain;
   display: block;
@@ -11929,7 +11929,7 @@ input:checked + .slider:before {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
-  height: 130px !important; /* Increase the height of the navbar */
+  height: 80px !important; /* Decrease the height of the navbar */
 }
 
 .app-header::after {
