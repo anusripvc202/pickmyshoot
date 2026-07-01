@@ -118,8 +118,7 @@ const HomePage = () => {
         </>
       ),
       description: "Book the country's top wedding & pre-wedding photographers. Premium cinematographic videos, aerial drone shoots, and custom theme layouts to make your special day eternal.",
-      image: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=600&q=80",
-      isFramed: true,
+      image: "pre_wedding_shoot_new.png",
       background: "radial-gradient(circle at 60% 40%, rgba(139, 92, 246, 0.25) 0%, transparent 60%), linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%)",
       highlights: [
         { icon: "✨", label: "Cinematic Teasers" },
@@ -149,8 +148,7 @@ const HomePage = () => {
         </>
       ),
       description: "Create timeless memories with professional baby & maternity shoots. Safe, warm indoor studios, colorful prop setups, and gentle experienced children's photographers.",
-      image: "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=600&q=80",
-      isFramed: true,
+      image: "baby_photoshoot.png",
       background: "radial-gradient(circle at 60% 40%, rgba(14, 165, 233, 0.25) 0%, transparent 60%), linear-gradient(135deg, #0284c7 0%, #0369a1 100%)",
       highlights: [
         { icon: "👶", label: "Safe Warm Studio" },
@@ -267,7 +265,7 @@ const HomePage = () => {
           </div>
 
           {/* ---- RIGHT: Image ---- */}
-          <div className="fest-center-col">
+          <div className={`fest-center-col ${activeSlideData.isFramed ? 'framed-mode' : ''}`}>
             {activeSlideData.isFramed ? (
               <div className="hero-image-frame-wrap">
                 <img 
