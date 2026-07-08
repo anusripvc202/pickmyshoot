@@ -121,21 +121,17 @@ async function run() {
     await Listing.deleteMany({});
     console.log('Listings cleared.');
 
-    // 3. Clear and re-seed Users
+    // 3. Clear Users
     console.log('Clearing Users collection...');
     await User.deleteMany({});
-    console.log('Seeding default Users...');
-    await User.insertMany(defaultUsers);
-    console.log('Users re-seeded successfully.');
+    console.log('Users cleared.');
 
-    // 4. Clear and re-seed Photographers
+    // 4. Clear Photographers
     console.log('Clearing Photographers collection...');
     await Photographer.deleteMany({});
-    console.log('Seeding default Photographers...');
-    await Photographer.insertMany(defaultPhotographers);
-    console.log('Photographers re-seeded successfully.');
+    console.log('Photographers cleared.');
 
-    console.log('🎉 MongoDB database successfully cleared and reset to default seed data!');
+    console.log('🎉 MongoDB database successfully cleared completely (all collections empty)!');
 
   } catch (error) {
     console.error('Database reset failed:', error);
