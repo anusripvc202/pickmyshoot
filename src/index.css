@@ -12172,7 +12172,7 @@ input:checked + .slider:before {
 /* Table styling */
 .table-container-no-pad {
   padding: 0;
-  overflow: hidden;
+  overflow-x: auto;
   border-radius: 12px;
   border: 1px solid #e2e8f0;
 }
@@ -12284,7 +12284,7 @@ input:checked + .slider:before {
 
 /* Actions group */
 .actions-cell {
-  width: 320px;
+  width: 360px;
 }
 
 .action-buttons-group {
