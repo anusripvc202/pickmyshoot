@@ -105,35 +105,118 @@ const defaultPhotographers = [
   }
 ];
 
+const defaultListings = [
+  {
+    _id: '6a5dde26b7e83c1231fd9301',
+    id: 'st-1',
+    title: 'Vibrant Retro Studio',
+    type: 'studio',
+    price: 1500,
+    rating: 4.8,
+    reviews: 120,
+    image: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=500&q=80',
+    description: 'Fully equipped photography studio with retro vibes, colored backdrops, and professional strobe lights.',
+    ownerId: '6a380b8173c0e340a6bf3a42', // Nikhil
+    active: true
+  },
+  {
+    _id: '6a5dde26b7e83c1231fd9302',
+    id: 'gr-1',
+    title: 'Sony Alpha FX3 Cinema Camera',
+    type: 'gear',
+    price: 2500,
+    rating: 4.9,
+    reviews: 45,
+    image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=500&q=80',
+    description: 'High-end cinema line camera, perfect for run-and-gun filmmaking and low-light video shoots.',
+    ownerId: '6a380b8173c0e340a6bf3a42', // Nikhil
+    active: true
+  },
+  {
+    _id: '6a5dde26b7e83c1231fd9303',
+    id: 'ps-1',
+    title: 'Scenic Outdoor Pre-Wedding Shoot',
+    type: 'service',
+    price: 12999,
+    rating: 4.8,
+    reviews: 320,
+    image: '/pre_wedding_shoot_new.png',
+    description: 'Capture the chemistry before the big day with professional photographers, custom styling advice, and scenic outdoor locations like lakes or parks.',
+    ownerId: '6a380b8173c0e340a6bf3a42', // Nikhil
+    active: true
+  }
+];
+
+const defaultBookings = [
+  {
+    _id: '6a6dde26b7e83c1231fd9401',
+    listingId: 'ps-1',
+    clientId: '6a380bd273c0e340a6bf3a43', // Sri
+    creatorId: '6a380b8173c0e340a6bf3a42', // Nikhil
+    ownerId: '6a380b8173c0e340a6bf3a42', // Nikhil
+    itemType: 'Service',
+    title: 'Scenic Outdoor Pre-Wedding Shoot',
+    date: '2026-07-15',
+    time: '10:00 AM',
+    price: 12999,
+    status: 'pending',
+    clientName: 'Sri',
+    clientEmail: 'ssrajuqc@gmail.com',
+    clientPhone: '+91 88888 77777'
+  },
+  {
+    _id: '6a6dde26b7e83c1231fd9402',
+    listingId: 'st-1',
+    clientId: '6a3920c7454a6492befc0840', // Maddiboina Lokesh
+    creatorId: '6a380b8173c0e340a6bf3a42', // Nikhil
+    ownerId: '6a380b8173c0e340a6bf3a42', // Nikhil
+    itemType: 'Studio',
+    title: 'Vibrant Retro Studio',
+    date: '2026-07-20',
+    time: '02:00 PM',
+    price: 1500,
+    status: 'confirmed',
+    clientName: 'Maddiboina Lokesh',
+    clientEmail: '2100030312@kluniversity.in',
+    clientPhone: '+91 99999 00000'
+  }
+];
+
 async function run() {
   try {
     console.log('Connecting to MongoDB...');
     await mongoose.connect(MONGODB_URI);
     console.log('Connected!');
 
-    // 1. Clear bookings
+    // 1. Clear and seed Bookings
     console.log('Clearing Bookings collection...');
     await Booking.deleteMany({});
-    console.log('Bookings cleared.');
+    console.log('Seeding default Bookings...');
+    await Booking.insertMany(defaultBookings);
+    console.log('Bookings seeded.');
 
-    // 2. Clear listings
+    // 2. Clear and seed listings
     console.log('Clearing Listings collection...');
     await Listing.deleteMany({});
-    console.log('Listings cleared.');
+    console.log('Seeding default Listings...');
+    await Listing.insertMany(defaultListings);
+    console.log('Listings seeded.');
 
-    // 3. Clear Users and seed Admin User
+    // 3. Clear and seed Users
     console.log('Clearing Users collection...');
     await User.deleteMany({});
-    console.log('Seeding Admin User (Anusha)...');
-    await User.create(defaultUsers[0]);
-    console.log('Admin User seeded.');
+    console.log('Seeding default Users...');
+    await User.insertMany(defaultUsers);
+    console.log('Users seeded.');
 
-    // 4. Clear Photographers
+    // 4. Clear and seed Photographers
     console.log('Clearing Photographers collection...');
     await Photographer.deleteMany({});
-    console.log('Photographers cleared.');
+    console.log('Seeding default Photographers...');
+    await Photographer.insertMany(defaultPhotographers);
+    console.log('Photographers seeded.');
 
-    console.log('🎉 MongoDB database cleared: All bookings/listings/photographers empty; Admin User Anusha seeded.');
+    console.log('🎉 MongoDB database successfully cleared and re-seeded with mock dummy data for all collections!');
 
   } catch (error) {
     console.error('Database reset failed:', error);
