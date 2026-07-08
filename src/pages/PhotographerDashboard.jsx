@@ -534,131 +534,159 @@ const PhotographerDashboard = () => {
   const finalInvoiceAmt = baseInvoiceAmt - discountAmt;
 
   return (
-    <div className="admin-console-page">
-      
-      {/* 2. Subheader Dark System Toolbar with Horizontal Tab Navigation */}
-      <div className="admin-console-toolbar">
-        <div className="toolbar-left" style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+    <div className="db-layout">
+      {/* Sidebar Navigation */}
+      <aside className="db-sidebar">
+        <div className="db-sidebar-header">
+          <div className="db-sidebar-logo" onClick={() => navigate('/')}>
+            <img src="/logo.png" alt="PickMyShoot Logo" />
+          </div>
+          
           {/* Active Profile Switcher Dropdown */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginRight: '16px' }}>
-            <span style={{ fontSize: '11px', fontWeight: 'bold', textTransform: 'uppercase', color: '#aaa' }}>Profile:</span>
-            <select
-              value={activeProfileId || activeProfile.id}
-              onChange={e => {
-                setActiveProfileId(e.target.value);
-                triggerToast(`Switched profile view!`);
-              }}
-              style={{
-                background: '#222',
-                color: 'white',
-                border: '1px solid #444',
-                padding: '4px 8px',
-                borderRadius: '6px',
-                fontSize: '12px',
-                outline: 'none',
-                cursor: 'pointer'
-              }}
-            >
-              {profiles.filter(p => p.role === 'photographer' || p.role === 'admin').map(p => (
-                <option key={p.id} value={p.id}>{p.name}</option>
-              ))}
-            </select>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <span style={{ fontSize: '10px', fontWeight: 'bold', textTransform: 'uppercase', color: '#64748b' }}>Active Profile:</span>
+            <div style={{ display: 'flex', gap: '6px' }}>
+              <select
+                value={activeProfileId || activeProfile.id}
+                onChange={e => {
+                  setActiveProfileId(e.target.value);
+                  triggerToast(`Switched profile view!`);
+                }}
+                style={{
+                  background: '#1e293b',
+                  color: '#f1f5f9',
+                  border: '1px solid #334155',
+                  padding: '6px 12px',
+                  borderRadius: '8px',
+                  fontSize: '12.5px',
+                  outline: 'none',
+                  cursor: 'pointer',
+                  flex: 1
+                }}
+              >
+                {profiles.filter(p => p.role === 'photographer' || p.role === 'admin').map(p => (
+                  <option key={p.id} value={p.id}>{p.name}</option>
+                ))}
+              </select>
+              <button 
+                onClick={() => setShowAddProfileModal(true)}
+                style={{
+                  background: '#c7100d',
+                  color: 'white',
+                  border: 'none',
+                  padding: '6px 10px',
+                  borderRadius: '8px',
+                  fontSize: '12px',
+                  fontWeight: 'bold',
+                  cursor: 'pointer'
+                }}
+              >
+                <Plus size={14} />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <nav className="db-sidebar-nav">
+          <button className={`db-sidebar-link ${activeTab === 'overview' ? 'active' : ''}`} onClick={() => setActiveTab('overview')}>
+            <Sliders size={16} /> Overview
+          </button>
+          <button className={`db-sidebar-link ${activeTab === 'bookings' ? 'active' : ''}`} onClick={() => setActiveTab('bookings')}>
+            <ClipboardList size={16} /> Gigs & Bookings
+          </button>
+          <button className={`db-sidebar-link ${activeTab === 'catalog' ? 'active' : ''}`} onClick={() => setActiveTab('catalog')}>
+            <Grid size={16} /> My Catalog
+          </button>
+          <button className={`db-sidebar-link ${activeTab === 'packages' ? 'active' : ''}`} onClick={() => setActiveTab('packages')}>
+            <Camera size={16} /> Packages
+          </button>
+          <button className={`db-sidebar-link ${activeTab === 'portfolio' ? 'active' : ''}`} onClick={() => setActiveTab('portfolio')}>
+            <Award size={16} /> Gallery
+          </button>
+          <button className={`db-sidebar-link ${activeTab === 'calendar' ? 'active' : ''}`} onClick={() => setActiveTab('calendar')}>
+            <Calendar size={16} /> Schedule
+          </button>
+          <button className={`db-sidebar-link ${activeTab === 'invoices' ? 'active' : ''}`} onClick={() => setActiveTab('invoices')}>
+            <FileText size={16} /> Invoices
+          </button>
+          <button className={`db-sidebar-link ${activeTab === 'messages' ? 'active' : ''}`} onClick={() => setActiveTab('messages')}>
+            <Mail size={16} /> Chat Inbox
+          </button>
+          <button className={`db-sidebar-link ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => setActiveTab('settings')}>
+            <Sliders size={16} /> Settings
+          </button>
+          <button className={`db-sidebar-link ${activeTab === 'verification' ? 'active' : ''}`} onClick={() => setActiveTab('verification')}>
+            <Shield size={16} /> Verification {isVerified && <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#27ae60', display: 'inline-block', marginLeft: 4 }} />}
+          </button>
+        </nav>
+
+        <div className="db-sidebar-footer">
+          <button className="db-sidebar-link" onClick={() => navigate('/')}>
+            <ArrowLeft size={16} /> User View
+          </button>
+          <button className="db-sidebar-link" style={{ color: '#ff4d5a' }} onClick={() => { logoutUser(); navigate('/'); }}>
+            <LogOut size={16} /> Log Out
+          </button>
+        </div>
+      </aside>
+
+      {/* Main Panel Content */}
+      <main className="db-main">
+        {/* Topbar Info */}
+        <header className="db-top-bar">
+          <div className="db-top-bar-title-wrap">
+            <h2 className="db-top-bar-title">Photographer Portal</h2>
+            <span className="db-top-bar-subtitle">Partner ID: {pmsIdFallback} • {activeProfile.name} ({activeProfile.email})</span>
+          </div>
+          <div className="db-top-bar-actions">
             <button 
-              onClick={() => setShowAddProfileModal(true)}
-              style={{
-                background: '#c7100d',
-                color: 'white',
-                border: 'none',
-                padding: '4px 8px',
-                borderRadius: '6px',
-                fontSize: '12px',
-                fontWeight: 'bold',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '3px'
-              }}
+              onClick={() => setShowPublicProfileModal(true)} 
+              className="console-action-btn claim-btn"
+              style={{ padding: '8px 16px', display: 'flex', alignItems: 'center', gap: '6px' }}
             >
-              <Plus size={12} /> Add
+              <Eye size={14} /> View Public Profile
             </button>
           </div>
+        </header>
 
-          <button className={`toolbar-tab-btn ${activeTab === 'overview' ? 'active' : ''}`} onClick={() => setActiveTab('overview')}>overview</button>
-          <span className="toolbar-sep">|</span>
-          <button className={`toolbar-tab-btn ${activeTab === 'bookings' ? 'active' : ''}`} onClick={() => setActiveTab('bookings')}>bookings</button>
-          <span className="toolbar-sep">|</span>
-          <button className={`toolbar-tab-btn ${activeTab === 'catalog' ? 'active' : ''}`} onClick={() => setActiveTab('catalog')}>catalog</button>
-          <span className="toolbar-sep">|</span>
-          <button className={`toolbar-tab-btn ${activeTab === 'packages' ? 'active' : ''}`} onClick={() => setActiveTab('packages')}>packages</button>
-          <span className="toolbar-sep">|</span>
-          <button className={`toolbar-tab-btn ${activeTab === 'portfolio' ? 'active' : ''}`} onClick={() => setActiveTab('portfolio')}>gallery</button>
-          <span className="toolbar-sep">|</span>
-          <button className={`toolbar-tab-btn ${activeTab === 'calendar' ? 'active' : ''}`} onClick={() => setActiveTab('calendar')}>schedule</button>
-          <span className="toolbar-sep">|</span>
-          <button className={`toolbar-tab-btn ${activeTab === 'invoices' ? 'active' : ''}`} onClick={() => setActiveTab('invoices')}>invoices</button>
-          <span className="toolbar-sep">|</span>
-          <button className={`toolbar-tab-btn ${activeTab === 'messages' ? 'active' : ''}`} onClick={() => setActiveTab('messages')}>messages</button>
-          <span className="toolbar-sep">|</span>
-          <button className={`toolbar-tab-btn ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => setActiveTab('settings')}>settings</button>
-          <span className="toolbar-sep">|</span>
-          <button className={`toolbar-tab-btn ${activeTab === 'verification' ? 'active' : ''}`} onClick={() => setActiveTab('verification')}>
-            verify {isVerified && <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#27ae60', display: 'inline-block', marginLeft: 4, verticalAlign: 'middle' }} />}
-          </button>
+        {/* Content Body */}
+        <div className="db-content">
+{activeTab === 'overview' && (
+            <>
+              {/* KPI Cards Grid */}
+              <div className="db-kpi-grid">
+                <div className="db-kpi-card" onClick={() => setActiveTab('bookings')} style={{ cursor: 'pointer' }}>
+                  <div className="db-kpi-card-icon red">
+                    <ClipboardList size={22} />
+                  </div>
+                  <div className="db-kpi-card-content">
+                    <span className="db-kpi-card-value">{photographerBookings.length}</span>
+                    <span className="db-kpi-card-label">Reserved Gigs</span>
+                  </div>
+                </div>
 
-          <span className="toolbar-sep">|</span>
-          <button className="toolbar-btn" onClick={() => { logoutUser(); navigate('/'); }}>
-            <LogOut size={12} style={{ marginRight: '4px' }} />
-            logout
-          </button>
-        </div>
-        <div className="toolbar-right">
-          <span className="superadmin-access-badge" style={{ color: '#ffb81c' }}>
-            <Camera size={13} style={{ marginRight: '4px' }} />
-            PHOTOGRAPHER ACCESS
-          </span>
-        </div>
-      </div>
+                <div className="db-kpi-card" onClick={() => setActiveTab('catalog')} style={{ cursor: 'pointer' }}>
+                  <div className="db-kpi-card-icon green">
+                    <Grid size={22} />
+                  </div>
+                  <div className="db-kpi-card-content">
+                    <span className="db-kpi-card-value">{photographerOwnedListings.length}</span>
+                    <span className="db-kpi-card-label">Active Listings</span>
+                  </div>
+                </div>
 
-      {/* 3. Title Card */}
-      <div className="console-title-card">
-        <h2 className="console-main-title">PickMyShoot Photographer Partner Console</h2>
-        <div style={{ display: 'flex', gap: '14px', alignItems: 'center', marginTop: '6px', fontSize: '13.5px' }}>
-          <span className="console-role-desc">
-            <strong>Partner ID:</strong> {pmsIdFallback} | {activeProfile.name} ({activeProfile.email})
-          </span>
-          <span style={{ color: '#666' }}>•</span>
-          <button 
-            onClick={() => setShowPublicProfileModal(true)} 
-            style={{ background: 'none', border: 'none', color: '#ffb81c', cursor: 'pointer', textDecoration: 'underline', padding: 0, fontWeight: 700 }}
-          >
-            View Public Profile
-          </button>
-        </div>
-      </div>
+                <div className="db-kpi-card">
+                  <div className="db-kpi-card-icon blue">
+                    <DollarSign size={22} />
+                  </div>
+                  <div className="db-kpi-card-content">
+                    <span className="db-kpi-card-value">₹{photographerEarnings.toLocaleString('en-IN')}</span>
+                    <span className="db-kpi-card-label">Net Earnings</span>
+                  </div>
+                </div>
+              </div>
 
-      {/* 4. Full-width KPI Overview Cards */}
-      <section className="console-section" style={{ border: 'none', background: 'transparent', boxShadow: 'none', margin: '24px 24px 0 24px' }}>
-        <div className="console-section-body overview-kpi-container" style={{ padding: 0 }}>
-          <div className="overview-kpi-card border-dashed-red">
-            <span className="kpi-number text-red">{photographerBookings.length}</span>
-            <span className="kpi-label">TOTAL RESERVED GIGS</span>
-          </div>
-          <div className="overview-kpi-card border-dashed-green bg-green-light">
-            <span className="kpi-number text-green">{photographerOwnedListings.length}</span>
-            <span className="kpi-label">ACTIVE CATALOG ITEMS</span>
-          </div>
-          <div className="overview-kpi-card border-dashed-red">
-            <span className="kpi-number text-dark">₹{photographerEarnings.toLocaleString('en-IN')}</span>
-            <span className="kpi-label">TOTAL NET EARNINGS</span>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. Main Section Area */}
-      <div style={{ padding: '0 24px 24px 24px' }}>
-        
-        {activeTab === 'overview' && (
-          <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: '24px', marginTop: '24px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: '24px', marginTop: '24px' }}>
             {/* LEFT PROFILE CARD */}
             <div style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '12px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', borderBottom: '1px solid #eee', paddingBottom: '16px' }}>
@@ -812,6 +840,7 @@ const PhotographerDashboard = () => {
 
             </div>
           </div>
+          </>
         )}
 
         {activeTab === 'bookings' && (
@@ -1517,8 +1546,6 @@ const PhotographerDashboard = () => {
           </section>
         )}
 
-      </div>
-
       {/* Upload Image Modal */}
       {showPortfolioModal && (
         <div className="detail-modal-overlay" style={{ zIndex: 1000 }} onClick={() => setShowPortfolioModal(false)}>
@@ -1665,6 +1692,8 @@ const PhotographerDashboard = () => {
               )}
 
             </div>
+          </section>
+        )}
       {/* Add Profile Modal */}
       {showAddProfileModal && (
         <div className="detail-modal-overlay" style={{ zIndex: 1000 }} onClick={() => setShowAddProfileModal(false)}>
@@ -1904,11 +1933,9 @@ const PhotographerDashboard = () => {
         </div>
       )}
 
-          </section>
-        )}
-
+                  </div>
+      </main>
     </div>
-
   );
 };
 

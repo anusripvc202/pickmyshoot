@@ -151,67 +151,100 @@ const ClientDashboard = () => {
   const totalSavedCount = savedStudios.length + savedGear.length + savedServices.length;
 
   return (
-    <div className="admin-console-page">
-      
-      {/* 2. Subheader Dark System Toolbar with Horizontal Tab Navigation */}
-      <div className="admin-console-toolbar">
-        <div className="toolbar-left">
-          <button className={`toolbar-tab-btn ${activeTab === 'overview' ? 'active' : ''}`} onClick={() => setActiveTab('overview')}>overview</button>
-          <span className="toolbar-sep">|</span>
-          <button className={`toolbar-tab-btn ${activeTab === 'bookings' ? 'active' : ''}`} onClick={() => setActiveTab('bookings')}>bookings</button>
-          <span className="toolbar-sep">|</span>
-          <button className={`toolbar-tab-btn ${activeTab === 'saved' ? 'active' : ''}`} onClick={() => setActiveTab('saved')}>saved listings</button>
-          <span className="toolbar-sep">|</span>
-          <button className={`toolbar-tab-btn ${activeTab === 'chat' ? 'active' : ''}`} onClick={() => setActiveTab('chat')}>chat support</button>
-          <span className="toolbar-sep">|</span>
-          <button className={`toolbar-tab-btn ${activeTab === 'support' ? 'active' : ''}`} onClick={() => setActiveTab('support')}>support tickets</button>
-          <span className="toolbar-sep">|</span>
-          <button className={`toolbar-tab-btn ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => setActiveTab('settings')}>settings</button>
-          <span className="toolbar-sep">|</span>
-          <button className="toolbar-btn" onClick={() => { logoutUser(); navigate('/'); }}>
-            <LogOut size={12} style={{ marginRight: '4px' }} />
-            logout
+    <div className="db-layout">
+      {/* Sidebar Navigation */}
+      <aside className="db-sidebar">
+        <div className="db-sidebar-header">
+          <div className="db-sidebar-logo" onClick={() => navigate('/')}>
+            <img src="/logo.png" alt="PickMyShoot Logo" />
+          </div>
+          
+          <div className="db-sidebar-user-info" style={{ display: 'flex', flexDirection: 'column', gap: '2px', padding: '8px 0' }}>
+            <span style={{ fontSize: '10px', fontWeight: 'bold', textTransform: 'uppercase', color: '#64748b' }}>Client Console:</span>
+            <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#f1f5f9' }}>{activeProfile.name}</span>
+            <span style={{ fontSize: '11px', color: '#94a3b8' }}>{activeProfile.email}</span>
+          </div>
+        </div>
+
+        <nav className="db-sidebar-nav">
+          <button className={`db-sidebar-link ${activeTab === 'overview' ? 'active' : ''}`} onClick={() => setActiveTab('overview')}>
+            <Sliders size={16} /> Overview
+          </button>
+          <button className={`db-sidebar-link ${activeTab === 'bookings' ? 'active' : ''}`} onClick={() => setActiveTab('bookings')}>
+            <ClipboardList size={16} /> Bookings placed
+          </button>
+          <button className={`db-sidebar-link ${activeTab === 'saved' ? 'active' : ''}`} onClick={() => setActiveTab('saved')}>
+            <Grid size={16} /> Saved listings
+          </button>
+          <button className={`db-sidebar-link ${activeTab === 'chat' ? 'active' : ''}`} onClick={() => setActiveTab('chat')}>
+            <Mail size={16} /> Chat support
+          </button>
+          <button className={`db-sidebar-link ${activeTab === 'support' ? 'active' : ''}`} onClick={() => setActiveTab('support')}>
+            <FileText size={16} /> Support tickets
+          </button>
+          <button className={`db-sidebar-link ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => setActiveTab('settings')}>
+            <Sliders size={16} /> Settings
+          </button>
+        </nav>
+
+        <div className="db-sidebar-footer">
+          <button className="db-sidebar-link" onClick={() => navigate('/')}>
+            <ArrowLeft size={16} /> User View
+          </button>
+          <button className="db-sidebar-link" style={{ color: '#ff4d5a' }} onClick={() => { logoutUser(); navigate('/'); }}>
+            <LogOut size={16} /> Log Out
           </button>
         </div>
-        <div className="toolbar-right">
-          <span className="superadmin-access-badge" style={{ color: '#00c864' }}>
-            <User size={13} style={{ marginRight: '4px' }} />
-            CLIENT ACCESS
-          </span>
-        </div>
-      </div>
+      </aside>
 
-      {/* 3. Client Console Title Card */}
-      <div className="console-title-card">
-        <h2 className="console-main-title">PickMyShoot Client Management Center</h2>
-        <span className="console-role-desc">
-          <strong>User:</strong> {activeProfile.name} ({activeProfile.email})
-        </span>
-      </div>
+      {/* Main Panel Content */}
+      <main className="db-main">
+        {/* Topbar Info */}
+        <header className="db-top-bar">
+          <div className="db-top-bar-title-wrap">
+            <h2 className="db-top-bar-title">Client Dashboard</h2>
+            <span className="db-top-bar-subtitle">Welcome back, {activeProfile.name}!</span>
+          </div>
+        </header>
 
-      {/* 4. Full-width KPI Overview Cards */}
-      <section className="console-section" style={{ border: 'none', background: 'transparent', boxShadow: 'none', margin: '24px 24px 0 24px' }}>
-        <div className="console-section-body overview-kpi-container" style={{ padding: 0 }}>
-          <div className="overview-kpi-card border-dashed-red">
-            <span className="kpi-number text-red">{clientBookings.length}</span>
-            <span className="kpi-label">TOTAL BOOKINGS PLACED</span>
-          </div>
-          <div className="overview-kpi-card border-dashed-green bg-green-light">
-            <span className="kpi-number text-green">{totalSavedCount}</span>
-            <span className="kpi-label">SAVED FAVORITES</span>
-          </div>
-          <div className="overview-kpi-card border-dashed-red">
-            <span className="kpi-number text-dark">₹{clientSpent.toLocaleString('en-IN')}</span>
-            <span className="kpi-label">TOTAL SALES TRANSACTION VOLUME</span>
-          </div>
-        </div>
-      </section>
+        {/* Content Body */}
+        <div className="db-content">
+{activeTab === 'overview' && (
+            <>
+              {/* KPI Cards Grid */}
+              <div className="db-kpi-grid">
+                <div className="db-kpi-card" onClick={() => setActiveTab('bookings')} style={{ cursor: 'pointer' }}>
+                  <div className="db-kpi-card-icon red">
+                    <ClipboardList size={22} />
+                  </div>
+                  <div className="db-kpi-card-content">
+                    <span className="db-kpi-card-value">{clientBookings.length}</span>
+                    <span className="db-kpi-card-label">Total Bookings</span>
+                  </div>
+                </div>
 
-      {/* 5. Main Section Area */}
-      <div style={{ padding: '0 24px 24px 24px' }}>
-        
-        {activeTab === 'overview' && (
-          <section className="console-section" style={{ margin: '24px 0 0 0' }}>
+                <div className="db-kpi-card" onClick={() => setActiveTab('saved')} style={{ cursor: 'pointer' }}>
+                  <div className="db-kpi-card-icon green">
+                    <Grid size={22} />
+                  </div>
+                  <div className="db-kpi-card-content">
+                    <span className="db-kpi-card-value">{totalSavedCount}</span>
+                    <span className="db-kpi-card-label">Saved Favorites</span>
+                  </div>
+                </div>
+
+                <div className="db-kpi-card">
+                  <div className="db-kpi-card-icon blue">
+                    <DollarSign size={22} />
+                  </div>
+                  <div className="db-kpi-card-content">
+                    <span className="db-kpi-card-value">₹{clientSpent.toLocaleString('en-IN')}</span>
+                    <span className="db-kpi-card-label">Total Spent</span>
+                  </div>
+                </div>
+              </div>
+
+            <section className="console-section" style={{ margin: '24px 0 0 0' }}>
             <div className="console-section-header">
               <h3 className="section-title-text">Recent Orders Schedule</h3>
             </div>
@@ -248,6 +281,7 @@ const ClientDashboard = () => {
               )}
             </div>
           </section>
+          </>
         )}
 
         {activeTab === 'bookings' && (
@@ -568,8 +602,6 @@ const ClientDashboard = () => {
           </section>
         )}
 
-      </div>
-
       {/* 5. Receipt Modal */}
       {showReceiptModal && selectedBooking && (
         <div className="detail-modal-overlay" style={{ zIndex: 1000 }} onClick={() => setShowReceiptModal(false)}>
@@ -604,6 +636,8 @@ const ClientDashboard = () => {
         </div>
       )}
 
+        </div>
+      </main>
     </div>
   );
 };
