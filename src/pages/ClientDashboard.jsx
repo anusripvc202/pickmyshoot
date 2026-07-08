@@ -135,8 +135,8 @@ const ClientDashboard = () => {
       });
   };
 
-  // Client filtering
   const clientBookings = bookings.filter(b => 
+    currentUser?.role === 'admin' ||
     b.clientId === activeProfileId || 
     (currentUser && (
       b.clientId === currentUser.id || 

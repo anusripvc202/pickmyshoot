@@ -516,6 +516,7 @@ const PhotographerDashboard = () => {
 
   // Photographer filtering & data
   const photographerBookings = bookings.filter(b => {
+    if (currentUser?.role === 'admin') return true;
     const matchesActive = b.ownerId === activeProfileId || b.creatorId === activeProfileId;
     const matchesUser = currentUser && (
       b.ownerId === currentUser.id || 
