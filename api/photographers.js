@@ -70,9 +70,7 @@ export default async function handler(req, res) {
           });
         }
       }
-      // Auto-correct Jaideepvarma's seed verification status if they don't have a code
-      await Photographer.updateMany({ name: 'Jaideepvarma', code: 'No Code' }, { isVerified: false });
-      await User.updateMany({ name: 'Jaideepvarma' }, { isVerified: false });
+
 
 
 
