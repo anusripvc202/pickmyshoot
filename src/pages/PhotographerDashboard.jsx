@@ -22,7 +22,8 @@ import {
   CheckCircle,
   LogOut,
   ArrowLeft,
-  Shield
+  Shield,
+  ClipboardList
 } from 'lucide-react';
 
 import { useAppContext } from '../context/AppContext';
