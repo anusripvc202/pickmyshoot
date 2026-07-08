@@ -24,6 +24,66 @@ const AdminDashboard = () => {
   const { logoutUser, triggerToast, profiles } = useAppContext();
   const navigate = useNavigate();
 
+  // ─── Client Bookings (MongoDB via /api/bookings) ─────────────────────
+  const [bookingsList, setBookingsList] = useState([]);
+  const [bookingsLoading, setBookingsLoading] = useState(false);
+  const [bookingsError, setBookingsError] = useState(null);
+  const [bookingFilterText, setBookingFilterText] = useState('');
+
+  const fetchBookings = useCallback(async () => {
+    setBookingsLoading(true);
+    setBookingsError(null);
+    try {
+      const res = await fetch('/api/bookings');
+      if (!res.ok) throw new Error(`API error ${res.status}`);
+      const data = await res.json();
+      setBookingsList(Array.isArray(data) ? data : []);
+    } catch (err) {
+      setBookingsError('Could not load bookings: ' + err.message);
+    } finally {
+      setBookingsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchBookings();
+  }, [fetchBookings]);
+
+  const handleUpdateBookingStatus = async (bookingId, newStatus) => {
+    try {
+      const res = await fetch('/api/bookings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: bookingId, status: newStatus })
+      });
+      if (!res.ok) throw new Error(`API error ${res.status}`);
+      const updated = await res.json();
+      
+      // Mapped update
+      setBookingsList(prev => prev.map(b => {
+        const matchesId = (updated && (b._id === updated._id || b.id === updated.id));
+        return matchesId ? { ...b, status: updated.status } : b;
+      }));
+      
+      triggerToast(`✓ Booking status updated to ${newStatus}!`);
+    } catch (err) {
+      triggerToast('Failed to update booking status: ' + err.message);
+    }
+  };
+
+  const handleDeleteBooking = async (booking) => {
+    const bookingId = booking._id || booking.id;
+    if (!window.confirm(`Delete booking record for "${booking.title}"?`)) return;
+    try {
+      const res = await fetch(`/api/bookings?id=${bookingId}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error(`API error ${res.status}`);
+      setBookingsList(prev => prev.filter(b => (b._id || b.id) !== bookingId));
+      triggerToast('✓ Booking record deleted successfully.');
+    } catch (err) {
+      triggerToast('Failed to delete booking: ' + err.message);
+    }
+  };
+
   // ─── Photographer Listings (MongoDB via /api/listings) ─────────────────
   const [listings, setListings] = useState([]);
   const [listingsLoading, setListingsLoading] = useState(false);
@@ -262,9 +322,9 @@ const AdminDashboard = () => {
             <span className="kpi-number text-green">{verifiedCount}</span>
             <span className="kpi-label">✓ VERIFIED PARTNER BADGES</span>
           </div>
-          <div className="overview-kpi-card border-dashed-red">
-            <span className="kpi-number text-dark">11</span>
-            <span className="kpi-label">TOTAL SYSTEM LEADS GENERATED</span>
+          <div className="overview-kpi-card border-dashed-red" style={{ background: '#eefcf5', border: '1px dashed #2b8a3e' }}>
+            <span className="kpi-number" style={{ color: '#2b8a3e' }}>{bookingsList.length}</span>
+            <span className="kpi-label" style={{ color: '#2b8a3e' }}>TOTAL BOOKINGS GENERATED</span>
           </div>
           <div className="overview-kpi-card border-dashed-red" style={{ background: '#fcf8e3', border: '1px dashed #f0ad4e' }}>
             <span className="kpi-number" style={{ color: '#f0ad4e' }}>{listings.length}</span>
@@ -559,6 +619,154 @@ const AdminDashboard = () => {
                         </td>
                       </tr>
                     ))
+                )}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </section>
+
+      {/* System Bookings Directory */}
+      <section className="console-section" style={{ marginTop: '24px' }}>
+        <div className="console-section-header flex-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '15px' }}>
+          <h3 className="section-title-text" style={{ margin: 0 }}>System Bookings & Gig Manager</h3>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+            <div className="filter-wrap" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <label className="filter-label" style={{ fontSize: '11px', fontWeight: 'bold', color: '#666' }}>Search:</label>
+              <input
+                type="text"
+                placeholder="Search client, gig..."
+                className="filter-input"
+                style={{ padding: '6px 10px', fontSize: '12px', border: '1px solid #ddd', borderRadius: '6px', outline: 'none' }}
+                value={bookingFilterText}
+                onChange={(e) => setBookingFilterText(e.target.value)}
+              />
+            </div>
+            <button
+              className="console-action-btn"
+              style={{ background: '#2980b9', fontSize: '11px', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: '4px' }}
+              onClick={fetchBookings}
+              disabled={bookingsLoading}
+            >
+              <RefreshCw size={12} />
+              {bookingsLoading ? 'Loading…' : 'Refresh'}
+            </button>
+          </div>
+        </div>
+
+        <div className="console-section-body table-container-no-pad">
+          {bookingsError ? (
+            <p style={{ padding: '24px', color: '#c0392b', fontStyle: 'italic' }}>{bookingsError}</p>
+          ) : (
+            <table className="console-data-table">
+              <thead>
+                <tr>
+                  <th>Client</th>
+                  <th>Booked Asset / Creator</th>
+                  <th>Schedule</th>
+                  <th>Total Cost</th>
+                  <th>Status</th>
+                  <th style={{ textAlign: 'center' }}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bookingsLoading && bookingsList.length === 0 ? (
+                  <tr><td colSpan="6" className="empty-row-text">Loading bookings…</td></tr>
+                ) : bookingsList.filter(b => {
+                    const client = b.clientName || '';
+                    const title = b.title || '';
+                    const email = b.clientEmail || '';
+                    const matchesSearch = client.toLowerCase().includes(bookingFilterText.toLowerCase()) ||
+                      title.toLowerCase().includes(bookingFilterText.toLowerCase()) ||
+                      email.toLowerCase().includes(bookingFilterText.toLowerCase());
+                    return matchesSearch;
+                  }).length === 0 ? (
+                  <tr><td colSpan="6" className="empty-row-text">No bookings found matching your search.</td></tr>
+                ) : (
+                  bookingsList
+                    .filter(b => {
+                      const client = b.clientName || '';
+                      const title = b.title || '';
+                      const email = b.clientEmail || '';
+                      const matchesSearch = client.toLowerCase().includes(bookingFilterText.toLowerCase()) ||
+                        title.toLowerCase().includes(bookingFilterText.toLowerCase()) ||
+                        email.toLowerCase().includes(bookingFilterText.toLowerCase());
+                      return matchesSearch;
+                    })
+                    .map(b => {
+                      const creatorProfile = profiles?.find(p => p.id === b.creatorId || p._id === b.creatorId);
+                      const creatorName = creatorProfile ? creatorProfile.name : `ID: ${b.creatorId?.substring(0, 8)}...`;
+                      
+                      return (
+                        <tr key={b._id || b.id}>
+                          <td>
+                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                              <span style={{ fontWeight: '700', fontSize: '13px', color: '#333' }}>{b.clientName || 'N/A'}</span>
+                              <span style={{ fontSize: '11px', color: '#888', marginTop: '1px' }}>{b.clientEmail || 'No Email'}</span>
+                              <span style={{ fontSize: '11px', color: '#888' }}>{b.clientPhone || 'No Phone'}</span>
+                            </div>
+                          </td>
+                          <td>
+                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                              <span style={{ fontWeight: '700', fontSize: '13px', color: '#c7100d' }}>{b.title || 'Gig Shoot'}</span>
+                              <span style={{ fontSize: '10px', background: '#eee', padding: '1px 6px', borderRadius: '4px', alignSelf: 'flex-start', margin: '3px 0', textTransform: 'uppercase', fontWeight: 'bold' }}>
+                                {b.itemType || 'Booking'}
+                              </span>
+                              <span style={{ fontSize: '11px', color: '#666' }}>Creator: <strong>{creatorName}</strong></span>
+                            </div>
+                          </td>
+                          <td style={{ fontSize: '13px' }}>
+                            <div>{b.date || 'N/A'}</div>
+                            <div style={{ fontSize: '11px', color: '#888', marginTop: '2px' }}>{b.time || 'N/A'}</div>
+                          </td>
+                          <td style={{ fontWeight: '700', color: '#2c3e50' }}>
+                            {typeof b.price === 'number' ? `₹${b.price.toLocaleString()}` : b.price}
+                          </td>
+                          <td>
+                            <span style={{
+                              padding: '4px 8px',
+                              borderRadius: '20px',
+                              fontSize: '11px',
+                              fontWeight: 'bold',
+                              textTransform: 'uppercase',
+                              background: b.status === 'confirmed' || b.status === 'approved' ? '#ebfbee' : b.status === 'pending' ? '#fff9db' : '#fff5f5',
+                              color: b.status === 'confirmed' || b.status === 'approved' ? '#2b8a3e' : b.status === 'pending' ? '#f59f00' : '#c92a2a'
+                            }}>
+                              {b.status || 'Pending'}
+                            </span>
+                          </td>
+                          <td className="actions-cell">
+                            <div className="action-buttons-group" style={{ justifyContent: 'center', gap: '6px' }}>
+                              {(b.status === 'pending') && (
+                                <button
+                                  className="console-action-btn"
+                                  onClick={() => handleUpdateBookingStatus(b._id || b.id, 'confirmed')}
+                                  style={{ background: '#27ae60', fontSize: '11px', padding: '5px 10px', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+                                >
+                                  Approve
+                                </button>
+                              )}
+                              {(b.status === 'pending' || b.status === 'confirmed') && (
+                                <button
+                                  className="console-action-btn"
+                                  onClick={() => handleUpdateBookingStatus(b._id || b.id, 'cancelled')}
+                                  style={{ background: '#e67e22', fontSize: '11px', padding: '5px 10px', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+                                >
+                                  Cancel
+                                </button>
+                              )}
+                              <button
+                                className="console-action-btn delete-btn"
+                                onClick={() => handleDeleteBooking(b)}
+                                style={{ display: 'flex', alignItems: 'center', gap: '4px' }}
+                              >
+                                <Trash2 size={12} />Delete
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })
                 )}
               </tbody>
             </table>

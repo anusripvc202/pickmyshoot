@@ -94,8 +94,20 @@ export default async function handler(req, res) {
       console.error('Error updating booking:', error);
       res.status(400).json({ error: 'Failed to update booking status', details: error.message });
     }
+  } else if (req.method === 'DELETE') {
+    try {
+      const { id } = req.query;
+      if (mongoose.Types.ObjectId.isValid(id)) {
+        await Booking.findByIdAndDelete(id);
+      } else {
+        await Booking.findOneAndDelete({ id: id });
+      }
+      res.status(200).json({ success: true });
+    } catch (error) {
+      res.status(400).json({ error: 'Failed to delete booking' });
+    }
   } else {
-    res.setHeader('Allow', ['GET', 'POST', 'PUT']);
+    res.setHeader('Allow', ['GET', 'POST', 'PUT', 'DELETE']);
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
