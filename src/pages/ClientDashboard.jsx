@@ -14,7 +14,9 @@ import {
   LogOut,
   ArrowLeft,
   CheckCircle,
-  AlertTriangle
+  AlertTriangle,
+  Grid,
+  DollarSign
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { useNavigate } from 'react-router-dom';
