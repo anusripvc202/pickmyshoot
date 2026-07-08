@@ -478,7 +478,7 @@ const AdminDashboard = () => {
                                     <Link size={13} />Claim Link
                                   </button>
                                   <button className="console-action-btn mail-btn" onClick={() => handleGenerateCode(p)}>
-                                    <Mail size={13} />Generate & Mail Code
+                                    <Mail size={13} />Mail Code
                                   </button>
                                   <button className="console-action-btn delete-btn" onClick={() => handleDelete(p)}>
                                     <Trash2 size={13} />Delete

@@ -12289,8 +12289,13 @@ input:checked + .slider:before {
 
 .action-buttons-group {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   justify-content: flex-end;
+}
+
+.action-buttons-group .console-action-btn {
+  padding: 6px 10px;
+  gap: 4px;
 }
 
 .console-action-btn {
