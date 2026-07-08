@@ -47,7 +47,7 @@ const ClientDashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
 
-  const activeProfile = profiles.find(p => p.id === activeProfileId) || profiles[0];
+  const activeProfile = profiles.find(p => p.id === activeProfileId) || profiles[0] || { name: '', email: '', bio: '' };
 
   // Local state for profile inputs in settings
   const [profileName, setProfileName] = useState(activeProfile.name);

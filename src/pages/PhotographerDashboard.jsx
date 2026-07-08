@@ -54,7 +54,26 @@ const PhotographerDashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
 
-  const activeProfile = profiles.find(p => p.id === activeProfileId) || profiles[0];
+  const activeProfile = profiles.find(p => p.id === activeProfileId) || profiles[0] || {
+    name: '',
+    email: '',
+    bio: '',
+    startingPrice: 1800,
+    experience: 3,
+    rating: "4.9 ★",
+    reviews: 42,
+    city: "Hyderabad",
+    area: "Jubilee Hills",
+    categories: ["Wedding Photography", "Candid Photography"],
+    highlights: ["1+ Year Experience", "Creative Angles", "High-End Camera Equipment"],
+    languages: ["English", "Hindi", "Telugu"],
+    travelOutside: "Yes",
+    pmsId: 'PMSHYD000007',
+    gmbUrl: "",
+    instaUrl: "https://instagram.com/pickmyshoot",
+    fbUrl: "",
+    webUrl: ""
+  };
 
   // Setup fallback constants
   const startingPriceFallback = activeProfile.startingPrice || 1800;

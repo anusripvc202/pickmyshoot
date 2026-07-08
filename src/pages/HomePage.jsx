@@ -36,12 +36,10 @@ const HomePage = () => {
 
   const navigate = useNavigate();
 
-  // Ensure a baby photoshoot is included in the homepage list of services
   const displayedServices = React.useMemo(() => {
     const babyShoot = services.find(s => s.serviceType === 'Baby Photoshoot' || s.title.toLowerCase().includes('baby'));
     const otherShoots = services.filter(s => s.id !== (babyShoot?.id || ''));
-    // Place the baby photoshoot as the second item so it is immediately visible on the home page without scrolling
-    return babyShoot ? [otherShoots[0], babyShoot, ...otherShoots.slice(1, 6)] : services.slice(0, 7);
+    return (babyShoot ? [otherShoots[0], babyShoot, ...otherShoots.slice(1, 6)] : services.slice(0, 7)).filter(Boolean);
   }, [services]);
 
   const [currentSlide, setCurrentSlide] = useState(0);
