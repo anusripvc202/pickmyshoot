@@ -495,11 +495,26 @@ const PhotographerDashboard = () => {
   };
 
   // Photographer filtering & data
-  const photographerBookings = bookings.filter(b => 
-    b.ownerId === activeProfileId || 
-    b.creatorId === activeProfileId || 
-    (currentUser && (b.ownerId === currentUser.id || b.ownerId === currentUser._id || b.creatorId === currentUser.id || b.creatorId === currentUser._id))
-  );
+  const photographerBookings = bookings.filter(b => {
+    const matchesActive = b.ownerId === activeProfileId || b.creatorId === activeProfileId;
+    const matchesUser = currentUser && (
+      b.ownerId === currentUser.id || 
+      b.ownerId === currentUser._id || 
+      b.creatorId === currentUser.id || 
+      b.creatorId === currentUser._id
+    );
+    
+    // Fallback for default mock bookings (prof-photographer, prof-1) to show up under primary photographer Nikhil
+    const isNikhil = activeProfile?.email === 'nikhiljai1215@gmail.com' || activeProfileId === '6a380b8173c0e340a6bf3a42';
+    const matchesMock = isNikhil && (
+      b.ownerId === 'prof-photographer' || 
+      b.creatorId === 'prof-photographer' || 
+      b.ownerId === 'prof-1' || 
+      b.creatorId === 'prof-1'
+    );
+    
+    return matchesActive || matchesUser || matchesMock;
+  });
   
   const photographerEarnings = photographerBookings.reduce((sum, b) => {
     const priceVal = typeof b.price === 'number' ? b.price : parseFloat(b.price) || 0;

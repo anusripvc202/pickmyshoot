@@ -497,8 +497,8 @@ export const AppProvider = ({ children }) => {
     const dbBooking = {
       listingId: selectedItem.id || selectedItem._id || "",
       clientId: activeProfileId || "prof-client",
-      creatorId: selectedItem.ownerId || (selectedItemType === "service" ? "prof-photographer" : (selectedItemType === "institute" ? "admin" : "prof-1")),
-      ownerId: selectedItem.ownerId || (selectedItemType === "service" ? "prof-photographer" : (selectedItemType === "institute" ? "admin" : "prof-1")),
+      creatorId: selectedItem.ownerId || selectedItem.creatorId || (selectedItemType === "service" ? "prof-photographer" : (selectedItemType === "institute" ? "admin" : "prof-1")),
+      ownerId: selectedItem.ownerId || selectedItem.creatorId || (selectedItemType === "service" ? "prof-photographer" : (selectedItemType === "institute" ? "admin" : "prof-1")),
       itemType: selectedItemType.charAt(0).toUpperCase() + selectedItemType.slice(1),
       title: selectedItem.title || "",
       date: selectedItemType === 'workshop' ? selectedItem.date : (selectedItemType === 'institute' ? 'Immediate' : selectedDate),
