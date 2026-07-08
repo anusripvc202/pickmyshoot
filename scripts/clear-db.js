@@ -121,17 +121,19 @@ async function run() {
     await Listing.deleteMany({});
     console.log('Listings cleared.');
 
-    // 3. Clear Users
+    // 3. Clear Users and seed Admin User
     console.log('Clearing Users collection...');
     await User.deleteMany({});
-    console.log('Users cleared.');
+    console.log('Seeding Admin User (Anusha)...');
+    await User.create(defaultUsers[0]);
+    console.log('Admin User seeded.');
 
     // 4. Clear Photographers
     console.log('Clearing Photographers collection...');
     await Photographer.deleteMany({});
     console.log('Photographers cleared.');
 
-    console.log('🎉 MongoDB database successfully cleared completely (all collections empty)!');
+    console.log('🎉 MongoDB database cleared: All bookings/listings/photographers empty; Admin User Anusha seeded.');
 
   } catch (error) {
     console.error('Database reset failed:', error);
