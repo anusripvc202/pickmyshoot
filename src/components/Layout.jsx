@@ -233,7 +233,11 @@ const Layout = () => {
       });
     } else if (currentRole === 'client') {
       bookings.forEach(b => {
-        if (b.clientId === activeProfileId || (currentUser && (b.clientId === currentUser.id || b.clientId === currentUser._id))) {
+        if (b.clientId === activeProfileId || (currentUser && (
+          b.clientId === currentUser.id || 
+          b.clientId === currentUser._id ||
+          (b.clientEmail && currentUser.email && b.clientEmail.toLowerCase() === currentUser.email.toLowerCase())
+        ))) {
           if (b.status === 'pending') {
             list.push({
               id: `client-pending-${b.id}`,

@@ -138,7 +138,11 @@ const ClientDashboard = () => {
   // Client filtering
   const clientBookings = bookings.filter(b => 
     b.clientId === activeProfileId || 
-    (currentUser && (b.clientId === currentUser.id || b.clientId === currentUser._id))
+    (currentUser && (
+      b.clientId === currentUser.id || 
+      b.clientId === currentUser._id ||
+      (b.clientEmail && currentUser.email && b.clientEmail.toLowerCase() === currentUser.email.toLowerCase())
+    ))
   );
   
   const clientSpent = clientBookings.reduce((sum, b) => {
