@@ -1948,12 +1948,22 @@ body {
   margin-bottom: 32px;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;       /* Firefox */
-  -ms-overflow-style: none;    /* IE/Edge */
+  scrollbar-width: thin;       /* Firefox */
+  scrollbar-color: #c7100d #e2e8f0;
 }
 
 .desktop-card-grid-5::-webkit-scrollbar {
-  display: none;               /* Chrome/Safari */
+  height: 6px;                 /* Chrome/Safari height */
+}
+
+.desktop-card-grid-5::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+
+.desktop-card-grid-5::-webkit-scrollbar-thumb {
+  background: #c7100d;
+  border-radius: 10px;
 }
 
 /* Fixed card widths inside scroll rows */

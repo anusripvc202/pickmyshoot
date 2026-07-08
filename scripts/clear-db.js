@@ -144,6 +144,71 @@ const defaultListings = [
     description: 'Capture the chemistry before the big day with professional photographers, custom styling advice, and scenic outdoor locations like lakes or parks.',
     ownerId: '6a380b8173c0e340a6bf3a42', // Nikhil
     active: true
+  },
+  {
+    _id: '6a5dde26b7e83c1231fd9304',
+    id: 'ps-1-2',
+    title: 'Royal Palace Indoor Pre-Wedding',
+    type: 'service',
+    price: 19999,
+    rating: 4.9,
+    reviews: 145,
+    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=500&q=80',
+    description: 'Premium indoor studio pre-wedding shoot featuring grand heritage pillars, retro backdrops, royal themes, and cinematic dynamic lighting.',
+    ownerId: '6a380b8173c0e340a6bf3a42', // Nikhil
+    active: true
+  },
+  {
+    _id: '6a5dde26b7e83c1231fd9305',
+    id: 'ps-1-3',
+    title: 'Golden Sands Beach Pre-Wedding',
+    type: 'service',
+    price: 15999,
+    rating: 4.7,
+    reviews: 88,
+    image: 'https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=500&q=80',
+    description: 'Cinematic romantic beach photoshoot at sunrise/sunset with drone b-rolls, custom props, and slow-motion video coordination.',
+    ownerId: '6a380b8173c0e340a6bf3a42', // Nikhil
+    active: true
+  },
+  {
+    _id: '6a5dde26b7e83c1231fd9306',
+    id: 'ps-2',
+    title: 'Cozy Studio Baby Portrait',
+    type: 'service',
+    price: 5999,
+    rating: 4.7,
+    reviews: 210,
+    image: '/baby_photoshoot.png',
+    description: 'Adorable baby portrait session with creative themes, baby-safe props, and professional lighting in a comfortable temperature-controlled studio environment.',
+    ownerId: '6a380b8173c0e340a6bf3a42', // Nikhil
+    active: true
+  },
+  {
+    _id: '6a5dde26b7e83c1231fd9307',
+    id: 'ps-w1',
+    title: 'Royal Traditional Wedding Coverage',
+    type: 'service',
+    price: 49999,
+    rating: 4.9,
+    reviews: 580,
+    image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=500&q=80',
+    description: 'Complete traditional ceremony wedding photography. Includes cinematic multi-cam angles, high-end flash coverage, and customized leather album printing.',
+    ownerId: '6a380b8173c0e340a6bf3a42', // Nikhil
+    active: true
+  },
+  {
+    _id: '6a5dde26b7e83c1231fd9308',
+    id: 'ps-w2',
+    title: 'Cinematic Candid Wedding Film & Frame',
+    type: 'service',
+    price: 64999,
+    rating: 4.8,
+    reviews: 245,
+    image: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=500&q=80',
+    description: 'Artistic candid moments, cinematic wedding movie trailer with drone b-rolls, emotional closeups, and color-graded custom prints.',
+    ownerId: '6a380b8173c0e340a6bf3a42', // Nikhil
+    active: true
   }
 ];
 
