@@ -268,14 +268,7 @@ const AdminDashboard = () => {
   return (
     <div className="admin-console-page">
 
-      {/* Header */}
-      <header className="admin-console-header">
-        <div className="admin-console-header-inner">
-          <div className="logo-container" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-            <img src="/logo.png" className="header-brand-logo" alt="PickMyShoot" />
-          </div>
-        </div>
-      </header>
+
 
       {/* Toolbar */}
       <div className="admin-console-toolbar">
