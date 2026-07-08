@@ -22,6 +22,14 @@ export default async function handler(req, res) {
     } catch (error) {
       res.status(400).json({ error: 'Failed to create listing' });
     }
+  } else if (req.method === 'PATCH' || req.method === 'PUT') {
+    try {
+      const { id, ...updateData } = req.body;
+      const updatedListing = await Listing.findByIdAndUpdate(id, updateData, { new: true });
+      res.status(200).json(updatedListing);
+    } catch (error) {
+      res.status(400).json({ error: 'Failed to update listing' });
+    }
   } else if (req.method === 'DELETE') {
     try {
       const { id } = req.query;
@@ -31,7 +39,7 @@ export default async function handler(req, res) {
       res.status(400).json({ error: 'Failed to delete listing' });
     }
   } else {
-    res.setHeader('Allow', ['GET', 'POST', 'DELETE']);
+    res.setHeader('Allow', ['GET', 'POST', 'PATCH', 'PUT', 'DELETE']);
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }

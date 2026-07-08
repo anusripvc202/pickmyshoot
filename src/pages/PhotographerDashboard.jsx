@@ -113,6 +113,7 @@ const PhotographerDashboard = () => {
     setProfileInstaUrl(activeProfile.instaUrl || "https://instagram.com/pickmyshoot");
     setProfileFbUrl(activeProfile.fbUrl || "");
     setProfileWebUrl(activeProfile.webUrl || "");
+    setIsVerified(!!activeProfile.isVerified);
   }, [activeProfileId, activeProfile]);
 
   // Packages Pricing Form state
@@ -200,8 +201,8 @@ const PhotographerDashboard = () => {
   const [verifyCode, setVerifyCode] = useState('');
   const [verifyLoading, setVerifyLoading] = useState(false);
   const [verifyMessage, setVerifyMessage] = useState(null);
-  const [isVerified, setIsVerified] = useState(!!(currentUser?.isVerified));
-
+  const [isVerified, setIsVerified] = useState(!!(activeProfile.isVerified));
+ 
   const handleVerifySubmit = async (e) => {
     e.preventDefault();
     if (!verifyCode.trim()) {
@@ -214,11 +215,12 @@ const PhotographerDashboard = () => {
       const res = await fetch('/api/verify-photographer', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: currentUser?.email, code: verifyCode.trim() })
+        body: JSON.stringify({ email: activeProfile.email || currentUser?.email, code: verifyCode.trim() })
       });
       const data = await res.json();
       if (res.ok && data.success) {
         setIsVerified(true);
+        setProfiles(prev => prev.map(p => p.id === activeProfileId ? { ...p, isVerified: true } : p));
         setVerifyMessage({ type: 'success', text: data.message || 'Profile verified successfully!' });
         triggerToast('✓ Profile verified! You are now a verified PickMyShoot partner.');
       } else {
@@ -348,6 +350,16 @@ const PhotographerDashboard = () => {
     setShowAddProfileModal(false);
     setNewProfileName('');
     triggerToast(`✓ Profile "${newProfileName}" created successfully!`);
+
+    // Sync new profile to MongoDB
+    fetch('/api/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newProfileObj)
+    })
+      .then(res => res.json())
+      .then(saved => console.log('Successfully synced new profile to DB:', saved))
+      .catch(err => console.warn('Failed to sync new profile to DB:', err));
   };
 
   const handleToggleCategory = (cat) => {
