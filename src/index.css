@@ -171,7 +171,7 @@ body {
 
 /* Logo sizing — matches reference image */
 .header-brand-logo {
-  height: 55px;
+  height: 65px;
   width: auto;
   transition: height var(--transition-normal), transform var(--transition-fast);
   object-fit: contain;
@@ -190,7 +190,7 @@ body {
     height: 64px;
   }
   .header-brand-logo {
-    height: 50px;
+    height: 55px;
   }
   .header-nav-tabs {
     display: none;
@@ -209,7 +209,7 @@ body {
     height: 68px;
   }
   .header-brand-logo {
-    height: 56px;
+    height: 62px;
   }
   .header-nav-tabs {
     display: none;
@@ -228,7 +228,7 @@ body {
     height: 72px;
   }
   .header-brand-logo {
-    height: 60px;
+    height: 66px;
   }
   .header-nav-tabs {
     display: none;
@@ -244,7 +244,7 @@ body {
     height: 76px;
   }
   .header-brand-logo {
-    height: 70px;
+    height: 74px;
   }
   .header-nav-tabs {
     gap: 1px;
@@ -261,7 +261,7 @@ body {
     height: 80px;
   }
   .header-brand-logo {
-    height: 55px;
+    height: 65px;
   }
 }
 
