@@ -549,6 +549,17 @@ const PhotographerDashboard = () => {
     return sum + (b.status === 'confirmed' || b.status === 'completed' || b.status === 'approved' ? priceVal : 0);
   }, 0);
 
+  const photographerOwnedStudios = studios.filter(st => 
+    st.ownerId === activeProfileId || 
+    st.creatorId === activeProfileId ||
+    (activeProfile && (
+      st.ownerId === activeProfile.id || 
+      st.ownerId === activeProfile._id ||
+      st.creatorId === activeProfile.id || 
+      st.creatorId === activeProfile._id
+    ))
+  );
+
   const photographerOwnedListings = [
     ...services.filter(s => 
       s.ownerId === activeProfileId || 
@@ -574,16 +585,7 @@ const PhotographerDashboard = () => {
       (!g.ownerId && activeProfileId === "prof-photographer" && (g.id === "gr-1" || g.id === "gr-6"))
     ).map(g => ({ ...g, type: "Gear Rental", categoryKey: "gear" })),
     
-    ...studios.filter(st => 
-      st.ownerId === activeProfileId || 
-      st.creatorId === activeProfileId ||
-      (activeProfile && (
-        st.ownerId === activeProfile.id || 
-        st.ownerId === activeProfile._id ||
-        st.creatorId === activeProfile.id || 
-        st.creatorId === activeProfile._id
-      ))
-    ).map(st => ({ ...st, type: "Studio Space", categoryKey: "studio" }))
+    ...photographerOwnedStudios.map(st => ({ ...st, type: "Studio Space", categoryKey: "studio" }))
   ];
 
   // For invoice calculations
@@ -756,6 +758,11 @@ const PhotographerDashboard = () => {
                 />
                 <h4 style={{ margin: '10px 0 2px 0', fontSize: '18px', fontWeight: '800' }}>{activeProfile.name}</h4>
                 <span style={{ fontSize: '12px', color: '#666', fontWeight: 600 }}>{pmsIdFallback}</span>
+                {photographerOwnedStudios.length > 0 && (
+                  <div style={{ fontSize: '11px', color: '#475569', fontWeight: '750', marginTop: '6px', background: '#f1f5f9', padding: '4px 10px', borderRadius: '12px', maxWidth: '200px', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                    🏢 {photographerOwnedStudios.map(st => st.title).join(', ')}
+                  </div>
+                )}
                 <button 
                   onClick={() => setActiveTab('settings')}
                   style={{ marginTop: '12px', background: '#fafafa', border: '1px solid #ddd', padding: '6px 12px', borderRadius: '20px', fontSize: '12px', cursor: 'pointer', fontWeight: 700 }}
@@ -867,31 +874,13 @@ const PhotographerDashboard = () => {
               {/* My Studio Spaces */}
               <div style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '12px', padding: '24px' }}>
                 <h3 style={{ margin: '0 0 12px 0', fontSize: '16px', fontWeight: 800, borderBottom: '1px solid #eee', paddingBottom: '8px' }}>My Studio Spaces</h3>
-                {studios.filter(st => 
-                  st.ownerId === activeProfileId || 
-                  st.creatorId === activeProfileId || 
-                  (activeProfile && (
-                    st.ownerId === activeProfile.id || 
-                    st.ownerId === activeProfile._id || 
-                    st.creatorId === activeProfile.id || 
-                    st.creatorId === activeProfile._id
-                  ))
-                ).length === 0 ? (
+                {photographerOwnedStudios.length === 0 ? (
                   <div style={{ padding: '16px', textAlign: 'center', color: '#666', fontStyle: 'italic', fontSize: '13px' }}>
                     No studio spaces registered under this profile.
                   </div>
                 ) : (
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '12px' }}>
-                    {studios.filter(st => 
-                      st.ownerId === activeProfileId || 
-                      st.creatorId === activeProfileId || 
-                      (activeProfile && (
-                        st.ownerId === activeProfile.id || 
-                        st.ownerId === activeProfile._id || 
-                        st.creatorId === activeProfile.id || 
-                        st.creatorId === activeProfile._id
-                      ))
-                    ).map(st => (
+                    {photographerOwnedStudios.map(st => (
                       <div key={st.id} style={{ display: 'flex', gap: '12px', border: '1px solid #eee', borderRadius: '8px', padding: '12px', background: '#fafafa', alignItems: 'center' }}>
                         <img 
                           src={st.image || 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=80&q=80'} 
