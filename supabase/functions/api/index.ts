@@ -438,7 +438,7 @@ async function edgeSendEmails(booking: any) {
 
     // 1. Send notification to photographer
     if (recipientEmail) {
-      sendBookingNotification({
+      await sendBookingNotification({
         photographerEmail: recipientEmail,
         photographerName: recipientName,
         clientName: clientName,
@@ -454,7 +454,7 @@ async function edgeSendEmails(booking: any) {
 
     // 2. Send confirmation to client
     if (clientEmailAddress) {
-      sendClientBookingConfirmation({
+      await sendClientBookingConfirmation({
         clientEmail: clientEmailAddress,
         clientName: clientName,
         bookingTitle: booking.title,
