@@ -1424,7 +1424,7 @@ const Layout = () => {
         <div className="footer-bottom">
           <div className="footer-bottom-inner">
             <div className="footer-bottom-left">
-              <span className="footer-copy">powered by <strong style={{ color: 'var(--primary)', fontWeight: '700' }}>Patterns Infotech Private Limited</strong> @2026 pickmyshoot. all rights reserved</span>
+              <span className="footer-copy">powered by <a href="https://thepatternscompany.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', fontWeight: '700', textDecoration: 'none' }}>Patterns Infotech Private Limited</a> @2026 pickmyshoot. all rights reserved</span>
               <span className="footer-made-in">🇮🇳 Made with ❤️ in India</span>
             </div>
             <div className="footer-bottom-links">
