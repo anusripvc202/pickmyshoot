@@ -517,7 +517,14 @@ const PhotographerDashboard = () => {
   // Photographer filtering & data
   const photographerBookings = bookings.filter(b => {
     if (currentUser?.role === 'admin') return true;
-    const matchesActive = b.ownerId === activeProfileId || b.creatorId === activeProfileId;
+    const matchesActive = b.ownerId === activeProfileId || 
+                          b.creatorId === activeProfileId ||
+                          (activeProfile && (
+                            b.ownerId === activeProfile.id || 
+                            b.ownerId === activeProfile._id || 
+                            b.creatorId === activeProfile.id || 
+                            b.creatorId === activeProfile._id
+                          ));
     const matchesUser = currentUser && (
       b.ownerId === currentUser.id || 
       b.ownerId === currentUser._id || 
@@ -543,9 +550,40 @@ const PhotographerDashboard = () => {
   }, 0);
 
   const photographerOwnedListings = [
-    ...services.filter(s => s.ownerId === activeProfileId || (!s.ownerId && activeProfileId === "prof-photographer" && (s.id === "ps-1" || s.id === "ps-9"))).map(s => ({ ...s, type: "Service Package", categoryKey: "service" })),
-    ...gear.filter(g => g.ownerId === activeProfileId || (!g.ownerId && activeProfileId === "prof-photographer" && (g.id === "gr-1" || g.id === "gr-6"))).map(g => ({ ...g, type: "Gear Rental", categoryKey: "gear" })),
-    ...studios.filter(st => st.ownerId === activeProfileId).map(st => ({ ...st, type: "Studio Space", categoryKey: "studio" }))
+    ...services.filter(s => 
+      s.ownerId === activeProfileId || 
+      s.creatorId === activeProfileId ||
+      (activeProfile && (
+        s.ownerId === activeProfile.id || 
+        s.ownerId === activeProfile._id ||
+        s.creatorId === activeProfile.id || 
+        s.creatorId === activeProfile._id
+      )) || 
+      (!s.ownerId && activeProfileId === "prof-photographer" && (s.id === "ps-1" || s.id === "ps-9"))
+    ).map(s => ({ ...s, type: "Service Package", categoryKey: "service" })),
+    
+    ...gear.filter(g => 
+      g.ownerId === activeProfileId || 
+      g.creatorId === activeProfileId ||
+      (activeProfile && (
+        g.ownerId === activeProfile.id || 
+        g.ownerId === activeProfile._id ||
+        g.creatorId === activeProfile.id || 
+        g.creatorId === activeProfile._id
+      )) || 
+      (!g.ownerId && activeProfileId === "prof-photographer" && (g.id === "gr-1" || g.id === "gr-6"))
+    ).map(g => ({ ...g, type: "Gear Rental", categoryKey: "gear" })),
+    
+    ...studios.filter(st => 
+      st.ownerId === activeProfileId || 
+      st.creatorId === activeProfileId ||
+      (activeProfile && (
+        st.ownerId === activeProfile.id || 
+        st.ownerId === activeProfile._id ||
+        st.creatorId === activeProfile.id || 
+        st.creatorId === activeProfile._id
+      ))
+    ).map(st => ({ ...st, type: "Studio Space", categoryKey: "studio" }))
   ];
 
   // For invoice calculations
