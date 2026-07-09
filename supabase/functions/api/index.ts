@@ -2,8 +2,8 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import postgres from "npm:postgres";
 import nodemailer from "npm:nodemailer";
 
-const smtpEmail = Deno.env.get('SMTP_EMAIL') || 'nikhiljai1215@gmail.com';
-const smtpPassword = Deno.env.get('SMTP_PASSWORD') || 'yfkphaydoxtueutr';
+const smtpEmail = Deno.env.get('SMTP_EMAIL') || 'anusripvc202@gmail.com';
+const smtpPassword = Deno.env.get('SMTP_PASSWORD') || 'mrzplpjgedrqljrx';
 const appUrl = Deno.env.get('APP_URL') || 'http://localhost:5173';
 
 const transporter = nodemailer.createTransport({
@@ -428,7 +428,7 @@ async function edgeSendEmails(booking: any) {
 
     // Fallback to SMTP_EMAIL
     if (!recipientEmail) {
-      recipientEmail = Deno.env.get('SMTP_EMAIL') || 'nikhiljai1215@gmail.com';
+      recipientEmail = Deno.env.get('SMTP_EMAIL') || 'anusripvc202@gmail.com';
       recipientName = creatorUser?.name || 'Demo Photographer (Mock Profile)';
       console.log(`ℹ️  No creator found for ID "${booking.creatorId}" — falling back to SMTP_EMAIL for demo notification.`);
     }
