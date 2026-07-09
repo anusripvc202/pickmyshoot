@@ -249,3 +249,145 @@ export async function sendVerificationCodeEmail({ photographerEmail, photographe
   }
 }
 
+/**
+ * Send a booking confirmation email to the client
+ */
+export async function sendClientBookingConfirmation({ clientEmail, clientName, bookingTitle, bookingDate, bookingTime, bookingPrice, bookingType, photographerName }) {
+  if (!process.env.SMTP_EMAIL || !process.env.SMTP_PASSWORD) {
+    console.warn('⚠️  SMTP credentials not configured — skipping client email notification.');
+    return { sent: false, reason: 'SMTP not configured' };
+  }
+
+  if (!clientEmail) {
+    console.warn('⚠️  No client email found — skipping client email notification.');
+    return { sent: false, reason: 'No client email' };
+  }
+
+  const formattedPrice = typeof bookingPrice === 'number'
+    ? `₹${bookingPrice.toLocaleString('en-IN')}`
+    : bookingPrice;
+
+  const mailOptions = {
+    from: `"PickMyShoot" <${process.env.SMTP_EMAIL}>`,
+    to: clientEmail,
+    subject: `🎉 Booking Confirmed — ${bookingTitle}`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="margin:0; padding:0; background:#f4f4f7; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f7; padding: 32px 0;">
+          <tr>
+            <td align="center">
+              <table width="560" cellpadding="0" cellspacing="0" style="background:#ffffff; border-radius:16px; overflow:hidden; box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+                
+                <!-- Header -->
+                <tr>
+                  <td style="background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%); padding: 28px 32px; text-align: center;">
+                    <h1 style="color:#fff; margin:0; font-size:22px; font-weight:800; letter-spacing:-0.5px;">
+                      📸 PickMyShoot
+                    </h1>
+                    <p style="color:rgba(255,255,255,0.85); margin:6px 0 0; font-size:13px;">
+                      Booking Confirmation
+                    </p>
+                  </td>
+                </tr>
+
+                <!-- Body -->
+                <tr>
+                  <td style="padding: 28px 32px;">
+                    <p style="font-size:15px; color:#333; margin:0 0 18px; line-height:1.6;">
+                      Hi <strong>${clientName || 'Valued Customer'}</strong>,<br><br>
+                      Thank you for choosing PickMyShoot! Your booking has been successfully placed. We've sent a notification to the photographer/provider <strong>${photographerName || 'Creator'}</strong>. Here are your booking details:
+                    </p>
+
+                    <!-- Booking Details Card -->
+                    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8f9fb; border:1px solid #e8eaed; border-radius:12px; overflow:hidden; margin-bottom:20px;">
+                      <tr>
+                        <td style="padding: 20px 24px;">
+                          <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                              <td style="padding:6px 0; font-size:13px; color:#888; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Booking</td>
+                              <td style="padding:6px 0; font-size:14px; color:#222; font-weight:700; text-align:right;">${bookingTitle}</td>
+                            </tr>
+                            <tr>
+                              <td colspan="2" style="border-bottom:1px solid #e8eaed; padding:0; height:1px;"></td>
+                            </tr>
+                            <tr>
+                              <td style="padding:6px 0; font-size:13px; color:#888; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Provider</td>
+                              <td style="padding:6px 0; font-size:14px; color:#222; font-weight:600; text-align:right;">${photographerName}</td>
+                            </tr>
+                            <tr>
+                              <td colspan="2" style="border-bottom:1px solid #e8eaed; padding:0; height:1px;"></td>
+                            </tr>
+                            <tr>
+                              <td style="padding:6px 0; font-size:13px; color:#888; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Date</td>
+                              <td style="padding:6px 0; font-size:14px; color:#222; font-weight:600; text-align:right;">${bookingDate || 'To be confirmed'}</td>
+                            </tr>
+                            <tr>
+                              <td colspan="2" style="border-bottom:1px solid #e8eaed; padding:0; height:1px;"></td>
+                            </tr>
+                            <tr>
+                              <td style="padding:6px 0; font-size:13px; color:#888; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Time</td>
+                              <td style="padding:6px 0; font-size:14px; color:#222; font-weight:600; text-align:right;">${bookingTime || 'To be confirmed'}</td>
+                            </tr>
+                            <tr>
+                              <td colspan="2" style="border-bottom:1px solid #e8eaed; padding:0; height:1px;"></td>
+                            </tr>
+                            <tr>
+                              <td style="padding:6px 0; font-size:13px; color:#888; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Amount Paid/Due</td>
+                              <td style="padding:6px 0; font-size:15px; color:#2B6CB0; font-weight:800; text-align:right;">${formattedPrice}</td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <p style="font-size:13px; color:#666; margin:0 0 20px; line-height:1.5;">
+                      You can log in to your dashboard at any time to view, track, or manage your bookings.
+                    </p>
+
+                    <!-- CTA Button -->
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td align="center">
+                          <a href="${process.env.APP_URL || 'http://localhost:5173'}/dashboard/client" 
+                             style="display:inline-block; background:linear-gradient(135deg, #1E3A8A, #3B82F6); color:#fff; text-decoration:none; padding:13px 36px; border-radius:10px; font-size:14px; font-weight:700; letter-spacing:0.3px;">
+                            Go to Dashboard
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+                <!-- Footer -->
+                <tr>
+                  <td style="padding: 20px 32px; background:#f8f9fb; border-top:1px solid #e8eaed; text-align:center;">
+                    <p style="font-size:11px; color:#aaa; margin:0; line-height:1.6;">
+                      This is an automated confirmation from PickMyShoot.<br>
+                      © ${new Date().getFullYear()} PickMyShoot — Every Story Builds a Brand.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
+    `
+  };
+
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log(`📧 Client confirmation email sent to ${clientEmail}: ${info.messageId}`);
+    return { sent: true, messageId: info.messageId };
+  } catch (error) {
+    console.error('❌ Failed to send client email:', error.message);
+    return { sent: false, reason: error.message };
+  }
+}

@@ -2,7 +2,8 @@ import mongoose from 'mongoose';
 import dbConnect from './_utils/dbConnect.js';
 import Booking from './models/Booking.js';
 import User from './models/User.js';
-import { sendBookingNotification } from './_utils/mailer.js';
+import Photographer from './models/Photographer.js';
+import { sendBookingNotification, sendClientBookingConfirmation } from './_utils/mailer.js';
 
 export default async function handler(req, res) {
   await dbConnect();
@@ -45,11 +46,27 @@ export default async function handler(req, res) {
         let recipientEmail = photographer?.email;
         let recipientName = photographer?.name;
 
-        // Fallback for mock profiles to facilitate testing and visual demonstration
-        if (!recipientEmail && (booking.creatorId === 'prof-photographer' || booking.creatorId === 'prof-1' || !booking.creatorId)) {
+        // Secondary lookup in Photographer collection if not found in User
+        if (!recipientEmail && booking.creatorId) {
+          const photographerProfile = await Photographer.findOne({
+            $or: [
+              { _id: mongoose.Types.ObjectId.isValid(booking.creatorId) ? booking.creatorId : null },
+              { slug: booking.creatorId },
+              { name: booking.creatorId }
+            ].filter(Boolean)
+          }).lean().catch(() => null);
+
+          if (photographerProfile) {
+            recipientEmail = photographerProfile.email;
+            recipientName = photographerProfile.name;
+          }
+        }
+
+        // Fallback for mock profiles or unregistered/unmapped creator IDs to facilitate testing and visual demonstration
+        if (!recipientEmail) {
           recipientEmail = process.env.SMTP_EMAIL;
-          recipientName = 'Demo Photographer (Mock Profile)';
-          console.log('ℹ️  Mock creator booked. Falling back to SMTP_EMAIL for demo notification email.');
+          recipientName = photographer?.name || 'Demo Photographer (Mock Profile)';
+          console.log(`ℹ️  No creator found for ID "${booking.creatorId}" — falling back to SMTP_EMAIL (${process.env.SMTP_EMAIL}) for demo notification.`);
         }
 
         if (recipientEmail) {
@@ -66,8 +83,22 @@ export default async function handler(req, res) {
             bookingPrice: booking.price,
             bookingType: booking.itemType
           }).catch(err => console.warn('Email send error:', err.message));
+        }
+
+        const clientEmailAddress = client?.email || req.body.clientEmail;
+        if (clientEmailAddress) {
+          sendClientBookingConfirmation({
+            clientEmail: clientEmailAddress,
+            clientName: client?.name || req.body.clientName || 'Valued Customer',
+            bookingTitle: booking.title || 'New Booking',
+            bookingDate: booking.date,
+            bookingTime: booking.time,
+            bookingPrice: booking.price,
+            bookingType: booking.itemType,
+            photographerName: recipientName || 'Creator'
+          }).catch(err => console.warn('Client confirmation email send error:', err.message));
         } else {
-          console.log('ℹ️  No photographer email found for creatorId:', booking.creatorId);
+          console.log('ℹ️  No client email found for clientId:', booking.clientId);
         }
       } catch (emailErr) {
         console.warn('⚠️  Email lookup failed (booking still saved):', emailErr.message);
