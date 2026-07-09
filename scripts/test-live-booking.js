@@ -11,8 +11,8 @@ async function testBooking() {
     time: "10:00 AM",
     clientName: "Test User",
     clientEmail: "nikhiljai1215@gmail.com", // Send client email to yourself
-    clientPhone: "+919876543210",
-    ownerId: "6a380b8173c0e340a6bf3a42", // Nikhil's ID
+    clientId: "6a380bd273c0e340a6bf3a43", // Sri's ID (Client)
+    ownerId: "6a380b8173c0e340a6bf3a42", // Nikhil's ID (Photographer)
     creatorId: "6a380b8173c0e340a6bf3a42",
     status: "pending"
   };
