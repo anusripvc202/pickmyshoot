@@ -491,6 +491,7 @@ serve(async (req) => {
   // Match path segments
   const path = url.pathname.replace(/^\/functions\/v1\/api/, '').replace(/^\/api/, '').replace(/\/$/, '');
   const method = req.method;
+  console.log(`🚀 Request received: ${method} ${path}`);
 
   try {
     // ── HEALTH ROUTE ──
