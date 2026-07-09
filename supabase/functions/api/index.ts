@@ -438,7 +438,7 @@ async function edgeSendEmails(booking: any) {
 
     // 1. Send notification to photographer
     if (recipientEmail) {
-      sendBookingNotification({
+      await sendBookingNotification({
         photographerEmail: recipientEmail,
         photographerName: recipientName,
         clientName: clientName,
@@ -454,7 +454,7 @@ async function edgeSendEmails(booking: any) {
 
     // 2. Send confirmation to client
     if (clientEmailAddress) {
-      sendClientBookingConfirmation({
+      await sendClientBookingConfirmation({
         clientEmail: clientEmailAddress,
         clientName: clientName,
         bookingTitle: booking.title,
@@ -529,8 +529,21 @@ serve(async (req) => {
             "_id", "listingId", "clientId", "creatorId", "itemType", "title", "date", 
             "time", "price", "status", "item", "ownerId", "clientName", "clientEmail", "clientPhone"
           ) VALUES (
-            ${id}, ${body.listingId}, ${body.clientId}, ${body.creatorId}, ${body.itemType}, ${body.title}, ${body.date}, 
-            ${body.time}, ${JSON.stringify(body.price)}, ${body.status || 'pending'}, ${JSON.stringify(body.item)}, ${body.ownerId}, ${body.clientName}, ${body.clientEmail}, ${body.clientPhone}
+            ${id}, 
+            ${body.listingId || null}, 
+            ${body.clientId || null}, 
+            ${body.creatorId || null}, 
+            ${body.itemType || null}, 
+            ${body.title || null}, 
+            ${body.date || null}, 
+            ${body.time || null}, 
+            ${body.price !== undefined ? JSON.stringify(body.price) : null}, 
+            ${body.status || 'pending'}, 
+            ${body.item !== undefined ? JSON.stringify(body.item) : null}, 
+            ${body.ownerId || null}, 
+            ${body.clientName || null}, 
+            ${body.clientEmail || null}, 
+            ${body.clientPhone || null}
           ) RETURNING *
         `;
 
@@ -581,12 +594,43 @@ serve(async (req) => {
             "jobType", "instructor", "date", "timing", "workshopType", "specialization", 
             "experience", "portfolio", "serviceType"
           ) VALUES (
-            ${id}, ${id}, ${body.title}, ${body.type}, ${JSON.stringify(body.price)}, ${body.priceUnit}, ${body.image}, ${body.description}, 
-            ${body.location}, ${JSON.stringify(body.rating)}, ${body.reviews || 0}, ${body.creatorId}, ${body.ownerId}, ${body.active !== false}, ${body.isFeatured || false}, 
-            ${JSON.stringify(body.amenities)}, ${JSON.stringify(body.features)}, ${body.capacity}, ${body.area}, ${body.studioType}, ${JSON.stringify(body.categories)}, 
-            ${body.gender}, ${body.height}, ${body.category}, ${body.specs}, ${body.includes}, ${JSON.stringify(body.skills)}, ${body.company}, 
-            ${body.jobType}, ${body.instructor}, ${body.date}, ${body.timing}, ${body.workshopType}, ${body.specialization}, 
-            ${body.experience}, ${body.portfolio}, ${body.serviceType}
+            ${id}, 
+            ${id}, 
+            ${body.title || null}, 
+            ${body.type || null}, 
+            ${body.price !== undefined ? JSON.stringify(body.price) : null}, 
+            ${body.priceUnit || null}, 
+            ${body.image || null}, 
+            ${body.description || null}, 
+            ${body.location || null}, 
+            ${body.rating !== undefined ? JSON.stringify(body.rating) : null}, 
+            ${body.reviews || 0}, 
+            ${body.creatorId || null}, 
+            ${body.ownerId || null}, 
+            ${body.active !== false}, 
+            ${body.isFeatured || false}, 
+            ${body.amenities !== undefined ? JSON.stringify(body.amenities) : null}, 
+            ${body.features !== undefined ? JSON.stringify(body.features) : null}, 
+            ${body.capacity || null}, 
+            ${body.area || null}, 
+            ${body.studioType || null}, 
+            ${body.categories !== undefined ? JSON.stringify(body.categories) : null}, 
+            ${body.gender || null}, 
+            ${body.height || null}, 
+            ${body.category || null}, 
+            ${body.specs || null}, 
+            ${body.includes || null}, 
+            ${body.skills !== undefined ? JSON.stringify(body.skills) : null}, 
+            ${body.company || null}, 
+            ${body.jobType || null}, 
+            ${body.instructor || null}, 
+            ${body.date || null}, 
+            ${body.timing || null}, 
+            ${body.workshopType || null}, 
+            ${body.specialization || null}, 
+            ${body.experience || null}, 
+            ${body.portfolio || null}, 
+            ${body.serviceType || null}
           ) RETURNING *
         `;
         return new Response(JSON.stringify(listing), { status: 201, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
