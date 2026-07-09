@@ -864,6 +864,61 @@ const PhotographerDashboard = () => {
                 </div>
               </div>
 
+              {/* My Studio Spaces */}
+              <div style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '12px', padding: '24px' }}>
+                <h3 style={{ margin: '0 0 12px 0', fontSize: '16px', fontWeight: 800, borderBottom: '1px solid #eee', paddingBottom: '8px' }}>My Studio Spaces</h3>
+                {studios.filter(st => 
+                  st.ownerId === activeProfileId || 
+                  st.creatorId === activeProfileId || 
+                  (activeProfile && (
+                    st.ownerId === activeProfile.id || 
+                    st.ownerId === activeProfile._id || 
+                    st.creatorId === activeProfile.id || 
+                    st.creatorId === activeProfile._id
+                  ))
+                ).length === 0 ? (
+                  <div style={{ padding: '16px', textAlign: 'center', color: '#666', fontStyle: 'italic', fontSize: '13px' }}>
+                    No studio spaces registered under this profile.
+                  </div>
+                ) : (
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '12px' }}>
+                    {studios.filter(st => 
+                      st.ownerId === activeProfileId || 
+                      st.creatorId === activeProfileId || 
+                      (activeProfile && (
+                        st.ownerId === activeProfile.id || 
+                        st.ownerId === activeProfile._id || 
+                        st.creatorId === activeProfile.id || 
+                        st.creatorId === activeProfile._id
+                      ))
+                    ).map(st => (
+                      <div key={st.id} style={{ display: 'flex', gap: '12px', border: '1px solid #eee', borderRadius: '8px', padding: '12px', background: '#fafafa', alignItems: 'center' }}>
+                        <img 
+                          src={st.image || 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=80&q=80'} 
+                          alt={st.title} 
+                          style={{ width: '60px', height: '60px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #ddd' }}
+                        />
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1, minWidth: 0 }}>
+                          <h4 style={{ margin: 0, fontSize: '14px', fontWeight: 800, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{st.title}</h4>
+                          <span style={{ fontSize: '12px', color: '#666', fontWeight: 600 }}>{st.location || 'Location not set'}</span>
+                          <span style={{ fontSize: '12px', fontWeight: 800, color: '#c7100d' }}>₹{st.price || 0} / {st.priceUnit || 'hr'}</span>
+                        </div>
+                        <span style={{ 
+                          fontSize: '10px', 
+                          fontWeight: 700, 
+                          padding: '2px 8px', 
+                          borderRadius: '12px', 
+                          background: st.active !== false ? '#e8f5e9' : '#ffebee',
+                          color: st.active !== false ? '#27ae60' : '#c7100d'
+                        }}>
+                          {st.active !== false ? 'Active' : 'Disabled'}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               {/* Client Inquiries */}
               <div style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '12px', padding: '24px' }}>
                 <h3 style={{ margin: '0 0 12px 0', fontSize: '16px', fontWeight: 800, borderBottom: '1px solid #eee', paddingBottom: '8px' }}>Client Inquiries Requests</h3>
