@@ -121,7 +121,7 @@ export const AppProvider = ({ children }) => {
   const [theme, setTheme] = useState('light');
 
   // 1. Multi-Profile Global States
-  const [profiles, setProfiles] = useState([]);
+  const [profiles, setProfiles] = useState(defaultMockProfiles || []);
 
   const [activeProfileId, setActiveProfileId] = useState(() => {
     return localStorage.getItem('pickmyshoot_active_profile_id') || "";
@@ -144,12 +144,13 @@ export const AppProvider = ({ children }) => {
   });
 
   // Lists
-  const [services, setServices] = useState([]);
-  const [studios, setStudios] = useState([]);
-  const [models, setModels] = useState([]);
-  const [gear, setGear] = useState([]);
-  const [workshops, setWorkshops] = useState([]);
-  const [jobs, setJobs] = useState([]);
+  const [services, setServices] = useState(initialServices || []);
+  const [studios, setStudios] = useState(initialStudios || []);
+  const [models, setModels] = useState(initialModels || []);
+  const [gear, setGear] = useState(initialGear || []);
+  const [workshops, setWorkshops] = useState(initialWorkshops || []);
+  const [jobs, setJobs] = useState(initialJobs || []);
+
 
   // Initial Mock Portfolio Items state
   const [portfolioItems, setPortfolioItems] = useState([]);

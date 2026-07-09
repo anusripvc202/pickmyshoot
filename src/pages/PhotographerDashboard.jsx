@@ -440,7 +440,7 @@ const PhotographerDashboard = () => {
         "https://images.unsplash.com/photo-1551250936-2640fffc7021?auto=format&fit=crop&w=600&q=80"
       ],
       "Baby Laugh": [
-        "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1471286174240-e67f25be2477?auto=format&fit=crop&w=600&q=80",
         "https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=600&q=80"
       ],
       "Commercial Shoot": [

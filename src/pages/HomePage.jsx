@@ -166,7 +166,7 @@ const HomePage = () => {
       attendeesLabel: "from 450+ portraits",
       avatars: [
         "https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=60&q=80",
-        "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=60&q=80",
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=60&q=80",
         "https://images.unsplash.com/photo-1516624683217-bf02fc6b6b7c?auto=format&fit=crop&w=60&q=80"
       ]
     }
