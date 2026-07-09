@@ -534,7 +534,7 @@ serve(async (req) => {
         `;
 
         // Async email notifications trigger
-        edgeSendEmails(booking).catch(err => console.error("Edge mail dispatch failed:", err.message));
+        await edgeSendEmails(booking).catch(err => console.error("Edge mail dispatch failed:", err.message));
 
         return new Response(JSON.stringify(booking), { status: 201, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
@@ -721,7 +721,7 @@ serve(async (req) => {
           }
 
           if (updates.code && updates.code !== 'No Code' && p.email) {
-            sendVerificationCodeEmail({
+            await sendVerificationCodeEmail({
               photographerEmail: p.email,
               photographerName: p.name,
               code: updates.code
