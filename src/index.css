@@ -12657,19 +12657,38 @@ input:checked + .slider:before {
 }
 
 @media (max-width: 768px) {
+  .hero-carousel-container {
+    height: auto !important;
+    min-height: auto !important;
+    overflow: hidden;
+  }
   .hero-fest-layout {
+    position: relative;
+    height: auto;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     text-align: center;
-    gap: 24px;
-    padding: 40px 24px;
+    gap: 16px;
+    padding: 40px 20px 80px;
   }
   .fest-left-col {
     max-width: 100%;
     align-items: center;
     text-align: center;
     padding-left: 0;
+    gap: 16px;
+  }
+  .fest-title {
+    font-size: clamp(28px, 6vw, 36px);
+  }
+  .fest-description {
+    font-size: 13.5px;
+    line-height: 1.45;
+  }
+  .fest-explore-btn {
+    padding: 10px 24px;
+    font-size: 13px;
   }
   .fest-center-col {
     display: none;
@@ -12852,22 +12871,45 @@ input:checked + .slider:before {
   .fest-highlights-row {
     justify-content: center;
     max-width: 420px;
-    margin: 16px auto;
+    margin: 8px auto 12px;
+    gap: 8px;
+  }
+  .fest-highlight-item {
+    font-size: 11.5px;
+    padding: 4px 10px;
   }
   .fest-subtags-row {
     justify-content: center;
+    margin-bottom: 16px;
+    gap: 6px;
+  }
+  .fest-pill-badge {
+    font-size: 11px;
+    padding: 4px 10px;
   }
   .fest-cta-row {
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
     align-items: center;
+    margin-top: 4px;
   }
   .fest-attendees-strip {
     justify-content: center;
+    gap: 8px;
+  }
+  .fest-avatar-bubble {
+    width: 28px;
+    height: 28px;
   }
   .fest-attendees-text {
     align-items: center;
     text-align: center;
+  }
+  .fest-attendees-num {
+    font-size: 12px;
+  }
+  .fest-attendees-label {
+    font-size: 10px;
   }
 }
 
