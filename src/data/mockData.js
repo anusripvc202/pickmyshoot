@@ -330,7 +330,9 @@ export const studios = [
     features: ["Parking", "AC", "Wi-Fi"],
     isFeatured: true,
     description: "A premium daylight studio with modern interiors, perfect for fashion, product and portrait shoots. Features tall industrial windows, high ceilings, custom brick wall layouts, and state-of-the-art booking spaces with gorgeous natural sunbeams.",
-    tags: ["Natural Sunbeam"]
+    tags: ["Natural Sunbeam"],
+    ownerId: "6a380b8173c0e340a6bf3a42",
+    creatorId: "6a380b8173c0e340a6bf3a42"
   },
   {
     id: "st-6",
@@ -349,7 +351,9 @@ export const studios = [
     features: ["Parking", "AC", "Wi-Fi"],
     isFeatured: true,
     description: "Bright and airy high-ceiling studio featuring clean scandinavian styling, natural wooden floorboards, minimal shadows, and huge floor-to-ceiling north facing windows.",
-    tags: ["Minimalist Shadows"]
+    tags: ["Minimalist Shadows"],
+    ownerId: "6a391527c8fbd2d7e85f0d92",
+    creatorId: "6a391527c8fbd2d7e85f0d92"
   },
 
   // --- CYCLORAMA STUDIOS ---
@@ -370,7 +374,9 @@ export const studios = [
     features: ["AC", "Wi-Fi"],
     isFeatured: false,
     description: "A minimalist studio with a large white cyclorama wall, ideal for commercial videos, fashion photography, and high-impact catalog shoots. Offers fully controllable seamless white layout and RGB ceiling ambient lights.",
-    tags: ["Seamless White"]
+    tags: ["Seamless White"],
+    ownerId: "6a380b8173c0e340a6bf3a42",
+    creatorId: "6a380b8173c0e340a6bf3a42"
   },
   {
     id: "st-5",
@@ -389,7 +395,9 @@ export const studios = [
     features: ["AC", "Wi-Fi"],
     isFeatured: false,
     description: "Professional virtual production green screen room with fully integrated chroma green cyc walls and lighting grids, ideal for vfx composition, interviews, and reels creator edits.",
-    tags: ["Chroma Green"]
+    tags: ["Chroma Green"],
+    ownerId: "6a380b8173c0e340a6bf3a42",
+    creatorId: "6a380b8173c0e340a6bf3a42"
   },
 
   // --- VINTAGE STUDIOS ---
@@ -410,7 +418,9 @@ export const studios = [
     features: ["Parking", "Wi-Fi"],
     isFeatured: false,
     description: "Step back in time with our themed retro space, complete with mid-century furniture, vintage record players, neon signs, and textured 1970s neon wallpaper. Perfect for creative concept photography and reels.",
-    tags: ["1970s Neon"]
+    tags: ["1970s Neon"],
+    ownerId: "6a391527c8fbd2d7e85f0d92",
+    creatorId: "6a391527c8fbd2d7e85f0d92"
   },
   {
     id: "st-7",

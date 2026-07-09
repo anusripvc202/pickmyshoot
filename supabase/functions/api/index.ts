@@ -675,17 +675,21 @@ serve(async (req) => {
         const [newUser] = await sql`
           INSERT INTO users (
             "_id", "id", "name", "email", "role", "avatar", "bio", "location", 
-            "rating", "isVerified", "phone", "shoots", "followers", "revenue", "success", "views"
+            "rating", "isVerified", "phone", "shoots", "followers", "revenue", "success", "views",
+            "studioName", "studio_name"
           ) VALUES (
             ${id}, ${body.id || id}, ${body.name}, ${body.email}, ${body.role || 'client'}, 
             ${body.avatar}, ${body.bio}, ${body.location}, ${body.rating}, ${body.isVerified || false}, 
-            ${body.phone}, ${body.shoots}, ${body.followers}, ${body.revenue}, ${body.success}, ${body.views}
+            ${body.phone}, ${body.shoots}, ${body.followers}, ${body.revenue}, ${body.success}, ${body.views},
+            ${body.studioName || null}, ${body.studioName || null}
           ) ON CONFLICT ("email") DO UPDATE SET
             "name" = EXCLUDED.name,
             "role" = EXCLUDED.role,
             "avatar" = EXCLUDED.avatar,
             "bio" = EXCLUDED.bio,
-            "location" = EXCLUDED.location
+            "location" = EXCLUDED.location,
+            "studioName" = EXCLUDED."studioName",
+            "studio_name" = EXCLUDED.studio_name
           RETURNING *
         `;
         return new Response(JSON.stringify(newUser), { status: 201, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
@@ -708,7 +712,9 @@ serve(async (req) => {
             "followers" = COALESCE(${updateData.followers}, "followers"),
             "revenue" = COALESCE(${updateData.revenue}, "revenue"),
             "success" = COALESCE(${updateData.success}, "success"),
-            "views" = COALESCE(${updateData.views}, "views")
+            "views" = COALESCE(${updateData.views}, "views"),
+            "studioName" = COALESCE(${updateData.studioName}, "studioName"),
+            "studio_name" = COALESCE(${updateData.studioName}, "studio_name")
           WHERE "id" = ${id} OR "_id" = ${id}
           RETURNING *
         `;

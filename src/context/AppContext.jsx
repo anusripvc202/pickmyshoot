@@ -25,7 +25,8 @@ const defaultMockProfiles = [
     followers: "0",
     revenue: "₹0",
     success: "100%",
-    views: "1"
+    views: "1",
+    studioName: "PickMyShoot HQ"
   },
   {
     id: '6a380b8173c0e340a6bf3a42',
@@ -42,7 +43,8 @@ const defaultMockProfiles = [
     followers: "0",
     revenue: "₹0",
     success: "100%",
-    views: "1"
+    views: "1",
+    studioName: "Nikhil Jai Photography & Studios"
   },
   {
     id: '6a380bd273c0e340a6bf3a43',
@@ -59,7 +61,8 @@ const defaultMockProfiles = [
     followers: "0",
     revenue: "₹0",
     success: "100%",
-    views: "1"
+    views: "1",
+    studioName: "Sri Designs & Creative"
   },
   {
     id: '6a39140ec8fbd2d7e85f0d91',
@@ -76,7 +79,8 @@ const defaultMockProfiles = [
     followers: "0",
     revenue: "₹0",
     success: "100%",
-    views: "1"
+    views: "1",
+    studioName: "Jaideep Productions"
   },
   {
     id: '6a391527c8fbd2d7e85f0d92',
@@ -93,7 +97,8 @@ const defaultMockProfiles = [
     followers: "0",
     revenue: "₹0",
     success: "100%",
-    views: "1"
+    views: "1",
+    studioName: "Jaideep Varma Films & Studios"
   },
   {
     id: '6a3920c7454a6492befc0840',
@@ -110,7 +115,8 @@ const defaultMockProfiles = [
     followers: "0",
     revenue: "₹0",
     success: "100%",
-    views: "1"
+    views: "1",
+    studioName: "Lokesh Media Hub"
   }
 ];
 
@@ -251,7 +257,8 @@ export const AppProvider = ({ children }) => {
             followers: u.followers || "0",
             revenue: u.revenue || "₹0",
             success: u.success || "100%",
-            views: u.views || "1"
+            views: u.views || "1",
+            studioName: u.studioName || u.studio_name || ""
           }));
 
           setProfiles(prev => {
