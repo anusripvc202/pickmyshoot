@@ -138,6 +138,69 @@ const HomePage = () => {
   }, [profiles]);
 
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [activePromoIndex, setActivePromoIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActivePromoIndex(prev => (prev + 1) % 4);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const promoSlides = [
+    {
+      tag: "Exclusive Deals on Gear Rentals",
+      title: (
+        <>
+          Up to <span className="stripe-bold">40% OFF</span>
+        </>
+      ),
+      desc: "Rent top cameras, premium lenses & lighting packages.",
+      image: "banner_cameras.png",
+      btnLabel: "Rent Now",
+      tab: "rentals",
+      background: "linear-gradient(90deg, #fff0f2 0%, #ffecee 100%)"
+    },
+    {
+      tag: "Aesthetic Modeling Portfolios",
+      title: (
+        <>
+          From <span className="stripe-bold">₹5,000/Session</span>
+        </>
+      ),
+      desc: "Book verified professional models & actors for your campaign.",
+      image: "fashion_model_cutout.png",
+      btnLabel: "Explore Talents",
+      tab: "models",
+      background: "linear-gradient(90deg, #f5f3ff 0%, #edd8fc 100%)"
+    },
+    {
+      tag: "Premium Indoor Shoot Spaces",
+      title: (
+        <>
+          Flat <span className="stripe-bold">20% Off Studios</span>
+        </>
+      ),
+      desc: "Book fully equipped cyclorama studios and luxury lifestyle sets.",
+      image: "studio_gear_cutout.png",
+      btnLabel: "Book Studio",
+      tab: "studios",
+      background: "linear-gradient(90deg, #ecfeff 0%, #cffafe 100%)"
+    },
+    {
+      tag: "Verified Professional Shoots",
+      title: (
+        <>
+          Starting at <span className="stripe-bold">₹2,000/hr</span>
+        </>
+      ),
+      desc: "Hire top wedding, pre-wedding, event, and product photographers.",
+      image: "pre_wedding_shoot_new.png",
+      btnLabel: "Book Shoot",
+      tab: "services",
+      background: "linear-gradient(90deg, #f0fdf4 0%, #dcfce7 100%)"
+    }
+  ];
 
   const heroSlides = [
     {
@@ -527,24 +590,71 @@ const HomePage = () => {
       </div>
     </section>
 
-      {/* Promo Banner stripe */}
-      <div className="mid-promo-stripe">
-        <div className="stripe-info-box">
-          <span className="stripe-tag">Exclusive Deals on Gear Rentals</span>
-          <span className="stripe-title">Up to <span className="stripe-bold">40% OFF</span></span>
-          <span className="stripe-desc">Rent top cameras, premium lenses & lighting packages.</span>
+      {/* Promo Banner stripe (Auto-sliding Carousel of 4 Banners) */}
+      <div 
+        className="mid-promo-stripe" 
+        style={{ 
+          background: promoSlides[activePromoIndex].background, 
+          transition: 'background 0.5s ease', 
+          position: 'relative' 
+        }}
+      >
+        <div 
+          className="stripe-info-box" 
+          key={`info-${activePromoIndex}`} 
+          style={{ animation: 'fadeIn 0.5s ease-out' }}
+        >
+          <span className="stripe-tag">{promoSlides[activePromoIndex].tag}</span>
+          <span className="stripe-title">{promoSlides[activePromoIndex].title}</span>
+          <span className="stripe-desc">{promoSlides[activePromoIndex].desc}</span>
         </div>
 
-        <div className="stripe-image-wrap">
-          <img src={`${import.meta.env.BASE_URL}banner_cameras.png`} className="stripe-image" alt="Camera Gear Group" />
+        <div 
+          className="stripe-image-wrap" 
+          key={`img-${activePromoIndex}`} 
+          style={{ animation: 'fadeIn 0.5s ease-out' }}
+        >
+          <img 
+            src={`${import.meta.env.BASE_URL}${promoSlides[activePromoIndex].image}`} 
+            className="stripe-image" 
+            alt={promoSlides[activePromoIndex].tag} 
+          />
         </div>
 
         <button 
           className="stripe-btn" 
-          onClick={() => handleCategoryClick('rentals')}
+          onClick={() => handleCategoryClick(promoSlides[activePromoIndex].tab)}
         >
-          Rent Now
+          {promoSlides[activePromoIndex].btnLabel}
         </button>
+
+        {/* Carousel indicator dots */}
+        <div style={{
+          position: 'absolute',
+          bottom: '12px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          display: 'flex',
+          gap: '6px',
+          zIndex: 10
+        }}>
+          {promoSlides.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setActivePromoIndex(idx)}
+              style={{
+                width: activePromoIndex === idx ? '20px' : '8px',
+                height: '8px',
+                borderRadius: '99px',
+                border: 'none',
+                background: activePromoIndex === idx ? 'var(--primary)' : 'rgba(0,0,0,0.15)',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease'
+              }}
+              title={`Go to promo slide ${idx + 1}`}
+            />
+          ))}
+        </div>
       </div>
 
       {/* Top Photographers Near Me */}
