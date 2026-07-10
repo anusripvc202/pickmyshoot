@@ -1767,7 +1767,7 @@ body {
 .promo-banner-shell {
   position: relative;
   width: 100%;
-  min-height: 240px;
+  min-height: 280px;
   border-radius: 24px;
   overflow: hidden;
   margin-bottom: 48px;
@@ -1800,7 +1800,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 40px 60px 40px 80px;
+  padding: 30px 60px 30px 80px;
   gap: 40px;
 }
 
@@ -1898,8 +1898,8 @@ body {
 
 .promo-right {
   position: relative;
-  width: 320px;
-  height: 200px;
+  width: 380px;
+  height: 260px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1908,11 +1908,11 @@ body {
 
 .promo-img-glow {
   position: absolute;
-  width: 140px;
-  height: 140px;
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
-  filter: blur(50px);
-  opacity: 0.4;
+  filter: blur(60px);
+  opacity: 0.45;
   z-index: 1;
   pointer-events: none;
 }
@@ -1925,6 +1925,11 @@ body {
   object-fit: contain;
   filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.3));
   animation: promoFloat 6s infinite ease-in-out;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.promo-banner-shell:hover .promo-img {
+  transform: scale(1.08) translateY(-4px);
 }
 
 @keyframes promoFloat {
