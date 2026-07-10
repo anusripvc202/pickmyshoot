@@ -47,6 +47,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
+import JobDetailsModal from './JobDetailsModal';
 
 const amenityIconMap = {
   'Lighting Equipment': <Lightbulb size={22} />,
@@ -643,8 +644,19 @@ const Layout = () => {
         </AnimatePresence>
       </main>
 
+      {/* PREMIUM JOB DETAILS MODAL — renders when a job card is clicked */}
+      {selectedItem && selectedItemType === 'job' && (
+        <JobDetailsModal
+          job={selectedItem}
+          onClose={() => setSelectedItem(null)}
+          onApply={() => handleBookingClick()}
+          likedItems={likedItems}
+          toggleLike={toggleLike}
+        />
+      )}
+
       {/* DYNAMIC DESKTOP SPLIT VIEW MODAL DIALOG */}
-      {selectedItem && (
+      {selectedItem && selectedItemType !== 'job' && (
         <div className="detail-modal-overlay" onClick={() => setSelectedItem(null)}>
           <div className="detail-modal-body" onClick={(e) => e.stopPropagation()}>
             
