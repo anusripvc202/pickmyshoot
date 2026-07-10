@@ -525,42 +525,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      
-      {/* Trending Models */}
-      <section>
-        <div className="section-header">
-          <h2 className="section-title">Trending Models</h2>
-          <span className="section-link" onClick={() => handleCategoryClick('models')}>
-            See All Models <ChevronRight size={14} />
-          </span>
-        </div>
-        <div className="desktop-card-grid-5 mobile-scroll-row">
-          {models.slice(0, 5).map(model => (
-            <div key={model.id} className="near-you-card" onClick={() => { setExploreTab('models'); navigate('/explore'); }}>
-              <div className="near-you-img-wrap">
-                <img src={model.image} className="card-image" alt={model.title} />
-                <button 
-                  className={`card-like-btn ${likedItems[model.id] ? 'liked' : ''}`}
-                  onClick={(e) => toggleLike(model.id, e)}
-                >
-                  <Heart size={15} fill={likedItems[model.id] ? 'var(--primary)' : 'none'} />
-                </button>
-              </div>
-              <div className="near-you-info">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span className="near-you-title">{model.title}</span>
-                  <div className="card-rating-row" style={{ marginTop: 0 }}>
-                    <Star size={11} className="card-rating-star" />
-                    <span>{model.rating}</span>
-                  </div>
-                </div>
-                <span className="near-you-loc">📍 {model.location}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* Top Institutes & Courses */}
       <section>
         <div className="section-header">
