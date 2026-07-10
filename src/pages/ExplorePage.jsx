@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Star, Heart, ChevronDown, ChevronUp, MapPin, SlidersHorizontal, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 
 const ExplorePage = () => {
@@ -18,6 +19,8 @@ const ExplorePage = () => {
     toggleLike,
     openDetails
   } = useAppContext();
+
+  const navigate = useNavigate();
 
   // 1. Expanded/Collapsed state for left accordion filters
   const [expandedFilters, setExpandedFilters] = useState({
@@ -611,6 +614,11 @@ const ExplorePage = () => {
                   key={item.id}
                   className={`explore-card-item bms-style ${isFilterSelected ? 'card-subtype-active' : ''}`}
                   onClick={() => {
+                    // Models tab — always go to dedicated profile page
+                    if (exploreTab === 'models') {
+                      navigate(`/model/${item.id}`);
+                      return;
+                    }
                     // First click: apply the subtype filter to show related cards
                     if (itemSubtype && selectedSubtype !== itemSubtype) {
                       setSelectedSubtype(itemSubtype);
