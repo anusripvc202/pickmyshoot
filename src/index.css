@@ -1830,35 +1830,35 @@ body {
 .stripe-tag {
   font-size: 14px;
   font-weight: 600;
-  color: var(--text-main);
-  text-transform: none;
-  letter-spacing: normal;
+  color: rgba(255,255,255,0.85);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .stripe-title {
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: 34px;
-  color: var(--text-main);
+  color: #ffffff;
   line-height: 1.2;
 }
 
 .stripe-bold {
-  color: var(--primary);
+  color: #ffd700;
   font-weight: 800;
 }
 
 .stripe-desc {
   font-size: 13px;
   font-weight: 500;
-  color: var(--text-muted);
+  color: rgba(255,255,255,0.75);
   line-height: 1.4;
   margin-top: 2px;
 }
 
 .stripe-btn {
-  background: var(--primary);
-  color: white;
+  background: #ffffff;
+  color: #c7100d;
   border: none;
   font-family: var(--font-heading);
   font-weight: 700;
@@ -1866,7 +1866,7 @@ body {
   padding: 10px 24px;
   border-radius: 12px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.2);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
   transition: all var(--transition-fast), transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
   z-index: 10;
 }
