@@ -145,7 +145,7 @@ export const popularServices = [
     rating: 4.6,
     reviews: 130,
     category: "Book Shoot",
-    image: "https://images.unsplash.com/photo-1471286174240-e67f25be2477?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=500&q=80",
     description: "Fun outdoor photoshoot on a picnic setup. Features colorful balloons, wooden toys, lush green background, and bright natural sunshine.",
     tags: ["Outdoor"]
   },

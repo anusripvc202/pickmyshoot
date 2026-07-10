@@ -345,43 +345,33 @@ export const AppProvider = ({ children }) => {
             else if (item.type === 'job') dbJobs.push(mappedItem);
           });
 
-          // Merge: DB items first (newest), then keep existing mock data that doesn't clash by id
-          if (dbServices.length > 0) {
-            setServices(prev => {
-              const filteredPrev = prev.filter(p => !dbServices.some(d => d.id === p.id));
-              return [...dbServices, ...filteredPrev];
+          // Helper: merge DB items with prev mock data.
+          // If a DB item is missing key display fields (image, title, etc.),
+          // fall back to the corresponding mock entry so nothing ever disappears.
+          const mergeItems = (dbItems, prev) => {
+            const enriched = dbItems.map(dbItem => {
+              const mock = prev.find(p => p.id === dbItem.id);
+              if (!mock) return dbItem;
+              return {
+                ...dbItem,
+                image:       dbItem.image       || mock.image,
+                title:       dbItem.title       || mock.title,
+                description: dbItem.description || mock.description,
+                rating:      dbItem.rating      ?? mock.rating,
+                reviews:     dbItem.reviews     ?? mock.reviews,
+              };
             });
-          }
-          if (dbStudios.length > 0) {
-            setStudios(prev => {
-              const filteredPrev = prev.filter(p => !dbStudios.some(d => d.id === p.id));
-              return [...dbStudios, ...filteredPrev];
-            });
-          }
-          if (dbModels.length > 0) {
-            setModels(prev => {
-              const filteredPrev = prev.filter(p => !dbModels.some(d => d.id === p.id));
-              return [...dbModels, ...filteredPrev];
-            });
-          }
-          if (dbGear.length > 0) {
-            setGear(prev => {
-              const filteredPrev = prev.filter(p => !dbGear.some(d => d.id === p.id));
-              return [...dbGear, ...filteredPrev];
-            });
-          }
-          if (dbWorkshops.length > 0) {
-            setWorkshops(prev => {
-              const filteredPrev = prev.filter(p => !dbWorkshops.some(d => d.id === p.id));
-              return [...dbWorkshops, ...filteredPrev];
-            });
-          }
-          if (dbJobs.length > 0) {
-            setJobs(prev => {
-              const filteredPrev = prev.filter(p => !dbJobs.some(d => d.id === p.id));
-              return [...dbJobs, ...filteredPrev];
-            });
-          }
+            const filteredPrev = prev.filter(p => !enriched.some(d => d.id === p.id));
+            return [...enriched, ...filteredPrev];
+          };
+
+          // Merge: DB items first (newest), backfilled with mock data for missing fields
+          if (dbServices.length > 0)  setServices(prev  => mergeItems(dbServices,  prev));
+          if (dbStudios.length > 0)   setStudios(prev   => mergeItems(dbStudios,   prev));
+          if (dbModels.length > 0)    setModels(prev    => mergeItems(dbModels,    prev));
+          if (dbGear.length > 0)      setGear(prev      => mergeItems(dbGear,      prev));
+          if (dbWorkshops.length > 0) setWorkshops(prev => mergeItems(dbWorkshops, prev));
+          if (dbJobs.length > 0)      setJobs(prev      => mergeItems(dbJobs,      prev));
         }
         // If DB returns nothing or empty — mock data stays as-is (no replacement)
       })

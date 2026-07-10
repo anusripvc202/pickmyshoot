@@ -639,16 +639,17 @@ serve(async (req) => {
       if (method === 'PATCH' || method === 'PUT') {
         const body = await req.json();
         const { id, ...updateData } = body;
+        // Use ?? null to avoid postgres.js UNDEFINED_VALUE errors on missing fields
         const [updatedListing] = await sql`
           UPDATE listings SET
-            "title" = COALESCE(${updateData.title}, "title"),
-            "price" = COALESCE(${updateData.price ? JSON.stringify(updateData.price) : null}::jsonb, "price"),
-            "priceUnit" = COALESCE(${updateData.priceUnit}, "priceUnit"),
-            "image" = COALESCE(${updateData.image}, "image"),
-            "description" = COALESCE(${updateData.description}, "description"),
-            "location" = COALESCE(${updateData.location}, "location"),
-            "active" = COALESCE(${updateData.active}, "active"),
-            "isFeatured" = COALESCE(${updateData.isFeatured}, "isFeatured")
+            "title"       = COALESCE(${updateData.title       ?? null}, "title"),
+            "price"       = COALESCE(${updateData.price != null ? JSON.stringify(updateData.price) : null}::jsonb, "price"),
+            "priceUnit"   = COALESCE(${updateData.priceUnit   ?? null}, "priceUnit"),
+            "image"       = COALESCE(${updateData.image       ?? null}, "image"),
+            "description" = COALESCE(${updateData.description ?? null}, "description"),
+            "location"    = COALESCE(${updateData.location    ?? null}, "location"),
+            "active"      = COALESCE(${updateData.active      ?? null}, "active"),
+            "isFeatured"  = COALESCE(${updateData.isFeatured  ?? null}, "isFeatured")
           WHERE "id" = ${id} OR "_id" = ${id}
           RETURNING *
         `;
