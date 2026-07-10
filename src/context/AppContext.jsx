@@ -134,23 +134,44 @@ export const AppProvider = ({ children }) => {
       })
       .then(data => {
         if (Array.isArray(data)) {
-          const dbProfiles = data.map(u => ({
-            ...u,
-            id: u.id || u._id,
-            name: u.name,
-            role: u.role || 'client',
-            email: u.email,
-            phone: u.phone || "+91 99999 88888",
-            bio: u.bio || "Newly registered visual creator profile.",
-            avatar: u.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=180&q=80",
-            shoots: u.shoots || "0",
-            rating: u.rating || "5.0 ★",
-            followers: u.followers || "0",
-            revenue: u.revenue || "₹0",
-            success: u.success || "100%",
-            views: u.views || "1",
-            studioName: u.studioName || u.studio_name || ""
-          }));
+          const dbProfiles = data.map(u => {
+            let bioText = u.bio || "Newly registered visual creator profile.";
+            let startingPrice = u.startingPrice;
+            let instaUrl = u.instaUrl;
+
+            try {
+              if (u.bio && u.bio.startsWith('{')) {
+                const parsed = JSON.parse(u.bio);
+                if (parsed && typeof parsed === 'object') {
+                  bioText = parsed.text || bioText;
+                  startingPrice = parsed.startingPrice || startingPrice;
+                  instaUrl = parsed.instaUrl || instaUrl;
+                }
+              }
+            } catch (e) {
+              // Not JSON
+            }
+
+            return {
+              ...u,
+              id: u.id || u._id,
+              name: u.name,
+              role: u.role || 'client',
+              email: u.email,
+              phone: u.phone || "+91 99999 88888",
+              bio: bioText,
+              avatar: u.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=180&q=80",
+              shoots: u.shoots || "0",
+              rating: u.rating || "5.0 ★",
+              followers: u.followers || "0",
+              revenue: u.revenue || "₹0",
+              success: u.success || "100%",
+              views: u.views || "1",
+              studioName: u.studioName || u.studio_name || "",
+              startingPrice: startingPrice,
+              instaUrl: instaUrl
+            };
+          });
 
           setProfiles(prev => {
             // Keep existing profiles unless they match email of DB profiles

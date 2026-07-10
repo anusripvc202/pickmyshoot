@@ -46,11 +46,10 @@ const HomePage = () => {
   }, [services]);
 
   const displayPhotographers = React.useMemo(() => {
-    const list = profiles.filter(p => p.role === 'photographer');
-    if (list.length > 0) return list;
+    const dbList = profiles.filter(p => p.role === 'photographer');
     
     // Fallback beautiful mock photographers if none in DB
-    return [
+    const mockList = [
       {
         id: "p-mock-1",
         name: "Arjun Kamath",
@@ -130,6 +129,12 @@ const HomePage = () => {
         instaUrl: "https://instagram.com/ananyarao_babyportraits"
       }
     ];
+
+    const filteredMock = mockList.filter(
+      mockItem => !dbList.some(dbItem => dbItem.name.toLowerCase() === mockItem.name.toLowerCase())
+    );
+
+    return [...dbList, ...filteredMock];
   }, [profiles]);
 
   const [currentSlide, setCurrentSlide] = useState(0);

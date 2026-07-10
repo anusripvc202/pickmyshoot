@@ -26,7 +26,9 @@ const CreatePage = () => {
     setJobs,
     setExploreTab,
     triggerToast,
-    activeProfileId
+    activeProfileId,
+    setProfiles,
+    currentUser
   } = useAppContext();
 
   const navigate = useNavigate();
@@ -130,13 +132,54 @@ const CreatePage = () => {
       setServices(prev => [newItem, ...prev]);
       setExploreTab('services');
     } else if (newCategory === 'photography') {
-      newItem.specialization = newSpecialization;
-      newItem.experience = newExperience ? `${newExperience} years` : 'Not specified';
-      newItem.portfolio = newPortfolio;
-      newItem.category = newSpecialization;
-      newItem.amenities = [newSpecialization, 'Professional Gear', 'Edited Deliverables'];
-      setServices(prev => [newItem, ...prev]);
-      setExploreTab('services');
+      const newProfile = {
+        id: generatedId,
+        _id: generatedId,
+        name: newTitle,
+        role: 'photographer',
+        email: currentUser?.email || `${generatedId}@pickmyshoot.com`,
+        phone: currentUser?.phone || "+91 99999 88888",
+        bio: newDescription,
+        avatar: defaultImg,
+        location: newLocation || "Hyderabad",
+        rating: "5.0",
+        isVerified: true,
+        shoots: newExperience ? `${parseInt(newExperience) * 15}+` : "150+",
+        followers: "1.2K",
+        experience: newExperience ? `${newExperience}+ Years` : "8+ Years",
+        startingPrice: priceVal,
+        instaUrl: newPortfolio || "https://instagram.com/pickmyshoot",
+        revenue: "₹0",
+        success: "100%",
+        views: "1"
+      };
+
+      setProfiles(prev => [newProfile, ...prev]);
+
+      fetch('/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newProfile)
+      })
+        .then(res => res.json())
+        .then(saved => console.log('Photographer Profile saved to DB:', saved._id || saved.id))
+        .catch(err => console.warn('Failed to sync photographer profile to DB:', err));
+
+      triggerToast(`Photographer Profile published: "${newTitle}"`);
+
+      // Reset Form
+      setNewTitle('');
+      setNewPrice('');
+      setNewDescription('');
+      setNewImage('');
+      setNewExperience('');
+      setNewPortfolio('');
+      setNewCompany('');
+      setNewSkills('');
+      setNewJobType('Full Time');
+
+      navigate(`/photographer/${generatedId}`);
+      return;
     } else if (newCategory === 'jobs') {
       newItem.company = newCompany || "Independent Recruiter";
       newItem.skills = newSkills ? newSkills.split(',').map(s => s.trim()) : ["Video Editing"];
@@ -196,7 +239,7 @@ const CreatePage = () => {
                   { id: 'studios', label: 'Studio Space', icon: Building2, desc: 'Indoor stages & lots' },
                   { id: 'gear', label: 'Camera Gear', icon: Camera, desc: 'Cameras, lenses & kits' },
                   { id: 'models', label: 'Models Portfolio', icon: User, desc: 'Fashion talents' },
-                  { id: 'photography', label: 'Photography Services', icon: Camera, desc: 'List yourself as a photographer' },
+                  { id: 'photography', label: 'Photographer Profile', icon: Camera, desc: 'List yourself as a photographer' },
                   { id: 'makeup', label: 'Makeup & Styling', icon: Sparkles, desc: 'Professional MUAs & hair stylists' },
                   { id: 'lighting', label: 'Lighting & Props', icon: Lightbulb, desc: 'Studio flashes, modifiers & props' },
                   { id: 'locations', label: 'Shooting Locations', icon: MapPin, desc: 'Resorts, villas & outdoor sets' },

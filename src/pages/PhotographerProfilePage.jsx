@@ -182,14 +182,32 @@ const PhotographerProfilePage = () => {
   const photographer = useMemo(() => {
     const matched = profiles.find(p => p.id === id || p._id === id);
     if (matched) {
+      let bioText = matched.bio || "";
+      let startingPrice = matched.startingPrice;
+      let instaUrl = matched.instaUrl;
+
+      try {
+        if (matched.bio && matched.bio.startsWith('{')) {
+          const parsed = JSON.parse(matched.bio);
+          if (parsed && typeof parsed === 'object') {
+            bioText = parsed.text || bioText;
+            startingPrice = parsed.startingPrice || startingPrice;
+            instaUrl = parsed.instaUrl || instaUrl;
+          }
+        }
+      } catch (e) {
+        // Not JSON
+      }
+
       return {
         ...matched,
+        bio: bioText,
         reviews: matched.reviews || 500,
         shoots: matched.shoots || "150+",
         followers: matched.followers || "24K",
         experience: matched.experience || "8+ Years",
-        startingPrice: matched.startingPrice || 2000,
-        instaUrl: matched.instaUrl || "https://instagram.com/pickmyshoot",
+        startingPrice: startingPrice || 2000,
+        instaUrl: instaUrl || "https://instagram.com/pickmyshoot",
         isVerified: matched.isVerified !== undefined ? matched.isVerified : true
       };
     }
