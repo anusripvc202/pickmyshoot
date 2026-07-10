@@ -721,6 +721,11 @@ serve(async (req) => {
         `;
         return new Response(JSON.stringify(updatedUser), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
+      if (method === 'DELETE') {
+        const id = url.searchParams.get('id');
+        await sql`DELETE FROM users WHERE "id" = ${id} OR "_id" = ${id}`;
+        return new Response(JSON.stringify({ success: true }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
     }
 
     // ── PHOTOGRAPHERS ROUTE ──
