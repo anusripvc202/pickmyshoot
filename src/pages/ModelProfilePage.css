@@ -5,7 +5,7 @@
   margin: 0 auto;
   padding: 40px 24px;
   font-family: 'Outfit', sans-serif;
-  color: #1f2937;
+  color: var(--text-main);
 }
 
 /* Breadcrumb */
@@ -18,7 +18,7 @@
   color: #9ca3af;
   margin-bottom: 24px;
 }
-.model-breadcrumb span { color: #1f2937; }
+.model-breadcrumb span { color: var(--text-main); }
 
 /* Two-column grid */
 .model-main-layout {
@@ -84,7 +84,7 @@
   font-weight: 800;
   letter-spacing: -0.5px;
   margin: 4px 0 0;
-  color: #111827;
+  color: var(--text-main);
 }
 
 .model-location-row {
@@ -204,6 +204,7 @@
   font-weight: 800;
   margin: 0 0 16px;
   letter-spacing: -0.2px;
+  color: var(--text-main);
 }
 
 /* Specialization chips */
@@ -454,7 +455,7 @@
 .model-spec-value {
   font-size: 16px;
   font-weight: 800;
-  color: #111827;
+  color: var(--text-main);
 }
 
 /* Reviews */
@@ -495,7 +496,7 @@
 .model-reviewer-name {
   font-size: 14.5px;
   font-weight: 800;
-  color: #111827;
+  color: var(--text-main);
   display: block;
 }
 
@@ -561,7 +562,7 @@
 .model-price-num {
   font-size: 28px;
   font-weight: 800;
-  color: #111827;
+  color: var(--text-main);
 }
 
 .model-price-unit {
@@ -596,8 +597,8 @@
 }
 
 .model-pkg-label { display: flex; flex-direction: column; gap: 4px; }
-.model-pkg-name { font-size: 14px; font-weight: 800; color: #111827; }
-.model-pkg-desc { font-size: 11px; font-weight: 600; color: #6b7280; }
+.model-pkg-name { font-size: 14px; font-weight: 800; color: var(--text-main); }
+.model-pkg-desc { font-size: 11px; font-weight: 600; color: var(--text-muted); }
 .model-pkg-price { font-size: 15px; font-weight: 800; color: #7c3aed; }
 
 /* Book CTA */
@@ -740,8 +741,8 @@
   gap: 2px;
 }
 
-.model-mobile-price-val { font-size: 18px; font-weight: 800; color: #111827; }
-.model-mobile-price-lbl { font-size: 10px; font-weight: 700; color: #6b7280; text-transform: uppercase; }
+.model-mobile-price-val { font-size: 18px; font-weight: 800; color: var(--text-main); }
+.model-mobile-price-lbl { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
 
 .model-mobile-actions {
   display: flex;

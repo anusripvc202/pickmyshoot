@@ -149,56 +149,60 @@ const HomePage = () => {
 
   const promoSlides = [
     {
-      tag: "Exclusive Deals on Gear Rentals",
-      title: (
-        <>
-          Up to <span className="stripe-bold">40% OFF</span>
-        </>
-      ),
-      desc: "Rent top cameras, premium lenses & lighting packages.",
+      tag: "Limited Time Offer",
+      badge: "40% OFF",
+      title: (<>Camera & Lens <span className="promo-accent">Rentals</span></>),
+      desc: "Top cameras, cinema lenses & pro lighting — delivered to your door.",
+      subPoints: ["📦 Free delivery", "🛡️ Full insurance", "⚡ Same-day booking"],
       image: "banner_cameras.png",
-      btnLabel: "Rent Now",
+      btnLabel: "Rent Now →",
       tab: "rentals",
-      background: "linear-gradient(90deg, #fff0f2 0%, #ffecee 100%)"
+      bg: "linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%)",
+      accentColor: "#e94560",
+      badgeBg: "#e94560",
+      patternOpacity: 0.06,
     },
     {
-      tag: "Aesthetic Modeling Portfolios",
-      title: (
-        <>
-          From <span className="stripe-bold">₹5,000/Session</span>
-        </>
-      ),
-      desc: "Book verified professional models & actors for your campaign.",
+      tag: "Top Verified Talent",
+      badge: "300+ Models",
+      title: (<>Professional <span className="promo-accent">Models</span> & Actors</>),
+      desc: "Fashion, fitness, commercial & editorial talent ready to book instantly.",
+      subPoints: ["✅ Verified profiles", "🌟 5-star rated", "📅 Instant booking"],
       image: "fashion_model_cutout.png",
-      btnLabel: "Explore Talents",
+      btnLabel: "Browse Talent →",
       tab: "models",
-      background: "linear-gradient(90deg, #f5f3ff 0%, #edd8fc 100%)"
+      bg: "linear-gradient(135deg, #2d1b69 0%, #11998e 100%)",
+      accentColor: "#38ef7d",
+      badgeBg: "#38ef7d",
+      patternOpacity: 0.07,
     },
     {
-      tag: "Premium Indoor Shoot Spaces",
-      title: (
-        <>
-          Flat <span className="stripe-bold">20% Off Studios</span>
-        </>
-      ),
-      desc: "Book fully equipped cyclorama studios and luxury lifestyle sets.",
+      tag: "Studio Deals",
+      badge: "20% OFF",
+      title: (<>Premium <span className="promo-accent">Studios</span> & Locations</>),
+      desc: "Cyclorama studios, outdoor sets, rooftops & luxury lifestyle backdrops.",
+      subPoints: ["🏢 150+ locations", "💡 Pro lighting rigs", "🎬 Green screen avail."],
       image: "studio_gear_cutout.png",
-      btnLabel: "Book Studio",
+      btnLabel: "Book Studio →",
       tab: "studios",
-      background: "linear-gradient(90deg, #ecfeff 0%, #cffafe 100%)"
+      bg: "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
+      accentColor: "#f7971e",
+      badgeBg: "#f7971e",
+      patternOpacity: 0.06,
     },
     {
-      tag: "Verified Professional Shoots",
-      title: (
-        <>
-          Starting at <span className="stripe-bold">₹2,000/hr</span>
-        </>
-      ),
-      desc: "Hire top wedding, pre-wedding, event, and product photographers.",
-      image: "pre_wedding_shoot_new.png",
-      btnLabel: "Book Shoot",
+      tag: "Book Your Shoot",
+      badge: "₹2K/hr",
+      title: (<>India's Best <span className="promo-accent">Photographers</span></>),
+      desc: "Wedding, pre-wedding, events, brand shoots — 1,200+ verified professionals.",
+      subPoints: ["📸 1,200+ photographers", "⭐ 4.9 avg. rating", "🔒 Secure payment"],
+      image: "banner_photographer.png",
+      btnLabel: "Find Photographer →",
       tab: "services",
-      background: "linear-gradient(90deg, #f0fdf4 0%, #dcfce7 100%)"
+      bg: "linear-gradient(135deg, #c7100d 0%, #7b0000 100%)",
+      accentColor: "#ffd700",
+      badgeBg: "#ffd700",
+      patternOpacity: 0.06,
     }
   ];
 
@@ -590,68 +594,95 @@ const HomePage = () => {
       </div>
     </section>
 
-      {/* Promo Banner stripe (Auto-sliding Carousel of 4 Banners) */}
-      <div 
-        className="mid-promo-stripe" 
-        style={{ 
-          background: promoSlides[activePromoIndex].background, 
-          transition: 'background 0.5s ease', 
-          position: 'relative' 
-        }}
-      >
-        <div 
-          className="stripe-info-box" 
-          key={`info-${activePromoIndex}`} 
-          style={{ animation: 'fadeIn 0.5s ease-out' }}
-        >
-          <span className="stripe-tag">{promoSlides[activePromoIndex].tag}</span>
-          <span className="stripe-title">{promoSlides[activePromoIndex].title}</span>
-          <span className="stripe-desc">{promoSlides[activePromoIndex].desc}</span>
+      {/* ═══ PREMIUM PROMO BANNER ═══ */}
+      <div className="promo-banner-shell">
+        {/* Slide counter top-right */}
+        <div className="promo-slide-counter">
+          <span className="promo-counter-current">{String(activePromoIndex + 1).padStart(2,'0')}</span>
+          <span className="promo-counter-sep">/</span>
+          <span className="promo-counter-total">{String(promoSlides.length).padStart(2,'0')}</span>
         </div>
 
-        <div 
-          className="stripe-image-wrap" 
-          key={`img-${activePromoIndex}`} 
-          style={{ animation: 'fadeIn 0.5s ease-out' }}
+        {/* Arrow nav */}
+        <button className="promo-nav-btn promo-nav-prev" onClick={() => setActivePromoIndex(i => (i - 1 + promoSlides.length) % promoSlides.length)} aria-label="Previous">‹</button>
+        <button className="promo-nav-btn promo-nav-next" onClick={() => setActivePromoIndex(i => (i + 1) % promoSlides.length)} aria-label="Next">›</button>
+
+        {/* Background gradient layer */}
+        <div
+          className="promo-bg-layer"
+          style={{ background: promoSlides[activePromoIndex].bg, transition: 'background 0.7s ease' }}
         >
-          <img 
-            src={`${import.meta.env.BASE_URL}${promoSlides[activePromoIndex].image}`} 
-            className="stripe-image" 
-            alt={promoSlides[activePromoIndex].tag} 
-          />
+          {/* Decorative SVG circles */}
+          <svg className="promo-deco-svg" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <circle cx="700" cy="50" r="180" fill="white" opacity={promoSlides[activePromoIndex].patternOpacity} />
+            <circle cx="750" cy="350" r="120" fill="white" opacity={promoSlides[activePromoIndex].patternOpacity} />
+            <circle cx="80" cy="380" r="90" fill="white" opacity={promoSlides[activePromoIndex].patternOpacity * 0.6} />
+            <path d="M0,200 Q200,50 400,200 T800,200" stroke="white" strokeWidth="1.5" fill="none" opacity={promoSlides[activePromoIndex].patternOpacity * 1.5} />
+            <path d="M0,280 Q200,130 400,280 T800,280" stroke="white" strokeWidth="1" fill="none" opacity={promoSlides[activePromoIndex].patternOpacity} />
+          </svg>
         </div>
 
-        <button 
-          className="stripe-btn" 
-          onClick={() => handleCategoryClick(promoSlides[activePromoIndex].tab)}
-        >
-          {promoSlides[activePromoIndex].btnLabel}
-        </button>
+        {/* Content */}
+        <div className="promo-content" key={activePromoIndex} style={{ animation: 'promoSlideIn 0.5s cubic-bezier(0.22,1,0.36,1)' }}>
 
-        {/* Carousel indicator dots */}
-        <div style={{
-          position: 'absolute',
-          bottom: '12px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          display: 'flex',
-          gap: '6px',
-          zIndex: 10
-        }}>
-          {promoSlides.map((_, idx) => (
+          {/* LEFT: Text */}
+          <div className="promo-left">
+            {/* Badge */}
+            <div className="promo-badge" style={{ background: promoSlides[activePromoIndex].badgeBg, color: '#000' }}>
+              🔥 {promoSlides[activePromoIndex].badge}
+            </div>
+
+            {/* Tag */}
+            <span className="promo-tag">{promoSlides[activePromoIndex].tag}</span>
+
+            {/* Title */}
+            <h2 className="promo-title" style={{ '--promo-accent': promoSlides[activePromoIndex].accentColor }}>
+              {promoSlides[activePromoIndex].title}
+            </h2>
+
+            {/* Description */}
+            <p className="promo-desc">{promoSlides[activePromoIndex].desc}</p>
+
+            {/* Sub feature points */}
+            <div className="promo-sub-points">
+              {promoSlides[activePromoIndex].subPoints.map((pt, i) => (
+                <span key={i} className="promo-sub-pt" style={{ borderColor: `${promoSlides[activePromoIndex].accentColor}40` }}>
+                  {pt}
+                </span>
+              ))}
+            </div>
+
+            {/* CTA Button */}
+            <button
+              className="promo-cta-btn"
+              style={{ background: promoSlides[activePromoIndex].accentColor, color: promoSlides[activePromoIndex].accentColor === '#ffd700' || promoSlides[activePromoIndex].accentColor === '#38ef7d' || promoSlides[activePromoIndex].accentColor === '#f7971e' ? '#000' : '#fff' }}
+              onClick={() => handleCategoryClick(promoSlides[activePromoIndex].tab)}
+            >
+              {promoSlides[activePromoIndex].btnLabel}
+            </button>
+          </div>
+
+          {/* RIGHT: Image */}
+          <div className="promo-right">
+            {/* Glow circle behind image */}
+            <div className="promo-img-glow" style={{ background: promoSlides[activePromoIndex].accentColor }} />
+            <img
+              src={`${import.meta.env.BASE_URL}${promoSlides[activePromoIndex].image}`}
+              className="promo-img"
+              alt={promoSlides[activePromoIndex].tag}
+            />
+          </div>
+        </div>
+
+        {/* Progress dots */}
+        <div className="promo-dots">
+          {promoSlides.map((s, idx) => (
             <button
               key={idx}
+              className={`promo-dot ${idx === activePromoIndex ? 'active' : ''}`}
+              style={{ '--dot-accent': s.accentColor }}
               onClick={() => setActivePromoIndex(idx)}
-              style={{
-                width: activePromoIndex === idx ? '20px' : '8px',
-                height: '8px',
-                borderRadius: '99px',
-                border: 'none',
-                background: activePromoIndex === idx ? 'var(--primary)' : 'rgba(0,0,0,0.15)',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease'
-              }}
-              title={`Go to promo slide ${idx + 1}`}
+              aria-label={`Go to slide ${idx + 1}`}
             />
           ))}
         </div>
@@ -685,7 +716,17 @@ const HomePage = () => {
               </div>
               <div className="near-you-info">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span className="near-you-title">{photographer.name}</span>
+                  <span className="near-you-title" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    {photographer.name}
+                    {photographer.isVerified && (
+                      <svg viewBox="0 0 24 24" width="15" height="15" style={{ flexShrink: 0, display: 'inline-block' }} aria-label="Verified">
+                        <path
+                          d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.99-3.818-3.99-.48 0-.941.1-1.356.278C14.774 2.525 13.5 1.7 12 1.7s-2.774.825-3.416 2.088c-.415-.178-.876-.278-1.356-.278-2.108 0-3.818 1.78-3.818 3.99 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.58.875 2.95 2.148 3.6-.154.435-.238.905-.238 1.4 0 2.21 1.71 3.99 3.818 3.99.48 0 .941-.1 1.356-.278C9.226 21.475 10.5 22.3 12 22.3s2.774-.825 3.416-2.088c.415.178.876.278 1.356.278 2.108 0 3.818-1.78 3.818-3.99 0-.495-.084-.965-.238-1.4 1.273-.65 2.148-2.02 2.148-3.6zm-12.72 4.14-3.535-3.535 1.414-1.414 2.121 2.122 5.657-5.657 1.414 1.414-7.071 7.071z"
+                          fill="#2563eb"
+                        />
+                      </svg>
+                    )}
+                  </span>
                   <div className="card-rating-row" style={{ marginTop: 0 }}>
                     <Star size={11} className="card-rating-star" />
                     <span>{photographer.rating || '5.0'}</span>

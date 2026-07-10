@@ -8,7 +8,7 @@
   margin: 0 auto;
   padding: 32px 24px 80px;
   font-family: 'Outfit', sans-serif;
-  color: #1f2937;
+  color: var(--text-main);
 }
 
 /* Breadcrumb */
@@ -28,7 +28,7 @@
   transition: color 0.18s;
 }
 .jdp-breadcrumb a:hover { color: #0a66c2; }
-.jdp-breadcrumb span { color: #1f2937; }
+.jdp-breadcrumb span { color: var(--text-main); }
 
 /* Two-column grid */
 .jdp-layout {
@@ -80,7 +80,7 @@
 .jdp-job-title {
   font-size: 26px;
   font-weight: 800;
-  color: #111827;
+  color: var(--text-main);
   letter-spacing: -0.4px;
   margin: 0 0 6px;
   line-height: 1.2;
@@ -97,7 +97,7 @@
 .jdp-company-name {
   font-size: 15px;
   font-weight: 700;
-  color: #374151;
+  color: var(--text-main);
 }
 
 .jdp-verified-badge {
@@ -231,7 +231,7 @@
 .jdp-section-title {
   font-size: 15px;
   font-weight: 800;
-  color: #111827;
+  color: var(--text-main);
   margin: 0 0 16px;
   display: flex;
   align-items: center;
