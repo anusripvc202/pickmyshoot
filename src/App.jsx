@@ -14,6 +14,7 @@ import BlogPage from './pages/BlogPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import FaqPage from './pages/FaqPage';
+import PhotographerProfilePage from './pages/PhotographerProfilePage';
 import { useAppContext } from './context/AppContext';
 
 // Redirect to login if not authenticated
@@ -44,6 +45,7 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="explore"  element={<ExplorePage />} />
+        <Route path="photographer/:id" element={<PhotographerProfilePage />} />
         <Route path="login"    element={<LoginPage />} />
         <Route path="blog"     element={<BlogPage />} />
         <Route path="about"    element={<AboutPage />} />

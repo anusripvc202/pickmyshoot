@@ -1047,15 +1047,26 @@ const Layout = () => {
                     </div>
 
                     {selectedItemType === 'photographer' ? (
-                      <a 
-                        href={selectedItem.instaUrl || "https://instagram.com/pickmyshoot"} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="checkout-submit-btn"
-                        style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                      >
-                        Visit Instagram
-                      </a>
+                      <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
+                        <a 
+                          href={selectedItem.instaUrl || "https://instagram.com/pickmyshoot"} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="checkout-submit-btn"
+                          style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f3f4f6', color: '#374151' }}
+                        >
+                          Instagram
+                        </a>
+                        <button 
+                          className="checkout-submit-btn" 
+                          onClick={() => {
+                            setSelectedItem(null);
+                            navigate(`/photographer/${selectedItem.id || selectedItem._id}`);
+                          }}
+                        >
+                          View Full Profile
+                        </button>
+                      </div>
                     ) : (
                       <button className="checkout-submit-btn" onClick={handleBookingClick}>
                         {selectedItemType === 'job' || selectedItemType === 'institute' ? 'Apply Now' : 

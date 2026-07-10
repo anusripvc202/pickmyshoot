@@ -555,7 +555,7 @@ const HomePage = () => {
             <div 
               key={photographer.id || photographer._id} 
               className="near-you-card" 
-              onClick={() => openDetails(photographer, 'photographer')}
+              onClick={() => navigate(`/photographer/${photographer.id || photographer._id}`)}
               style={{ cursor: 'pointer' }}
             >
               <div className="near-you-img-wrap">
