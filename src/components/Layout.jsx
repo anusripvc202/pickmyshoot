@@ -814,6 +814,26 @@ const Layout = () => {
                             </div>
                           </>
                         )}
+                        {selectedItemType === 'photographer' && (
+                          <>
+                            <div className="metric-pill">
+                              <span className="metric-label">Shoots</span>
+                              <span className="metric-value">{selectedItem.shoots || '0'}+</span>
+                            </div>
+                            <div className="metric-pill">
+                              <span className="metric-label">Followers</span>
+                              <span className="metric-value">{selectedItem.followers || '0'}</span>
+                            </div>
+                            <div className="metric-pill">
+                              <span className="metric-label">Rating</span>
+                              <span className="metric-value">{selectedItem.rating || '5.0'} ★</span>
+                            </div>
+                            <div className="metric-pill">
+                              <span className="metric-label">Location</span>
+                              <span className="metric-value">{selectedItem.location || 'Hyderabad'}</span>
+                            </div>
+                          </>
+                        )}
                         {selectedItemType === 'institute' && (
                           <>
                             <div className="metric-pill">
@@ -846,7 +866,8 @@ const Layout = () => {
                          selectedItemType === 'workshop' ? 'About Workshop' :
                          selectedItemType === 'job' ? 'About Job Opening' :
                          selectedItemType === 'service' ? 'About Shoot Package' :
-                         selectedItemType === 'institute' ? 'About Institute' : 'About Listing'}
+                         selectedItemType === 'institute' ? 'About Institute' :
+                         selectedItemType === 'photographer' ? 'About Photographer' : 'About Listing'}
                       </span>
                       <p className="detail-desc-text">
                         {showFullDesc || !selectedItem.description || selectedItem.description.length <= 110 
@@ -937,7 +958,7 @@ const Layout = () => {
                     )}
 
                     {/* Schedulers (for booking items) */}
-                    {selectedItemType !== 'job' && selectedItemType !== 'workshop' && (
+                    {selectedItemType !== 'job' && selectedItemType !== 'workshop' && selectedItemType !== 'photographer' && (
                       <div className="scheduler-box">
                         <span className="scheduler-title">Select Date & Time</span>
                         
@@ -1010,19 +1031,37 @@ const Layout = () => {
                       <span className="checkout-price-val">
                         {selectedItemType === 'institute' 
                           ? 'Free to Apply' 
-                          : (typeof selectedItem.price === 'number' 
-                              ? `₹${selectedItem.price.toLocaleString('en-IN')}${selectedItem.priceUnit ? ` /${selectedItem.priceUnit}` : ''}` 
-                              : selectedItem.price || 'Free')}
+                          : selectedItemType === 'photographer'
+                            ? `₹${(selectedItem.startingPrice || 1800).toLocaleString('en-IN')}/hr`
+                            : (typeof selectedItem.price === 'number' 
+                                ? `₹${selectedItem.price.toLocaleString('en-IN')}${selectedItem.priceUnit ? ` /${selectedItem.priceUnit}` : ''}` 
+                                : selectedItem.price || 'Free')}
                       </span>
                       <span className="checkout-price-unit">
-                        {selectedItemType === 'institute' ? 'No application fee' : 'Total (incl. taxes)'}
+                        {selectedItemType === 'institute' 
+                          ? 'No application fee' 
+                          : selectedItemType === 'photographer'
+                            ? 'Starting Price'
+                            : 'Total (incl. taxes)'}
                       </span>
                     </div>
 
-                    <button className="checkout-submit-btn" onClick={handleBookingClick}>
-                      {selectedItemType === 'job' || selectedItemType === 'institute' ? 'Apply Now' : 
-                       selectedItemType === 'workshop' ? 'Register Now' : 'Book Now'}
-                    </button>
+                    {selectedItemType === 'photographer' ? (
+                      <a 
+                        href={selectedItem.instaUrl || "https://instagram.com/pickmyshoot"} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="checkout-submit-btn"
+                        style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                      >
+                        Visit Instagram
+                      </a>
+                    ) : (
+                      <button className="checkout-submit-btn" onClick={handleBookingClick}>
+                        {selectedItemType === 'job' || selectedItemType === 'institute' ? 'Apply Now' : 
+                         selectedItemType === 'workshop' ? 'Register Now' : 'Book Now'}
+                      </button>
+                    )}
                   </div>
                 </>
               )}

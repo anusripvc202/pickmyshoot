@@ -33,7 +33,8 @@ const HomePage = () => {
     openDetails,
     setExploreTab,
     gear,
-    models
+    models,
+    profiles
   } = useAppContext();
 
   const navigate = useNavigate();
@@ -43,6 +44,54 @@ const HomePage = () => {
     const otherShoots = services.filter(s => s.id !== (babyShoot?.id || ''));
     return (babyShoot ? [otherShoots[0], babyShoot, ...otherShoots.slice(1, 6)] : services.slice(0, 7)).filter(Boolean);
   }, [services]);
+
+  const displayPhotographers = React.useMemo(() => {
+    const list = profiles.filter(p => p.role === 'photographer');
+    if (list.length > 0) return list;
+    
+    // Fallback beautiful mock photographers if none in DB
+    return [
+      {
+        id: "p-mock-1",
+        name: "Arjun Kamath",
+        role: "photographer",
+        avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=300&q=80",
+        bio: "Award-winning portrait and wedding photographer based in Hyderabad. Specialized in cinematic storytelling and natural light photography.",
+        location: "Jubilee Hills, Hyderabad",
+        rating: "4.9",
+        shoots: "120",
+        followers: "12K",
+        startingPrice: 2500,
+        instaUrl: "https://instagram.com/arjunkamath8"
+      },
+      {
+        id: "p-mock-2",
+        name: "Sanjana Roy",
+        role: "photographer",
+        avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80",
+        bio: "Fashion and lifestyle photographer. Working with top brands and creating aesthetic portfolio content.",
+        location: "Gachibowli, Hyderabad",
+        rating: "4.8",
+        shoots: "95",
+        followers: "8.5K",
+        startingPrice: 3000,
+        instaUrl: "https://instagram.com/sanjanaroy.photography"
+      },
+      {
+        id: "p-mock-3",
+        name: "Kabir Singh",
+        role: "photographer",
+        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80",
+        bio: "Travel and wildlife documentary photographer. Capturing raw emotions and beautiful landscapes around the globe.",
+        location: "Banjara Hills, Hyderabad",
+        rating: "4.9",
+        shoots: "150",
+        followers: "24K",
+        startingPrice: 2000,
+        instaUrl: "https://instagram.com/kabirsingh_wildlife"
+      }
+    ];
+  }, [profiles]);
 
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -517,6 +566,47 @@ const HomePage = () => {
                   </div>
                 </div>
                 <span className="near-you-loc">📍 {studio.location} • {studio.distance}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Top Photographers Near Me */}
+      <section>
+        <div className="section-header">
+          <h2 className="section-title">Top Photographers Near Me</h2>
+          <span className="section-link" onClick={() => handleCategoryClick('services')}>
+            See All Photographers <ChevronRight size={14} />
+          </span>
+        </div>
+        <div className="desktop-card-grid-5 mobile-scroll-row">
+          {displayPhotographers.map(photographer => (
+            <div 
+              key={photographer.id || photographer._id} 
+              className="near-you-card" 
+              onClick={() => openDetails(photographer, 'photographer')}
+              style={{ cursor: 'pointer' }}
+            >
+              <div className="near-you-img-wrap">
+                <img src={photographer.avatar} className="card-image" alt={photographer.name} />
+                {photographer.isVerified && <span className="near-you-badge" style={{ background: '#2563eb' }}>✓ Verified</span>}
+                <button 
+                  className={`card-like-btn ${likedItems[photographer.id || photographer._id] ? 'liked' : ''}`}
+                  onClick={(e) => toggleLike(photographer.id || photographer._id, e)}
+                >
+                  <Heart size={15} fill={likedItems[photographer.id || photographer._id] ? 'var(--primary)' : 'none'} />
+                </button>
+              </div>
+              <div className="near-you-info">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span className="near-you-title">{photographer.name}</span>
+                  <div className="card-rating-row" style={{ marginTop: 0 }}>
+                    <Star size={11} className="card-rating-star" />
+                    <span>{photographer.rating || '5.0'}</span>
+                  </div>
+                </div>
+                <span className="near-you-loc">📍 {photographer.location}</span>
               </div>
             </div>
           ))}
