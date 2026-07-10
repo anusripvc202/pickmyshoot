@@ -594,43 +594,96 @@ const HomePage = () => {
       </div>
     </section>
 
-      {/* ═══ REDESIGNED PROMO GRID SECTION (COMPLETELY DIFFERENT FROM HERO) ═══ */}
-      <div className="promo-grid-section">
-        <div className="promo-cards-grid">
-          {promoSlides.map((slide, idx) => (
-            <div 
-              key={idx} 
-              className="promo-card-item" 
-              onClick={() => handleCategoryClick(slide.tab)}
-            >
-              {/* Card top: colored background and image */}
-              <div className="promo-card-top" style={{ background: slide.bg }}>
-                {/* Decorative background glow & circle */}
-                <div className="promo-card-glow" style={{ background: slide.accentColor }} />
-                <img
-                  src={`${import.meta.env.BASE_URL}${slide.image}`}
-                  className="promo-card-img"
-                  alt={slide.tag}
-                />
-                <span className="promo-card-badge" style={{ background: slide.badgeBg, color: '#000000' }}>
-                  {slide.badge}
-                </span>
-              </div>
-              
-              {/* Card bottom: details */}
-              <div className="promo-card-body">
-                <span className="promo-card-tag" style={{ color: slide.accentColor === '#ffd700' ? 'var(--primary)' : slide.accentColor }}>
-                  {slide.tag}
-                </span>
-                <h3 className="promo-card-title">{slide.title}</h3>
-                <p className="promo-card-desc">{slide.desc}</p>
-                <div className="promo-card-footer">
-                  <span className="promo-card-cta">
-                    {slide.btnLabel}
-                  </span>
-                </div>
-              </div>
+      {/* ═══ PREMIUM PROMO BANNER ═══ */}
+      <div className="promo-banner-shell">
+        {/* Slide counter top-right */}
+        <div className="promo-slide-counter">
+          <span className="promo-counter-current">{String(activePromoIndex + 1).padStart(2,'0')}</span>
+          <span className="promo-counter-sep">/</span>
+          <span className="promo-counter-total">{String(promoSlides.length).padStart(2,'0')}</span>
+        </div>
+
+        {/* Arrow nav */}
+        <button className="promo-nav-btn promo-nav-prev" onClick={() => setActivePromoIndex(i => (i - 1 + promoSlides.length) % promoSlides.length)} aria-label="Previous">‹</button>
+        <button className="promo-nav-btn promo-nav-next" onClick={() => setActivePromoIndex(i => (i + 1) % promoSlides.length)} aria-label="Next">›</button>
+
+        {/* Background gradient layer */}
+        <div
+          className="promo-bg-layer"
+          style={{ background: promoSlides[activePromoIndex].bg, transition: 'background 0.7s ease' }}
+        >
+          {/* Decorative SVG circles */}
+          <svg className="promo-deco-svg" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <circle cx="700" cy="50" r="180" fill="white" opacity={promoSlides[activePromoIndex].patternOpacity} />
+            <circle cx="750" cy="350" r="120" fill="white" opacity={promoSlides[activePromoIndex].patternOpacity} />
+            <circle cx="80" cy="380" r="90" fill="white" opacity={promoSlides[activePromoIndex].patternOpacity * 0.6} />
+            <path d="M0,200 Q200,50 400,200 T800,200" stroke="white" strokeWidth="1.5" fill="none" opacity={promoSlides[activePromoIndex].patternOpacity * 1.5} />
+            <path d="M0,280 Q200,130 400,280 T800,280" stroke="white" strokeWidth="1" fill="none" opacity={promoSlides[activePromoIndex].patternOpacity} />
+          </svg>
+        </div>
+
+        {/* Content */}
+        <div className="promo-content" key={activePromoIndex} style={{ animation: 'promoSlideIn 0.5s cubic-bezier(0.22,1,0.36,1)' }}>
+
+          {/* LEFT: Text */}
+          <div className="promo-left">
+            {/* Badge */}
+            <div className="promo-badge" style={{ background: promoSlides[activePromoIndex].badgeBg, color: '#000' }}>
+              🔥 {promoSlides[activePromoIndex].badge}
             </div>
+
+            {/* Tag */}
+            <span className="promo-tag">{promoSlides[activePromoIndex].tag}</span>
+
+            {/* Title */}
+            <h2 className="promo-title" style={{ '--promo-accent': promoSlides[activePromoIndex].accentColor }}>
+              {promoSlides[activePromoIndex].title}
+            </h2>
+
+            {/* Description */}
+            <p className="promo-desc">{promoSlides[activePromoIndex].desc}</p>
+
+            {/* Sub feature points */}
+            <div className="promo-sub-points">
+              {promoSlides[activePromoIndex].subPoints.map((pt, i) => (
+                <span key={i} className="promo-sub-pt" style={{ borderColor: `${promoSlides[activePromoIndex].accentColor}40` }}>
+                  {pt}
+                </span>
+              ))}
+            </div>
+
+            {/* CTA Button */}
+            <button
+              className="promo-cta-btn"
+              style={{ background: promoSlides[activePromoIndex].accentColor, color: promoSlides[activePromoIndex].accentColor === '#ffd700' || promoSlides[activePromoIndex].accentColor === '#38ef7d' || promoSlides[activePromoIndex].accentColor === '#f7971e' ? '#000' : '#fff' }}
+              onClick={() => handleCategoryClick(promoSlides[activePromoIndex].tab)}
+            >
+              {promoSlides[activePromoIndex].btnLabel}
+            </button>
+          </div>
+
+          {/* RIGHT: Image */}
+          <div className="promo-right">
+            {/* Glow circle behind image */}
+            <div className="promo-img-glow" style={{ background: promoSlides[activePromoIndex].accentColor }} />
+            <img
+              src={`${import.meta.env.BASE_URL}${promoSlides[activePromoIndex].image}`}
+              className="promo-img"
+              alt={promoSlides[activePromoIndex].tag}
+            />
+          </div>
+        </div>
+
+        {/* Progress dots */}
+        <div className="promo-dots">
+          {promoSlides.map((s, idx) => (
+            <button
+              key={idx}
+              className={`promo-dot ${idx === activePromoIndex ? 'active' : ''}`}
+              style={{ '--dot-accent': s.accentColor }}
+              onClick={() => setActivePromoIndex(idx)}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
           ))}
         </div>
       </div>
