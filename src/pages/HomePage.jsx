@@ -89,6 +89,45 @@ const HomePage = () => {
         followers: "24K",
         startingPrice: 2000,
         instaUrl: "https://instagram.com/kabirsingh_wildlife"
+      },
+      {
+        id: "p-mock-4",
+        name: "Meera Nair",
+        role: "photographer",
+        avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
+        bio: "Fine art portrait and couples photographer. Creating beautiful lighting setups and capturing intimate, candid moments.",
+        location: "Begumpet, Hyderabad",
+        rating: "4.9",
+        shoots: "110",
+        followers: "15K",
+        startingPrice: 2200,
+        instaUrl: "https://instagram.com/meeranair_photography"
+      },
+      {
+        id: "p-mock-5",
+        name: "Rohan Mehta",
+        role: "photographer",
+        avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80",
+        bio: "Commercial, architectural and interior photographer. Helping hotels, brands, and realtors display their spaces.",
+        location: "Secunderabad, TS",
+        rating: "4.7",
+        shoots: "85",
+        followers: "5.2K",
+        startingPrice: 3500,
+        instaUrl: "https://instagram.com/rohanmehta_frames"
+      },
+      {
+        id: "p-mock-6",
+        name: "Ananya Rao",
+        role: "photographer",
+        avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=300&q=80",
+        bio: "Specialist in baby, kids, and maternal portraiture. Friendly, patient, and operates out of a cozy child-safe studio.",
+        location: "Kondapur, Hyderabad",
+        rating: "4.9",
+        shoots: "140",
+        followers: "9.8K",
+        startingPrice: 1800,
+        instaUrl: "https://instagram.com/ananyarao_babyportraits"
       }
     ];
   }, [profiles]);
@@ -503,6 +542,47 @@ const HomePage = () => {
         </button>
       </div>
 
+      {/* Top Photographers Near Me */}
+      <section>
+        <div className="section-header">
+          <h2 className="section-title">Top Photographers Near Me</h2>
+          <span className="section-link" onClick={() => handleCategoryClick('services')}>
+            See All Photographers <ChevronRight size={14} />
+          </span>
+        </div>
+        <div className="desktop-card-grid-5 mobile-scroll-row">
+          {displayPhotographers.map(photographer => (
+            <div 
+              key={photographer.id || photographer._id} 
+              className="near-you-card" 
+              onClick={() => openDetails(photographer, 'photographer')}
+              style={{ cursor: 'pointer' }}
+            >
+              <div className="near-you-img-wrap">
+                <img src={photographer.avatar} className="card-image" alt={photographer.name} />
+                {photographer.isVerified && <span className="near-you-badge" style={{ background: '#2563eb' }}>✓ Verified</span>}
+                <button 
+                  className={`card-like-btn ${likedItems[photographer.id || photographer._id] ? 'liked' : ''}`}
+                  onClick={(e) => toggleLike(photographer.id || photographer._id, e)}
+                >
+                  <Heart size={15} fill={likedItems[photographer.id || photographer._id] ? 'var(--primary)' : 'none'} />
+                </button>
+              </div>
+              <div className="near-you-info">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span className="near-you-title">{photographer.name}</span>
+                  <div className="card-rating-row" style={{ marginTop: 0 }}>
+                    <Star size={11} className="card-rating-star" />
+                    <span>{photographer.rating || '5.0'}</span>
+                  </div>
+                </div>
+                <span className="near-you-loc">📍 {photographer.location}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Popular Services Section */}
       <section>
         <div className="section-header">
@@ -572,46 +652,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Top Photographers Near Me */}
-      <section>
-        <div className="section-header">
-          <h2 className="section-title">Top Photographers Near Me</h2>
-          <span className="section-link" onClick={() => handleCategoryClick('services')}>
-            See All Photographers <ChevronRight size={14} />
-          </span>
-        </div>
-        <div className="desktop-card-grid-5 mobile-scroll-row">
-          {displayPhotographers.map(photographer => (
-            <div 
-              key={photographer.id || photographer._id} 
-              className="near-you-card" 
-              onClick={() => openDetails(photographer, 'photographer')}
-              style={{ cursor: 'pointer' }}
-            >
-              <div className="near-you-img-wrap">
-                <img src={photographer.avatar} className="card-image" alt={photographer.name} />
-                {photographer.isVerified && <span className="near-you-badge" style={{ background: '#2563eb' }}>✓ Verified</span>}
-                <button 
-                  className={`card-like-btn ${likedItems[photographer.id || photographer._id] ? 'liked' : ''}`}
-                  onClick={(e) => toggleLike(photographer.id || photographer._id, e)}
-                >
-                  <Heart size={15} fill={likedItems[photographer.id || photographer._id] ? 'var(--primary)' : 'none'} />
-                </button>
-              </div>
-              <div className="near-you-info">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span className="near-you-title">{photographer.name}</span>
-                  <div className="card-rating-row" style={{ marginTop: 0 }}>
-                    <Star size={11} className="card-rating-star" />
-                    <span>{photographer.rating || '5.0'}</span>
-                  </div>
-                </div>
-                <span className="near-you-loc">📍 {photographer.location}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/* Top Institutes & Courses */}
       <section>
