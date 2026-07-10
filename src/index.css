@@ -1811,8 +1811,7 @@ body {
   height: 100%;
   width: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 12px 24px rgba(0,0,0,0.12));
-  mix-blend-mode: multiply;
+  filter: drop-shadow(0 12px 24px rgba(0,0,0,0.15));
 }
 
 .stripe-info-box {
@@ -12548,7 +12547,6 @@ input:checked + .slider:before {
   filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
   display: block;
   animation: floatPhotographer 6s infinite ease-in-out;
-  mix-blend-mode: multiply;
 }
 
 @keyframes floatPhotographer {
