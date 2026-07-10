@@ -169,7 +169,7 @@ const HomePage = () => {
         </>
       ),
       desc: "Book verified professional models & actors for your campaign.",
-      image: "fashion_model_cutout.png",
+      image: "fashion_model.svg",
       btnLabel: "Explore Talents",
       tab: "models",
       background: "linear-gradient(90deg, #f5f3ff 0%, #edd8fc 100%)"
@@ -182,7 +182,7 @@ const HomePage = () => {
         </>
       ),
       desc: "Book fully equipped cyclorama studios and luxury lifestyle sets.",
-      image: "studio_gear_cutout.png",
+      image: "studio_gear.svg",
       btnLabel: "Book Studio",
       tab: "studios",
       background: "linear-gradient(90deg, #ecfeff 0%, #cffafe 100%)"
@@ -274,7 +274,7 @@ const HomePage = () => {
         </>
       ),
       description: "Rent fully-equipped professional studios and top-tier camera gear for your next production. From green screens to premium lighting kits, find exactly what you need.",
-      image: "studio_gear_cutout.png",
+      image: "studio_gear.svg",
       background: "radial-gradient(circle at 60% 40%, rgba(16, 185, 129, 0.25) 0%, transparent 60%), linear-gradient(135deg, #059669 0%, #047857 100%)",
       highlights: [
         { icon: "🏢", label: "Premium Studios" },
@@ -304,7 +304,7 @@ const HomePage = () => {
         </>
       ),
       description: "Discover and book professional fashion, fitness, and commercial models. Elevate your brand's visual identity with experienced talent ready for any shoot.",
-      image: "fashion_model_cutout.png",
+      image: "fashion_model.svg",
       background: "radial-gradient(circle at 60% 40%, rgba(236, 72, 153, 0.25) 0%, transparent 60%), linear-gradient(135deg, #db2777 0%, #be185d 100%)",
       highlights: [
         { icon: "👗", label: "Fashion Models" },
