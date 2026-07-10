@@ -2,8 +2,8 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import postgres from "npm:postgres";
 import nodemailer from "npm:nodemailer";
 
-const smtpEmail = Deno.env.get('SMTP_EMAIL') || 'nikhiljai1215@gmail.com';
-const smtpPassword = Deno.env.get('SMTP_PASSWORD') || 'yfkphaydoxtueutr';
+const smtpEmail = Deno.env.get('SMTP_EMAIL') || 'anusripvc202@gmail.com';
+const smtpPassword = Deno.env.get('SMTP_PASSWORD') || 'mrzplpjgedrqljrx';
 const appUrl = Deno.env.get('APP_URL') || 'http://localhost:5173';
 
 const transporter = nodemailer.createTransport({
@@ -428,7 +428,7 @@ async function edgeSendEmails(booking: any) {
 
     // Fallback to SMTP_EMAIL
     if (!recipientEmail) {
-      recipientEmail = Deno.env.get('SMTP_EMAIL') || 'nikhiljai1215@gmail.com';
+      recipientEmail = Deno.env.get('SMTP_EMAIL') || 'anusripvc202@gmail.com';
       recipientName = creatorUser?.name || 'Demo Photographer (Mock Profile)';
       console.log(`ℹ️  No creator found for ID "${booking.creatorId}" — falling back to SMTP_EMAIL for demo notification.`);
     }
@@ -639,16 +639,17 @@ serve(async (req) => {
       if (method === 'PATCH' || method === 'PUT') {
         const body = await req.json();
         const { id, ...updateData } = body;
+        // Use ?? null to avoid postgres.js UNDEFINED_VALUE errors on missing fields
         const [updatedListing] = await sql`
           UPDATE listings SET
-            "title" = COALESCE(${updateData.title}, "title"),
-            "price" = COALESCE(${updateData.price ? JSON.stringify(updateData.price) : null}::jsonb, "price"),
-            "priceUnit" = COALESCE(${updateData.priceUnit}, "priceUnit"),
-            "image" = COALESCE(${updateData.image}, "image"),
-            "description" = COALESCE(${updateData.description}, "description"),
-            "location" = COALESCE(${updateData.location}, "location"),
-            "active" = COALESCE(${updateData.active}, "active"),
-            "isFeatured" = COALESCE(${updateData.isFeatured}, "isFeatured")
+            "title"       = COALESCE(${updateData.title       ?? null}, "title"),
+            "price"       = COALESCE(${updateData.price != null ? JSON.stringify(updateData.price) : null}::jsonb, "price"),
+            "priceUnit"   = COALESCE(${updateData.priceUnit   ?? null}, "priceUnit"),
+            "image"       = COALESCE(${updateData.image       ?? null}, "image"),
+            "description" = COALESCE(${updateData.description ?? null}, "description"),
+            "location"    = COALESCE(${updateData.location    ?? null}, "location"),
+            "active"      = COALESCE(${updateData.active      ?? null}, "active"),
+            "isFeatured"  = COALESCE(${updateData.isFeatured  ?? null}, "isFeatured")
           WHERE "id" = ${id} OR "_id" = ${id}
           RETURNING *
         `;
@@ -675,17 +676,21 @@ serve(async (req) => {
         const [newUser] = await sql`
           INSERT INTO users (
             "_id", "id", "name", "email", "role", "avatar", "bio", "location", 
-            "rating", "isVerified", "phone", "shoots", "followers", "revenue", "success", "views"
+            "rating", "isVerified", "phone", "shoots", "followers", "revenue", "success", "views",
+            "studioName", "studio_name"
           ) VALUES (
             ${id}, ${body.id || id}, ${body.name}, ${body.email}, ${body.role || 'client'}, 
             ${body.avatar}, ${body.bio}, ${body.location}, ${body.rating}, ${body.isVerified || false}, 
-            ${body.phone}, ${body.shoots}, ${body.followers}, ${body.revenue}, ${body.success}, ${body.views}
+            ${body.phone}, ${body.shoots}, ${body.followers}, ${body.revenue}, ${body.success}, ${body.views},
+            ${body.studioName || null}, ${body.studioName || null}
           ) ON CONFLICT ("email") DO UPDATE SET
             "name" = EXCLUDED.name,
             "role" = EXCLUDED.role,
             "avatar" = EXCLUDED.avatar,
             "bio" = EXCLUDED.bio,
-            "location" = EXCLUDED.location
+            "location" = EXCLUDED.location,
+            "studioName" = EXCLUDED."studioName",
+            "studio_name" = EXCLUDED.studio_name
           RETURNING *
         `;
         return new Response(JSON.stringify(newUser), { status: 201, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
@@ -708,11 +713,18 @@ serve(async (req) => {
             "followers" = COALESCE(${updateData.followers}, "followers"),
             "revenue" = COALESCE(${updateData.revenue}, "revenue"),
             "success" = COALESCE(${updateData.success}, "success"),
-            "views" = COALESCE(${updateData.views}, "views")
+            "views" = COALESCE(${updateData.views}, "views"),
+            "studioName" = COALESCE(${updateData.studioName}, "studioName"),
+            "studio_name" = COALESCE(${updateData.studioName}, "studio_name")
           WHERE "id" = ${id} OR "_id" = ${id}
           RETURNING *
         `;
         return new Response(JSON.stringify(updatedUser), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      if (method === 'DELETE') {
+        const id = url.searchParams.get('id');
+        await sql`DELETE FROM users WHERE "id" = ${id} OR "_id" = ${id}`;
+        return new Response(JSON.stringify({ success: true }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
     }
 

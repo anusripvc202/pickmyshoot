@@ -14,7 +14,7 @@ const defaultMockProfiles = [
     id: '6a380b1e73c0e340a6bf3a41',
     name: 'Anusha',
     role: 'admin',
-    email: 'anusripvc202@gmail.com',
+    email: 'anusripvc202+admin@gmail.com',
     avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80',
     bio: 'Platform Security Control Center Administrator.',
     location: 'Hyderabad, TS',
@@ -25,7 +25,8 @@ const defaultMockProfiles = [
     followers: "0",
     revenue: "₹0",
     success: "100%",
-    views: "1"
+    views: "1",
+    studioName: "PickMyShoot HQ"
   },
   {
     id: '6a380b8173c0e340a6bf3a42',
@@ -42,7 +43,8 @@ const defaultMockProfiles = [
     followers: "0",
     revenue: "₹0",
     success: "100%",
-    views: "1"
+    views: "1",
+    studioName: "Nikhil Jai Photography & Studios"
   },
   {
     id: '6a380bd273c0e340a6bf3a43',
@@ -59,7 +61,8 @@ const defaultMockProfiles = [
     followers: "0",
     revenue: "₹0",
     success: "100%",
-    views: "1"
+    views: "1",
+    studioName: "Sri Designs & Creative"
   },
   {
     id: '6a39140ec8fbd2d7e85f0d91',
@@ -76,13 +79,14 @@ const defaultMockProfiles = [
     followers: "0",
     revenue: "₹0",
     success: "100%",
-    views: "1"
+    views: "1",
+    studioName: "Jaideep Productions"
   },
   {
     id: '6a391527c8fbd2d7e85f0d92',
     name: 'Jaideepvarma',
     role: 'photographer',
-    email: 'anusripvc204@gmail.com',
+    email: 'anusripvc202@gmail.com',
     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80',
     bio: 'Wedding cinematographer and event shooter.',
     location: 'Hyderabad, TS',
@@ -93,7 +97,8 @@ const defaultMockProfiles = [
     followers: "0",
     revenue: "₹0",
     success: "100%",
-    views: "1"
+    views: "1",
+    studioName: "Jaideep Varma Films & Studios"
   },
   {
     id: '6a3920c7454a6492befc0840',
@@ -110,7 +115,8 @@ const defaultMockProfiles = [
     followers: "0",
     revenue: "₹0",
     success: "100%",
-    views: "1"
+    views: "1",
+    studioName: "Lokesh Media Hub"
   }
 ];
 
@@ -251,7 +257,8 @@ export const AppProvider = ({ children }) => {
             followers: u.followers || "0",
             revenue: u.revenue || "₹0",
             success: u.success || "100%",
-            views: u.views || "1"
+            views: u.views || "1",
+            studioName: u.studioName || u.studio_name || ""
           }));
 
           setProfiles(prev => {
@@ -338,43 +345,33 @@ export const AppProvider = ({ children }) => {
             else if (item.type === 'job') dbJobs.push(mappedItem);
           });
 
-          // Merge: DB items first (newest), then keep existing mock data that doesn't clash by id
-          if (dbServices.length > 0) {
-            setServices(prev => {
-              const filteredPrev = prev.filter(p => !dbServices.some(d => d.id === p.id));
-              return [...dbServices, ...filteredPrev];
+          // Helper: merge DB items with prev mock data.
+          // If a DB item is missing key display fields (image, title, etc.),
+          // fall back to the corresponding mock entry so nothing ever disappears.
+          const mergeItems = (dbItems, prev) => {
+            const enriched = dbItems.map(dbItem => {
+              const mock = prev.find(p => p.id === dbItem.id);
+              if (!mock) return dbItem;
+              return {
+                ...dbItem,
+                image:       dbItem.image       || mock.image,
+                title:       dbItem.title       || mock.title,
+                description: dbItem.description || mock.description,
+                rating:      dbItem.rating      ?? mock.rating,
+                reviews:     dbItem.reviews     ?? mock.reviews,
+              };
             });
-          }
-          if (dbStudios.length > 0) {
-            setStudios(prev => {
-              const filteredPrev = prev.filter(p => !dbStudios.some(d => d.id === p.id));
-              return [...dbStudios, ...filteredPrev];
-            });
-          }
-          if (dbModels.length > 0) {
-            setModels(prev => {
-              const filteredPrev = prev.filter(p => !dbModels.some(d => d.id === p.id));
-              return [...dbModels, ...filteredPrev];
-            });
-          }
-          if (dbGear.length > 0) {
-            setGear(prev => {
-              const filteredPrev = prev.filter(p => !dbGear.some(d => d.id === p.id));
-              return [...dbGear, ...filteredPrev];
-            });
-          }
-          if (dbWorkshops.length > 0) {
-            setWorkshops(prev => {
-              const filteredPrev = prev.filter(p => !dbWorkshops.some(d => d.id === p.id));
-              return [...dbWorkshops, ...filteredPrev];
-            });
-          }
-          if (dbJobs.length > 0) {
-            setJobs(prev => {
-              const filteredPrev = prev.filter(p => !dbJobs.some(d => d.id === p.id));
-              return [...dbJobs, ...filteredPrev];
-            });
-          }
+            const filteredPrev = prev.filter(p => !enriched.some(d => d.id === p.id));
+            return [...enriched, ...filteredPrev];
+          };
+
+          // Merge: DB items first (newest), backfilled with mock data for missing fields
+          if (dbServices.length > 0)  setServices(prev  => mergeItems(dbServices,  prev));
+          if (dbStudios.length > 0)   setStudios(prev   => mergeItems(dbStudios,   prev));
+          if (dbModels.length > 0)    setModels(prev    => mergeItems(dbModels,    prev));
+          if (dbGear.length > 0)      setGear(prev      => mergeItems(dbGear,      prev));
+          if (dbWorkshops.length > 0) setWorkshops(prev => mergeItems(dbWorkshops, prev));
+          if (dbJobs.length > 0)      setJobs(prev      => mergeItems(dbJobs,      prev));
         }
         // If DB returns nothing or empty — mock data stays as-is (no replacement)
       })

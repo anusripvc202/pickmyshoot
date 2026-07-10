@@ -97,6 +97,7 @@ const PhotographerDashboard = () => {
   const [profileName, setProfileName] = useState(activeProfile.name);
   const [profileEmail, setProfileEmail] = useState(activeProfile.email);
   const [profileBio, setProfileBio] = useState(activeProfile.bio);
+  const [profileStudioName, setProfileStudioName] = useState(activeProfile.studioName || '');
 
   const [profileStartingPrice, setProfileStartingPrice] = useState(startingPriceFallback);
   const [profileExperience, setProfileExperience] = useState(experienceFallback);
@@ -119,6 +120,7 @@ const PhotographerDashboard = () => {
     setProfileName(activeProfile.name);
     setProfileEmail(activeProfile.email);
     setProfileBio(activeProfile.bio);
+    setProfileStudioName(activeProfile.studioName || "");
     setProfileStartingPrice(activeProfile.startingPrice || 1800);
     setProfileExperience(activeProfile.experience || 3);
     setProfileRating(activeProfile.rating || "4.9 ★");
@@ -286,6 +288,7 @@ const PhotographerDashboard = () => {
       name: profileName,
       email: profileEmail,
       bio: profileBio,
+      studioName: profileStudioName,
       startingPrice: parseInt(profileStartingPrice) || 1800,
       experience: parseInt(profileExperience) || 3,
       rating: profileRating,
@@ -758,9 +761,9 @@ const PhotographerDashboard = () => {
                 />
                 <h4 style={{ margin: '10px 0 2px 0', fontSize: '18px', fontWeight: '800' }}>{activeProfile.name}</h4>
                 <span style={{ fontSize: '12px', color: '#666', fontWeight: 600 }}>{pmsIdFallback}</span>
-                {photographerOwnedStudios.length > 0 && (
-                  <div style={{ fontSize: '11px', color: '#475569', fontWeight: '750', marginTop: '6px', background: '#f1f5f9', padding: '4px 10px', borderRadius: '12px', maxWidth: '200px', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
-                    🏢 {photographerOwnedStudios.map(st => st.title).join(', ')}
+                {(activeProfile.studioName || photographerOwnedStudios.length > 0) && (
+                  <div style={{ fontSize: '11px', color: '#c7100d', fontWeight: '750', marginTop: '6px', background: '#fef2f2', border: '1px solid #fca5a5', padding: '4px 10px', borderRadius: '12px', maxWidth: '240px', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                    🏢 {activeProfile.studioName || photographerOwnedStudios.map(st => st.title).join(', ')}
                   </div>
                 )}
                 <button 
@@ -1480,6 +1483,17 @@ const PhotographerDashboard = () => {
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '13px', fontWeight: '700' }}>Studio Name</label>
+                  <input 
+                    type="text" 
+                    value={profileStudioName} 
+                    onChange={e => setProfileStudioName(e.target.value)}
+                    placeholder="e.g. Om Sai Digital Photo Studio"
+                    style={{ padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   <label style={{ fontSize: '13px', fontWeight: '700' }}>Registered Email</label>
                   <input 
                     type="email" 
@@ -1872,6 +1886,12 @@ const PhotographerDashboard = () => {
                 />
                 <div>
                   <h3 style={{ margin: 0, fontSize: '24px', fontWeight: 800 }}>{activeProfile.name}</h3>
+                  {(activeProfile.studioName || photographerOwnedStudios.length > 0) && (
+                    <div style={{ fontSize: '13.5px', fontWeight: '700', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px', opacity: 0.95 }}>
+                      <span>🏢</span>
+                      <span>{activeProfile.studioName || photographerOwnedStudios.map(st => st.title).join(', ')}</span>
+                    </div>
+                  )}
                   <div style={{ display: 'flex', gap: '8px', alignItems: 'center', fontSize: '13px', opacity: 0.9, marginTop: '4px' }}>
                     <MapPin size={12} />
                     <span>{areaFallback}, {cityFallback}</span>

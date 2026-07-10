@@ -7,7 +7,7 @@ async function run() {
   await pgClient.connect();
   
   try {
-    const usersRes = await pgClient.query('SELECT _id, id, name, email, role FROM users');
+    const usersRes = await pgClient.query('SELECT _id, id, name, email, role, "studioName", "studio_name" FROM users');
     console.log('\n--- USERS ---');
     console.table(usersRes.rows);
 
