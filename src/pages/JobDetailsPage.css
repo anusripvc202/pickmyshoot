@@ -1,0 +1,788 @@
+/* ============================================
+   Premium Job Details Page — PickMyShoot
+   LinkedIn-inspired, full-page layout
+   ============================================ */
+
+.jdp-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+  font-family: 'Outfit', sans-serif;
+  color: #1f2937;
+}
+
+/* Breadcrumb */
+.jdp-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #9ca3af;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.jdp-breadcrumb a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.18s;
+}
+.jdp-breadcrumb a:hover { color: #0a66c2; }
+.jdp-breadcrumb span { color: #1f2937; }
+
+/* Two-column grid */
+.jdp-layout {
+  display: grid;
+  grid-template-columns: 6fr 4fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* ── LEFT COLUMN ── */
+.jdp-left { display: flex; flex-direction: column; gap: 28px; }
+
+/* ── RIGHT COLUMN (Sticky) ── */
+.jdp-right {
+  position: sticky;
+  top: 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── Header Card ── */
+.jdp-header-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+}
+
+.jdp-header-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.jdp-company-logo {
+  width: 72px;
+  height: 72px;
+  border-radius: 14px;
+  object-fit: cover;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  flex-shrink: 0;
+}
+
+.jdp-header-text { flex: 1; }
+
+.jdp-job-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: -0.4px;
+  margin: 0 0 6px;
+  line-height: 1.2;
+}
+
+.jdp-company-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.jdp-company-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #374151;
+}
+
+.jdp-verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+  padding: 3px 10px;
+  border-radius: 99px;
+}
+
+.jdp-rating-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.jdp-rating-num {
+  font-weight: 700;
+  color: #374151;
+}
+
+.jdp-meta-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.jdp-meta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 10px;
+  background: #f3f4f6;
+  color: #374151;
+}
+.jdp-meta-pill.easy-apply {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+.jdp-meta-pill.hiring-now {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+/* ── Gallery ── */
+.jdp-gallery-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+}
+
+.jdp-main-image-wrap {
+  position: relative;
+  width: 100%;
+  height: 380px;
+  overflow: hidden;
+  background: #f3f4f6;
+}
+
+.jdp-main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.4s ease;
+}
+.jdp-main-img:hover { transform: scale(1.02); }
+
+.jdp-gallery-badge {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 10px;
+  backdrop-filter: blur(6px);
+}
+
+.jdp-thumbnails {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 12px;
+  background: #fafafa;
+  border-top: 1px solid #f3f4f6;
+}
+
+.jdp-thumb {
+  aspect-ratio: 4/3;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.18s ease;
+}
+.jdp-thumb.active { border-color: #0a66c2; }
+.jdp-thumb:hover  { transform: scale(1.04); }
+.jdp-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ── Section Card ── */
+.jdp-section-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+}
+
+.jdp-section-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.jdp-section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #f3f4f6;
+}
+
+/* Quick Info */
+.jdp-quick-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.jdp-quick-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: #f9fafb;
+  border: 1px solid #f3f4f6;
+  border-radius: 12px;
+  transition: all 0.18s ease;
+}
+.jdp-quick-item:hover {
+  border-color: #dbeafe;
+  background: #f0f7ff;
+}
+
+.jdp-qi-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #0a66c2;
+}
+
+.jdp-qi-text { display: flex; flex-direction: column; gap: 1px; }
+.jdp-qi-label {
+  font-size: 9.5px;
+  font-weight: 800;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.jdp-qi-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* Description */
+.jdp-desc-text {
+  font-size: 14px;
+  line-height: 1.75;
+  color: #4b5563;
+  margin: 0;
+}
+
+.jdp-read-more {
+  background: none;
+  border: none;
+  color: #0a66c2;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 6px 0 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: opacity 0.18s;
+}
+.jdp-read-more:hover { opacity: 0.7; }
+
+/* Responsibilities */
+.jdp-responsibilities { display: flex; flex-direction: column; gap: 8px; }
+
+.jdp-resp-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: #374151;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+.jdp-resp-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #0a66c2;
+  flex-shrink: 0;
+  margin-top: 7px;
+}
+
+/* Skills */
+.jdp-skills-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.jdp-skill-chip {
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 7px 16px;
+  border-radius: 99px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  cursor: default;
+  transition: all 0.18s ease;
+}
+.jdp-skill-chip:hover {
+  background: #dbeafe;
+  transform: translateY(-1px);
+}
+
+/* Qualifications */
+.jdp-qual-list { display: flex; flex-direction: column; gap: 10px; }
+
+.jdp-qual-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.jdp-qual-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #059669;
+}
+
+/* Benefits */
+.jdp-benefits-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.jdp-benefit-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  transition: all 0.18s ease;
+}
+.jdp-benefit-card:hover {
+  border-color: #a7f3d0;
+  background: #f0fdf4;
+  color: #065f46;
+}
+
+.jdp-benefit-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: #ecfdf5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+/* Company Insights */
+.jdp-insights-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.jdp-insight-card {
+  text-align: center;
+  padding: 16px 8px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  transition: all 0.18s ease;
+}
+.jdp-insight-card:hover {
+  border-color: #bfdbfe;
+  background: #eff6ff;
+}
+
+.jdp-insight-val {
+  display: block;
+  font-size: 20px;
+  font-weight: 800;
+  color: #0a66c2;
+  margin-bottom: 4px;
+}
+.jdp-insight-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* Recruiter */
+.jdp-recruiter-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+}
+
+.jdp-recruiter-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.jdp-recruiter-info { flex: 1; }
+.jdp-recruiter-name {
+  font-size: 15px;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 2px;
+}
+.jdp-recruiter-title { font-size: 12px; color: #6b7280; font-weight: 500; }
+.jdp-recruiter-resp { font-size: 11px; color: #10b981; font-weight: 700; margin-top: 4px; }
+
+.jdp-msg-btn {
+  padding: 10px 18px;
+  border-radius: 99px;
+  border: 1px solid #0a66c2;
+  background: #fff;
+  color: #0a66c2;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.jdp-msg-btn:hover { background: #0a66c2; color: #fff; }
+
+/* Map */
+.jdp-map-wrap {
+  border-radius: 14px;
+  overflow: hidden;
+  height: 180px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 12px;
+}
+
+.jdp-location-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.jdp-office-addr {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.jdp-directions-btn {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0a66c2;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.jdp-directions-btn:hover { opacity: 0.7; }
+
+/* Similar Jobs */
+.jdp-similar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.jdp-similar-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  cursor: pointer;
+  background: #fff;
+  transition: all 0.18s ease;
+  text-align: left;
+}
+.jdp-similar-card:hover {
+  border-color: #0a66c2;
+  background: #f0f7ff;
+  transform: translateX(4px);
+}
+
+.jdp-similar-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #f3f4f6;
+}
+.jdp-similar-icon img { width: 100%; height: 100%; object-fit: cover; }
+
+.jdp-similar-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #111827;
+  display: block;
+}
+.jdp-similar-meta { font-size: 11px; color: #6b7280; font-weight: 500; }
+
+/* ── RIGHT Sticky Cards ── */
+.jdp-apply-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.04);
+}
+
+.jdp-salary-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #f3f4f6;
+  margin-bottom: 18px;
+}
+
+.jdp-salary-val {
+  font-size: 24px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.jdp-salary-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.jdp-apply-btn {
+  width: 100%;
+  padding: 15px;
+  background: #0a66c2;
+  color: #fff;
+  border: none;
+  border-radius: 99px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 16px rgba(10, 102, 194, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.jdp-apply-btn:hover {
+  background: #0958a8;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(10, 102, 194, 0.35);
+}
+
+.jdp-action-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.jdp-save-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px;
+  background: #fff;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.jdp-save-btn:hover { border-color: #0a66c2; color: #0a66c2; }
+.jdp-save-btn.saved { background: #fee2e2; color: #e53935; border-color: #fca5a5; }
+
+.jdp-share-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px;
+  background: #fff;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.jdp-share-btn:hover { border-color: #0a66c2; color: #0a66c2; }
+
+/* Success */
+.jdp-success-card {
+  background: #fff;
+  border: 1px solid #a7f3d0;
+  border-radius: 20px;
+  padding: 36px 28px;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.04);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.jdp-success-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: #ecfdf5;
+  border: 2px solid #a7f3d0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: jdp-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes jdp-pop {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+.jdp-success-title { font-size: 18px; font-weight: 800; color: #111827; }
+.jdp-success-sub { font-size: 13px; color: #6b7280; line-height: 1.6; }
+
+/* Mobile Sticky Bottom Bar */
+.jdp-mobile-bar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid #e5e7eb;
+  padding: 14px 20px;
+  z-index: 1000;
+  box-shadow: 0 -8px 28px rgba(0,0,0,0.06);
+}
+
+.jdp-mobile-bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.jdp-mobile-salary { display: flex; flex-direction: column; }
+.jdp-mobile-salary-val { font-size: 16px; font-weight: 800; color: #111827; }
+.jdp-mobile-salary-lbl { font-size: 9px; font-weight: 700; color: #9ca3af; text-transform: uppercase; }
+
+.jdp-mobile-actions { display: flex; align-items: center; gap: 8px; }
+
+.jdp-mobile-icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #374151;
+  transition: all 0.18s ease;
+}
+.jdp-mobile-icon-btn:hover { color: #0a66c2; border-color: #0a66c2; }
+
+.jdp-mobile-apply-btn {
+  padding: 11px 22px;
+  border-radius: 99px;
+  background: #0a66c2;
+  color: #fff;
+  border: none;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(10,102,194,0.2);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .jdp-layout { grid-template-columns: 1fr; }
+  .jdp-right { position: static; }
+}
+
+@media (max-width: 768px) {
+  .jdp-container { padding: 20px 16px 100px; }
+  .jdp-job-title { font-size: 22px; }
+  .jdp-main-image-wrap { height: 240px; }
+  .jdp-quick-grid { grid-template-columns: 1fr 1fr; }
+  .jdp-benefits-grid { grid-template-columns: 1fr; }
+  .jdp-insights-grid { grid-template-columns: repeat(2, 1fr); }
+  .jdp-apply-card { display: none; }
+  .jdp-mobile-bar { display: block; }
+}

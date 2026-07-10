@@ -693,7 +693,7 @@ const ExplorePage = () => {
           /* Jobs and Gigs layout (renders vertical job details cards) */
           <div className="desktop-card-grid-3">
             {filteredItems.map(job => (
-              <div key={job.id} className="job-card-item" onClick={() => openDetails(job, 'job')}>
+              <div key={job.id} className="job-card-item" onClick={() => navigate(`/job/${job.id}`)}>
                 <div className="job-header">
                   <div className="job-company-wrap">
                     <img src={job.image} className="job-company-logo" alt={job.company} />
