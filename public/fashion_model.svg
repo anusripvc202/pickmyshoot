@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#db2777" />
+      <stop offset="100%" stop-color="#9d174d" />
+    </linearGradient>
+    <linearGradient id="grad4" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#fbcfe8" />
+      <stop offset="100%" stop-color="#f472b6" />
+    </linearGradient>
+    <filter id="shadow2" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="15" stdDeviation="15" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#shadow2)">
+    <!-- Abstract Dress / Body -->
+    <path d="M 400 240 Q 280 450 200 580 L 600 580 Q 520 450 400 240 Z" fill="url(#grad3)" />
+    
+    <!-- Flowing fabric elements -->
+    <path d="M 400 240 Q 550 350 650 500 L 600 580 Q 520 450 400 240 Z" fill="url(#grad4)" opacity="0.8" />
+    <path d="M 400 240 Q 250 350 150 500 L 200 580 Q 280 450 400 240 Z" fill="url(#grad4)" opacity="0.6" />
+    
+    <!-- Head/Hat silhouette -->
+    <circle cx="400" cy="180" r="45" fill="url(#grad4)" />
+    <!-- Wide Brim Hat -->
+    <ellipse cx="400" cy="150" rx="120" ry="30" fill="url(#grad3)" transform="rotate(-10 400 150)" />
+    
+    <!-- Sparkles/Stars in the background -->
+    <path d="M 220 180 L 225 200 L 245 205 L 225 210 L 220 230 L 215 210 L 195 205 L 215 200 Z" fill="#fcd34d" />
+    <path d="M 600 120 L 605 140 L 625 145 L 605 150 L 600 170 L 595 150 L 575 145 L 595 140 Z" fill="#fcd34d" />
+    <path d="M 580 250 L 583 260 L 593 263 L 583 266 L 580 276 L 577 266 L 567 263 L 577 260 Z" fill="#fcd34d" />
+  </g>
+</svg>
