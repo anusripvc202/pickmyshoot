@@ -159,7 +159,7 @@ const HomePage = () => {
       image: "banner_cameras.png",
       btnLabel: "Rent Now",
       tab: "rentals",
-      background: "linear-gradient(90deg, #fff0f2 0%, #ffecee 100%)"
+      background: "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)"
     },
     {
       tag: "Aesthetic Modeling Portfolios",
@@ -172,7 +172,7 @@ const HomePage = () => {
       image: "fashion_model_cutout.png",
       btnLabel: "Explore Talents",
       tab: "models",
-      background: "linear-gradient(90deg, #f5f3ff 0%, #edd8fc 100%)"
+      background: "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)"
     },
     {
       tag: "Premium Indoor Shoot Spaces",
@@ -185,7 +185,7 @@ const HomePage = () => {
       image: "studio_gear_cutout.png",
       btnLabel: "Book Studio",
       tab: "studios",
-      background: "linear-gradient(90deg, #ecfeff 0%, #cffafe 100%)"
+      background: "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)"
     },
     {
       tag: "Verified Professional Shoots",
@@ -195,10 +195,10 @@ const HomePage = () => {
         </>
       ),
       desc: "Hire top wedding, pre-wedding, event, and product photographers.",
-      image: "pre_wedding_shoot_new.png",
+      image: "banner_photographer.png",
       btnLabel: "Book Shoot",
       tab: "services",
-      background: "linear-gradient(90deg, #f0fdf4 0%, #dcfce7 100%)"
+      background: "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)"
     }
   ];
 
