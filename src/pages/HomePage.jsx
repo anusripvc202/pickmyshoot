@@ -118,7 +118,7 @@ const HomePage = () => {
         </>
       ),
       description: "Rent fully-equipped professional studios and top-tier camera gear for your next production. From green screens to premium lighting kits, find exactly what you need.",
-      image: "studio_gear.svg",
+      image: "studio_gear_cutout.png",
       background: "radial-gradient(circle at 60% 40%, rgba(16, 185, 129, 0.25) 0%, transparent 60%), linear-gradient(135deg, #059669 0%, #047857 100%)",
       highlights: [
         { icon: "🏢", label: "Premium Studios" },
@@ -148,7 +148,7 @@ const HomePage = () => {
         </>
       ),
       description: "Discover and book professional fashion, fitness, and commercial models. Elevate your brand's visual identity with experienced talent ready for any shoot.",
-      image: "fashion_model.svg",
+      image: "fashion_model_cutout.png",
       background: "radial-gradient(circle at 60% 40%, rgba(236, 72, 153, 0.25) 0%, transparent 60%), linear-gradient(135deg, #db2777 0%, #be185d 100%)",
       highlights: [
         { icon: "👗", label: "Fashion Models" },
