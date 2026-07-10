@@ -111,37 +111,6 @@ const HomePage = () => {
       ]
     },
     {
-      tag: "CAPTURE YOUR LOVE STORY",
-      title: (
-        <>
-          PRE-WEDDING & WEDDING <span className="fest-title-year">SHOOT</span>
-        </>
-      ),
-      description: "Book the country's top wedding & pre-wedding photographers. Premium cinematographic videos, aerial drone shoots, and custom theme layouts to make your special day eternal.",
-      image: "pre_wedding_shoot_new.png",
-      isFramed: true,
-      background: "radial-gradient(circle at 60% 40%, rgba(139, 92, 246, 0.25) 0%, transparent 60%), linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%)",
-      highlights: [
-        { icon: "✨", label: "Cinematic Teasers" },
-        { icon: "🛸", label: "Drone Videography" },
-        { icon: "📸", label: "Custom Albums" }
-      ],
-      pills: [
-        { label: "📸 Wedding Shoots", tab: "services" },
-        { label: "✈️ Outdoor Shoots", tab: "services" },
-        { label: "🎥 Cinematography", tab: "services" }
-      ],
-      ctaLabel: "Book Wedding Shoot",
-      ctaTab: "services",
-      attendeesNum: "💖 4.9/5 Rating",
-      attendeesLabel: "from 850+ love stories",
-      avatars: [
-        "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=60&q=80",
-        "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=60&q=80",
-        "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=60&q=80"
-      ]
-    },
-    {
       tag: "PREMIUM LOCATIONS & GEAR",
       title: (
         <>
@@ -149,7 +118,7 @@ const HomePage = () => {
         </>
       ),
       description: "Rent fully-equipped professional studios and top-tier camera gear for your next production. From green screens to premium lighting kits, find exactly what you need.",
-      image: "https://images.unsplash.com/photo-1598928636135-d146006ff4be?auto=format&fit=crop&w=600&q=80",
+      image: "https://images.unsplash.com/photo-1603513492128-ba7bc9b3e143?auto=format&fit=crop&w=800&q=80",
       isFramed: true,
       background: "radial-gradient(circle at 60% 40%, rgba(16, 185, 129, 0.25) 0%, transparent 60%), linear-gradient(135deg, #059669 0%, #047857 100%)",
       highlights: [
@@ -180,7 +149,7 @@ const HomePage = () => {
         </>
       ),
       description: "Discover and book professional fashion, fitness, and commercial models. Elevate your brand's visual identity with experienced talent ready for any shoot.",
-      image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80",
+      image: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=800&q=80",
       isFramed: true,
       background: "radial-gradient(circle at 60% 40%, rgba(236, 72, 153, 0.25) 0%, transparent 60%), linear-gradient(135deg, #db2777 0%, #be185d 100%)",
       highlights: [
