@@ -5407,11 +5407,44 @@ input:checked + .slider:before {
 .footer-inner {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 60px 40px 48px;
+  padding: 40px 40px 24px;
   display: grid;
-  grid-template-columns: 300px repeat(3, 1fr) 280px;
-  gap: 40px;
+  grid-template-columns: 220px repeat(3, 1fr) 260px;
+  gap: 28px;
   align-items: start;
+}
+
+/* Middle bar — Stats + App Badges across full width */
+.footer-middle-bar {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px 40px;
+  border-top: 1px solid var(--footer-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.footer-stats-row-container {
+  flex: 1;
+  max-width: 380px;
+}
+
+.footer-stats-row-container .footer-stats-row {
+  border-radius: 10px;
+  padding: 10px 0;
+}
+
+.footer-app-badges-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-app-badges-container .footer-app-badges {
+  flex-wrap: nowrap;
 }
 
 /* Brand Column */
