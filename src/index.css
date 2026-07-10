@@ -1776,7 +1776,7 @@ body {
   box-shadow: var(--shadow-sm);
   min-height: 180px;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
   transform-style: preserve-3d;
   perspective: 1000px;
   transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.5s ease;
@@ -1792,7 +1792,7 @@ body {
   top: 50%;
   left: 58%;
   transform: translate(-50%, -50%);
-  height: 120%;
+  height: 95%;
   width: 300px;
   display: flex;
   justify-content: center;
@@ -1812,6 +1812,7 @@ body {
   width: 100%;
   object-fit: contain;
   filter: drop-shadow(0 12px 24px rgba(0,0,0,0.12));
+  mix-blend-mode: multiply;
 }
 
 .stripe-info-box {
