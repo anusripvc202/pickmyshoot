@@ -31,7 +31,9 @@ const HomePage = () => {
     likedItems,
     toggleLike,
     openDetails,
-    setExploreTab
+    setExploreTab,
+    gear,
+    models
   } = useAppContext();
 
   const navigate = useNavigate();
