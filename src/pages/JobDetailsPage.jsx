@@ -16,13 +16,6 @@ const GALLERY_IMAGES = [
   "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=900&q=80",
 ];
 
-const SIMILAR_JOBS = [
-  { title: "Wedding Photographer", company: "Moments Studio", salary: "₹35K–₹55K/mo", image: "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?auto=format&fit=crop&w=80&q=80" },
-  { title: "Fashion Photographer", company: "Vogue Frames",   salary: "₹40K–₹65K/mo", image: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=80&q=80" },
-  { title: "Product Photographer", company: "BrandLens",       salary: "₹30K–₹50K/mo", image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=80&q=80" },
-  { title: "Studio Assistant",     company: "Light & Shade",   salary: "₹15K–₹25K/mo", image: "https://images.unsplash.com/photo-1517760444937-f6397edcbbcd?auto=format&fit=crop&w=80&q=80" },
-];
-
 const RESPONSIBILITIES = [
   "Conduct professional portrait and event photography sessions",
   "Edit and retouch photos using Adobe Lightroom & Photoshop",
@@ -363,14 +356,21 @@ const JobDetailsPage = () => {
           <div className="jdp-section-card">
             <h3 className="jdp-section-title">Similar Openings</h3>
             <div className="jdp-similar-list">
-              {SIMILAR_JOBS.map((sj, idx) => (
-                <div key={idx} className="jdp-similar-card">
+              {jobs.filter(j => j.id !== job.id).slice(0, 4).map((sj) => (
+                <div 
+                  key={sj.id} 
+                  className="jdp-similar-card"
+                  onClick={() => {
+                    navigate(`/job/${sj.id}`);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                >
                   <div className="jdp-similar-icon">
                     <img src={sj.image} alt={sj.company} />
                   </div>
                   <div>
                     <span className="jdp-similar-title">{sj.title}</span>
-                    <span className="jdp-similar-meta">{sj.company} • {sj.salary}</span>
+                    <span className="jdp-similar-meta">{sj.company} • {sj.price}</span>
                   </div>
                 </div>
               ))}
