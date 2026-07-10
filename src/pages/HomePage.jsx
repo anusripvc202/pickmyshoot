@@ -142,34 +142,65 @@ const HomePage = () => {
       ]
     },
     {
-      tag: "CHERISH EVERY MILESTONE",
+      tag: "PREMIUM LOCATIONS & GEAR",
       title: (
         <>
-          BABY & KIDS PORTRAIT <span className="fest-title-year">SPECIALS</span>
+          TOP STUDIOS & <span className="fest-title-year">EQUIPMENT</span>
         </>
       ),
-      description: "Create timeless memories with professional baby & maternity shoots. Safe, warm indoor studios, colorful prop setups, and gentle experienced children's photographers.",
-      image: "baby_photoshoot.png",
+      description: "Rent fully-equipped professional studios and top-tier camera gear for your next production. From green screens to premium lighting kits, find exactly what you need.",
+      image: "https://images.unsplash.com/photo-1598928636135-d146006ff4be?auto=format&fit=crop&w=600&q=80",
       isFramed: true,
-      background: "radial-gradient(circle at 60% 40%, rgba(14, 165, 233, 0.25) 0%, transparent 60%), linear-gradient(135deg, #0284c7 0%, #0369a1 100%)",
+      background: "radial-gradient(circle at 60% 40%, rgba(16, 185, 129, 0.25) 0%, transparent 60%), linear-gradient(135deg, #059669 0%, #047857 100%)",
       highlights: [
-        { icon: "👶", label: "Safe Warm Studio" },
-        { icon: "🎈", label: "Prop Setup Packs" },
-        { icon: "🤰", label: "Maternity Shoots" }
+        { icon: "🏢", label: "Premium Studios" },
+        { icon: "🎥", label: "Cinema Cameras" },
+        { icon: "💡", label: "Lighting Kits" }
       ],
       pills: [
-        { label: "👶 Baby Photoshoot", tab: "services" },
-        { label: "🤰 Maternity Shoots", tab: "services" },
-        { label: "🎂 Birthday Specials", tab: "services" }
+        { label: "🏢 Rent Studio", tab: "studios" },
+        { label: "🎥 Rent Gear", tab: "rentals" },
+        { label: "📍 Locations", tab: "studios" }
       ],
-      ctaLabel: "Book Baby Shoot",
-      ctaTab: "services",
-      attendeesNum: "🧸 100% Happy Parents",
-      attendeesLabel: "from 450+ portraits",
+      ctaLabel: "Explore Studios & Gear",
+      ctaTab: "studios",
+      attendeesNum: "🏢 150+ Locations",
+      attendeesLabel: "ready for booking",
       avatars: [
-        "https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=60&q=80",
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=60&q=80",
-        "https://images.unsplash.com/photo-1516624683217-bf02fc6b6b7c?auto=format&fit=crop&w=60&q=80"
+        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=60&q=80",
+        "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=60&q=80",
+        "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=60&q=80"
+      ]
+    },
+    {
+      tag: "PROFESSIONAL TALENT",
+      title: (
+        <>
+          HIRE TOP <span className="fest-title-year">MODELS</span>
+        </>
+      ),
+      description: "Discover and book professional fashion, fitness, and commercial models. Elevate your brand's visual identity with experienced talent ready for any shoot.",
+      image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80",
+      isFramed: true,
+      background: "radial-gradient(circle at 60% 40%, rgba(236, 72, 153, 0.25) 0%, transparent 60%), linear-gradient(135deg, #db2777 0%, #be185d 100%)",
+      highlights: [
+        { icon: "👗", label: "Fashion Models" },
+        { icon: "💪", label: "Fitness Talent" },
+        { icon: "📺", label: "Commercial Acting" }
+      ],
+      pills: [
+        { label: "👗 Fashion", tab: "models" },
+        { label: "💪 Fitness", tab: "models" },
+        { label: "📺 Commercial", tab: "models" }
+      ],
+      ctaLabel: "Book Models",
+      ctaTab: "models",
+      attendeesNum: "✨ 300+ Models",
+      attendeesLabel: "verified professionals",
+      avatars: [
+        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=60&q=80",
+        "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=60&q=80",
+        "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=60&q=80"
       ]
     }
   ];
