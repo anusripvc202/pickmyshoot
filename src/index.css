@@ -12548,6 +12548,7 @@ input:checked + .slider:before {
   filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
   display: block;
   animation: floatPhotographer 6s infinite ease-in-out;
+  mix-blend-mode: multiply;
 }
 
 @keyframes floatPhotographer {
