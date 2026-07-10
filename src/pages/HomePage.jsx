@@ -716,7 +716,17 @@ const HomePage = () => {
               </div>
               <div className="near-you-info">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span className="near-you-title">{photographer.name}</span>
+                  <span className="near-you-title" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    {photographer.name}
+                    {photographer.isVerified && (
+                      <svg viewBox="0 0 24 24" width="15" height="15" style={{ flexShrink: 0, display: 'inline-block' }} aria-label="Verified">
+                        <path
+                          d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.99-3.818-3.99-.48 0-.941.1-1.356.278C14.774 2.525 13.5 1.7 12 1.7s-2.774.825-3.416 2.088c-.415-.178-.876-.278-1.356-.278-2.108 0-3.818 1.78-3.818 3.99 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.58.875 2.95 2.148 3.6-.154.435-.238.905-.238 1.4 0 2.21 1.71 3.99 3.818 3.99.48 0 .941-.1 1.356-.278C9.226 21.475 10.5 22.3 12 22.3s2.774-.825 3.416-2.088c.415.178.876.278 1.356.278 2.108 0 3.818-1.78 3.818-3.99 0-.495-.084-.965-.238-1.4 1.273-.65 2.148-2.02 2.148-3.6zm-12.72 4.14-3.535-3.535 1.414-1.414 2.121 2.122 5.657-5.657 1.414 1.414-7.071 7.071z"
+                          fill="#2563eb"
+                        />
+                      </svg>
+                    )}
+                  </span>
                   <div className="card-rating-row" style={{ marginTop: 0 }}>
                     <Star size={11} className="card-rating-star" />
                     <span>{photographer.rating || '5.0'}</span>
