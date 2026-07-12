@@ -5649,9 +5649,10 @@ input:checked + .slider:before {
 
 /* ── Stats strip — full-width light panel ── */
 .footer-stats-strip {
+  grid-column: 1 / -1;
   max-width: 540px;
-  margin: 0 auto 0 0;
-  padding: 0 40px 12px;
+  margin: 0;
+  padding: 0;
   display: flex;
   align-items: stretch;
 }
@@ -6033,7 +6034,7 @@ input:checked + .slider:before {
   }
   .footer-stats-strip {
     margin: 0 auto;
-    padding: 0 20px 12px;
+    padding: 0;
   }
   .footer-mid-strip-content {
     flex-direction: column;
