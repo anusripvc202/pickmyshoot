@@ -5584,7 +5584,36 @@ input:checked + .slider:before {
   align-items: start;
 }
 
-/* ── Middle strip: unified newsletter form, social icons, and app badges ── */
+/* ── Trio strip: Stats | Social icons | App badges side by side ── */
+.footer-trio-strip {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px 40px;
+  border-top: 1px solid var(--footer-border);
+}
+
+.footer-trio-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.footer-trio-inner .footer-stats-row {
+  max-width: 320px;
+  width: 100%;
+}
+
+.footer-trio-inner .footer-app-badges {
+  flex-shrink: 0;
+}
+
+.footer-trio-inner .footer-socials {
+  flex-shrink: 0;
+}
+
+/* ── Middle strip: unified newsletter form ── */
 .footer-mid-strip {
   max-width: 1280px;
   margin: 0 auto;
@@ -6035,8 +6064,18 @@ input:checked + .slider:before {
     justify-content: center;
     gap: 16px;
   }
+  .footer-trio-inner {
+    justify-content: center;
+    gap: 20px;
+  }
 }
 @media (max-width: 768px) {
+  .footer-trio-inner {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+  }
   .footer-inner {
     grid-template-columns: 1fr;
     gap: 20px;
