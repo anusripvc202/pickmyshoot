@@ -5733,6 +5733,16 @@ input:checked + .slider:before {
   flex-shrink: 0;
 }
 
+/* Social + badges combined row — under Explore col */
+.footer-social-badges-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
 /* Social icons */
 .footer-socials {
   display: flex;
