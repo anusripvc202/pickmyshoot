@@ -1327,7 +1327,7 @@ const Layout = () => {
 
             <div className="footer-brand-col">
               <div className="footer-logo" onClick={() => { navigate('/'); setSelectedItem(null); }} style={{ cursor: 'pointer' }}>
-                <svg viewBox="0 0 170 100" style={{ height: '52px', width: 'auto' }}>
+                <svg viewBox="0 0 170 100" style={{ height: '42px', width: 'auto' }}>
                   <path d="M 25,38 C 25,33 29,33 32,33 L 58,33 C 63,33 65,30 68,25 L 73,17 C 75,14 79,14 83,14 L 87,14 C 91,14 95,14 97,17 L 102,25 C 105,30 107,33 112,33 L 138,33 C 141,33 145,33 145,38 L 145,73 C 145,78 141,78 138,78 L 32,78 C 29,78 25,78 25,73 Z" stroke="#c7100d" strokeWidth="2.5" fill="none" />
                   <text x="85" y="47" textAnchor="middle" fill="#c7100d" style={{ fontFamily: "'Dancing Script', 'Brush Script MT', cursive", fontSize: '23px', fontWeight: 'bold' }}>pick my</text>
                   <text x="85" y="71" textAnchor="middle" fill="#c7100d" style={{ fontFamily: "'Montserrat', 'Arial Black', sans-serif", fontSize: '26px', fontWeight: '900', letterSpacing: '1px' }}>SHOOT</text>
@@ -1382,7 +1382,7 @@ const Layout = () => {
               </ul>
               
               {/* Contact info under Support */}
-              <div className="footer-contact" style={{ marginTop: '16px' }}>
+              <div className="footer-contact" style={{ marginTop: '6px' }}>
                 <a href="mailto:hello@pickmyshoot.in" className="footer-contact-item">
                   <Mail size={13} />
                   <span>hello@pickmyshoot.in</span>
