@@ -5577,7 +5577,7 @@ input:checked + .slider:before {
 .footer-inner {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 24px 40px 16px;
+  padding: 24px 40px 4px;
   display: grid;
   grid-template-columns: 240px repeat(3, 1fr);
   gap: 20px;
@@ -5650,8 +5650,8 @@ input:checked + .slider:before {
 /* ── Stats strip — full-width light panel ── */
 .footer-stats-strip {
   max-width: 540px;
-  margin: 0 auto;
-  padding: 8px 40px 16px;
+  margin: 0 auto 0 0;
+  padding: 0 40px 12px;
   display: flex;
   align-items: stretch;
 }
@@ -6030,6 +6030,10 @@ input:checked + .slider:before {
   .footer-inner {
     grid-template-columns: 1fr;
     gap: 20px;
+  }
+  .footer-stats-strip {
+    margin: 0 auto;
+    padding: 0 20px 12px;
   }
   .footer-mid-strip-content {
     flex-direction: column;
