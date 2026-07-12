@@ -1360,6 +1360,61 @@ const Layout = () => {
               </div>
             </div>
 
+            {/* Explore Links */}
+            <div className="footer-links-col">
+              <h4 className="footer-col-title">
+                <span className="footer-col-title-dot" />
+                Explore
+              </h4>
+              <ul className="footer-links-list">
+                <li><NavLink to="/explore" onClick={() => setSelectedItem(null)}>Book a Shoot</NavLink></li>
+                <li><NavLink to="/explore" onClick={() => setSelectedItem(null)}>Rent a Studio</NavLink></li>
+                <li><NavLink to="/explore" onClick={() => setSelectedItem(null)}>Hire a Model</NavLink></li>
+                <li><NavLink to="/explore" onClick={() => setSelectedItem(null)}>Gear Rentals</NavLink></li>
+              </ul>
+            </div>
+
+            {/* Company Links */}
+            <div className="footer-links-col">
+              <h4 className="footer-col-title">
+                <span className="footer-col-title-dot" />
+                Company
+              </h4>
+              <ul className="footer-links-list">
+                <li><NavLink to="/about" onClick={() => setSelectedItem(null)}>About Us</NavLink></li>
+                <li><a href="#">Careers <span className="footer-link-tag">We're Hiring!</span></a></li>
+                <li><NavLink to="/blog" onClick={() => setSelectedItem(null)}>Blog</NavLink></li>
+                <li><NavLink to="/contact" onClick={() => setSelectedItem(null)}>Partner with Us</NavLink></li>
+              </ul>
+            </div>
+
+            {/* Support Links */}
+            <div className="footer-links-col">
+              <h4 className="footer-col-title">
+                <span className="footer-col-title-dot" />
+                Support
+              </h4>
+              <ul className="footer-links-list">
+                <li><NavLink to="/faq" onClick={() => setSelectedItem(null)}>Help Center &amp; FAQ</NavLink></li>
+                <li><NavLink to="/contact" onClick={() => setSelectedItem(null)}>Contact Us</NavLink></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Refund Policy</a></li>
+              </ul>
+
+              {/* Contact info under Support */}
+              <div className="footer-contact" style={{ marginTop: '6px' }}>
+                <a href="mailto:hello@pickmyshoot.in" className="footer-contact-item">
+                  <Mail size={13} />
+                  <span>hello@pickmyshoot.in</span>
+                </a>
+                <a href="tel:+919876543210" className="footer-contact-item">
+                  <Phone size={13} />
+                  <span>+91 98765 43210</span>
+                </a>
+              </div>
+            </div>
+
           </div>{/* end footer-inner */}
 
           {/* ── Middle strip: unified newsletter form, social icons, and app badges ── */}
