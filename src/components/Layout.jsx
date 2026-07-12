@@ -1396,6 +1396,26 @@ const Layout = () => {
 
           </div>{/* end footer-inner */}
 
+          {/* ── Stats row ── */}
+          <div className="footer-stats-strip">
+            <div className="footer-stats-row">
+              <div className="footer-stat-item">
+                <span className="footer-stat-num">15K+</span>
+                <span className="footer-stat-lbl">Creators</span>
+              </div>
+              <div className="footer-stat-sep" />
+              <div className="footer-stat-item">
+                <span className="footer-stat-num">2.8K+</span>
+                <span className="footer-stat-lbl">Studios</span>
+              </div>
+              <div className="footer-stat-sep" />
+              <div className="footer-stat-item">
+                <span className="footer-stat-num">50K+</span>
+                <span className="footer-stat-lbl">Bookings</span>
+              </div>
+            </div>
+          </div>
+
           {/* ── Middle strip: unified newsletter form, social icons, and app badges ── */}
           <div className="footer-mid-strip">
             <div className="footer-mid-strip-content">
@@ -1456,27 +1476,6 @@ const Layout = () => {
               </div>
             </div>
           </div>
-
-          {/* ── Stats row ── */}
-          <div className="footer-stats-strip">
-            <div className="footer-stats-row">
-              <div className="footer-stat-item">
-                <span className="footer-stat-num">15K+</span>
-                <span className="footer-stat-lbl">Creators</span>
-              </div>
-              <div className="footer-stat-sep" />
-              <div className="footer-stat-item">
-                <span className="footer-stat-num">2.8K+</span>
-                <span className="footer-stat-lbl">Studios</span>
-              </div>
-              <div className="footer-stat-sep" />
-              <div className="footer-stat-item">
-                <span className="footer-stat-num">50K+</span>
-                <span className="footer-stat-lbl">Bookings</span>
-              </div>
-            </div>
-          </div>
-
 
         </div>{/* end footer-main */}
 
