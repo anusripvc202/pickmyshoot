@@ -679,10 +679,10 @@ serve(async (req) => {
             "rating", "isVerified", "phone", "shoots", "followers", "revenue", "success", "views",
             "studioName", "studio_name"
           ) VALUES (
-            ${id}, ${body.id || id}, ${body.name}, ${body.email}, ${body.role || 'client'}, 
-            ${body.avatar}, ${body.bio}, ${body.location}, ${body.rating}, ${body.isVerified || false}, 
-            ${body.phone}, ${body.shoots}, ${body.followers}, ${body.revenue}, ${body.success}, ${body.views},
-            ${body.studioName || null}, ${body.studioName || null}
+            ${id}, ${body.id || id}, ${body.name ?? null}, ${body.email ?? null}, ${body.role || 'client'}, 
+            ${body.avatar ?? null}, ${body.bio ?? null}, ${body.location ?? null}, ${body.rating ?? null}, ${body.isVerified ?? false}, 
+            ${body.phone ?? null}, ${body.shoots ?? null}, ${body.followers ?? null}, ${body.revenue ?? null}, ${body.success ?? null}, ${body.views ?? null},
+            ${body.studioName ?? null}, ${body.studioName ?? null}
           ) ON CONFLICT ("email") DO UPDATE SET
             "name" = EXCLUDED.name,
             "role" = EXCLUDED.role,

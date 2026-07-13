@@ -28,7 +28,8 @@ const CreatePage = () => {
     triggerToast,
     activeProfileId,
     setProfiles,
-    currentUser
+    currentUser,
+    reloadListings
   } = useAppContext();
 
   const navigate = useNavigate();
@@ -49,6 +50,8 @@ const CreatePage = () => {
   const [newCompany, setNewCompany] = useState('');
   const [newSkills, setNewSkills] = useState('');
   const [newJobType, setNewJobType] = useState('Full Time');
+  // Subtype/Subcategory selector field
+  const [newSubtype, setNewSubtype] = useState('Daylight Studio');
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -113,6 +116,7 @@ const CreatePage = () => {
       newItem.area = "1200 Sq.ft";
       newItem.capacity = "10 Capacity";
       newItem.amenities = newCategory === 'locations' ? ["Outdoor Set", "Changing Room"] : ["Lighting Equipment", "Backdrops", "Makeup Room"];
+      newItem.studioType = newSubtype || (newCategory === 'locations' ? 'Outdoor Location' : 'Daylight Studio');
       setStudios(prev => [newItem, ...prev]);
       setExploreTab('studios');
     } else if (newCategory === 'models') {
@@ -122,12 +126,13 @@ const CreatePage = () => {
       setModels(prev => [newItem, ...prev]);
       setExploreTab('models');
     } else if (newCategory === 'gear' || newCategory === 'lighting') {
-      newItem.category = newCategory === 'lighting' ? "Lights" : "Camera";
+      newItem.category = newSubtype || (newCategory === 'lighting' ? "Lights" : "Camera");
       newItem.includes = "Standard kit and accessories";
       setGear(prev => [newItem, ...prev]);
       setExploreTab('rentals');
     } else if (newCategory === 'makeup') {
       newItem.category = "Makeup & Styling";
+      newItem.serviceType = "Makeup & Styling";
       newItem.amenities = ["Makeup Room", "Styling Kit", "Professional Cosmetics"];
       setServices(prev => [newItem, ...prev]);
       setExploreTab('services');
@@ -162,7 +167,10 @@ const CreatePage = () => {
         body: JSON.stringify(newProfile)
       })
         .then(res => res.json())
-        .then(saved => console.log('Photographer Profile saved to DB:', saved._id || saved.id))
+        .then(saved => {
+          console.log('Photographer Profile saved to DB:', saved._id || saved.id);
+          reloadListings(); // refresh explore listings
+        })
         .catch(err => console.warn('Failed to sync photographer profile to DB:', err));
 
       triggerToast(`Photographer Profile published: "${newTitle}"`);
@@ -177,6 +185,7 @@ const CreatePage = () => {
       setNewCompany('');
       setNewSkills('');
       setNewJobType('Full Time');
+      setNewSubtype('Daylight Studio');
 
       navigate(`/photographer/${generatedId}`);
       return;
@@ -187,18 +196,22 @@ const CreatePage = () => {
       setJobs(prev => [newItem, ...prev]);
       setExploreTab('jobs');
     } else {
+      newItem.serviceType = newSubtype || "Pre Wedding Shoot";
       setServices(prev => [newItem, ...prev]);
       setExploreTab('services');
     }
 
-    // ✅ Save to MongoDB Atlas via /api/listings
+    // Save to DB via /api/listings
     fetch('/api/listings', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newItem)
     })
       .then(res => res.json())
-      .then(saved => console.log('Listing saved to DB:', saved._id))
+      .then(saved => {
+        console.log('Listing saved to DB:', saved._id);
+        reloadListings(); // immediately refresh explore so new listing is visible
+      })
       .catch(err => console.warn('Failed to sync listing to DB:', err));
 
     triggerToast(`Listing published: "${newTitle}"`);
@@ -213,6 +226,7 @@ const CreatePage = () => {
     setNewCompany('');
     setNewSkills('');
     setNewJobType('Full Time');
+    setNewSubtype('Daylight Studio');
     
     navigate('/explore');
   };
@@ -259,6 +273,14 @@ const CreatePage = () => {
                         else if (cat.id === 'models') setNewPriceUnit('day');
                         else if (cat.id === 'jobs') setNewPriceUnit('month');
                         else setNewPriceUnit('booking');
+
+                        // Set default subtypes
+                        if (cat.id === 'studios') setNewSubtype('Daylight Studio');
+                        else if (cat.id === 'locations') setNewSubtype('Outdoor Location');
+                        else if (cat.id === 'gear') setNewSubtype('Camera');
+                        else if (cat.id === 'lighting') setNewSubtype('Lights');
+                        else if (cat.id === 'services') setNewSubtype('Pre Wedding Shoot');
+                        else setNewSubtype('');
                       }}
                     >
                       <div className="cat-select-icon"><Icon size={18} /></div>
@@ -271,6 +293,79 @@ const CreatePage = () => {
                 })}
               </div>
             </div>
+
+            {/* Subcategory / Specific Type Selector */}
+            {['studios', 'locations', 'gear', 'lighting', 'services'].includes(newCategory) && (
+              <div className="form-group">
+                <label className="form-label">Subcategory / Specific Type *</label>
+                <div className="auth-input-wrap">
+                  <select
+                    className="auth-select-input"
+                    value={newSubtype}
+                    onChange={(e) => setNewSubtype(e.target.value)}
+                    style={{
+                      width: '100%',
+                      background: 'var(--bg-card)',
+                      border: '1px solid var(--border)',
+                      borderRadius: '10px',
+                      padding: '12px 14px',
+                      color: 'var(--text-main)',
+                      fontSize: '14px',
+                      fontFamily: 'inherit',
+                      outline: 'none',
+                      transition: 'border-color 0.2s'
+                    }}
+                  >
+                    {newCategory === 'studios' && (
+                      <>
+                        <option value="Daylight Studio">Daylight Studio</option>
+                        <option value="Cyclorama Studio">Cyclorama Studio</option>
+                        <option value="Retro Studio">Retro Studio</option>
+                        <option value="Vintage Studio">Vintage Studio</option>
+                        <option value="Outdoor Location">Outdoor Location</option>
+                      </>
+                    )}
+                    {newCategory === 'locations' && (
+                      <>
+                        <option value="Outdoor Location">Outdoor Location</option>
+                        <option value="Indoor Set">Indoor Set</option>
+                        <option value="Heritage Lot">Heritage Lot</option>
+                      </>
+                    )}
+                    {newCategory === 'gear' && (
+                      <>
+                        <option value="Camera">Camera</option>
+                        <option value="Lens">Lens</option>
+                        <option value="Gimbal">Gimbal</option>
+                        <option value="Drone">Drone</option>
+                      </>
+                    )}
+                    {newCategory === 'lighting' && (
+                      <>
+                        <option value="Lights">Lights</option>
+                        <option value="Props">Props</option>
+                        <option value="Modifiers">Modifiers</option>
+                      </>
+                    )}
+                    {newCategory === 'services' && (
+                      <>
+                        <option value="Pre Wedding Shoot">Pre Wedding Shoot</option>
+                        <option value="Wedding Shoot">Wedding Shoot</option>
+                        <option value="Product Photography">Product Photography</option>
+                        <option value="Real Estate Photography">Real Estate Photography</option>
+                        <option value="Reels & Social Media Shoot">Reels & Social Media Shoot</option>
+                        <option value="Maternity Shoot">Maternity Shoot</option>
+                        <option value="Corporate Shoot">Corporate Shoot</option>
+                        <option value="Birthday Shoot">Birthday Shoot</option>
+                        <option value="Fashion Catalog Shoot">Fashion Catalog Shoot</option>
+                        <option value="Food & Culinary Shoot">Food & Culinary Shoot</option>
+                        <option value="Commercial Film Shoot">Commercial Film Shoot</option>
+                      </>
+                    )}
+                  </select>
+                </div>
+              </div>
+            )}
 
             {/* 2. Listing Title */}
             <div className="form-group">

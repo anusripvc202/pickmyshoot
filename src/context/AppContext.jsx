@@ -9,7 +9,54 @@ import {
   jobs as initialJobs 
 } from '../data/mockData';
 
-const defaultMockProfiles = [];
+const defaultMockProfiles = [
+  {
+    id: "demo-admin",
+    name: "Anusha (Admin)",
+    role: "admin",
+    email: "anusripvc202@gmail.com",
+    phone: "+91 99999 88888",
+    bio: "Platform Security Control Center Administrator.",
+    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=180&q=80",
+    shoots: "0",
+    rating: "5.0 ★",
+    followers: "0",
+    revenue: "₹0",
+    success: "100%",
+    views: "1",
+    studioName: "PickMyShoot HQ"
+  },
+  {
+    id: "demo-photographer",
+    name: "Rahul Verma (Photographer)",
+    role: "photographer",
+    email: "photographer@pickmyshoot.com",
+    phone: "+91 98765 43210",
+    bio: "Professional photographer with 8+ years experience in weddings, portraits, and fashion.",
+    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=180&q=80",
+    shoots: "150+",
+    rating: "4.9 ★",
+    followers: "24K",
+    revenue: "₹2.4L",
+    success: "98%",
+    views: "1200"
+  },
+  {
+    id: "demo-client",
+    name: "Priya Sharma (Client)",
+    role: "client",
+    email: "client@pickmyshoot.com",
+    phone: "+91 87654 32109",
+    bio: "Content creator and brand photographer from Mumbai.",
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=180&q=80",
+    shoots: "5",
+    rating: "5.0 ★",
+    followers: "240",
+    revenue: "₹0",
+    success: "100%",
+    views: "20"
+  }
+];
 
 const AppContext = createContext();
 
@@ -225,8 +272,8 @@ export const AppProvider = ({ children }) => {
     return () => clearInterval(interval);
   }, [activeProfileId]);
 
-  // Load listings from MongoDB on startup — merge with mock data (mock is always kept as baseline)
-  useEffect(() => {
+  // Reusable function: load listings from DB and merge with mock data
+  const reloadListings = () => {
     fetch('/api/listings')
       .then(res => {
         if (!res.ok) throw new Error("Failed to load listings");
@@ -258,8 +305,6 @@ export const AppProvider = ({ children }) => {
           });
 
           // Helper: merge DB items with prev mock data.
-          // If a DB item is missing key display fields (image, title, etc.),
-          // fall back to the corresponding mock entry so nothing ever disappears.
           const mergeItems = (dbItems, prev) => {
             const enriched = dbItems.map(dbItem => {
               const mock = prev.find(p => p.id === dbItem.id);
@@ -277,17 +322,21 @@ export const AppProvider = ({ children }) => {
             return [...enriched, ...filteredPrev];
           };
 
-          // Merge: DB items first (newest), backfilled with mock data for missing fields
-          if (dbServices.length > 0)  setServices(prev  => mergeItems(dbServices,  prev));
-          if (dbStudios.length > 0)   setStudios(prev   => mergeItems(dbStudios,   prev));
-          if (dbModels.length > 0)    setModels(prev    => mergeItems(dbModels,    prev));
-          if (dbGear.length > 0)      setGear(prev      => mergeItems(dbGear,      prev));
-          if (dbWorkshops.length > 0) setWorkshops(prev => mergeItems(dbWorkshops, prev));
-          if (dbJobs.length > 0)      setJobs(prev      => mergeItems(dbJobs,      prev));
+          // Always replace with full DB list (enriched) so new custom listings always show
+          setServices(prev  => mergeItems(dbServices,  prev));
+          setStudios(prev   => mergeItems(dbStudios,   prev));
+          setModels(prev    => mergeItems(dbModels,    prev));
+          setGear(prev      => mergeItems(dbGear,      prev));
+          setWorkshops(prev => mergeItems(dbWorkshops, prev));
+          setJobs(prev      => mergeItems(dbJobs,      prev));
         }
-        // If DB returns nothing or empty — mock data stays as-is (no replacement)
       })
       .catch(err => console.warn('Failed to load listings from DB — showing mock data:', err));
+  };
+
+  // Load listings from DB on app startup
+  useEffect(() => {
+    reloadListings();
   }, []);
 
 
@@ -511,7 +560,22 @@ export const AppProvider = ({ children }) => {
       return false;
     }
 
-    const foundProfile = profiles.find(p => p.email.toLowerCase() === email.toLowerCase());
+    // Check live profiles first
+    let foundProfile = profiles.find(p => p.email.toLowerCase() === email.toLowerCase());
+
+    // Fallback: check if there's a locally stored user with this email (registered this session)
+    if (!foundProfile) {
+      try {
+        const storedUser = localStorage.getItem('pickmyshoot_current_user');
+        if (storedUser) {
+          const parsed = JSON.parse(storedUser);
+          if (parsed && parsed.email && parsed.email.toLowerCase() === email.toLowerCase()) {
+            foundProfile = parsed;
+          }
+        }
+      } catch (e) { /* ignore */ }
+    }
+
     if (foundProfile) {
       const mappedRole = getMappedRole(foundProfile);
       setCurrentUser(foundProfile);
@@ -522,7 +586,7 @@ export const AppProvider = ({ children }) => {
       triggerToast(`Welcome back, ${foundProfile.name}!`);
       return true;
     } else {
-      triggerToast("Invalid credentials. Try using a demo login!");
+      triggerToast("Invalid credentials. Please register first or use demo accounts!");
       return false;
     }
   };
@@ -683,7 +747,8 @@ export const AppProvider = ({ children }) => {
       coupons, setCoupons,
       addSupportTicket, updateTicketStatus,
       sendChatMessage,
-      toggleCouponStatus, createCoupon
+      toggleCouponStatus, createCoupon,
+      reloadListings
     }}>
       {children}
     </AppContext.Provider>

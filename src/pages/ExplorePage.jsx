@@ -160,9 +160,9 @@ const ExplorePage = () => {
     
     list.forEach(item => {
       if (exploreTab === 'services') {
-        if (item.serviceType || item.title) subTypesSet.add(item.serviceType || item.title);
+        subTypesSet.add(item.serviceType || "Other Services");
       } else if (exploreTab === 'studios') {
-        if (item.studioType || item.title) subTypesSet.add(item.studioType || item.title);
+        subTypesSet.add(item.studioType || "Other Studios");
       } else if (exploreTab === 'models') {
         if (Array.isArray(item.categories)) {
           item.categories.forEach(cat => subTypesSet.add(cat));
@@ -172,7 +172,7 @@ const ExplorePage = () => {
       } else if (exploreTab === 'rentals') {
         if (item.category) subTypesSet.add(item.category);
       } else if (exploreTab === 'workshops') {
-        if (item.workshopType || item.title) subTypesSet.add(item.workshopType || item.title);
+        subTypesSet.add(item.workshopType || "Other Workshops");
       } else if (exploreTab === 'jobs') {
         if (Array.isArray(item.skills)) {
           item.skills.forEach(skill => subTypesSet.add(skill));
@@ -188,13 +188,13 @@ const ExplorePage = () => {
   // Helper to get the filter key for a given card item (used for click-to-filter)
   const getItemSubtype = (item) => {
     if (exploreTab === 'services') {
-      return item.serviceType || item.title || null;
+      return item.serviceType || "Other Services";
     }
     if (exploreTab === 'studios') {
-      return item.studioType || item.title || null;
+      return item.studioType || "Other Studios";
     }
     if (exploreTab === 'workshops') {
-      return item.workshopType || item.title || null;
+      return item.workshopType || "Other Workshops";
     }
     if (exploreTab === 'models') {
       if (Array.isArray(item.categories) && item.categories.length > 0) return item.categories[0];
@@ -218,10 +218,10 @@ const ExplorePage = () => {
     if (selectedSubtype) {
       list = list.filter(item => {
         if (exploreTab === 'services') {
-          return (item.serviceType || item.title) === selectedSubtype;
+          return (item.serviceType || "Other Services") === selectedSubtype;
         }
         if (exploreTab === 'studios') {
-          return (item.studioType || item.title) === selectedSubtype;
+          return (item.studioType || "Other Studios") === selectedSubtype;
         }
         if (exploreTab === 'models') {
           if (Array.isArray(item.categories)) {
@@ -233,7 +233,7 @@ const ExplorePage = () => {
           return item.category === selectedSubtype;
         }
         if (exploreTab === 'workshops') {
-          return (item.workshopType || item.title) === selectedSubtype;
+          return (item.workshopType || "Other Workshops") === selectedSubtype;
         }
         if (exploreTab === 'jobs') {
           if (Array.isArray(item.skills)) {
