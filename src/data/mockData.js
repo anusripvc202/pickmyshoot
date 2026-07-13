@@ -157,7 +157,7 @@ export const popularServices = [
     rating: 4.9,
     reviews: 182,
     category: "Book Shoot",
-    image: "https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1541855492-581f618f69a0?auto=format&fit=crop&w=500&q=80",
     description: "Capture the messy joy! First birthday custom cake-smash backdrop, premium cream cake included, bubbly tub bath portraits after the smash.",
     tags: ["Cake Smash"]
   },
