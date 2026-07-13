@@ -5579,9 +5579,9 @@ input:checked + .slider:before {
   margin: 0 auto;
   padding: 24px 40px 4px;
   display: grid;
-  grid-template-columns: 240px repeat(3, 1fr);
+  grid-template-columns: 240px repeat(4, 1fr);
   gap: 20px;
-  align-items: start;
+  align-items: stretch;
 }
 
 /* ── Trio strip: Stats | Social icons | App badges side by side ── */
@@ -5661,11 +5661,11 @@ input:checked + .slider:before {
 
 .footer-newsletter-form-row {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: stretch;
-  gap: 6px;
+  gap: 8px;
   width: 100%;
-  max-width: 220px;
+  max-width: 360px;
 }
 
 .footer-mid-right {
@@ -5964,7 +5964,8 @@ input:checked + .slider:before {
 }
 
 .footer-email-input {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
   background: var(--footer-newsletter-bg);
   border: 1px solid var(--footer-newsletter-border);
   border-radius: 12px;
@@ -5987,6 +5988,7 @@ input:checked + .slider:before {
 }
 
 .footer-subscribe-btn {
+  flex-shrink: 0;
   background: linear-gradient(135deg, #c7100d 0%, #FF4D5A 100%);
   border: none;
   padding: 8px 16px;
@@ -6100,16 +6102,17 @@ input:checked + .slider:before {
     align-items: center;
   }
   .footer-newsletter-form-row {
-    flex-direction: column;
+    flex-direction: row;
     width: 100%;
-    max-width: 240px;
-    gap: 6px;
+    max-width: 360px;
+    gap: 8px;
   }
   .footer-email-input {
-    width: 100% !important;
+    flex: 1 !important;
+    width: auto !important;
   }
   .footer-subscribe-btn {
-    width: 100%;
+    width: auto;
   }
   .footer-mid-right {
     flex-direction: column;

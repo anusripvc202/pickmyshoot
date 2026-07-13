@@ -826,3 +826,55 @@
   .jdm-benefits-grid { grid-template-columns: 1fr; }
   .jdm-apply-btn { padding: 12px 20px; font-size: 13px; }
 }
+
+/* Dark Theme Overrides */
+.dark-theme .jdm-body,
+.dark-theme .jdm-close,
+.dark-theme .jdm-bottom-apply-bar {
+  background-color: var(--card-bg) !important;
+  border-color: var(--border) !important;
+  color: var(--text-main) !important;
+}
+
+.dark-theme .jdm-gallery-col {
+  border-right-color: var(--border) !important;
+}
+
+.dark-theme .jdm-desc-text,
+.dark-theme .jdm-recruiter-title,
+.dark-theme .jdm-sub-title,
+.dark-theme .jdm-success-sub {
+  color: var(--text-muted) !important;
+}
+
+.dark-theme .jdm-job-title,
+.dark-theme .jdm-company-name,
+.dark-theme .jdm-section-title,
+.dark-theme .jdm-recruiter-name,
+.dark-theme .jdm-success-title,
+.dark-theme .jdm-qi-val {
+  color: var(--text-main) !important;
+}
+
+.dark-theme .jdm-tag-badge,
+.dark-theme .jdm-stat-card,
+.dark-theme .jdm-benefit-card,
+.dark-theme .jdm-recruiter-card,
+.dark-theme .jdm-quick-item {
+  background-color: var(--bg-app) !important;
+  border-color: var(--border) !important;
+  color: var(--text-main) !important;
+}
+
+.dark-theme .jdm-qi-icon {
+  background-color: var(--card-bg) !important;
+  border-color: var(--border) !important;
+}
+
+.dark-theme .jdm-header-meta-row {
+  border-bottom-color: var(--border) !important;
+}
+
+.dark-theme .jdm-section-title::after {
+  background: var(--border) !important;
+}

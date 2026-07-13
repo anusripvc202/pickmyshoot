@@ -39,6 +39,17 @@ const HomePage = () => {
 
   const navigate = useNavigate();
 
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return '';
+    if (imagePath.startsWith('http') || imagePath.startsWith('https') || imagePath.startsWith('data:')) {
+      return imagePath;
+    }
+    const base = import.meta.env.BASE_URL || '/';
+    const cleanBase = base.endsWith('/') ? base : `${base}/`;
+    const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
+    return `${cleanBase}${cleanPath}`;
+  };
+
   const displayedServices = React.useMemo(() => {
     const babyShoot = services.find(s => s.serviceType === 'Baby Photoshoot' || s.title.toLowerCase().includes('baby'));
     const otherShoots = services.filter(s => s.id !== (babyShoot?.id || ''));
@@ -431,14 +442,14 @@ const HomePage = () => {
             {activeSlideData.isFramed ? (
               <div className="hero-image-frame-wrap">
                 <img 
-                  src={activeSlideData.image.startsWith('http') ? activeSlideData.image : `${import.meta.env.BASE_URL}${activeSlideData.image}`} 
+                  src={getImageUrl(activeSlideData.image)} 
                   className="fest-photographer-img-framed" 
                   alt="Shoot Banner graphic" 
                 />
               </div>
             ) : (
               <img 
-                src={activeSlideData.image.startsWith('http') ? activeSlideData.image : `${import.meta.env.BASE_URL}${activeSlideData.image}`} 
+                src={getImageUrl(activeSlideData.image)} 
                 className="fest-photographer-img" 
                 alt="Shoot Banner graphic" 
               />
@@ -667,7 +678,7 @@ const HomePage = () => {
             {/* Glow circle behind image */}
             <div className="promo-img-glow" style={{ background: promoSlides[activePromoIndex].accentColor }} />
             <img
-              src={`${import.meta.env.BASE_URL}${promoSlides[activePromoIndex].image}`}
+              src={getImageUrl(promoSlides[activePromoIndex].image)}
               className="promo-img"
               alt={promoSlides[activePromoIndex].tag}
             />
@@ -751,7 +762,7 @@ const HomePage = () => {
           {displayedServices.map(service => (
             <div key={service.id} className="service-card" onClick={() => { setExploreTab('services'); navigate('/explore'); }}>
               <div className="card-img-wrap">
-                <img src={service.image} className="card-image" alt={service.title} />
+                <img src={getImageUrl(service.image)} className="card-image" alt={service.title} />
                 <button 
                   className={`card-like-btn ${likedItems[service.id] ? 'liked' : ''}`}
                   onClick={(e) => toggleLike(service.id, e)}
@@ -849,7 +860,7 @@ const HomePage = () => {
               <div className="inst-logo-container">
                 <div className="inst-logo-badge" style={{ background: inst.bgColor || '#ffffff' }}>
                   <img 
-                    src={`${import.meta.env.BASE_URL}${inst.logo.startsWith('/') ? inst.logo.slice(1) : inst.logo}`} 
+                    src={getImageUrl(inst.logo)} 
                     alt={inst.title} 
                   />
                 </div>

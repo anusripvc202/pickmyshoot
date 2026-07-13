@@ -786,3 +786,60 @@
   .jdp-apply-card { display: none; }
   .jdp-mobile-bar { display: block; }
 }
+
+/* Dark Theme Overrides */
+.dark-theme .jdp-header-card,
+.dark-theme .jdp-section-card,
+.dark-theme .jdp-apply-card,
+.dark-theme .jdp-recruiter-card,
+.dark-theme .jdp-similar-card,
+.dark-theme .jdp-mobile-icon-btn,
+.dark-theme .jdp-msg-btn,
+.dark-theme .jdp-success-modal {
+  background-color: var(--card-bg) !important;
+  border-color: var(--border) !important;
+  color: var(--text-main) !important;
+}
+
+.dark-theme .jdp-desc-text,
+.dark-theme .jdp-similar-meta,
+.dark-theme .jdp-salary-lbl,
+.dark-theme .jdp-mobile-salary-lbl,
+.dark-theme .jdp-success-sub,
+.dark-theme .jdp-recruiter-title {
+  color: var(--text-muted) !important;
+}
+
+.dark-theme .jdp-qi-val,
+.dark-theme .jdp-recruiter-name,
+.dark-theme .jdp-similar-title,
+.dark-theme .jdp-salary-val,
+.dark-theme .jdp-mobile-salary-val,
+.dark-theme .jdp-success-title,
+.dark-theme .jdp-qi-label {
+  color: var(--text-main) !important;
+}
+
+.dark-theme .jdp-tag-badge,
+.dark-theme .jdp-quick-item,
+.dark-theme .jdp-benefit-card,
+.dark-theme .jdp-insight-card,
+.dark-theme .jdp-company-logo {
+  background-color: var(--bg-app) !important;
+  border-color: var(--border) !important;
+  color: var(--text-main) !important;
+}
+
+.dark-theme .jdp-qi-icon {
+  background-color: var(--card-bg) !important;
+  border-color: var(--border) !important;
+}
+
+.dark-theme .jdp-mobile-bar {
+  background-color: var(--navbar-bg) !important;
+  border-top-color: var(--border) !important;
+}
+
+.dark-theme .jdp-section-title::after {
+  background: var(--border) !important;
+}

@@ -22,6 +22,17 @@ const ExplorePage = () => {
 
   const navigate = useNavigate();
 
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return '';
+    if (imagePath.startsWith('http') || imagePath.startsWith('https') || imagePath.startsWith('data:')) {
+      return imagePath;
+    }
+    const base = import.meta.env.BASE_URL || '/';
+    const cleanBase = base.endsWith('/') ? base : `${base}/`;
+    const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
+    return `${cleanBase}${cleanPath}`;
+  };
+
   // 1. Expanded/Collapsed state for left accordion filters
   const [expandedFilters, setExpandedFilters] = useState({
     categories: true,
@@ -630,7 +641,7 @@ const ExplorePage = () => {
                   }}
                 >
                   <div className="explore-img-wrap">
-                    <img src={item.image} className="card-image" alt={item.title} />
+                    <img src={getImageUrl(item.image)} className="card-image" alt={item.title} />
                     
                     {/* Dark Translucent Rating Overlay Bar at the bottom of the poster */}
                     <div className="card-rating-overlay-bar">
@@ -696,7 +707,7 @@ const ExplorePage = () => {
               <div key={job.id} className="job-card-item" onClick={() => navigate(`/job/${job.id}`)}>
                 <div className="job-header">
                   <div className="job-company-wrap">
-                    <img src={job.image} className="job-company-logo" alt={job.company} />
+                    <img src={getImageUrl(job.image)} className="job-company-logo" alt={job.company} />
                     <div className="job-title-meta">
                       <span className="job-name">{job.title}</span>
                       <span className="job-comp">{job.company}</span>

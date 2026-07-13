@@ -917,3 +917,61 @@
     display: block; /* Show sticky bottom bar on mobile screens */
   }
 }
+
+/* Dark Theme Overrides */
+.dark-theme .stat-item-block,
+.dark-theme .specialty-chip-item,
+.dark-theme .customer-review-card,
+.dark-theme .sticky-pricing-card,
+.dark-theme .view-all-portfolio-btn {
+  background-color: var(--card-bg) !important;
+  border-color: var(--border) !important;
+  color: var(--text-main) !important;
+}
+
+.dark-theme .specialty-chip-item {
+  color: var(--text-muted) !important;
+}
+
+.dark-theme .bio-desc-text,
+.dark-theme .review-desc-quote,
+.dark-theme .stat-label-text,
+.dark-theme .booking-rate-unit,
+.dark-theme .package-features-subtitle,
+.dark-theme .location-row {
+  color: var(--text-muted) !important;
+}
+
+.dark-theme .review-author-name,
+.dark-theme .booking-rate-num,
+.dark-theme .package-name-title,
+.dark-theme .stat-num-val {
+  color: var(--text-main) !important;
+}
+
+.dark-theme .equipment-badge-card {
+  background-color: var(--bg-app) !important;
+  border-color: var(--border) !important;
+  color: var(--text-main) !important;
+}
+
+.dark-theme .booking-package-radio-option {
+  border-color: var(--border) !important;
+}
+
+.dark-theme .avatar-large-img,
+.dark-theme .available-online-dot {
+  border-color: var(--card-bg) !important;
+}
+
+.dark-theme .photographer-header-card,
+.dark-theme .profile-section-card,
+.dark-theme .booking-card-price-row {
+  border-bottom-color: var(--border) !important;
+}
+
+.dark-theme .map-radius-overlay-info {
+  background-color: rgba(229, 57, 53, 0.05) !important;
+  border-color: rgba(229, 57, 53, 0.1) !important;
+  color: #ff5252 !important;
+}

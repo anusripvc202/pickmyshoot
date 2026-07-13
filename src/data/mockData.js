@@ -133,7 +133,7 @@ export const popularServices = [
     rating: 4.8,
     reviews: 95,
     category: "Book Shoot",
-    image: "https://images.unsplash.com/photo-1544126592-807adc26cc7d?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1546015720-b8b30df5aa27?auto=format&fit=crop&w=500&q=80",
     description: "Delicate newborn baby photography (under 4 weeks). Includes basket setups, soft wraps, floral rings, and careful posture support experts.",
     tags: ["Newborn (0–4 wks)"]
   },
@@ -157,7 +157,7 @@ export const popularServices = [
     rating: 4.9,
     reviews: 182,
     category: "Book Shoot",
-    image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&w=500&q=80",
     description: "Capture the messy joy! First birthday custom cake-smash backdrop, premium cream cake included, bubbly tub bath portraits after the smash.",
     tags: ["Cake Smash"]
   },
