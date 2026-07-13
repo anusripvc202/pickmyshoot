@@ -2712,7 +2712,7 @@ body {
 
 /* Model specific list overlays */
 .explore-card-item {
-  background-color: var(--card-bg);
+  background-color: #ffffff;
   border-radius: 20px;
   overflow: hidden;
   box-shadow: var(--shadow-sm);
@@ -7403,7 +7403,7 @@ input:checked + .slider:before {
 .explore-card-item.bms-style {
   display: flex;
   flex-direction: column;
-  background: none;
+  background: #ffffff;
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
