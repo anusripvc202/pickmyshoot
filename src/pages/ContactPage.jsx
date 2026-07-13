@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
+import './ContactPage.css';
 
 const ContactPage = () => {
   const { triggerToast } = useAppContext();

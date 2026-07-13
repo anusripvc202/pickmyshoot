@@ -415,6 +415,12 @@ async function edgeSendEmails(booking: any) {
     let recipientEmail = creatorUser?.email;
     let recipientName = creatorUser?.name;
 
+    // Direct mapping for mock photographer ID used by mock listings
+    if (booking.creatorId === '6a380b8173c0e340a6bf3a42') {
+      recipientEmail = 'nikhiljai1215@gmail.com';
+      recipientName = 'Nikhil photography';
+    }
+
     // Secondary lookup in photographers table if not found in users
     if (!recipientEmail && booking.creatorId) {
       const [photographerProfile] = await sql`
@@ -426,11 +432,11 @@ async function edgeSendEmails(booking: any) {
       }
     }
 
-    // Fallback to SMTP_EMAIL
+    // Fallback to nikhiljai1215@gmail.com so Nikhil receives mock booking notifications during tests
     if (!recipientEmail) {
-      recipientEmail = Deno.env.get('SMTP_EMAIL') || 'anusripvc202@gmail.com';
-      recipientName = creatorUser?.name || 'Demo Photographer (Mock Profile)';
-      console.log(`ℹ️  No creator found for ID "${booking.creatorId}" — falling back to SMTP_EMAIL for demo notification.`);
+      recipientEmail = 'nikhiljai1215@gmail.com';
+      recipientName = creatorUser?.name || 'Nikhil photography (Mock)';
+      console.log(`ℹ️  No creator found for ID "${booking.creatorId}" — falling back to nikhiljai1215@gmail.com for test notification.`);
     }
 
     const clientEmailAddress = clientUser?.email || booking.clientEmail;
@@ -500,6 +506,112 @@ serve(async (req) => {
       return new Response(JSON.stringify({ status: 'ok', timestamp: new Date().toISOString(), database: 'connected' }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
+    }
+
+    // ── TEST EMAIL ROUTE ──
+    if (path === '/test-email' && method === 'GET') {
+      const email = url.searchParams.get('to') || 'nikhiljai1215@gmail.com';
+      try {
+        const result = await sendBookingNotification({
+          photographerEmail: email,
+          photographerName: 'Test Photographer',
+          clientName: 'Test Client',
+          clientEmail: 'client@test.com',
+          clientPhone: '1234567890',
+          bookingTitle: 'Test Shoot via Supabase Edge',
+          bookingDate: '2026-08-15',
+          bookingTime: '10:00 AM',
+          bookingPrice: 5000,
+          bookingType: 'Service'
+        });
+        return new Response(JSON.stringify({ success: true, result }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      } catch (err) {
+        return new Response(JSON.stringify({ success: false, error: err.message }), {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      }
+    }
+
+    // ── TEST BOOKING EMAIL ROUTE ──
+    if (path === '/test-booking' && method === 'GET') {
+      const bookingId = url.searchParams.get('id');
+      try {
+        const [booking] = await sql`SELECT * FROM bookings WHERE "_id" = ${bookingId} OR "listingId" = ${bookingId}`;
+        if (!booking) {
+          return new Response(JSON.stringify({ success: false, error: 'Booking not found' }), {
+            status: 404,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          });
+        }
+        
+        // Find creator user
+        let [creatorUser] = await sql`
+          SELECT * FROM users WHERE "id" = ${booking.creatorId} OR "_id" = ${booking.creatorId}
+        `;
+        
+        let recipientEmail = creatorUser?.email;
+        let recipientName = creatorUser?.name;
+        let mappingUsed = 'Database Users Table';
+
+        if (booking.creatorId === '6a380b8173c0e340a6bf3a42') {
+          recipientEmail = 'nikhiljai1215@gmail.com';
+          recipientName = 'Nikhil photography';
+          mappingUsed = 'Direct Mock ID Mapping';
+        }
+
+        if (!recipientEmail && booking.creatorId) {
+          const [photographerProfile] = await sql`
+            SELECT * FROM photographers WHERE "_id" = ${booking.creatorId} OR "slug" = ${booking.creatorId} OR "name" = ${booking.creatorId}
+          `;
+          if (photographerProfile) {
+            recipientEmail = photographerProfile.email;
+            recipientName = photographerProfile.name;
+            mappingUsed = 'Database Photographers Table';
+          }
+        }
+
+        if (!recipientEmail) {
+          recipientEmail = 'nikhiljai1215@gmail.com';
+          recipientName = creatorUser?.name || 'Nikhil photography (Mock)';
+          mappingUsed = 'Default Fallback';
+        }
+
+        const clientEmailAddress = booking.clientEmail;
+        const clientName = booking.clientName;
+
+        // Directly test edgeSendEmails
+        await edgeSendEmails(booking);
+
+        return new Response(JSON.stringify({ 
+          success: true, 
+          booking: {
+            id: booking._id,
+            title: booking.title,
+            creatorId: booking.creatorId,
+            clientId: booking.clientId
+          },
+          photographer: {
+            name: recipientName,
+            email: recipientEmail,
+            mappingUsed
+          },
+          client: {
+            name: clientName,
+            email: clientEmailAddress,
+            phone: booking.clientPhone
+          }
+        }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      } catch (err) {
+        return new Response(JSON.stringify({ success: false, error: err.message }), {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      }
     }
 
     // ── BOOKINGS ROUTE ──
@@ -765,9 +877,9 @@ serve(async (req) => {
         const { id, ...updates } = body;
         const [p] = await sql`
           UPDATE photographers SET
-            "isVerified" = COALESCE(${updates.isVerified}, "isVerified"),
-            "code" = COALESCE(${updates.code}, "code"),
-            "status" = COALESCE(${updates.status}, "status")
+            "isVerified" = COALESCE(${updates.isVerified ?? null}, "isVerified"),
+            "code" = COALESCE(${updates.code ?? null}, "code"),
+            "status" = COALESCE(${updates.status ?? null}, "status")
           WHERE "_id" = ${id}
           RETURNING *
         `;
@@ -881,6 +993,38 @@ serve(async (req) => {
       if (method === 'DELETE') {
         await sql`DELETE FROM login_activities`;
         return new Response(JSON.stringify({ message: 'Login activity cleared.' }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+    }
+
+    // ── MESSAGES ROUTE ──
+    if (path === '/messages') {
+      if (method === 'GET') {
+        const userId = url.searchParams.get('userId');
+        if (!userId) {
+          return new Response(JSON.stringify({ error: 'userId parameter is required' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+        const msgs = await sql`
+          SELECT * FROM messages 
+          WHERE "senderId" = ${userId} OR "recipientId" = ${userId} 
+          ORDER BY "createdAt" ASC
+        `;
+        return new Response(JSON.stringify(msgs), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+
+      if (method === 'POST') {
+        const body = await req.json();
+        const id = body._id || body.id || `msg-${Date.now()}`;
+        
+        if (!body.sessionId || !body.senderId || !body.recipientId || !body.text) {
+          return new Response(JSON.stringify({ error: 'Missing required message parameters' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+
+        const [msg] = await sql`
+          INSERT INTO messages ("_id", "sessionId", "senderId", "recipientId", "text", "time")
+          VALUES (${id}, ${body.sessionId}, ${body.senderId}, ${body.recipientId}, ${body.text}, ${body.time ?? null})
+          RETURNING *
+        `;
+        return new Response(JSON.stringify(msg), { status: 201, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
     }
 

@@ -162,7 +162,7 @@ const mockReviews = [
 const PhotographerProfilePage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { profiles, openDetails, likedItems, toggleLike, triggerToast } = useAppContext();
+  const { profiles, openDetails, likedItems, toggleLike, triggerToast, activeProfileId } = useAppContext();
   
   const [activeSlide, setActiveSlide] = useState(0);
   const [showFullBio, setShowFullBio] = useState(false);
@@ -216,20 +216,20 @@ const PhotographerProfilePage = () => {
     return mockMatched || fallbackPhotographers[0];
   }, [profiles, id]);
 
-  const priceVal = photographer.startingPrice || 2000;
+  const priceVal = parseFloat(photographer.startingPrice) || 1999;
 
   // Calculate pricing packages dynamically
   const packages = {
     hourly: {
       name: "Hourly Session",
-      desc: "Perfect for quick portrait sessions, custom events or headshots.",
+      desc: "Ideal for quick portraits, couple shoots, or product highlights.",
       price: priceVal,
       unit: "/hr"
     },
     halfDay: {
       name: "Half Day Package (4 Hours)",
-      desc: "Ideal for pre-wedding shoots, fashion model portfolios & corporate events.",
-      price: priceVal * 3.5, // Discounted rate
+      desc: "Perfect for pre-wedding ceremonies, maternity, or outdoor catalog fashion shoots.",
+      price: priceVal * 3.5, // Bulk discount
       unit: " flat"
     },
     fullDay: {
@@ -255,6 +255,18 @@ const PhotographerProfilePage = () => {
     
     // Open details modal which triggers scheduling
     openDetails(bookingItem, 'service');
+  };
+
+  const handleChatNow = () => {
+    if (!activeProfileId) {
+      triggerToast("Please login first to chat with the photographer.");
+      return;
+    }
+    const clientPart = activeProfileId;
+    const photographerPart = photographer.id || photographer._id;
+    const sorted = [clientPart, photographerPart].sort();
+    const sessionId = `sess-${sorted[0]}-${sorted[1]}`;
+    navigate(`/dashboard/client?tab=chat&select=${sessionId}`);
   };
 
   const handleSocialClick = (platform) => {
@@ -545,6 +557,19 @@ const PhotographerProfilePage = () => {
             {/* CTA Buttons */}
             <button className="booking-submit-cta-btn" onClick={handleBookNow}>
               Book Photographer Now
+            </button>
+
+            <button 
+              className="booking-submit-cta-btn" 
+              onClick={handleChatNow}
+              style={{ 
+                marginTop: '10px', 
+                background: 'linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%)',
+                boxShadow: '0 4px 14px rgba(30, 58, 138, 0.25)' 
+              }}
+            >
+              <MessageSquare size={16} style={{ marginRight: '8px', verticalAlign: 'middle', display: 'inline-block' }} />
+              Chat with Photographer
             </button>
 
             <div className="social-buttons-flex-row">

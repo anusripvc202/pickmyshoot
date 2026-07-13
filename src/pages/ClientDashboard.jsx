@@ -19,7 +19,7 @@ import {
   DollarSign
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const ClientDashboard = () => {
   const {
@@ -38,6 +38,7 @@ const ClientDashboard = () => {
     tickets,
     addSupportTicket,
     chatSessions,
+    setChatSessions,
     chatMessages,
     sendChatMessage,
     currentUser,
@@ -45,7 +46,33 @@ const ClientDashboard = () => {
   } = useAppContext();
 
   const navigate = useNavigate();
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState('overview');
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const tabParam = params.get('tab');
+    const selectParam = params.get('select');
+    
+    if (tabParam) {
+      setActiveTab(tabParam);
+    }
+    if (selectParam) {
+      setSelectedSessionId(selectParam);
+      
+      const exists = chatSessions.some(s => s.id === selectParam);
+      if (!exists && profiles.length > 0) {
+        const photographerId = selectParam.replace(/^sess-/, '').split('-').find(id => id !== activeProfileId);
+        const photographerProfile = profiles.find(p => p.id === photographerId || p._id === photographerId);
+        const name = photographerProfile ? photographerProfile.name : "Photographer";
+        
+        setChatSessions(prev => [
+          { id: selectParam, recipientId: photographerId, recipientName: name, lastMessage: "Start typing to chat...", lastUpdated: "Now" },
+          ...prev
+        ]);
+      }
+    }
+  }, [location, chatSessions, profiles, activeProfileId, setChatSessions]);
 
   const activeProfile = profiles.find(p => p.id === activeProfileId) || profiles[0] || { name: '', email: '', bio: '' };
 
@@ -73,6 +100,15 @@ const ClientDashboard = () => {
   // Chat window states
   const [selectedSessionId, setSelectedSessionId] = useState('ch-1');
   const [chatInputText, setChatInputText] = useState('');
+
+  useEffect(() => {
+    if (chatSessions && chatSessions.length > 0) {
+      const exists = chatSessions.some(s => s.id === selectedSessionId);
+      if (!exists) {
+        setSelectedSessionId(chatSessions[0].id);
+      }
+    }
+  }, [chatSessions, selectedSessionId]);
 
   const handleTicketSubmit = (e) => {
     e.preventDefault();
@@ -449,7 +485,7 @@ const ClientDashboard = () => {
               <div style={{ display: 'flex', flexDirection: 'column', height: '400px' }}>
                 <div style={{ flex: 1, overflowY: 'auto', padding: '15px', background: '#fcfcfc', border: '1px solid #ddd', borderRadius: '8px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {chatMessages.filter(m => m.sessionId === selectedSessionId).map(msg => {
-                    const isMe = msg.senderId === activeProfileId;
+                    const isMe = msg.senderId === activeProfileId || msg.senderId === 'prof-client' || msg.senderId === 'prof-client-2';
                     return (
                       <div 
                         key={msg.id} 

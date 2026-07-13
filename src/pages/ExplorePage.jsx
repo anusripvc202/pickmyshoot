@@ -3,6 +3,26 @@ import { Star, Heart, ChevronDown, ChevronUp, MapPin, SlidersHorizontal, X } fro
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 
+const normalizeCategory = (cat) => {
+  if (!cat) return '';
+  const lower = cat.toLowerCase().trim();
+  if (lower.includes('wedding photography') || lower.includes('wedding shoot')) return 'Wedding Shoot';
+  if (lower.includes('pre wedding')) return 'Pre Wedding Shoot';
+  if (lower.includes('baby shoot') || lower.includes('baby photoshoot')) return 'Baby Photoshoot';
+  if (lower.includes('product')) return 'Product Photography';
+  if (lower.includes('maternity')) return 'Maternity Shoot';
+  if (lower.includes('candid')) return 'Candid Photography';
+  if (lower.includes('makeup')) return 'Makeup & Styling';
+  if (lower.includes('real estate')) return 'Real Estate Photography';
+  if (lower.includes('reels') || lower.includes('social media')) return 'Reels & Social Media Shoot';
+  if (lower.includes('corporate')) return 'Corporate Shoot';
+  if (lower.includes('birthday')) return 'Birthday Shoot';
+  if (lower.includes('fashion')) return 'Fashion Catalog Shoot';
+  if (lower.includes('food') || lower.includes('culinary')) return 'Food & Culinary Shoot';
+  if (lower.includes('film') || lower.includes('commercial')) return 'Commercial Film Shoot';
+  return cat;
+};
+
 const ExplorePage = () => {
   const {
     services,
@@ -11,6 +31,7 @@ const ExplorePage = () => {
     gear,
     workshops,
     jobs,
+    profiles,
     searchQuery,
     setSearchQuery,
     exploreTab,
@@ -143,7 +164,26 @@ const ExplorePage = () => {
   // Helper to determine the active array to display
   const getRawList = () => {
     switch (exploreTab) {
-      case 'services': return services;
+      case 'services': {
+        const photographerServices = (profiles || [])
+          .filter(p => p.role === 'photographer')
+          .map(p => ({
+            id: p.id || p._id,
+            title: p.name,
+            serviceType: "Photographer Profile",
+            price: p.startingPrice || p.price || 1999,
+            priceUnit: "hr",
+            rating: parseFloat(p.rating) || 5.0,
+            reviews: parseInt(p.shoots) || 45,
+            category: "Photographer",
+            image: p.avatar || p.image || "https://images.unsplash.com/photo-1542038784456-1ea8e935640e",
+            description: p.bio || "Professional photographer available for hire.",
+            location: p.location || "Hyderabad",
+            isPhotographerProfile: true,
+            categories: p.categories || ["Wedding Photography", "Candid Photography"]
+          }));
+        return [...photographerServices, ...services];
+      }
       case 'studios': return studios;
       case 'models': return models;
       case 'rentals': return gear;
@@ -160,7 +200,15 @@ const ExplorePage = () => {
     
     list.forEach(item => {
       if (exploreTab === 'services') {
-        subTypesSet.add(item.serviceType || "Other Services");
+        if (item.isPhotographerProfile) {
+          if (Array.isArray(item.categories) && item.categories.length > 0) {
+            item.categories.forEach(cat => subTypesSet.add(normalizeCategory(cat)));
+          } else {
+            subTypesSet.add("Photographer Profile");
+          }
+        } else {
+          subTypesSet.add(normalizeCategory(item.serviceType || "Other Services"));
+        }
       } else if (exploreTab === 'studios') {
         subTypesSet.add(item.studioType || "Other Studios");
       } else if (exploreTab === 'models') {
@@ -188,7 +236,14 @@ const ExplorePage = () => {
   // Helper to get the filter key for a given card item (used for click-to-filter)
   const getItemSubtype = (item) => {
     if (exploreTab === 'services') {
-      return item.serviceType || "Other Services";
+      if (item.isPhotographerProfile) {
+        if (Array.isArray(item.categories) && item.categories.length > 0) {
+          const matched = item.categories.map(c => normalizeCategory(c)).find(c => c === selectedSubtype);
+          return matched || normalizeCategory(item.categories[0]);
+        }
+        return "Photographer Profile";
+      }
+      return normalizeCategory(item.serviceType || "Other Services");
     }
     if (exploreTab === 'studios') {
       return item.studioType || "Other Studios";
@@ -218,7 +273,12 @@ const ExplorePage = () => {
     if (selectedSubtype) {
       list = list.filter(item => {
         if (exploreTab === 'services') {
-          return (item.serviceType || "Other Services") === selectedSubtype;
+          if (item.isPhotographerProfile) {
+            const itemCats = item.categories || [];
+            if (selectedSubtype === "Photographer Profile") return true;
+            return itemCats.some(cat => normalizeCategory(cat) === selectedSubtype);
+          }
+          return normalizeCategory(item.serviceType || "Other Services") === selectedSubtype;
         }
         if (exploreTab === 'studios') {
           return (item.studioType || "Other Studios") === selectedSubtype;
@@ -628,6 +688,11 @@ const ExplorePage = () => {
                     // Models tab — always go to dedicated profile page
                     if (exploreTab === 'models') {
                       navigate(`/model/${item.id}`);
+                      return;
+                    }
+                    // Photographer profile — go to photographer profile page
+                    if (item.isPhotographerProfile) {
+                      navigate(`/photographer/${item.id}`);
                       return;
                     }
                     // First click: apply the subtype filter to show related cards

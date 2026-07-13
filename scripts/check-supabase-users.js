@@ -7,9 +7,13 @@ async function run() {
   await pgClient.connect();
   
   try {
-    const usersRes = await pgClient.query('SELECT _id, id, name, email, role, "studioName", "studio_name" FROM users');
+    const usersRes = await pgClient.query('SELECT _id, name, email, role, "isVerified" FROM users');
     console.log('\n--- USERS ---');
     console.table(usersRes.rows);
+
+    const photographersRes = await pgClient.query('SELECT _id, name, email, "isVerified", code FROM photographers');
+    console.log('\n--- PHOTOGRAPHERS ---');
+    console.table(photographersRes.rows);
 
     const listingsRes = await pgClient.query('SELECT _id, title, type, "creatorId" FROM listings LIMIT 5');
     console.log('\n--- LISTINGS (First 5) ---');

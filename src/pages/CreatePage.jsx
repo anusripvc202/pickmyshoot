@@ -137,6 +137,19 @@ const CreatePage = () => {
       setServices(prev => [newItem, ...prev]);
       setExploreTab('services');
     } else if (newCategory === 'photography') {
+      const bioObj = {
+        text: newDescription,
+        startingPrice: priceVal,
+        instaUrl: newPortfolio || "https://instagram.com/pickmyshoot",
+        categories: ["Wedding Shoot", "Pre Wedding Shoot"],
+        highlights: ["1+ Year Experience", "Creative Angles", "High-End Camera Equipment"],
+        languages: ["English", "Hindi", "Telugu"],
+        travelOutside: "Yes",
+        gmbUrl: "",
+        fbUrl: "",
+        webUrl: ""
+      };
+
       const newProfile = {
         id: generatedId,
         _id: generatedId,
@@ -144,7 +157,7 @@ const CreatePage = () => {
         role: 'photographer',
         email: currentUser?.email || `${generatedId}@pickmyshoot.com`,
         phone: currentUser?.phone || "+91 99999 88888",
-        bio: newDescription,
+        bio: JSON.stringify(bioObj),
         avatar: defaultImg,
         location: newLocation || "Hyderabad",
         rating: "5.0",
@@ -154,6 +167,13 @@ const CreatePage = () => {
         experience: newExperience ? `${newExperience}+ Years` : "8+ Years",
         startingPrice: priceVal,
         instaUrl: newPortfolio || "https://instagram.com/pickmyshoot",
+        categories: bioObj.categories,
+        highlights: bioObj.highlights,
+        languages: bioObj.languages,
+        travelOutside: bioObj.travelOutside,
+        gmbUrl: bioObj.gmbUrl,
+        fbUrl: bioObj.fbUrl,
+        webUrl: bioObj.webUrl,
         revenue: "₹0",
         success: "100%",
         views: "1"
@@ -161,10 +181,15 @@ const CreatePage = () => {
 
       setProfiles(prev => [newProfile, ...prev]);
 
+      const dbPayload = {
+        ...newProfile,
+        bio: JSON.stringify(bioObj)
+      };
+
       fetch('/api/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newProfile)
+        body: JSON.stringify(dbPayload)
       })
         .then(res => res.json())
         .then(saved => {

@@ -207,6 +207,15 @@ const PhotographerDashboard = () => {
   const [selectedSessionId, setSelectedSessionId] = useState('ch-1');
   const [chatInputText, setChatInputText] = useState('');
 
+  useEffect(() => {
+    if (chatSessions && chatSessions.length > 0) {
+      const exists = chatSessions.some(s => s.id === selectedSessionId);
+      if (!exists) {
+        setSelectedSessionId(chatSessions[0].id);
+      }
+    }
+  }, [chatSessions, selectedSessionId]);
+
   // Calendar Availability states
   const [blockedDates, setBlockedDates] = useState(['2026-06-22', '2026-06-25']);
   const [workingHoursStart, setWorkingHoursStart] = useState('09:00 AM');
@@ -283,11 +292,31 @@ const PhotographerDashboard = () => {
 
   const handleProfileUpdate = (e) => {
     e.preventDefault();
+    const categoriesArray = Array.isArray(selectedCategories) ? selectedCategories : [];
+    const highlightsArray = profileHighlights.split(",").map(s => s.trim()).filter(Boolean);
+    const languagesArray = profileLanguages.split(",").map(s => s.trim()).filter(Boolean);
+
+    // Build the bio JSON string to persist custom fields
+    const bioObj = {
+      text: profileBio,
+      startingPrice: parseInt(profileStartingPrice) || 1800,
+      instaUrl: profileInstaUrl,
+      categories: categoriesArray,
+      highlights: highlightsArray,
+      languages: languagesArray,
+      travelOutside: profileTravelOutside,
+      gmbUrl: profileGmbUrl,
+      fbUrl: profileFbUrl,
+      webUrl: profileWebUrl
+    };
+
+    const bioJsonStr = JSON.stringify(bioObj);
+
     const updatedProfile = {
       ...activeProfile,
       name: profileName,
       email: profileEmail,
-      bio: profileBio,
+      bio: profileBio, // keep clean bio text in local state
       studioName: profileStudioName,
       startingPrice: parseInt(profileStartingPrice) || 1800,
       experience: parseInt(profileExperience) || 3,
@@ -295,9 +324,9 @@ const PhotographerDashboard = () => {
       reviews: parseInt(profileReviews) || 0,
       area: profileLocation,
       city: profileCity,
-      categories: selectedCategories,
-      highlights: profileHighlights.split(",").map(s => s.trim()).filter(Boolean),
-      languages: profileLanguages.split(",").map(s => s.trim()).filter(Boolean),
+      categories: categoriesArray,
+      highlights: highlightsArray,
+      languages: languagesArray,
       travelOutside: profileTravelOutside,
       gmbUrl: profileGmbUrl,
       instaUrl: profileInstaUrl,
@@ -305,6 +334,7 @@ const PhotographerDashboard = () => {
       webUrl: profileWebUrl
     };
 
+    // Update locally
     setProfiles(prev => prev.map(p => {
       if (p.id === activeProfileId) {
         return updatedProfile;
@@ -312,8 +342,41 @@ const PhotographerDashboard = () => {
       return p;
     }));
 
-    // Trigger toast
-    triggerToast("✓ Profile settings updated successfully!");
+    // Send payload to DB
+    const dbPayload = {
+      id: activeProfileId,
+      name: profileName,
+      email: profileEmail,
+      bio: bioJsonStr, // save custom fields inside bio JSON
+      role: activeProfile.role || 'photographer',
+      avatar: activeProfile.avatar || '',
+      studioName: profileStudioName,
+      location: profileLocation,
+      phone: activeProfile.phone || "+91 99999 88888",
+      shoots: activeProfile.shoots || "0",
+      rating: activeProfile.rating || "5.0 ★",
+      followers: activeProfile.followers || "0",
+      revenue: activeProfile.revenue || "₹0",
+      success: activeProfile.success || "100%",
+      views: activeProfile.views || "1"
+    };
+
+    fetch('/api/users', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dbPayload)
+    })
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to sync profile update to DB");
+        return res.json();
+      })
+      .then(() => {
+        triggerToast("✓ Profile settings saved and synced to database!");
+      })
+      .catch(err => {
+        console.warn("Could not sync profile settings update to DB:", err);
+        triggerToast("Profile settings saved locally");
+      });
   };
 
   const handlePackagesUpdate = (e) => {
@@ -1428,7 +1491,7 @@ const PhotographerDashboard = () => {
               <div style={{ display: 'flex', flexDirection: 'column', height: '400px' }}>
                 <div style={{ flex: 1, overflowY: 'auto', padding: '15px', background: '#fcfcfc', border: '1px solid #ddd', borderRadius: '8px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {chatMessages.filter(m => m.sessionId === selectedSessionId).map(msg => {
-                    const isMe = msg.senderId === activeProfileId;
+                    const isMe = msg.senderId === activeProfileId || msg.senderId === 'photographer';
                     return (
                       <div 
                         key={msg.id} 
@@ -1547,9 +1610,11 @@ const PhotographerDashboard = () => {
                   <label style={{ fontSize: '13px', fontWeight: '700' }}>Service Categories</label>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px', background: '#fafafa', padding: '12px', borderRadius: '8px', border: '1px solid #eee' }}>
                     {[
+                      "Wedding Shoot",
                       "Wedding Photography",
                       "Pre Wedding Shoot",
                       "Maternity Shoot",
+                      "Baby Photoshoot",
                       "Baby Shoot",
                       "Candid Photography",
                       "Product Photography"

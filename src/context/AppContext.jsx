@@ -117,6 +117,56 @@ export const AppProvider = ({ children }) => {
   const [chatSessions, setChatSessions] = useState([]);
   const [chatMessages, setChatMessages] = useState([]);
 
+  // Load real chat messages from database
+  useEffect(() => {
+    if (!activeProfileId || profiles.length === 0) {
+      setChatSessions([]);
+      setChatMessages([]);
+      return;
+    }
+
+    const loadMessages = async () => {
+      try {
+        const res = await fetch(`/api/messages?userId=${activeProfileId}`);
+        if (!res.ok) throw new Error("Failed to load messages");
+        const msgs = await res.json();
+        
+        // Group by sessionId to build sessions list dynamically
+        const sessionsMap = {};
+        msgs.forEach(m => {
+          const partnerId = m.senderId === activeProfileId ? m.recipientId : m.senderId;
+          const partnerProfile = profiles.find(p => p.id === partnerId || p._id === partnerId);
+          const partnerName = partnerProfile ? partnerProfile.name : "Partner User";
+          
+          if (!sessionsMap[m.sessionId]) {
+            sessionsMap[m.sessionId] = {
+              id: m.sessionId,
+              recipientId: partnerId,
+              recipientName: partnerName,
+              lastMessage: m.text,
+              lastUpdated: m.time || "Just now"
+            };
+          } else {
+            sessionsMap[m.sessionId].lastMessage = m.text;
+            if (m.time) {
+              sessionsMap[m.sessionId].lastUpdated = m.time;
+            }
+          }
+        });
+
+        setChatMessages(msgs);
+        setChatSessions(Object.values(sessionsMap));
+      } catch (err) {
+        console.warn("Failed to load chat messages:", err);
+      }
+    };
+
+    loadMessages();
+    // Poll every 3 seconds to get new incoming messages instantly!
+    const interval = setInterval(loadMessages, 3000);
+    return () => clearInterval(interval);
+  }, [activeProfileId, profiles]);
+
   // Coupons State
   const [coupons, setCoupons] = useState([]);
 
@@ -185,6 +235,13 @@ export const AppProvider = ({ children }) => {
             let bioText = u.bio || "Newly registered visual creator profile.";
             let startingPrice = u.startingPrice;
             let instaUrl = u.instaUrl;
+            let categories = u.categories || (u.role === 'photographer' ? ["Wedding Photography", "Candid Photography"] : []);
+            let highlights = u.highlights || (u.role === 'photographer' ? ["1+ Year Experience", "Creative Angles", "High-End Camera Equipment"] : []);
+            let languages = u.languages || ["English", "Hindi", "Telugu"];
+            let travelOutside = u.travelOutside || "Yes";
+            let gmbUrl = u.gmbUrl || "";
+            let fbUrl = u.fbUrl || "";
+            let webUrl = u.webUrl || "";
 
             try {
               if (u.bio && u.bio.startsWith('{')) {
@@ -193,6 +250,13 @@ export const AppProvider = ({ children }) => {
                   bioText = parsed.text || bioText;
                   startingPrice = parsed.startingPrice || startingPrice;
                   instaUrl = parsed.instaUrl || instaUrl;
+                  categories = parsed.categories || categories;
+                  highlights = parsed.highlights || highlights;
+                  languages = parsed.languages || languages;
+                  travelOutside = parsed.travelOutside || travelOutside;
+                  gmbUrl = parsed.gmbUrl || gmbUrl;
+                  fbUrl = parsed.fbUrl || fbUrl;
+                  webUrl = parsed.webUrl || webUrl;
                 }
               }
             } catch (e) {
@@ -216,7 +280,14 @@ export const AppProvider = ({ children }) => {
               views: u.views || "1",
               studioName: u.studioName || u.studio_name || "",
               startingPrice: startingPrice,
-              instaUrl: instaUrl
+              instaUrl: instaUrl,
+              categories,
+              highlights,
+              languages,
+              travelOutside,
+              gmbUrl,
+              fbUrl,
+              webUrl
             };
           });
 
@@ -497,16 +568,42 @@ export const AppProvider = ({ children }) => {
   };
 
   // Chat/Messages Actions
-  const sendChatMessage = (sessionId, text) => {
-    const newMsg = {
-      id: `m-${Date.now()}`,
+  const sendChatMessage = async (sessionId, text) => {
+    if (!activeProfileId) return;
+    
+    // Find recipient ID from the session ID (formatted as sess-id1-id2)
+    const ids = sessionId.replace(/^sess-/, '').split('-');
+    const recipientId = ids.find(id => id !== activeProfileId);
+    if (!recipientId) return;
+
+    const timeString = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const payload = {
       sessionId,
       senderId: activeProfileId,
+      recipientId,
       text,
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      time: timeString
     };
-    setChatMessages(prev => [...prev, newMsg]);
-    setChatSessions(prev => prev.map(s => s.id === sessionId ? { ...s, lastMessage: text, lastUpdated: "Just now" } : s));
+
+    try {
+      // Local optimistic update for instant UI response
+      const tempId = `m-temp-${Date.now()}`;
+      const tempMsg = { _id: tempId, id: tempId, ...payload, createdAt: new Date().toISOString() };
+      setChatMessages(prev => [...prev, tempMsg]);
+
+      const res = await fetch('/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error("Failed to send message to database");
+      const dbMsg = await res.json();
+      
+      // Replace optimistic message with actual db message
+      setChatMessages(prev => prev.map(m => m._id === tempId ? { ...dbMsg, id: dbMsg._id } : m));
+    } catch (err) {
+      console.warn("Failed to save message:", err);
+    }
   };
 
   // Coupon Actions

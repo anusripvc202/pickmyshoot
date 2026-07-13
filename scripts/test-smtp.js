@@ -22,7 +22,7 @@ async function testEmail() {
     // Send a test email
     const info = await transporter.sendMail({
       from: `"PickMyShoot Test" <${smtpEmail}>`,
-      to: smtpEmail,
+      to: 'nikhiljai1215@gmail.com',
       subject: '✅ PickMyShoot SMTP Test Email',
       html: `
         <div style="font-family: Arial, sans-serif; padding: 20px; background: #f4f4f7;">
