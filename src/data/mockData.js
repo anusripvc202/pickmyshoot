@@ -149,18 +149,7 @@ export const popularServices = [
     description: "Fun outdoor photoshoot on a picnic setup. Features colorful balloons, wooden toys, lush green background, and bright natural sunshine.",
     tags: ["Outdoor"]
   },
-  {
-    id: "ps-2-4",
-    title: "First Birthday Cake Smash",
-    serviceType: "Baby Photoshoot",
-    price: 7999,
-    rating: 4.9,
-    reviews: 182,
-    category: "Book Shoot",
-    image: "https://images.unsplash.com/photo-1541855492-581f618f69a0?auto=format&fit=crop&w=500&q=80",
-    description: "Capture the messy joy! First birthday custom cake-smash backdrop, premium cream cake included, bubbly tub bath portraits after the smash.",
-    tags: ["Cake Smash"]
-  },
+
 
   // --- PRODUCT PHOTOGRAPHY ---
   {
