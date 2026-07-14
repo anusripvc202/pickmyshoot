@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { useNavigate, useLocation } from 'react-router-dom';
+import EmailHoverReveal from '../components/EmailHoverReveal';
 
 const ClientDashboard = () => {
   const {
@@ -680,7 +681,7 @@ const ClientDashboard = () => {
               <p><strong>Event Date:</strong> {selectedBooking.date}</p>
               <p><strong>Slot Time:</strong> {selectedBooking.time}</p>
               <p><strong>Customer Name:</strong> {selectedBooking.clientName || activeProfile.name}</p>
-              <p><strong>Contact Email:</strong> {selectedBooking.clientEmail || activeProfile.email}</p>
+              <p><strong>Contact Email:</strong> <EmailHoverReveal email={selectedBooking.clientEmail || activeProfile.email} /></p>
               <p><strong>Paid Status:</strong> Paid (via online channels)</p>
               <div style={{ borderTop: '1px dashed #ccc', paddingTop: '10px', marginTop: '10px', display: 'flex', justifyContent: 'space-between', fontWeight: '800', fontSize: '16px' }}>
                 <span>Total amount paid</span>

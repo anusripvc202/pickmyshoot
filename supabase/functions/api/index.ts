@@ -708,6 +708,17 @@ function slugify(text: string) {
     .replace(/\-\-+/g, '-');        // Replace multiple - with single -
 }
 
+function maskEmail(email: string | null | undefined): string {
+  if (!email) return '';
+  const parts = email.split('@');
+  if (parts.length !== 2) return email;
+  const [local, domain] = parts;
+  if (local.length <= 2) {
+    return `${local.charAt(0)}***@${domain}`;
+  }
+  return `${local.charAt(0)}***${local.charAt(local.length - 1)}@${domain}`;
+}
+
 serve(async (req) => {
   // Handle CORS preflight options request
   if (req.method === 'OPTIONS') {
@@ -726,8 +737,28 @@ serve(async (req) => {
       await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS "password" TEXT;`;
       await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS "resetToken" TEXT;`;
       await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS "resetTokenExpires" TIMESTAMP;`;
+      await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS "authProvider" TEXT;`;
     } catch (err) {
       console.warn("Schema adjustment check warning:", err.message);
+    }
+
+    // Validate request authorization to reveal email addresses
+    const reqUserId = req.headers.get('x-user-id');
+    const reqAuthProvider = req.headers.get('x-auth-provider');
+    
+    let isGoogleAuth = false;
+    if (reqUserId && reqAuthProvider === 'google') {
+      try {
+        const [dbUser] = await sql`
+          SELECT "authProvider" FROM users 
+          WHERE ("id" = ${reqUserId} OR "_id" = ${reqUserId}) AND "authProvider" = 'google'
+        `;
+        if (dbUser) {
+          isGoogleAuth = true;
+        }
+      } catch (err) {
+        console.warn("Authorization verification db check warning:", err.message);
+      }
     }
 
     // ── HEALTH ROUTE ──
@@ -860,7 +891,13 @@ serve(async (req) => {
         } else {
           bookings = await sql`SELECT * FROM bookings ORDER BY "createdAt" DESC`;
         }
-        return new Response(JSON.stringify(bookings), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        const mappedBookings = isGoogleAuth ? bookings : bookings.map(b => ({
+          ...b,
+          clientEmail: maskEmail(b.clientEmail),
+          photographerEmail: maskEmail(b.photographerEmail),
+          email: maskEmail(b.email)
+        }));
+        return new Response(JSON.stringify(mappedBookings), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
 
       if (method === 'POST') {
@@ -1009,7 +1046,8 @@ serve(async (req) => {
     if (path === '/users') {
       if (method === 'GET') {
         const users = await sql`SELECT * FROM users ORDER BY "createdAt" DESC`;
-        return new Response(JSON.stringify(users), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        const mappedUsers = isGoogleAuth ? users : users.map(u => ({ ...u, email: maskEmail(u.email) }));
+        return new Response(JSON.stringify(mappedUsers), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
 
       if (method === 'POST') {
@@ -1019,12 +1057,12 @@ serve(async (req) => {
           INSERT INTO users (
             "_id", "id", "name", "email", "role", "avatar", "bio", "location", 
             "rating", "isVerified", "phone", "shoots", "followers", "revenue", "success", "views",
-            "studioName", "studio_name", "password"
+            "studioName", "studio_name", "password", "authProvider"
           ) VALUES (
             ${id}, ${body.id || id}, ${body.name ?? null}, ${body.email ?? null}, ${body.role || 'client'}, 
             ${body.avatar ?? null}, ${body.bio ?? null}, ${body.location ?? null}, ${body.rating ?? null}, ${body.isVerified ?? false}, 
             ${body.phone ?? null}, ${body.shoots ?? null}, ${body.followers ?? null}, ${body.revenue ?? null}, ${body.success ?? null}, ${body.views ?? null},
-            ${body.studioName ?? null}, ${body.studioName ?? null}, ${body.password ?? null}
+            ${body.studioName ?? null}, ${body.studioName ?? null}, ${body.password ?? null}, ${body.authProvider ?? 'email'}
           ) ON CONFLICT ("email") DO UPDATE SET
             "name" = EXCLUDED.name,
             "role" = EXCLUDED.role,
@@ -1033,7 +1071,8 @@ serve(async (req) => {
             "location" = EXCLUDED.location,
             "studioName" = EXCLUDED."studioName",
             "studio_name" = EXCLUDED.studio_name,
-            "password" = COALESCE(EXCLUDED.password, users.password)
+            "password" = COALESCE(EXCLUDED.password, users.password),
+            "authProvider" = COALESCE(EXCLUDED."authProvider", users."authProvider")
           RETURNING *
         `;
         return new Response(JSON.stringify(newUser), { status: 201, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
@@ -1089,7 +1128,8 @@ serve(async (req) => {
         }
 
         const photographers = await sql`SELECT * FROM photographers ORDER BY "createdAt" ASC`;
-        return new Response(JSON.stringify(photographers), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        const mappedPhotographers = isGoogleAuth ? photographers : photographers.map(p => ({ ...p, email: maskEmail(p.email) }));
+        return new Response(JSON.stringify(mappedPhotographers), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
 
       if (method === 'POST') {

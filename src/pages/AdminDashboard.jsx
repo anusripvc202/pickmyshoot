@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
+import EmailHoverReveal from '../components/EmailHoverReveal';
 import {
   AlertTriangle,
   Mail,
@@ -25,7 +26,7 @@ import {
 } from '../data/mockData';
 
 const AdminDashboard = () => {
-  const { logoutUser, triggerToast, profiles, currentUser } = useAppContext();
+  const { logoutUser, triggerToast, profiles, currentUser, getAuthHeaders } = useAppContext();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
 
@@ -39,7 +40,9 @@ const AdminDashboard = () => {
     setBookingsLoading(true);
     setBookingsError(null);
     try {
-      const res = await fetch('/api/bookings');
+      const res = await fetch('/api/bookings', {
+        headers: getAuthHeaders()
+      });
       if (!res.ok) throw new Error(`API error ${res.status}`);
       const data = await res.json();
       setBookingsList(Array.isArray(data) ? data : []);
@@ -201,7 +204,9 @@ const AdminDashboard = () => {
     setDirLoading(true);
     setDirError(null);
     try {
-      const res = await fetch('/api/photographers');
+      const res = await fetch('/api/photographers', {
+        headers: getAuthHeaders()
+      });
       if (!res.ok) throw new Error(`API error ${res.status}`);
       const data = await res.json();
       setPhotographers(Array.isArray(data) ? data : []);
@@ -726,7 +731,9 @@ const AdminDashboard = () => {
                                 <td>
                                   <div style={{ display: 'flex', flexDirection: 'column' }}>
                                     <span style={{ fontWeight: '700', fontSize: '13px', color: '#333' }}>{b.clientName || 'N/A'}</span>
-                                    <span style={{ fontSize: '11px', color: '#888', marginTop: '1px' }}>{b.clientEmail || 'No Email'}</span>
+                                    <span style={{ fontSize: '11px', color: '#888', marginTop: '1px', display: 'inline-block' }}>
+                                      <EmailHoverReveal email={b.clientEmail} />
+                                    </span>
                                     <span style={{ fontSize: '11px', color: '#888' }}>{b.clientPhone || 'No Phone'}</span>
                                   </div>
                                 </td>

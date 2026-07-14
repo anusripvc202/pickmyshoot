@@ -127,7 +127,9 @@ export const AppProvider = ({ children }) => {
 
     const loadMessages = async () => {
       try {
-        const res = await fetch(`/api/messages?userId=${activeProfileId}`);
+        const res = await fetch(`/api/messages?userId=${activeProfileId}`, {
+          headers: getAuthHeaders()
+        });
         if (!res.ok) throw new Error("Failed to load messages");
         const msgs = await res.json();
         
@@ -222,9 +224,31 @@ export const AppProvider = ({ children }) => {
     }
   }, [profiles, currentUser]);
 
+  const getAuthHeaders = () => {
+    const userId = localStorage.getItem('pickmyshoot_active_profile_id') || "";
+    let authProvider = 'email';
+    try {
+      const storedUser = localStorage.getItem('pickmyshoot_current_user');
+      if (storedUser) {
+        const parsed = JSON.parse(storedUser);
+        if (parsed && parsed.authProvider) {
+          authProvider = parsed.authProvider;
+        }
+      }
+    } catch (e) { /* ignore */ }
+
+    return {
+      'Content-Type': 'application/json',
+      'X-User-Id': userId,
+      'X-Auth-Provider': authProvider
+    };
+  };
+
   // Load registered users from MongoDB on startup
   useEffect(() => {
-    fetch('/api/users')
+    fetch('/api/users', {
+      headers: getAuthHeaders()
+    })
       .then(res => {
         if (!res.ok) throw new Error("Failed to load users");
         return res.json();
@@ -299,12 +323,14 @@ export const AppProvider = ({ children }) => {
         }
       })
       .catch(err => console.warn('Failed to load users from DB:', err));
-  }, []);
+  }, [isAuthenticated, activeProfileId]);
 
   // Load and poll bookings from MongoDB
   useEffect(() => {
     const loadBookings = () => {
-      fetch('/api/bookings')
+      fetch('/api/bookings', {
+        headers: getAuthHeaders()
+      })
         .then(res => {
           if (!res.ok) throw new Error("Failed to load bookings");
           return res.json();
@@ -341,11 +367,13 @@ export const AppProvider = ({ children }) => {
     loadBookings();
     const interval = setInterval(loadBookings, 5000); // poll every 5s for real-time notification feel
     return () => clearInterval(interval);
-  }, [activeProfileId]);
+  }, [activeProfileId, isAuthenticated]);
 
   // Reusable function: load listings from DB and merge with mock data
   const reloadListings = () => {
-    fetch('/api/listings')
+    fetch('/api/listings', {
+      headers: getAuthHeaders()
+    })
       .then(res => {
         if (!res.ok) throw new Error("Failed to load listings");
         return res.json();
@@ -473,7 +501,7 @@ export const AppProvider = ({ children }) => {
     // Sync with backend
     fetch('/api/bookings', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(),
       body: JSON.stringify(dbBooking)
     })
       .then(res => {
@@ -530,7 +558,7 @@ export const AppProvider = ({ children }) => {
     // Sync status update with backend
     fetch('/api/bookings', {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(),
       body: JSON.stringify({ id: bookingId, status: newStatus })
     }).catch(err => console.warn('Failed to sync booking status update with DB:', err));
   };
@@ -593,7 +621,7 @@ export const AppProvider = ({ children }) => {
 
       const res = await fetch('/api/messages', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify(payload)
       });
       if (!res.ok) throw new Error("Failed to send message to database");
@@ -621,7 +649,7 @@ export const AppProvider = ({ children }) => {
     if (!profile) return;
     fetch('/api/login-activity', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(),
       body: JSON.stringify({
         userId: profile.id || profile._id || `user-${Date.now()}`,
         name:   profile.name  || 'Unknown',
@@ -679,11 +707,12 @@ export const AppProvider = ({ children }) => {
         return false;
       }
       const mappedRole = getMappedRole(foundProfile);
-      setCurrentUser(foundProfile);
+      const updatedUser = { ...foundProfile, authProvider: foundProfile.authProvider || 'email' };
+      setCurrentUser(updatedUser);
       setActiveProfileId(foundProfile.id);
       setIsAuthenticated(true);
       setCurrentRole(mappedRole);
-      recordLoginActivity(foundProfile, mappedRole);
+      recordLoginActivity(updatedUser, mappedRole);
       triggerToast(`Welcome back, ${foundProfile.name}!`);
       return true;
     } else {
@@ -708,7 +737,8 @@ export const AppProvider = ({ children }) => {
       followers: "0",
       revenue: "₹0",
       success: "100%",
-      views: "1"
+      views: "1",
+      authProvider: 'email'
     };
 
     setProfiles(prev => [...prev, newProfile]);
@@ -730,7 +760,7 @@ export const AppProvider = ({ children }) => {
     // Sync with backend
     fetch('/api/users', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(),
       body: JSON.stringify({ ...newProfile, password })
     }).catch(err => console.warn('Failed to sync new user with DB', err));
 
@@ -754,14 +784,22 @@ export const AppProvider = ({ children }) => {
 
     const existing = profiles.find(p => p.email.toLowerCase() === email.toLowerCase());
     if (existing) {
-      setCurrentUser(existing);
+      const updatedUser = { ...existing, authProvider: 'google' };
+      setCurrentUser(updatedUser);
       setActiveProfileId(existing.id);
       setIsAuthenticated(true);
-
+      
       const roleLower = existing.role.toLowerCase();
       const mappedRole = roleLower.includes('admin') ? 'admin' : roleLower.includes('photographer') ? 'photographer' : 'client';
       setCurrentRole(mappedRole);
-      recordLoginActivity(existing, mappedRole);
+      recordLoginActivity(updatedUser, mappedRole);
+
+      // Sync authProvider update to DB
+      fetch('/api/users', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(updatedUser)
+      }).catch(err => console.warn('Failed to update Google authProvider in DB', err));
 
       triggerToast(`Welcome back, ${existing.name}!`);
       return true;
@@ -780,7 +818,8 @@ export const AppProvider = ({ children }) => {
         followers: "0",
         revenue: "₹0",
         success: "100%",
-        views: "1"
+        views: "1",
+        authProvider: 'google'
       };
 
       setProfiles(prev => [...prev, newProfile]);
@@ -793,7 +832,7 @@ export const AppProvider = ({ children }) => {
       try {
         await fetch('/api/users', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: getAuthHeaders(),
           body: JSON.stringify(newProfile)
         });
       } catch (err) {
@@ -849,7 +888,8 @@ export const AppProvider = ({ children }) => {
       addSupportTicket, updateTicketStatus,
       sendChatMessage,
       toggleCouponStatus, createCoupon,
-      reloadListings
+      reloadListings,
+      getAuthHeaders
     }}>
       {children}
     </AppContext.Provider>

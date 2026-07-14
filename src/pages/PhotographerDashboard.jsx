@@ -28,6 +28,7 @@ import {
 
 import { useAppContext } from '../context/AppContext';
 import { useNavigate } from 'react-router-dom';
+import EmailHoverReveal from '../components/EmailHoverReveal';
 
 const PhotographerDashboard = () => {
   const {
@@ -763,7 +764,7 @@ const PhotographerDashboard = () => {
         <header className="db-top-bar">
           <div className="db-top-bar-title-wrap">
             <h2 className="db-top-bar-title">Photographer Portal</h2>
-            <span className="db-top-bar-subtitle">Partner ID: {pmsIdFallback} • {activeProfile.name} ({activeProfile.email})</span>
+            <span className="db-top-bar-subtitle">Partner ID: {pmsIdFallback} • {activeProfile.name} (<EmailHoverReveal email={activeProfile.email} />)</span>
           </div>
           <div className="db-top-bar-actions">
             <button 
@@ -1438,7 +1439,7 @@ const PhotographerDashboard = () => {
                   
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '13.5px', color: '#333' }}>
                     <p><strong>Billing to Client:</strong> {invoiceSelectedBooking.clientName || 'Client Name'}</p>
-                    <p><strong>Contact Email:</strong> {invoiceSelectedBooking.clientEmail || 'Client Email'}</p>
+                    <p><strong>Contact Email:</strong> <EmailHoverReveal email={invoiceSelectedBooking.clientEmail} /></p>
                     <p><strong>Gig package details:</strong> {invoiceSelectedBooking.title}</p>
                     <p><strong>Event Schedule:</strong> {invoiceSelectedBooking.date} • {invoiceSelectedBooking.time}</p>
                     <p><strong>Base pricing amount:</strong> ₹{baseInvoiceAmt.toLocaleString('en-IN')}</p>
