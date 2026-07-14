@@ -162,7 +162,7 @@ const mockReviews = [
 const PhotographerProfilePage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { profiles, openDetails, likedItems, toggleLike, triggerToast, activeProfileId } = useAppContext();
+  const { profiles, studios, openDetails, likedItems, toggleLike, triggerToast, activeProfileId } = useAppContext();
   
   const [activeSlide, setActiveSlide] = useState(0);
   const [showFullBio, setShowFullBio] = useState(false);
@@ -215,6 +215,12 @@ const PhotographerProfilePage = () => {
     const mockMatched = fallbackPhotographers.find(p => p.id === id);
     return mockMatched || fallbackPhotographers[0];
   }, [profiles, id]);
+
+  const photographerOwnedStudios = useMemo(() => {
+    if (!studios) return [];
+    const photographerId = photographer.id || photographer._id;
+    return studios.filter(st => st.ownerId === photographerId || st.creatorId === photographerId);
+  }, [studios, photographer]);
 
   const priceVal = parseFloat(photographer.startingPrice) || 1999;
 
@@ -457,6 +463,34 @@ const PhotographerProfilePage = () => {
             </div>
           </div>
 
+          {/* Connected Social Channels */}
+          <div className="profile-section-card">
+            <h3 className="section-card-title">Connected Social Channels</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginTop: '12px' }}>
+              {[
+                { label: "Google My Business", connected: !!photographer.gmbUrl, url: photographer.gmbUrl },
+                { label: "Instagram Link", connected: !!photographer.instaUrl, url: photographer.instaUrl },
+                { label: "Facebook Page", connected: !!photographer.fbUrl, url: photographer.fbUrl },
+                { label: "Website URL", connected: !!photographer.webUrl, url: photographer.webUrl }
+              ].map((soc, idx) => (
+                <div key={idx} style={{ background: '#fafafa', border: '1px solid #eee', borderRadius: '8px', padding: '12px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '12px', fontWeight: 700, color: '#333', marginBottom: '6px' }}>{soc.label}</div>
+                  <span style={{ 
+                    display: 'inline-block', 
+                    padding: '2px 8px', 
+                    borderRadius: '12px', 
+                    fontSize: '10px', 
+                    fontWeight: 700,
+                    background: soc.connected ? '#e8f5e9' : '#f5f5f5',
+                    color: soc.connected ? '#27ae60' : '#888'
+                  }}>
+                    {soc.connected ? "Connected" : "Not Linked"}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
           {/* Responsive Portfolio Grid (6 Images) */}
           <div className="profile-section-card">
             <h3 className="section-card-title">Recent Portfolio Grid</h3>
@@ -475,6 +509,29 @@ const PhotographerProfilePage = () => {
               View All 15 Portfolio Photos <ChevronRight size={14} />
             </button>
           </div>
+
+          {/* My Studio Spaces */}
+          {photographerOwnedStudios.length > 0 && (
+            <div className="profile-section-card">
+              <h3 className="section-card-title">My Studio Spaces</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '12px' }}>
+                {photographerOwnedStudios.map(st => (
+                  <div key={st.id} style={{ display: 'flex', gap: '12px', border: '1px solid #eee', borderRadius: '8px', padding: '12px', background: '#fafafa', alignItems: 'center' }}>
+                    <img 
+                      src={st.image || 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=80&q=80'} 
+                      alt={st.title} 
+                      style={{ width: '60px', height: '60px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #ddd' }}
+                    />
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1, minWidth: 0 }}>
+                      <h4 style={{ margin: 0, fontSize: '14px', fontWeight: 800, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{st.title}</h4>
+                      <span style={{ fontSize: '12px', color: '#666', fontWeight: 600 }}>{st.location || 'Location not set'}</span>
+                      <span style={{ fontSize: '12px', fontWeight: 800, color: '#c7100d' }}>₹{st.price || 0} / {st.priceUnit || 'hr'}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Client Reviews Section */}
           <div className="profile-section-card">

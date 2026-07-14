@@ -1010,6 +1010,63 @@ const PhotographerDashboard = () => {
                 </div>
               </div>
 
+              {/* Client Bookings (from Supabase) */}
+              <div style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '12px', padding: '24px' }}>
+                <h3 style={{ margin: '0 0 12px 0', fontSize: '16px', fontWeight: 800, borderBottom: '1px solid #eee', paddingBottom: '8px' }}>Client Bookings</h3>
+                <div className="table-container-no-pad" style={{ marginTop: '12px' }}>
+                  {photographerBookings.length === 0 ? (
+                    <div style={{ padding: '24px', textAlign: 'center', color: '#666', fontStyle: 'italic' }}>No active bookings found.</div>
+                  ) : (
+                    <table className="console-data-table">
+                      <thead>
+                        <tr>
+                          <th>Gig / Package</th>
+                          <th>Client Details</th>
+                          <th>Schedule</th>
+                          <th>Pricing</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {photographerBookings.map(b => (
+                          <tr key={b.id || b._id}>
+                            <td className="bold" style={{ color: '#c7100d' }}>{b.title}</td>
+                            <td>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                                <span style={{ fontWeight: 700 }}>{b.clientName || 'N/A'}</span>
+                                <span style={{ fontSize: '11px', color: '#666' }}>
+                                  <EmailHoverReveal email={b.clientEmail} />
+                                </span>
+                                {b.clientPhone && <span style={{ fontSize: '11px', color: '#888' }}>{b.clientPhone}</span>}
+                              </div>
+                            </td>
+                            <td>
+                              <div>{b.date || 'N/A'}</div>
+                              <div style={{ fontSize: '11.5px', color: '#666', marginTop: '2px' }}>{b.time || 'N/A'}</div>
+                            </td>
+                            <td className="bold">₹{(typeof b.price === 'number' ? b.price : parseFloat(b.price) || 0).toLocaleString('en-IN')}</td>
+                            <td>
+                              <span style={{
+                                display: 'inline-block',
+                                padding: '2px 8px',
+                                borderRadius: '12px',
+                                fontSize: '10.5px',
+                                fontWeight: 700,
+                                textTransform: 'uppercase',
+                                background: b.status === 'confirmed' || b.status === 'approved' || b.status === 'completed' ? '#e8f5e9' : b.status === 'pending' ? '#fff8e1' : '#ffebee',
+                                color: b.status === 'confirmed' || b.status === 'approved' || b.status === 'completed' ? '#27ae60' : b.status === 'pending' ? '#ffb300' : '#c7100d'
+                              }}>
+                                {b.status || 'Pending'}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
+                </div>
+              </div>
+
             </div>
           </div>
           </>
