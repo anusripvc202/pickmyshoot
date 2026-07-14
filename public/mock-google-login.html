@@ -437,41 +437,53 @@
 
       document.getElementById('custom-back-btn').style.display = 'inline-block';
       
-      let html = '';
+      listContainer.innerHTML = ''; // Clear container
+
       accounts.forEach(acc => {
         const avatarUrl = acc.avatar || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(acc.name)}`;
         
-        html += `
-          <div class="account-item" onclick="selectUser('${acc.name.replace(/'/g, "\\'")}', '${acc.email.replace(/'/g, "\\'")}', '${avatarUrl.replace(/'/g, "\\'")}')">
-            <img class="account-avatar" src="${avatarUrl}" alt="${acc.name}" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(acc.name)}'">
-            <div class="account-info">
-              <div class="account-email" style="font-size: 14px; font-weight: 500; color: var(--text-main);">${acc.email}</div>
-            </div>
-            <button class="remove-account-btn" title="Remove account" onclick="removeAccount(event, '${acc.email.replace(/'/g, "\\'")}')">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-              </svg>
-            </button>
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'account-item';
+        itemDiv.onclick = () => selectUser(acc.name, acc.email, avatarUrl);
+        
+        itemDiv.innerHTML = `
+          <img class="account-avatar" src="${avatarUrl}" alt="${acc.name}" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(acc.name)}'">
+          <div class="account-info">
+            <div class="account-email" style="font-size: 14px; font-weight: 500; color: var(--text-main);">${acc.email}</div>
           </div>
+          <button class="remove-account-btn" title="Remove account">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+          </button>
         `;
+        
+        const removeBtn = itemDiv.querySelector('.remove-account-btn');
+        removeBtn.onclick = (event) => {
+          event.stopPropagation();
+          removeAccount(event, acc.email);
+        };
+        
+        listContainer.appendChild(itemDiv);
       });
 
-      html += `
-        <div class="use-another-btn" onclick="showCustomView()">
-          <div class="use-another-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-              <circle cx="9" cy="7" r="4"></circle>
-              <line x1="19" y1="8" x2="19" y2="14"></line>
-              <line x1="22" y1="11" x2="16" y2="11"></line>
-            </svg>
-          </div>
-          <div class="use-another-text">Use another account</div>
+      // Add "Use another account" button
+      const anotherDiv = document.createElement('div');
+      anotherDiv.className = 'use-another-btn';
+      anotherDiv.onclick = () => showCustomView();
+      anotherDiv.innerHTML = `
+        <div class="use-another-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <line x1="19" y1="8" x2="19" y2="14"></line>
+            <line x1="22" y1="11" x2="16" y2="11"></line>
+          </svg>
         </div>
+        <div class="use-another-text">Use another account</div>
       `;
-
-      listContainer.innerHTML = html;
+      listContainer.appendChild(anotherDiv);
       showChooserView();
     }
 
