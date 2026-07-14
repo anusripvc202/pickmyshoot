@@ -53,12 +53,12 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 16px;
+      margin-bottom: 24px;
     }
 
     .google-logo svg {
-      width: 75px;
-      height: 24px;
+      width: 88px;
+      height: 30px;
     }
 
     h1 {
@@ -281,6 +281,27 @@
       color: var(--text-main);
     }
 
+    .remove-account-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s, color 0.2s;
+      margin-left: 8px;
+      opacity: 0.6;
+    }
+
+    .remove-account-btn:hover {
+      background-color: rgba(217, 83, 79, 0.15);
+      color: #d9534f;
+      opacity: 1;
+    }
+
     .footer {
       display: flex;
       justify-content: space-between;
@@ -304,101 +325,23 @@
 
   <div class="card">
     <div class="google-logo">
-      <svg viewBox="0 0 74 24" width="75" height="24">
-        <path d="M9.24 5c-3.13 0-5.74 2.5-5.74 5.86s2.61 5.86 5.74 5.86c3.12 0 5.73-2.5 5.73-5.86S12.36 5 9.24 5zm0 9.47c-1.74 0-3.32-1.42-3.32-3.61s1.58-3.61 3.32-3.61 3.31 1.42 3.31 3.61-1.57 3.61-3.31 3.61zm21.46-9.47c-3.13 0-5.74 2.5-5.74 5.86s2.61 5.86 5.74 5.86c3.12 0 5.73-2.5 5.73-5.86s-2.61-5.86-5.73-5.86zm0 9.47c-1.74 0-3.32-1.42-3.32-3.61s1.58-3.61 3.32-3.61 3.31 1.42 3.31 3.61-1.57 3.61-3.31 3.61zm17.91-9.13v.84h-4.22c.38.56.96 1.25 1.94 1.25 1.57 0 2.45-1.25 2.45-2.61 0-2.39-1.92-3.79-4.25-3.79-3.21 0-5.74 2.53-5.74 5.86 0 3.29 2.5 5.86 5.74 5.86 2.37 0 4.14-1.25 4.54-3.19h-4.54v-.84h5.38v.83c-.45 2.44-2.53 4.04-5.38 4.04-3.79 0-6.58-2.94-6.58-6.7 0-3.7 2.76-6.7 6.58-6.7 2.87 0 4.71 1.63 5.08 4.13zm6.65-4.5h2.36v14.62H55.26V1.21zm10.74 3.79c-2.88 0-4.85 2.1-4.85 5.86 0 3.69 1.92 5.86 4.67 5.86 1.83 0 2.91-1.02 3.42-1.95v1.63c0 2.22-1.2 3.42-3.11 3.42-1.58 0-2.57-1.13-2.97-2.07l-2.07.86c.6 1.44 2.19 3.25 5.04 3.25 3.01 0 5.53-1.78 5.53-6.11V5.32H69.4v.85c-.52-.94-1.55-2.17-3.4-2.17zm.21 9.47c-1.63 0-2.73-1.39-2.73-3.61 0-2.26 1.1-3.61 2.73-3.61 1.62 0 2.66 1.39 2.66 3.61 0 2.22-1.04 3.61-2.66 3.61zM6.62 9.07c0-2.47-1.91-4.22-4.51-4.22C.96 4.85 0 6 0 7.84c0 3.12 2.5 4.7 4.77 4.7 1.12 0 2-.45 2.55-.95v1.27c0 1.73-.95 2.66-2.45 2.66-1.25 0-2.04-.9-2.35-1.65l-2.06.86c.61 1.45 2.19 3.03 4.41 3.03 3.05 0 5.17-2.08 5.17-5.91V5.32H7.9v.85c-.47-.56-1.21-1.32-2.39-1.32V9.07z" fill="#4285F4"/>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 272 92">
+        <path d="M115.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18C71.25 34.32 81.24 25 93.5 25s22.25 9.32 22.25 22.18zm-9.74 0c0-7.62-5.48-12.85-12.51-12.85-7.07 0-12.51 5.23-12.51 12.85 0 7.54 5.44 12.85 12.51 12.85 7.03 0 12.51-5.31 12.51-12.85z" fill="#EA4335"/>
+        <path d="M163.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18c0-12.85 9.99-22.18 22.25-22.18s22.25 9.32 22.25 22.18zm-9.74 0c0-7.62-5.48-12.85-12.51-12.85-7.07 0-12.51 5.23-12.51 12.85 0 7.54 5.44 12.85 12.51 12.85 7.03 0 12.51-5.31 12.51-12.85z" fill="#FBBC05"/>
+        <path d="M209.75 26.2v41.03c0 17.06-10.08 24.06-22.07 24.06-11.12 0-17.96-7.48-20.5-13.82l8.47-3.52c1.51 3.61 5.21 7.87 12.03 7.87 7.79 0 12.33-4.83 12.33-13.88V65.1h-.34c-2.31 2.85-6.72 5.35-12.3 5.35-11.72 0-22.25-10.21-22.25-22.14 0-12.01 10.53-22.31 22.25-22.31 5.58 0 9.99 2.5 12.3 5.26h.34V26.2h9.52zm-8.83 21.09c0-7.43-5.04-12.77-11.89-12.77-6.93 0-12.51 5.34-12.51 12.77 0 7.39 5.58 12.77 12.51 12.77 6.85 0 11.89-5.38 11.89-12.77z" fill="#4285F4"/>
+        <path d="M225 3v65h-9.5V3h9.5z" fill="#34A853"/>
+        <path d="M262.02 54.44l7.65 5.09c-2.49 3.7-8.47 10.12-19.14 10.12-12.98 0-22.78-10.08-22.78-22.18 0-13.11 9.91-22.18 21.64-22.18 11.85 0 17.56 9.24 19.46 14.3l1.01 2.52-30 12.43c2.31 4.54 5.88 6.81 10.97 6.81 5.08 0 8.57-2.49 11.19-6.91zm-21.75-7.79l20.08-8.31c-1.09-2.77-4.16-4.75-8.07-4.75-4.96 0-12.22 4.41-12.01 13.06z" fill="#EA4335"/>
+        <path d="M35 82.5c-15.5 0-28.5-12.5-28.5-28.5S19.5 25.5 35 25.5c9.5 0 17 4 22.5 9.5l-8 8c-4-4-9-6.5-14.5-6.5-11 0-20.5 9-20.5 20.5S24 67.5 35 67.5c7 0 12-3 15-5.5 3-3 4.5-7.5 5-12.5H35v-10h30.5c.3 1.5.5 3.5.5 5.5 0 9.5-2.5 19-8.5 25-5.5 6-13 9.5-22.5 9.5z" fill="#4285F4"/>
       </svg>
     </div>
 
     <!-- Account Chooser View -->
-    <div id="account-chooser-view" class="account-chooser-view">
+    <div id="account-chooser-view" class="account-chooser-view" style="display: none;">
       <h1>Choose an account</h1>
       <p class="subtitle">to continue to PickMyShoot</p>
 
       <div class="account-list">
-        <!-- Anusha -->
-        <div class="account-item" onclick="selectUser('Anusha', 'anusripvc202@gmail.com', 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80')">
-          <img class="account-avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" alt="Anusha" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Anusha'">
-          <div class="account-info">
-            <div class="account-name-row">
-              <span class="account-name">Anusha</span>
-              <span class="role-badge admin">Admin</span>
-            </div>
-            <div class="account-email">anusripvc202@gmail.com</div>
-          </div>
-        </div>
-
-        <!-- Nikhil -->
-        <div class="account-item" onclick="selectUser('Nikhil', 'nikhiljai1215@gmail.com', 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80')">
-          <img class="account-avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80" alt="Nikhil" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Nikhil'">
-          <div class="account-info">
-            <div class="account-name-row">
-              <span class="account-name">Nikhil</span>
-              <span class="role-badge photographer">Photographer</span>
-            </div>
-            <div class="account-email">nikhiljai1215@gmail.com</div>
-          </div>
-        </div>
-
-        <!-- Sri -->
-        <div class="account-item" onclick="selectUser('Sri', 'ssrajuqc@gmail.com', 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&q=80')">
-          <img class="account-avatar" src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&q=80" alt="Sri" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Sri'">
-          <div class="account-info">
-            <div class="account-name-row">
-              <span class="account-name">Sri</span>
-              <span class="role-badge client">Client</span>
-            </div>
-            <div class="account-email">ssrajuqc@gmail.com</div>
-          </div>
-        </div>
-
-        <!-- Jaideep -->
-        <div class="account-item" onclick="selectUser('Jaideep', 'anusripvc203@gmail.com', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80')">
-          <img class="account-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="Jaideep" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Jaideep'">
-          <div class="account-info">
-            <div class="account-name-row">
-              <span class="account-name">Jaideep</span>
-              <span class="role-badge client">Client</span>
-            </div>
-            <div class="account-email">anusripvc203@gmail.com</div>
-          </div>
-        </div>
-
-        <!-- Jaideepvarma -->
-        <div class="account-item" onclick="selectUser('Jaideepvarma', 'anusripvc204@gmail.com', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80')">
-          <img class="account-avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80" alt="Jaideepvarma" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Jaideepvarma'">
-          <div class="account-info">
-            <div class="account-name-row">
-              <span class="account-name">Jaideepvarma</span>
-              <span class="role-badge photographer">Photographer</span>
-            </div>
-            <div class="account-email">anusripvc204@gmail.com</div>
-          </div>
-        </div>
-
-        <!-- Maddiboina Lokesh -->
-        <div class="account-item" onclick="selectUser('Maddiboina Lokesh', '2100030312@kluniversity.in', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80')">
-          <img class="account-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="Maddiboina Lokesh" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Maddiboina Lokesh'">
-          <div class="account-info">
-            <div class="account-name-row">
-              <span class="account-name">Maddiboina Lokesh</span>
-              <span class="role-badge client">Client</span>
-            </div>
-            <div class="account-email">2100030312@kluniversity.in</div>
-          </div>
-        </div>
-
-        <!-- Use another account -->
-        <div class="use-another-btn" onclick="showCustomView()">
-          <div class="use-another-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-              <circle cx="9" cy="7" r="4"></circle>
-              <line x1="19" y1="8" x2="19" y2="14"></line>
-              <line x1="22" y1="11" x2="16" y2="11"></line>
-            </svg>
-          </div>
-          <div class="use-another-text">Use another account</div>
-        </div>
+        <!-- Accounts will be rendered here dynamically -->
       </div>
     </div>
 
@@ -418,7 +361,7 @@
       </div>
 
       <div class="btn-group">
-        <button class="btn-secondary" onclick="showChooserView()">Back</button>
+        <button id="custom-back-btn" class="btn-secondary" onclick="showChooserView()">Back</button>
         <button class="btn-submit" onclick="submitCustomUser()">Next</button>
       </div>
     </div>
@@ -434,19 +377,142 @@
   </div>
 
   <script>
+    const SEED_ACCOUNTS = [
+      {
+        name: 'Anusha',
+        email: 'anusripvc202@gmail.com',
+        avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80',
+        role: 'Admin'
+      },
+      {
+        name: 'Nikhil',
+        email: 'nikhiljai1215@gmail.com',
+        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80',
+        role: 'Photographer'
+      },
+      {
+        name: 'Sri',
+        email: 'ssrajuqc@gmail.com',
+        avatar: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&q=80',
+        role: 'Client'
+      },
+      {
+        name: 'Jaideep',
+        email: 'anusripvc203@gmail.com',
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80',
+        role: 'Client'
+      },
+      {
+        name: 'Jaideepvarma',
+        email: 'anusripvc204@gmail.com',
+        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80',
+        role: 'Photographer'
+      },
+      {
+        name: 'Maddiboina Lokesh',
+        email: '2100030312@kluniversity.in',
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80',
+        role: 'Client'
+      }
+    ];
+
+    function getAccounts() {
+      const stored = localStorage.getItem('mock_google_accounts');
+      if (stored !== null) {
+        return JSON.parse(stored);
+      }
+      
+      // Seed if on development domains
+      const isLocalhost = window.location.hostname === 'localhost' || 
+                          window.location.hostname === '127.0.0.1' ||
+                          window.location.hostname.startsWith('192.168.');
+      
+      const initialList = isLocalhost ? SEED_ACCOUNTS : [];
+      localStorage.setItem('mock_google_accounts', JSON.stringify(initialList));
+      return initialList;
+    }
+
+    function saveAccounts(accounts) {
+      localStorage.setItem('mock_google_accounts', JSON.stringify(accounts));
+    }
+
+    function renderAccounts() {
+      const accounts = getAccounts();
+      const listContainer = document.querySelector('.account-list');
+      
+      if (accounts.length === 0) {
+        showCustomView();
+        document.getElementById('custom-back-btn').style.display = 'none';
+        return;
+      }
+
+      document.getElementById('custom-back-btn').style.display = 'inline-block';
+      
+      let html = '';
+      accounts.forEach(acc => {
+        const roleClass = (acc.role || 'Client').toLowerCase();
+        const roleLabel = acc.role || 'Client';
+        const avatarUrl = acc.avatar || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(acc.name)}`;
+        
+        html += `
+          <div class="account-item" onclick="selectUser('${acc.name.replace(/'/g, "\\'")}', '${acc.email.replace(/'/g, "\\'")}', '${avatarUrl.replace(/'/g, "\\'")}')">
+            <img class="account-avatar" src="${avatarUrl}" alt="${acc.name}" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(acc.name)}'">
+            <div class="account-info">
+              <div class="account-name-row">
+                <span class="account-name">${acc.name}</span>
+                <span class="role-badge ${roleClass}">${roleLabel}</span>
+              </div>
+              <div class="account-email">${acc.email}</div>
+            </div>
+            <button class="remove-account-btn" title="Remove account" onclick="removeAccount(event, '${acc.email.replace(/'/g, "\\'")}')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+            </button>
+          </div>
+        `;
+      });
+
+      html += `
+        <div class="use-another-btn" onclick="showCustomView()">
+          <div class="use-another-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <line x1="19" y1="8" x2="19" y2="14"></line>
+              <line x1="22" y1="11" x2="16" y2="11"></line>
+            </svg>
+          </div>
+          <div class="use-another-text">Use another account</div>
+        </div>
+      `;
+
+      listContainer.innerHTML = html;
+      showChooserView();
+    }
+
+    function removeAccount(event, email) {
+      event.stopPropagation();
+      let accounts = getAccounts();
+      accounts = accounts.filter(acc => acc.email.toLowerCase() !== email.toLowerCase());
+      saveAccounts(accounts);
+      renderAccounts();
+    }
+
     function showCustomView() {
       document.getElementById('account-chooser-view').style.display = 'none';
       document.getElementById('custom-account-view').style.display = 'block';
     }
 
+    // Toggle button displays
     function showChooserView() {
       document.getElementById('custom-account-view').style.display = 'none';
       document.getElementById('account-chooser-view').style.display = 'block';
     }
 
     function selectUser(name, email, avatar) {
-      const userAvatar = avatar || `https://api.dicebear.com/7.x/initials/svg?seed=${name}`;
-      // Send user info back to main window
+      const userAvatar = avatar || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}`;
       window.opener.postMessage({
         type: 'GOOGLE_SIGNIN_SUCCESS',
         user: {
@@ -472,8 +538,32 @@
         return;
       }
 
+      let role = 'Client';
+      if (email.toLowerCase().includes('admin') || email.toLowerCase() === 'anusripvc202@gmail.com') {
+        role = 'Admin';
+      } else if (email.toLowerCase().includes('photographer') || email.toLowerCase() === 'nikhiljai1215@gmail.com' || email.toLowerCase() === 'anusripvc204@gmail.com') {
+        role = 'Photographer';
+      }
+
+      const accounts = getAccounts();
+      const exists = accounts.some(acc => acc.email.toLowerCase() === email.toLowerCase());
+      if (!exists) {
+        accounts.push({
+          name: name,
+          email: email,
+          avatar: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}`,
+          role: role
+        });
+        saveAccounts(accounts);
+      }
+
       selectUser(name, email);
     }
+
+    // Run render on load
+    document.addEventListener('DOMContentLoaded', () => {
+      renderAccounts();
+    });
   </script>
 </body>
 </html>
