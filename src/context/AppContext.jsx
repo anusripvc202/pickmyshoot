@@ -674,6 +674,10 @@ export const AppProvider = ({ children }) => {
     }
 
     if (foundProfile) {
+      if (foundProfile.password && foundProfile.password !== password) {
+        triggerToast("Incorrect password. Please try again!");
+        return false;
+      }
       const mappedRole = getMappedRole(foundProfile);
       setCurrentUser(foundProfile);
       setActiveProfileId(foundProfile.id);
@@ -727,7 +731,7 @@ export const AppProvider = ({ children }) => {
     fetch('/api/users', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newProfile)
+      body: JSON.stringify({ ...newProfile, password })
     }).catch(err => console.warn('Failed to sync new user with DB', err));
 
     triggerToast(`Welcome to PickMyShoot, ${name}!`);

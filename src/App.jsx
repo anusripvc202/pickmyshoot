@@ -7,6 +7,7 @@ import CreatePage from './pages/CreatePage';
 import BookingsPage from './pages/BookingsPage';
 import ProfilePage from './pages/ProfilePage';
 import LoginPage from './pages/LoginPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 import ClientDashboard from './pages/ClientDashboard';
 import PhotographerDashboard from './pages/PhotographerDashboard';
 import AdminDashboard from './pages/AdminDashboard';
@@ -51,6 +52,7 @@ function App() {
         <Route path="model/:id" element={<ModelProfilePage />} />
         <Route path="job/:id" element={<JobDetailsPage />} />
         <Route path="login"    element={<LoginPage />} />
+        <Route path="reset-password" element={<ResetPasswordPage />} />
         <Route path="blog"     element={<BlogPage />} />
         <Route path="about"    element={<AboutPage />} />
         <Route path="contact"  element={<ContactPage />} />

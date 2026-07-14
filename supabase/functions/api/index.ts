@@ -721,6 +721,15 @@ serve(async (req) => {
   console.log(`🚀 Request received: ${method} ${path}`);
 
   try {
+    // Ensure columns exist on the users table
+    try {
+      await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS "password" TEXT;`;
+      await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS "resetToken" TEXT;`;
+      await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS "resetTokenExpires" TIMESTAMP;`;
+    } catch (err) {
+      console.warn("Schema adjustment check warning:", err.message);
+    }
+
     // ── HEALTH ROUTE ──
     if (path === '/health' && method === 'GET') {
       await sql`SELECT 1`;
@@ -1010,12 +1019,12 @@ serve(async (req) => {
           INSERT INTO users (
             "_id", "id", "name", "email", "role", "avatar", "bio", "location", 
             "rating", "isVerified", "phone", "shoots", "followers", "revenue", "success", "views",
-            "studioName", "studio_name"
+            "studioName", "studio_name", "password"
           ) VALUES (
             ${id}, ${body.id || id}, ${body.name ?? null}, ${body.email ?? null}, ${body.role || 'client'}, 
             ${body.avatar ?? null}, ${body.bio ?? null}, ${body.location ?? null}, ${body.rating ?? null}, ${body.isVerified ?? false}, 
             ${body.phone ?? null}, ${body.shoots ?? null}, ${body.followers ?? null}, ${body.revenue ?? null}, ${body.success ?? null}, ${body.views ?? null},
-            ${body.studioName ?? null}, ${body.studioName ?? null}
+            ${body.studioName ?? null}, ${body.studioName ?? null}, ${body.password ?? null}
           ) ON CONFLICT ("email") DO UPDATE SET
             "name" = EXCLUDED.name,
             "role" = EXCLUDED.role,
@@ -1023,7 +1032,8 @@ serve(async (req) => {
             "bio" = EXCLUDED.bio,
             "location" = EXCLUDED.location,
             "studioName" = EXCLUDED."studioName",
-            "studio_name" = EXCLUDED.studio_name
+            "studio_name" = EXCLUDED.studio_name,
+            "password" = COALESCE(EXCLUDED.password, users.password)
           RETURNING *
         `;
         return new Response(JSON.stringify(newUser), { status: 201, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
@@ -1276,6 +1286,148 @@ serve(async (req) => {
       }), { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
       });
+    }
+
+    // ── FORGOT PASSWORD ROUTE ──
+    if (path === '/forgot-password' && method === 'POST') {
+      try {
+        const body = await req.json();
+        const email = body.email?.trim()?.toLowerCase();
+        if (!email) {
+          return new Response(JSON.stringify({ success: false, error: 'Email is required' }), {
+            status: 400,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          });
+        }
+
+        const [user] = await sql`SELECT * FROM users WHERE LOWER("email") = ${email}`;
+        if (!user) {
+          return new Response(JSON.stringify({ success: false, error: 'User with this email does not exist.' }), {
+            status: 404,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          });
+        }
+
+        // Generate reset token
+        const resetToken = crypto.randomUUID();
+        const expires = new Date(Date.now() + 3600000); // 1 hour expiry
+
+        await sql`
+          UPDATE users 
+          SET "resetToken" = ${resetToken}, "resetTokenExpires" = ${expires} 
+          WHERE "id" = ${user.id}
+        `;
+
+        // Send email
+        const resetLink = `${appUrl}/reset-password?token=${resetToken}`;
+        
+        const mailOptions = {
+          from: `"PickMyShoot" <${smtpEmail}>`,
+          to: user.email,
+          subject: '🔒 Reset Your PickMyShoot Password',
+          html: `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            </head>
+            <body style="margin:0; padding:0; background:#f4f4f7; font-family: 'Segoe UI', Roboto, sans-serif;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f7; padding: 32px 0;">
+                <tr>
+                  <td align="center">
+                    <table width="500" cellpadding="0" cellspacing="0" style="background:#ffffff; border-radius:16px; overflow:hidden; box-shadow:0 4px 24px rgba(0,0,0,0.06);">
+                      <!-- Header -->
+                      <tr>
+                        <td style="background: linear-gradient(135deg, #FF4D5A 0%, #C8102E 100%); padding: 24px 32px; text-align: center;">
+                          <h1 style="color:#fff; margin:0; font-size:20px; font-weight:700;">PickMyShoot</h1>
+                        </td>
+                      </tr>
+                      <!-- Body -->
+                      <tr>
+                        <td style="padding: 32px; color:#333;">
+                          <p style="font-size:15px; margin:0 0 16px; line-height:1.6;">Hi ${user.name || 'User'},</p>
+                          <p style="font-size:15px; margin:0 0 24px; line-height:1.6;">
+                            We received a request to reset your password for your PickMyShoot account. Click the button below to choose a new password. This link is valid for 1 hour.
+                          </p>
+                          <div style="text-align: center; margin-bottom: 28px;">
+                            <a href="${resetLink}" target="_blank" style="background:#C8102E; color:#ffffff; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">Reset Password</a>
+                          </div>
+                          <p style="font-size: 13px; color:#666; margin:0 0 8px;">If the button doesn't work, copy and paste this link in your browser:</p>
+                          <p style="font-size: 12px; color:#C8102E; margin:0; word-break: break-all;">${resetLink}</p>
+                        </td>
+                      </tr>
+                      <!-- Footer -->
+                      <tr>
+                        <td style="background:#f8f9fa; padding: 16px; text-align: center; font-size: 12px; color:#888; border-top:1px solid #eee;">
+                          If you did not request a password reset, you can safely ignore this email.
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </body>
+            </html>
+          `
+        };
+
+        await transporter.sendMail(mailOptions);
+
+        return new Response(JSON.stringify({ success: true, message: 'Reset password email sent.' }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+
+      } catch (err) {
+        return new Response(JSON.stringify({ success: false, error: err.message }), {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      }
+    }
+
+    // ── RESET PASSWORD ROUTE ──
+    if (path === '/reset-password' && method === 'POST') {
+      try {
+        const body = await req.json();
+        const { token, password } = body;
+        if (!token || !password) {
+          return new Response(JSON.stringify({ success: false, error: 'Token and password are required.' }), {
+            status: 400,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          });
+        }
+
+        // Find user with valid token
+        const [user] = await sql`
+          SELECT * FROM users 
+          WHERE "resetToken" = ${token} AND "resetTokenExpires" > NOW()
+        `;
+
+        if (!user) {
+          return new Response(JSON.stringify({ success: false, error: 'Invalid or expired reset token.' }), {
+            status: 400,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          });
+        }
+
+        // Update user password and clear token
+        await sql`
+          UPDATE users 
+          SET "password" = ${password}, "resetToken" = NULL, "resetTokenExpires" = NULL 
+          WHERE "id" = ${user.id}
+        `;
+
+        return new Response(JSON.stringify({ success: true, message: 'Password updated successfully!' }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+
+      } catch (err) {
+        return new Response(JSON.stringify({ success: false, error: err.message }), {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      }
     }
 
     // Default 404 Response

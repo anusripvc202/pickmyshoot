@@ -37,6 +37,12 @@ const LoginPage = () => {
   const [registerError,    setRegisterError]    = useState('');
   const [registerLoading,  setRegisterLoading]  = useState(false);
 
+  /* ── Forgot Password state ──────── */
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotError, setForgotError] = useState('');
+  const [forgotSuccess, setForgotSuccess] = useState(false);
+
   /* Redirect if already logged in */
   useEffect(() => {
     if (isAuthenticated) navigate('/profile');
@@ -144,6 +150,38 @@ const LoginPage = () => {
     }
   };
 
+  const handleForgotPasswordSubmit = async (e) => {
+    e.preventDefault();
+    setForgotError('');
+    setForgotSuccess(false);
+
+    if (!forgotEmail) {
+      setForgotError('Please enter your email address.');
+      return;
+    }
+
+    setForgotLoading(true);
+    try {
+      const response = await fetch('/api/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: forgotEmail })
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send reset link.');
+      }
+
+      setForgotSuccess(true);
+      triggerToast('Reset password email sent successfully!');
+    } catch (err) {
+      setForgotError(err.message);
+    } finally {
+      setForgotLoading(false);
+    }
+  };
+
   return (
     <div className="auth-page-container">
       <div className="auth-card">
@@ -155,30 +193,34 @@ const LoginPage = () => {
             <span>PickMyShoot</span>
           </div>
           <h2>
-            {activeTab === 'login' ? 'Welcome Back 👋' : 'Create Account 🎯'}
+            {activeTab === 'login' ? 'Welcome Back 👋' : activeTab === 'register' ? 'Create Account 🎯' : 'Reset Password 🔒'}
           </h2>
           <p>
             {activeTab === 'login'
               ? 'Sign in to access your studios, bookings & portfolio'
-              : 'Join the creative community of photographers & studios'}
+              : activeTab === 'register'
+              ? 'Join the creative community of photographers & studios'
+              : 'Enter your email address to receive a secure password reset link'}
           </p>
         </div>
 
         {/* ── Tabs ───────────────────── */}
-        <div className="auth-tabs-nav">
-          <button
-            className={`auth-tab-btn ${activeTab === 'login' ? 'active' : ''}`}
-            onClick={() => { setActiveTab('login'); setLoginError(''); }}
-          >
-            Sign In
-          </button>
-          <button
-            className={`auth-tab-btn ${activeTab === 'register' ? 'active' : ''}`}
-            onClick={() => { setActiveTab('register'); setRegisterError(''); }}
-          >
-            Register
-          </button>
-        </div>
+        {activeTab !== 'forgot-password' && (
+          <div className="auth-tabs-nav">
+            <button
+              className={`auth-tab-btn ${activeTab === 'login' ? 'active' : ''}`}
+              onClick={() => { setActiveTab('login'); setLoginError(''); }}
+            >
+              Sign In
+            </button>
+            <button
+              className={`auth-tab-btn ${activeTab === 'register' ? 'active' : ''}`}
+              onClick={() => { setActiveTab('register'); setRegisterError(''); }}
+            >
+              Register
+            </button>
+          </div>
+        )}
 
         {/* ── Body ───────────────────── */}
         <div className="auth-body">
@@ -238,18 +280,35 @@ const LoginPage = () => {
                 </div>
               </div>
 
-              {/* Remember Me */}
-              <div className="auth-remember-me-group" style={{ display: 'flex', alignItems: 'center', margin: '12px 0 20px', gap: '8px' }}>
-                <input
-                  type="checkbox"
-                  id="remember-me"
-                  checked={rememberMe}
-                  onChange={e => setRememberMe(e.target.checked)}
-                  style={{ width: '16px', height: '16px', cursor: 'pointer' }}
-                />
-                <label htmlFor="remember-me" style={{ fontSize: '14px', color: 'var(--text-muted, #5f6368)', cursor: 'pointer', userSelect: 'none' }}>
-                  Remember me
-                </label>
+              {/* Remember Me & Forgot Password */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '12px 0 20px' }}>
+                <div className="auth-remember-me-group" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <input
+                    type="checkbox"
+                    id="remember-me"
+                    checked={rememberMe}
+                    onChange={e => setRememberMe(e.target.checked)}
+                    style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                  />
+                  <label htmlFor="remember-me" style={{ fontSize: '14px', color: 'var(--text-muted, #5f6368)', cursor: 'pointer', userSelect: 'none' }}>
+                    Remember me
+                  </label>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => { setActiveTab('forgot-password'); setForgotError(''); setForgotSuccess(false); }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: 'var(--primary, #C8102E)',
+                    fontSize: '14px',
+                    fontWeight: '500',
+                    cursor: 'pointer',
+                    padding: 0
+                  }}
+                >
+                  Forgot password?
+                </button>
               </div>
 
               <button
@@ -267,6 +326,78 @@ const LoginPage = () => {
                     <ChevronRight size={16} />
                   </>
                 )}
+              </button>
+            </form>
+          )}
+
+          {/* ═══════════ FORGOT PASSWORD FORM ═══════════ */}
+          {activeTab === 'forgot-password' && (
+            <form onSubmit={handleForgotPasswordSubmit} className="auth-form">
+              {forgotSuccess ? (
+                <div className="auth-msg success" style={{ marginBottom: '20px' }}>
+                  <CheckCircle2 size={15} />
+                  <span>Reset link sent successfully! Check your email inbox.</span>
+                </div>
+              ) : (
+                <>
+                  {forgotError && (
+                    <div className="auth-msg error" style={{ marginBottom: '20px' }}>
+                      <AlertCircle size={15} />
+                      <span>{forgotError}</span>
+                    </div>
+                  )}
+
+                  <div className="auth-form-group">
+                    <label className="auth-label">Email Address</label>
+                    <div className="auth-input-wrap">
+                      <span className="auth-icon"><Mail size={16} /></span>
+                      <input
+                        type="email"
+                        placeholder="name@example.com"
+                        className="auth-input"
+                        value={forgotEmail}
+                        onChange={e => setForgotEmail(e.target.value)}
+                        autoComplete="email"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="auth-submit-btn"
+                    disabled={forgotLoading}
+                    style={{ marginTop: '10px' }}
+                  >
+                    {forgotLoading ? (
+                      <span>Sending link…</span>
+                    ) : (
+                      <>
+                        <span>Send Reset Link</span>
+                        <ChevronRight size={16} />
+                      </>
+                    )}
+                  </button>
+                </>
+              )}
+
+              <button
+                type="button"
+                className="auth-secondary-btn"
+                onClick={() => { setActiveTab('login'); setForgotError(''); setForgotSuccess(false); }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--text-muted, #5f6368)',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  width: '100%',
+                  textAlign: 'center',
+                  marginTop: '15px'
+                }}
+              >
+                Back to Sign In
               </button>
             </form>
           )}
