@@ -54,20 +54,11 @@
       align-items: center;
       justify-content: center;
       margin-bottom: 24px;
-      gap: 10px;
     }
 
     .google-logo svg {
-      width: 32px;
-      height: 32px;
-    }
-
-    .google-logo span {
-      font-size: 22px;
-      font-weight: 500;
-      color: #5f6368;
-      font-family: 'Product Sans', 'Roboto', 'Segoe UI', Arial, sans-serif;
-      letter-spacing: -0.5px;
+      width: 88px;
+      height: 30px;
     }
 
     h1 {
@@ -227,18 +218,12 @@
     }
 
     .account-email {
-      font-size: 12px;
-      color: var(--text-muted);
+      font-size: 14px;
+      color: var(--text-main);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       margin-top: 1px;
-      opacity: 0;
-      transition: opacity 0.2s ease-in-out;
-    }
-
-    .account-item:hover .account-email {
-      opacity: 1;
     }
 
     .role-badge {
@@ -340,20 +325,14 @@
 
   <div class="card">
     <div class="google-logo">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
-        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 272 92">
+        <path d="M115.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18C71.25 34.32 81.24 25 93.5 25s22.25 9.32 22.25 22.18zm-9.74 0c0-7.62-5.48-12.85-12.51-12.85-7.07 0-12.51 5.23-12.51 12.85 0 7.54 5.44 12.85 12.51 12.85 7.03 0 12.51-5.31 12.51-12.85z" fill="#EA4335"/>
+        <path d="M163.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18c0-12.85 9.99-22.18 22.25-22.18s22.25 9.32 22.25 22.18zm-9.74 0c0-7.62-5.48-12.85-12.51-12.85-7.07 0-12.51 5.23-12.51 12.85 0 7.54 5.44 12.85 12.51 12.85 7.03 0 12.51-5.31 12.51-12.85z" fill="#FBBC05"/>
+        <path d="M209.75 26.2v41.03c0 17.06-10.08 24.06-22.07 24.06-11.12 0-17.96-7.48-20.5-13.82l8.47-3.52c1.51 3.61 5.21 7.87 12.03 7.87 7.79 0 12.33-4.83 12.33-13.88V65.1h-.34c-2.31 2.85-6.72 5.35-12.3 5.35-11.72 0-22.25-10.21-22.25-22.14 0-12.01 10.53-22.31 22.25-22.31 5.58 0 9.99 2.5 12.3 5.26h.34V26.2h9.52zm-8.83 21.09c0-7.43-5.04-12.77-11.89-12.77-6.93 0-12.51 5.34-12.51 12.77 0 7.39 5.58 12.77 12.51 12.77 6.85 0 11.89-5.38 11.89-12.77z" fill="#4285F4"/>
+        <path d="M225 3v65h-9.5V3h9.5z" fill="#34A853"/>
+        <path d="M262.02 54.44l7.65 5.09c-2.49 3.7-8.47 10.12-19.14 10.12-12.98 0-22.78-10.08-22.78-22.18 0-13.11 9.91-22.18 21.64-22.18 11.85 0 17.56 9.24 19.46 14.3l1.01 2.52-30 12.43c2.31 4.54 5.88 6.81 10.97 6.81 5.08 0 8.57-2.49 11.19-6.91zm-21.75-7.79l20.08-8.31c-1.09-2.77-4.16-4.75-8.07-4.75-4.96 0-12.22 4.41-12.01 13.06z" fill="#EA4335"/>
+        <path d="M35 82.5c-15.5 0-28.5-12.5-28.5-28.5S19.5 25.5 35 25.5c9.5 0 17 4 22.5 9.5l-8 8c-4-4-9-6.5-14.5-6.5-11 0-20.5 9-20.5 20.5S24 67.5 35 67.5c7 0 12-3 15-5.5 3-3 4.5-7.5 5-12.5H35v-10h30.5c.3 1.5.5 3.5.5 5.5 0 9.5-2.5 19-8.5 25-5.5 6-13 9.5-22.5 9.5z" fill="#4285F4"/>
       </svg>
-      <span>
-        <span style="color: #4285F4">G</span>
-        <span style="color: #EA4335">o</span>
-        <span style="color: #FBBC05">o</span>
-        <span style="color: #4285F4">g</span>
-        <span style="color: #34A853">l</span>
-        <span style="color: #EA4335">e</span>
-      </span>
     </div>
 
     <!-- Account Chooser View -->
@@ -370,11 +349,6 @@
     <div id="custom-account-view" class="custom-form" style="display: none;">
       <h1>Sign in</h1>
       <p class="subtitle">Use your Google Account</p>
-
-      <div class="form-group">
-        <label class="form-label" for="custom-name">Full Name</label>
-        <input type="text" id="custom-name" class="form-input">
-      </div>
 
       <div class="form-group">
         <label class="form-label" for="custom-email">Email Address</label>
@@ -477,10 +451,7 @@
           <div class="account-item" onclick="selectUser('${acc.name.replace(/'/g, "\\'")}', '${acc.email.replace(/'/g, "\\'")}', '${avatarUrl.replace(/'/g, "\\'")}')">
             <img class="account-avatar" src="${avatarUrl}" alt="${acc.name}" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(acc.name)}'">
             <div class="account-info">
-              <div class="account-name-row">
-                <span class="account-name">${acc.name}</span>
-              </div>
-              <div class="account-email">${acc.email}</div>
+              <div class="account-email" style="font-size: 14px; font-weight: 500; color: var(--text-main);">${acc.email}</div>
             </div>
             <button class="remove-account-btn" title="Remove account" onclick="removeAccount(event, '${acc.email.replace(/'/g, "\\'")}')">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -543,11 +514,10 @@
     }
 
     function submitCustomUser() {
-      const name = document.getElementById('custom-name').value.trim();
       const email = document.getElementById('custom-email').value.trim();
 
-      if (!name || !email) {
-        alert('Please fill in both name and email.');
+      if (!email) {
+        alert('Please enter your email address.');
         return;
       }
 
@@ -555,6 +525,10 @@
         alert('Please enter a valid email address.');
         return;
       }
+
+      // Extract name from email prefix
+      const emailPrefix = email.split('@')[0];
+      const name = emailPrefix.split(/[._-]/).map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
 
       let role = 'Client';
       if (email.toLowerCase().includes('admin') || email.toLowerCase() === 'anusripvc202@gmail.com') {
