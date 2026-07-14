@@ -14,11 +14,16 @@ const LoginPage = () => {
   const [activeTab, setActiveTab] = useState('login');
 
   /* ── Login state ───────────────── */
-  const [loginEmail, setLoginEmail]       = useState('');
+  const [loginEmail, setLoginEmail]       = useState(() => {
+    return localStorage.getItem('pickmyshoot_remembered_email') || '';
+  });
   const [loginPassword, setLoginPassword] = useState('');
   const [showLoginPass, setShowLoginPass] = useState(false);
   const [loginError, setLoginError]       = useState('');
   const [loginLoading, setLoginLoading]   = useState(false);
+  const [rememberMe, setRememberMe]       = useState(() => {
+    return localStorage.getItem('pickmyshoot_remember_me') === 'true';
+  });
 
   /* ── Register state ────────────── */
   const [registerName,     setRegisterName]     = useState('');
@@ -96,6 +101,13 @@ const LoginPage = () => {
     const success = loginUser(loginEmail, loginPassword);
     setLoginLoading(false);
     if (success) {
+      if (rememberMe) {
+        localStorage.setItem('pickmyshoot_remembered_email', loginEmail);
+        localStorage.setItem('pickmyshoot_remember_me', 'true');
+      } else {
+        localStorage.removeItem('pickmyshoot_remembered_email');
+        localStorage.setItem('pickmyshoot_remember_me', 'false');
+      }
       navigate('/profile');
     } else {
       setLoginError('Invalid email or password. Please try again.');
@@ -224,6 +236,20 @@ const LoginPage = () => {
                     {showLoginPass ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
                 </div>
+              </div>
+
+              {/* Remember Me */}
+              <div className="auth-remember-me-group" style={{ display: 'flex', alignItems: 'center', margin: '12px 0 20px', gap: '8px' }}>
+                <input
+                  type="checkbox"
+                  id="remember-me"
+                  checked={rememberMe}
+                  onChange={e => setRememberMe(e.target.checked)}
+                  style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                />
+                <label htmlFor="remember-me" style={{ fontSize: '14px', color: 'var(--text-muted, #5f6368)', cursor: 'pointer', userSelect: 'none' }}>
+                  Remember me
+                </label>
               </div>
 
               <button
