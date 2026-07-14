@@ -388,6 +388,227 @@ async function sendVerificationCodeEmail({ photographerEmail, photographerName, 
   }
 }
 
+/**
+ * Send contact form email to the admin/support team
+ */
+async function sendContactFormEmail({ name, email, subject, message }) {
+  if (!smtpEmail || !smtpPassword) {
+    console.warn('⚠️  SMTP credentials not configured — skipping contact form email.');
+    return { sent: false, reason: 'SMTP not configured' };
+  }
+
+  const mailOptions = {
+    from: `"PickMyShoot Contact" <${smtpEmail}>`,
+    to: smtpEmail,
+    replyTo: email,
+    subject: `📞 New Contact Us Inquiry: ${subject}`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="margin:0; padding:0; background:#f4f4f7; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f7; padding: 32px 0;">
+          <tr>
+            <td align="center">
+              <table width="560" cellpadding="0" cellspacing="0" style="background:#ffffff; border-radius:16px; overflow:hidden; box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+                <!-- Header -->
+                <tr>
+                  <td style="background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%); padding: 28px 32px; text-align: center;">
+                    <h1 style="color:#fff; margin:0; font-size:22px; font-weight:800; letter-spacing:-0.5px;">
+                      📸 PickMyShoot
+                    </h1>
+                    <p style="color:rgba(255,255,255,0.85); margin:6px 0 0; font-size:13px;">
+                      New Contact Inquiry
+                    </p>
+                  </td>
+                </tr>
+                <!-- Body -->
+                <tr>
+                  <td style="padding: 28px 32px;">
+                    <p style="font-size:15px; color:#333; margin:0 0 18px; line-height:1.6;">
+                      You have received a new message from the Contact Us form on PickMyShoot.
+                    </p>
+
+                    <!-- Submission Details -->
+                    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8f9fb; border:1px solid #e8eaed; border-radius:12px; overflow:hidden; margin-bottom:20px;">
+                      <tr>
+                        <td style="padding: 20px 24px;">
+                          <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                              <td style="padding:6px 0; font-size:13px; color:#888; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Name</td>
+                              <td style="padding:6px 0; font-size:14px; color:#222; font-weight:700; text-align:right;">${name}</td>
+                            </tr>
+                            <tr>
+                              <td colspan="2" style="border-bottom:1px solid #e8eaed; padding:0; height:1px;"></td>
+                            </tr>
+                            <tr>
+                              <td style="padding:6px 0; font-size:13px; color:#888; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Email</td>
+                              <td style="padding:6px 0; font-size:14px; color:#222; font-weight:600; text-align:right;">
+                                <a href="mailto:${email}" style="color:#3B82F6; text-decoration:none;">${email}</a>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td colspan="2" style="border-bottom:1px solid #e8eaed; padding:0; height:1px;"></td>
+                            </tr>
+                            <tr>
+                              <td style="padding:6px 0; font-size:13px; color:#888; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Subject</td>
+                              <td style="padding:6px 0; font-size:14px; color:#222; font-weight:600; text-align:right;">${subject}</td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- Message Card -->
+                    <div style="background:#fef7f7; border:1px solid #fde2e2; border-radius:12px; padding: 16px 24px; margin-bottom: 20px;">
+                      <p style="margin:0 0 8px; font-size:12px; color:#888; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">Message</p>
+                      <p style="margin:0; font-size:14px; color:#333; line-height:1.7; white-space: pre-wrap;">
+                        ${message}
+                      </p>
+                    </div>
+
+                    <!-- CTA Button -->
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td align="center">
+                          <a href="mailto:${email}?subject=Re: ${encodeURIComponent(subject)}" 
+                             style="display:inline-block; background:linear-gradient(135deg, #1E3A8A, #3B82F6); color:#fff; text-decoration:none; padding:13px 36px; border-radius:10px; font-size:14px; font-weight:700; letter-spacing:0.3px;">
+                            Reply to Sender
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <!-- Footer -->
+                <tr>
+                  <td style="padding: 20px 32px; background:#f8f9fb; border-top:1px solid #e8eaed; text-align:center;">
+                    <p style="font-size:11px; color:#aaa; margin:0; line-height:1.6;">
+                      This is an automated notification from PickMyShoot.<br>
+                      © ${new Date().getFullYear()} PickMyShoot — Every Story Builds a Brand.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
+    `
+  };
+
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log(`📧 Contact form email sent: ${info.messageId}`);
+    return { sent: true, messageId: info.messageId };
+  } catch (error) {
+    console.error('❌ Failed to send contact form email:', error.message);
+    return { sent: false, reason: error.message };
+  }
+}
+
+/**
+ * Send contact form receipt confirmation to the user
+ */
+async function sendContactReceiptEmail({ name, email, subject, message }) {
+  if (!smtpEmail || !smtpPassword) {
+    console.warn('⚠️  SMTP credentials not configured — skipping contact receipt email.');
+    return { sent: false, reason: 'SMTP not configured' };
+  }
+
+  const mailOptions = {
+    from: `"PickMyShoot Support" <${smtpEmail}>`,
+    to: email,
+    subject: `We've received your message! — PickMyShoot`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="margin:0; padding:0; background:#f4f4f7; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f7; padding: 32px 0;">
+          <tr>
+            <td align="center">
+              <table width="560" cellpadding="0" cellspacing="0" style="background:#ffffff; border-radius:16px; overflow:hidden; box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+                <!-- Header -->
+                <tr>
+                  <td style="background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%); padding: 28px 32px; text-align: center;">
+                    <h1 style="color:#fff; margin:0; font-size:22px; font-weight:800; letter-spacing:-0.5px;">
+                      📸 PickMyShoot
+                    </h1>
+                    <p style="color:rgba(255,255,255,0.85); margin:6px 0 0; font-size:13px;">
+                      Message Received
+                    </p>
+                  </td>
+                </tr>
+                <!-- Body -->
+                <tr>
+                  <td style="padding: 28px 32px;">
+                    <p style="font-size:15px; color:#333; margin:0 0 18px; line-height:1.6;">
+                      Hi <strong>${name}</strong>,<br><br>
+                      Thank you for contacting PickMyShoot! We have received your inquiry and our support team will get back to you as soon as possible.
+                    </p>
+
+                    <!-- Summary of details -->
+                    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8f9fb; border:1px solid #e8eaed; border-radius:12px; overflow:hidden; margin-bottom:20px;">
+                      <tr>
+                        <td style="padding: 20px 24px;">
+                          <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                              <td style="padding:6px 0; font-size:13px; color:#888; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Subject</td>
+                              <td style="padding:6px 0; font-size:14px; color:#222; font-weight:700; text-align:right;">${subject}</td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <div style="background:#f9fafb; border:1px solid #e2e8f0; border-radius:12px; padding: 16px 24px; margin-bottom: 20px;">
+                      <p style="margin:0 0 8px; font-size:12px; color:#888; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">Your Message</p>
+                      <p style="margin:0; font-size:14px; color:#555; line-height:1.7; white-space: pre-wrap;">
+                        ${message}
+                      </p>
+                    </div>
+
+                    <p style="font-size:13px; color:#666; margin:0; line-height:1.5;">
+                      No reply to this email is necessary. We will be in touch shortly.
+                    </p>
+                  </td>
+                </tr>
+                <!-- Footer -->
+                <tr>
+                  <td style="padding: 20px 32px; background:#f8f9fb; border-top:1px solid #e8eaed; text-align:center;">
+                    <p style="font-size:11px; color:#aaa; margin:0; line-height:1.6;">
+                      This is an automated receipt from PickMyShoot.<br>
+                      © ${new Date().getFullYear()} PickMyShoot — Every Story Builds a Brand.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
+    `
+  };
+
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log(`📧 Receipt email sent to ${email}: ${info.messageId}`);
+    return { sent: true, messageId: info.messageId };
+  } catch (error) {
+    console.error('❌ Failed to send receipt email:', error.message);
+    return { sent: false, reason: error.message };
+  }
+}
+
 const connectionString = Deno.env.get('DATABASE_URL') || 'postgresql://postgres:anusripvc202@db.ttjywwxethwoqgtcvzno.supabase.co:5432/postgres';
 const sql = postgres(connectionString, {
   ssl: { rejectUnauthorized: false }
@@ -1026,6 +1247,35 @@ serve(async (req) => {
         `;
         return new Response(JSON.stringify(msg), { status: 201, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
+    }
+
+    // ── CONTACT ROUTE ──
+    if (path === '/contact' && method === 'POST') {
+      const body = await req.json();
+      const { name, email, subject, message } = body;
+
+      if (!name || !email || !subject || !message) {
+        return new Response(JSON.stringify({ error: 'All fields are required (name, email, subject, message)' }), { 
+          status: 400, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        });
+      }
+
+      // Send email to admin
+      const adminResult = await sendContactFormEmail({ name, email, subject, message });
+
+      // Send receipt to user (non-blocking)
+      sendContactReceiptEmail({ name, email, subject, message }).catch(err => {
+        console.error('Error sending contact receipt email:', err.message);
+      });
+
+      return new Response(JSON.stringify({ 
+        success: adminResult.sent, 
+        message: adminResult.sent ? 'Message sent successfully!' : 'Failed to send message email.',
+        details: adminResult.reason || null
+      }), { 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      });
     }
 
     // Default 404 Response

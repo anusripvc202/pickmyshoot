@@ -1039,7 +1039,7 @@ const PhotographerDashboard = () => {
                     {photographerBookings.map(b => (
                       <tr key={b.id}>
                         <td className="bold" style={{ color: '#c7100d' }}>{b.title}</td>
-                        <td>{b.clientName || 'Client Profile'}</td>
+                        <td>{b.itemType === 'Job' || b.itemType === 'Gig' ? (b.item?.company || 'Employer') : (b.clientName || 'Client Profile')}</td>
                         <td>{b.date}</td>
                         <td>{b.time}</td>
                         <td className="bold">{typeof b.price === 'number' ? `₹${b.price.toLocaleString('en-IN')}` : b.price}</td>
@@ -1048,25 +1048,31 @@ const PhotographerDashboard = () => {
                         </td>
                         <td style={{ textAlign: 'center' }}>
                           {b.status === 'pending' && (
-                            <div style={{ display: 'inline-flex', gap: '8px', margin: '0 auto' }}>
-                              <button 
-                                className="console-action-btn claim-btn"
-                                onClick={() => { updateBookingStatus(b.id, 'approved'); triggerToast("✓ Booking Approved!"); }}
-                                style={{ padding: '6px 10px' }}
-                              >
-                                Approve
-                              </button>
-                              <button 
-                                className="console-action-btn delete-btn"
-                                onClick={() => { updateBookingStatus(b.id, 'cancelled'); triggerToast("✓ Booking Declined!"); }}
-                                style={{ padding: '6px 10px' }}
-                              >
-                                Decline
-                              </button>
-                            </div>
+                            b.itemType === 'Job' || b.itemType === 'Gig' ? (
+                              <span className="muted-italic" style={{ fontSize: '12.5px', color: '#e67e22', fontWeight: 'bold' }}>Applied (Pending Review)</span>
+                            ) : (
+                              <div style={{ display: 'inline-flex', gap: '8px', margin: '0 auto' }}>
+                                <button 
+                                  className="console-action-btn claim-btn"
+                                  onClick={() => { updateBookingStatus(b.id, 'approved'); triggerToast("✓ Booking Approved!"); }}
+                                  style={{ padding: '6px 10px' }}
+                                >
+                                  Approve
+                                </button>
+                                <button 
+                                  className="console-action-btn delete-btn"
+                                  onClick={() => { updateBookingStatus(b.id, 'cancelled'); triggerToast("✓ Booking Declined!"); }}
+                                  style={{ padding: '6px 10px' }}
+                                >
+                                  Decline
+                                </button>
+                              </div>
+                            )
                           )}
                           {b.status !== 'pending' && (
-                            <span className="muted-italic" style={{ fontSize: '12px' }}>Finalized</span>
+                            <span className="muted-italic" style={{ fontSize: '12px' }}>
+                              {b.itemType === 'Job' || b.itemType === 'Gig' ? (b.status === 'confirmed' || b.status === 'approved' ? 'Accepted' : 'Declined') : 'Finalized'}
+                            </span>
                           )}
                         </td>
                       </tr>

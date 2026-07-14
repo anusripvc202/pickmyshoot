@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useAppContext } from '../context/AppContext';
 import {
   X,
   Star,
@@ -84,6 +85,14 @@ const BENEFITS = [
 ];
 
 const JobDetailsModal = ({ job, onClose, onApply, likedItems, toggleLike }) => {
+  const { 
+    isAuthenticated,
+    activeProfileId,
+    currentUser,
+    setBookings,
+    triggerToast
+  } = useAppContext();
+
   const [activeThumb, setActiveThumb] = useState(0);
   const [showFullDesc, setShowFullDesc] = useState(false);
   const [applied, setApplied] = useState(false);
@@ -102,8 +111,63 @@ const JobDetailsModal = ({ job, onClose, onApply, likedItems, toggleLike }) => {
   const company = job.company || 'PickMyShoot Studio';
 
   const handleApply = () => {
-    setApplied(true);
-    if (onApply) onApply();
+    if (!isAuthenticated) {
+      triggerToast("Please log in to apply for jobs.");
+      return;
+    }
+
+    const employerId = job.ownerId || job.creatorId || "demo-admin";
+    const applicantId = activeProfileId || (currentUser?.id || "demo-photographer");
+
+    const dbBooking = {
+      listingId: job.id || job._id || "",
+      clientId: employerId,
+      creatorId: applicantId,
+      ownerId: applicantId,
+      itemType: "Job",
+      title: job.title || "",
+      date: new Date().toLocaleDateString('en-IN'),
+      time: "Anytime",
+      price: job.price || "Contact for Quote",
+      status: "pending",
+      item: job,
+      clientName: currentUser?.name || "Applicant",
+      clientEmail: currentUser?.email || "",
+      clientPhone: currentUser?.phone || ""
+    };
+
+    fetch('/api/bookings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dbBooking)
+    })
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to save job application");
+        return res.json();
+      })
+      .then(savedBooking => {
+        const mappedBooking = { 
+          ...savedBooking, 
+          id: savedBooking._id,
+          ownerId: savedBooking.ownerId || savedBooking.creatorId
+        };
+        setBookings(prev => [mappedBooking, ...prev]);
+        setApplied(true);
+        triggerToast(`Application submitted for "${job.title}"!`);
+        if (onApply) onApply();
+      })
+      .catch(err => {
+        console.warn("Failed to sync application to DB, saving locally:", err);
+        const localBooking = { 
+          id: `b-${Date.now()}`, 
+          ...dbBooking,
+          ownerId: dbBooking.ownerId || dbBooking.creatorId
+        };
+        setBookings(prev => [localBooking, ...prev]);
+        setApplied(true);
+        triggerToast(`Application submitted locally for "${job.title}"!`);
+        if (onApply) onApply();
+      });
   };
 
   if (applied) {

@@ -42,7 +42,8 @@ const ClientDashboard = () => {
     chatMessages,
     sendChatMessage,
     currentUser,
-    logoutUser
+    logoutUser,
+    updateBookingStatus
   } = useAppContext();
 
   const navigate = useNavigate();
@@ -359,14 +360,34 @@ const ClientDashboard = () => {
                           <span className={`status-badge-chip ${b.status}`}>{b.status}</span>
                         </td>
                         <td style={{ textAlign: 'center' }}>
-                          <button 
-                            className="console-action-btn claim-btn"
-                            style={{ background: '#111', padding: '6px 10px', display: 'inline-flex', margin: '0 auto' }}
-                            onClick={() => { setSelectedBooking(b); setShowReceiptModal(true); }}
-                          >
-                            <FileText size={12} style={{ marginRight: '4px' }} />
-                            View Receipt
-                          </button>
+                          <div style={{ display: 'inline-flex', gap: '8px', alignItems: 'center' }}>
+                            <button 
+                              className="console-action-btn claim-btn"
+                              style={{ background: '#111', padding: '6px 10px', display: 'inline-flex' }}
+                              onClick={() => { setSelectedBooking(b); setShowReceiptModal(true); }}
+                            >
+                              <FileText size={12} style={{ marginRight: '4px' }} />
+                              Receipt
+                            </button>
+                            {(b.itemType === 'Job' || b.itemType === 'Gig') && b.status === 'pending' && (
+                              <>
+                                <button 
+                                  className="console-action-btn claim-btn"
+                                  onClick={() => { updateBookingStatus(b.id, 'confirmed'); triggerToast("✓ Application Accepted!"); }}
+                                  style={{ padding: '6px 10px', background: '#27ae60' }}
+                                >
+                                  Accept
+                                </button>
+                                <button 
+                                  className="console-action-btn delete-btn"
+                                  onClick={() => { updateBookingStatus(b.id, 'cancelled'); triggerToast("✓ Application Declined!"); }}
+                                  style={{ padding: '6px 10px', background: '#e74c3c' }}
+                                >
+                                  Decline
+                                </button>
+                              </>
+                            )}
+                          </div>
                         </td>
                       </tr>
                     ))}

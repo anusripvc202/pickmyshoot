@@ -6,11 +6,33 @@ import './ContactPage.css';
 const ContactPage = () => {
   const { triggerToast } = useAppContext();
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    triggerToast("Message sent successfully! We'll get back to you soon.");
-    setFormData({ name: '', email: '', subject: '', message: '' });
+    setIsSubmitting(true);
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+      if (response.ok && data.success) {
+        triggerToast("Message sent successfully! We'll get back to you soon.");
+        setFormData({ name: '', email: '', subject: '', message: '' });
+      } else {
+        triggerToast(data.error || data.message || "Failed to send message. Please try again.");
+      }
+    } catch (error) {
+      console.error('Error submitting contact form:', error);
+      triggerToast("Error sending message. Please check your connection.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -88,9 +110,9 @@ const ContactPage = () => {
               placeholder="Write your message here..." 
             ></textarea>
           </div>
-          <button type="submit" className="primary-btn submit-contact-btn">
-            <span>Send Message</span>
-            <Send size={16} />
+          <button type="submit" className="primary-btn submit-contact-btn" disabled={isSubmitting}>
+            <span>{isSubmitting ? "Sending..." : "Send Message"}</span>
+            {isSubmitting ? <span className="spinner-mini"></span> : <Send size={16} />}
           </button>
         </form>
       </div>
