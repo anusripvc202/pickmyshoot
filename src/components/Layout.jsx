@@ -121,6 +121,24 @@ const Layout = () => {
   const [showFullDesc, setShowFullDesc] = React.useState(false);
   const scrollRef = React.useRef(null);
 
+  const userMenuRef = React.useRef(null);
+  const notificationMenuRef = React.useRef(null);
+
+  React.useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setUserDropdownOpen(false);
+      }
+      if (notificationMenuRef.current && !notificationMenuRef.current.contains(event.target)) {
+        setNotificationDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   // Payment UI States
   const [selectedPaymentMethod, setSelectedPaymentMethod] = React.useState('upi');
   const [upiId, setUpiId] = React.useState('');
@@ -453,8 +471,8 @@ const Layout = () => {
               </button>
 
               <div 
+                ref={notificationMenuRef}
                 className="notification-dropdown-container"
-                onMouseLeave={() => setNotificationDropdownOpen(false)}
               >
                 <button 
                   className={`icon-btn-wrap ${notificationDropdownOpen ? 'active' : ''}`}
@@ -544,8 +562,8 @@ const Layout = () => {
               {/* Authentication Widget */}
               {isAuthenticated ? (
                 <div 
+                  ref={userMenuRef}
                   className="user-profile-menu-container"
-                  onMouseLeave={() => setUserDropdownOpen(false)}
                 >
                   <button 
                     className="user-avatar-badge-btn" 
