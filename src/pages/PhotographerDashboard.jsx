@@ -821,7 +821,9 @@ const PhotographerDashboard = () => {
                 <img 
                   src={activeProfile.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80'} 
                   alt="Profile Avatar"
-                  style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #eee' }}
+                  onClick={() => navigate(`/photographer/${activeProfile.id || activeProfile._id}`)}
+                  style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #eee', cursor: 'pointer' }}
+                  title="Click to view public profile page"
                 />
                 <h4 style={{ margin: '10px 0 2px 0', fontSize: '18px', fontWeight: '800' }}>{activeProfile.name}</h4>
                 <span style={{ fontSize: '12px', color: '#666', fontWeight: 600 }}>{pmsIdFallback}</span>

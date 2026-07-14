@@ -579,13 +579,28 @@ const Layout = () => {
                   </button>
                   {userDropdownOpen && (
                     <div className="header-user-dropdown-card">
-                      <div className="dropdown-user-info">
+                      <div 
+                        className="dropdown-user-info" 
+                        onClick={() => { navigate('/profile'); setUserDropdownOpen(false); }}
+                        style={{ display: 'flex', gap: '8px', alignItems: 'center', cursor: 'pointer', transition: 'background-color 0.2s', padding: '6px' }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--background-alt, #f8f9fb)'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                        title="Click to view profile page"
+                      >
+                        <img 
+                          src={currentUser?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=40&q=80'} 
+                          alt="Dropdown User Avatar"
+                          style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover' }}
+                        />
                         <div className="user-name-role">
                           <span className="dropdown-user-name">{currentUser?.name}</span>
-                          <span className="dropdown-user-role">{currentUser?.role}</span>
+                          <span className="dropdown-user-role" style={{ fontSize: '9px', fontWeight: 'bold', color: 'var(--primary, #C8102E)' }}>{currentUser?.role}</span>
                         </div>
                       </div>
                       <div className="dropdown-menu-list">
+                        <button className="dropdown-menu-item-btn" onClick={() => { navigate('/profile'); setUserDropdownOpen(false); }}>
+                          👤 My Profile
+                        </button>
                         {/* Show dashboard link that matches the user's actual registered role */}
                         {currentUser?.role === 'client' && (
                           <button className="dropdown-menu-item-btn" onClick={() => { navigate('/dashboard/client'); setUserDropdownOpen(false); }}>
