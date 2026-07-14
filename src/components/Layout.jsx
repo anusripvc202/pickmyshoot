@@ -665,7 +665,7 @@ const Layout = () => {
       <main className="page-content-body">
         <AnimatePresence mode="wait">
           <PageTransition key={location.pathname}>
-            {location.pathname === '/' ? (
+            {location.pathname === '/' || location.pathname.startsWith('/dashboard') ? (
               <Outlet />
             ) : (
               <div className="max-width-wrapper">
