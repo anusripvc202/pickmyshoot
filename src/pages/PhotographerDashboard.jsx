@@ -939,8 +939,11 @@ const PhotographerDashboard = () => {
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
 
-              {/* My Studio Spaces */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginTop: '24px' }}>
+            {/* My Studio Spaces */}
               <div style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '12px', padding: '24px' }}>
                 <h3 style={{ margin: '0 0 12px 0', fontSize: '16px', fontWeight: 800, borderBottom: '1px solid #eee', paddingBottom: '8px' }}>My Studio Spaces</h3>
                 {photographerOwnedStudios.length === 0 ? (
@@ -1068,7 +1071,6 @@ const PhotographerDashboard = () => {
               </div>
 
             </div>
-          </div>
           </>
         )}
 
