@@ -13911,13 +13911,12 @@ input:checked + .slider:before {
   cursor: pointer !important;
 }
 
-/* Enforce dark visible text for "Google" word in both themes */
+/* Enforce dark visible text for "Google" word in both themes without affecting SVG branding colors */
 .auth-page-container .auth-card .social-btn,
-.auth-page-container .auth-card .social-btn *,
-.dark-theme .auth-page-container .auth-card .social-btn,
-.dark-theme .auth-page-container .auth-card .social-btn * {
-  color: #1f2937 !important;
-  fill: #1f2937 !important;
+.dark-theme .auth-page-container .auth-card .social-btn {
+  color: #3c4043 !important; /* Official Google Sign-In grey text color */
+  font-family: 'Roboto', 'Google Sans', sans-serif !important;
+  font-weight: 500 !important;
 }
 
 .auth-page-container .social-btn:hover {
