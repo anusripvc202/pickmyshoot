@@ -337,11 +337,22 @@ export const AppProvider = ({ children }) => {
         })
         .then(data => {
           if (Array.isArray(data)) {
-            const dbBookings = data.map(b => ({
-              ...b,
-              id: b.id || b._id,
-              ownerId: b.ownerId || b.creatorId
-            }));
+            const dbBookings = data.map(b => {
+              let parsedItem = b.item;
+              if (typeof b.item === 'string') {
+                try {
+                  parsedItem = JSON.parse(b.item);
+                } catch (e) {
+                  console.warn("Failed to parse booking item:", e);
+                }
+              }
+              return {
+                ...b,
+                id: b.id || b._id,
+                ownerId: b.ownerId || b.creatorId,
+                item: parsedItem
+              };
+            });
             
             // Sync state and avoid unnecessary renders if the data is unchanged
             setBookings(prev => {
@@ -509,10 +520,19 @@ export const AppProvider = ({ children }) => {
         return res.json();
       })
       .then(savedBooking => {
+        let parsedItem = savedBooking.item;
+        if (typeof savedBooking.item === 'string') {
+          try {
+            parsedItem = JSON.parse(savedBooking.item);
+          } catch (e) {
+            console.warn("Failed to parse saved booking item:", e);
+          }
+        }
         const mappedBooking = { 
           ...savedBooking, 
           id: savedBooking._id,
-          ownerId: savedBooking.ownerId || savedBooking.creatorId
+          ownerId: savedBooking.ownerId || savedBooking.creatorId,
+          item: parsedItem
         };
         setBookings(prev => [mappedBooking, ...prev]);
         triggerToast(`Booking confirmed for ${selectedItem.title}!`);
