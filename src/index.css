@@ -13890,19 +13890,34 @@ input:checked + .slider:before {
   padding: 0 10px !important;
 }
 
-/* Single Social Google button on red: stretch to full width and make text dark */
-.auth-page-container .social-btn {
-  background: #ffffff !important;
-  color: #202124 !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  width: 100% !important;
-  flex: 1 !important;
+/* Centered Social Google button on red and make text dark */
+.auth-page-container .social-login-grid {
+  display: flex !important;
   justify-content: center !important;
+  width: 100% !important;
 }
 
-.auth-page-container .social-btn,
-.auth-page-container .social-btn * {
-  color: #202124 !important; /* Enforce dark visible text for "Google" word */
+.auth-page-container .social-btn {
+  background: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  width: 220px !important;
+  flex: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  border-radius: 12px !important;
+  padding: 10px 16px !important;
+  cursor: pointer !important;
+}
+
+/* Enforce dark visible text for "Google" word in both themes */
+.auth-page-container .auth-card .social-btn,
+.auth-page-container .auth-card .social-btn *,
+.dark-theme .auth-page-container .auth-card .social-btn,
+.dark-theme .auth-page-container .auth-card .social-btn * {
+  color: #1f2937 !important;
+  fill: #1f2937 !important;
 }
 
 .auth-page-container .social-btn:hover {
