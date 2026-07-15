@@ -36,6 +36,7 @@ const PhotographerDashboard = () => {
     services,
     setServices,
     gear,
+    setGear,
     studios,
     setStudios,
     triggerToast,
@@ -408,6 +409,41 @@ const PhotographerDashboard = () => {
     } catch (err) {
       console.error(err);
       triggerToast("Error deleting account. Please try again.");
+    }
+  };
+  
+  const handleDeleteListing = async (listing) => {
+    const listingId = listing._id || listing.id;
+    if (!window.confirm(`Are you sure you want to permanently delete listing "${listing.title}"?`)) return;
+
+    try {
+      const isMock = !listing._id || typeof listing._id !== 'string' || listing._id.length < 24;
+      if (isMock) {
+        if (listing.categoryKey === 'service') {
+          setServices(prev => prev.filter(x => (x._id || x.id) !== listingId));
+        } else if (listing.categoryKey === 'gear') {
+          setGear(prev => prev.filter(x => (x._id || x.id) !== listingId));
+        } else if (listing.categoryKey === 'studio') {
+          setStudios(prev => prev.filter(x => (x._id || x.id) !== listingId));
+        }
+        triggerToast('✓ (Demo) Mock listing removed.');
+        return;
+      }
+
+      const res = await fetch(`/api/listings?id=${listingId}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error(`API error ${res.status}`);
+      
+      if (listing.categoryKey === 'service') {
+        setServices(prev => prev.filter(x => (x._id || x.id) !== listingId));
+      } else if (listing.categoryKey === 'gear') {
+        setGear(prev => prev.filter(x => (x._id || x.id) !== listingId));
+      } else if (listing.categoryKey === 'studio') {
+        setStudios(prev => prev.filter(x => (x._id || x.id) !== listingId));
+      }
+      
+      triggerToast('✓ Listing deleted successfully.');
+    } catch (err) {
+      triggerToast('Failed to delete listing: ' + err.message);
     }
   };
 
@@ -1205,13 +1241,20 @@ const PhotographerDashboard = () => {
                         <td style={{ fontWeight: '600' }}>{lst.type}</td>
                         <td>₹{lst.price} / {lst.priceUnit || 'hr'}</td>
                         <td>{lst.location}</td>
-                        <td style={{ textAlign: 'center' }}>
+                        <td style={{ textAlign: 'center', display: 'flex', gap: '8px', justifyContent: 'center' }}>
                           <button 
                             className={`console-action-btn ${lst.active ? 'claim-btn' : 'delete-btn'}`}
                             onClick={() => { toggleListingActive(lst.id, lst.categoryKey); triggerToast("Listing visibility toggled!"); }}
-                            style={{ padding: '6px 14px', display: 'inline-flex', margin: '0 auto' }}
+                            style={{ padding: '6px 14px' }}
                           >
                             {lst.active ? 'Active' : 'Disabled'}
+                          </button>
+                          <button 
+                            className="console-action-btn delete-btn"
+                            onClick={() => handleDeleteListing(lst)}
+                            style={{ padding: '6px 14px', background: '#fee2e2', border: '1.5px solid #fecaca', color: '#dc2626' }}
+                          >
+                            Delete
                           </button>
                         </td>
                       </tr>
