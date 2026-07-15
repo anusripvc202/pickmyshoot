@@ -19,6 +19,7 @@ import PhotographerProfilePage from './pages/PhotographerProfilePage';
 import ModelProfilePage from './pages/ModelProfilePage';
 import JobDetailsPage from './pages/JobDetailsPage';
 import { useAppContext } from './context/AppContext';
+import ClaimPage from './pages/ClaimPage';
 
 // Redirect to login if not authenticated
 const ProtectedRoute = ({ children }) => {
@@ -57,6 +58,7 @@ function App() {
         <Route path="about"    element={<AboutPage />} />
         <Route path="contact"  element={<ContactPage />} />
         <Route path="faq"      element={<FaqPage />} />
+        <Route path="claim/:slug" element={<ClaimPage />} />
 
         {/* Protected Routes */}
         <Route path="create"   element={<ProtectedRoute><CreatePage /></ProtectedRoute>} />

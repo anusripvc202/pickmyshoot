@@ -1156,6 +1156,16 @@ serve(async (req) => {
           }
         }
 
+        const url = new URL(req.url);
+        const slug = url.searchParams.get('slug');
+        if (slug) {
+          const [p] = await sql`SELECT * FROM photographers WHERE "slug" = ${slug}`;
+          if (!p) {
+            return new Response(JSON.stringify({ error: 'Profile not found' }), { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+          }
+          return new Response(JSON.stringify(p), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+
         const photographers = await sql`SELECT * FROM photographers ORDER BY "createdAt" ASC`;
         const mappedPhotographers = isGoogleAuth ? photographers : photographers.map(p => ({ ...p, email: maskEmail(p.email) }));
         return new Response(JSON.stringify(mappedPhotographers), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
@@ -1205,6 +1215,50 @@ serve(async (req) => {
         await sql`DELETE FROM photographers WHERE "_id" = ${id}`;
         return new Response(JSON.stringify({ success: true }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
+    }
+
+    // ── CLAIM PROFILE ROUTE ──
+    if (path === '/claim-profile' && method === 'POST') {
+      const body = await req.json();
+      const { slug, email, userId } = body;
+
+      if (!slug || !email || !userId) {
+        return new Response(JSON.stringify({ error: 'Missing required parameters' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+
+      // Check if profile exists
+      const [photographer] = await sql`SELECT * FROM photographers WHERE "slug" = ${slug}`;
+      if (!photographer) {
+        return new Response(JSON.stringify({ error: 'Photographer profile not found' }), { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+
+      // Check if user exists
+      const [dbUser] = await sql`SELECT * FROM users WHERE "id" = ${userId} OR "_id" = ${userId}`;
+      if (!dbUser) {
+        return new Response(JSON.stringify({ error: 'User account not found' }), { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+
+      // If they are not photographer role, promote them so they can see the dashboard
+      if (dbUser.role !== 'photographer') {
+        await sql`UPDATE users SET "role" = 'photographer' WHERE "id" = ${userId} OR "_id" = ${userId}`;
+      }
+
+      // Link photographer profile to this user
+      const [updatedPhotographer] = await sql`
+        UPDATE photographers SET
+          "email" = ${email},
+          "_id" = ${dbUser._id},
+          "isVerified" = false,
+          "status" = 'Active'
+        WHERE "slug" = ${slug}
+        RETURNING *
+      `;
+
+      return new Response(JSON.stringify({ 
+        success: true, 
+        message: 'Profile claimed successfully! Please verify your profile now.',
+        photographer: updatedPhotographer
+      }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
     // ── VERIFY PHOTOGRAPHER ROUTE ──

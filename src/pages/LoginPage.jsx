@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import {
   Mail, Lock, User, Sparkles, ChevronRight,
@@ -9,9 +9,13 @@ import {
 
 const LoginPage = () => {
   const { loginUser, signupUser, isAuthenticated, triggerToast, loginOrSignupGoogle } = useAppContext();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-
-  const [activeTab, setActiveTab] = useState('login');
+  const redirect = searchParams.get('redirect') || '/profile';
+  
+  const [activeTab, setActiveTab] = useState(() => {
+    return searchParams.get('tab') || 'login';
+  });
 
   /* ── Login state ───────────────── */
   const [loginEmail, setLoginEmail]       = useState(() => {
@@ -45,8 +49,8 @@ const LoginPage = () => {
 
   /* Redirect if already logged in */
   useEffect(() => {
-    if (isAuthenticated) navigate('/profile');
-  }, [isAuthenticated, navigate]);
+    if (isAuthenticated) navigate(redirect);
+  }, [isAuthenticated, navigate, redirect]);
 
   /* ── Image Upload ──────────────── */
   const handleImageChange = (e) => {
@@ -84,7 +88,7 @@ const LoginPage = () => {
         const { name, email, avatar } = event.data.user;
         loginOrSignupGoogle(name, email, avatar).then((success) => {
           if (success) {
-            navigate('/profile');
+            navigate(redirect);
           }
         });
         window.removeEventListener('message', messageListener);
@@ -114,7 +118,7 @@ const LoginPage = () => {
         localStorage.removeItem('pickmyshoot_remembered_email');
         localStorage.setItem('pickmyshoot_remember_me', 'false');
       }
-      navigate('/profile');
+      navigate(redirect);
     } else {
       setLoginError('Invalid email or password. Please try again.');
     }
@@ -144,7 +148,7 @@ const LoginPage = () => {
     );
     setRegisterLoading(false);
     if (success) {
-      navigate('/profile');
+      navigate(redirect);
     } else {
       setRegisterError('An account with this email already exists.');
     }
