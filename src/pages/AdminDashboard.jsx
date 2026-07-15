@@ -244,12 +244,12 @@ const AdminDashboard = () => {
       const res = await fetch('/api/photographers', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: p._id, code: randomCode })
+        body: JSON.stringify({ id: p._id, code: randomCode, isVerified: false })
       });
       if (!res.ok) throw new Error(`API error ${res.status}`);
       const updated = await res.json();
       setPhotographers(prev => prev.map(x => x._id === updated._id ? updated : x));
-      triggerToast(`✓ Code ${randomCode} saved to database!`);
+      triggerToast(`✓ Code ${randomCode} saved and sent to photographer!`);
     } catch (err) {
       triggerToast('Failed to save code: ' + err.message);
     }
@@ -452,14 +452,7 @@ const AdminDashboard = () => {
                               </td>
                               <td className="location-cell">{p.location}</td>
                               <td className="verification-cell">
-                                <button
-                                  onClick={() => handleToggleVerify(p)}
-                                  style={{
-                                    background: 'none', border: 'none', cursor: 'pointer',
-                                    padding: 0, display: 'flex', alignItems: 'center', gap: '6px'
-                                  }}
-                                  title={p.isVerified ? 'Click to unverify' : 'Click to verify'}
-                                >
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                                   {p.isVerified ? (
                                     <span className="verified-status-text">
                                       <CheckCircle size={14} className="status-icon green" />
@@ -471,7 +464,7 @@ const AdminDashboard = () => {
                                       Unverified Profile
                                     </span>
                                   )}
-                                </button>
+                                </div>
                               </td>
                               <td className="code-cell">
                                 <span className={`code-value ${p.code === 'No Code' ? 'no-code' : 'has-code'}`}>{p.code}</span>
