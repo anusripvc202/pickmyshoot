@@ -97,11 +97,11 @@ const PhotographerDashboard = () => {
   const fbUrlFallback = activeProfile.fbUrl || "";
   const webUrlFallback = activeProfile.webUrl || "";
 
-  // Local state for profile inputs in settings
   const [profileName, setProfileName] = useState(activeProfile.name);
   const [profileEmail, setProfileEmail] = useState(activeProfile.email);
   const [profileBio, setProfileBio] = useState(activeProfile.bio);
   const [profileStudioName, setProfileStudioName] = useState(activeProfile.studioName || '');
+  const [profilePhone, setProfilePhone] = useState(activeProfile.phone || '');
 
   const [profileStartingPrice, setProfileStartingPrice] = useState(startingPriceFallback);
   const [profileExperience, setProfileExperience] = useState(experienceFallback);
@@ -139,6 +139,7 @@ const PhotographerDashboard = () => {
     setProfileInstaUrl(activeProfile.instaUrl || "https://instagram.com/pickmyshoot");
     setProfileFbUrl(activeProfile.fbUrl || "");
     setProfileWebUrl(activeProfile.webUrl || "");
+    setProfilePhone(activeProfile.phone || "");
     setIsVerified(!!activeProfile.isVerified);
   }, [activeProfileId, activeProfile]);
 
@@ -335,7 +336,8 @@ const PhotographerDashboard = () => {
       gmbUrl: profileGmbUrl,
       instaUrl: profileInstaUrl,
       fbUrl: profileFbUrl,
-      webUrl: profileWebUrl
+      webUrl: profileWebUrl,
+      phone: profilePhone
     };
 
     // Update locally
@@ -356,7 +358,7 @@ const PhotographerDashboard = () => {
       avatar: activeProfile.avatar || '',
       studioName: profileStudioName,
       location: profileLocation,
-      phone: activeProfile.phone || "+91 99999 88888",
+      phone: profilePhone || "+91 99999 88888",
       shoots: activeProfile.shoots || "0",
       rating: activeProfile.rating || "5.0 ★",
       followers: activeProfile.followers || "0",
@@ -1704,6 +1706,17 @@ const PhotographerDashboard = () => {
                     type="email" 
                     value={profileEmail} 
                     onChange={e => setProfileEmail(e.target.value)}
+                    style={{ padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '13px', fontWeight: '700' }}>Contact Phone Number</label>
+                  <input 
+                    type="text" 
+                    value={profilePhone} 
+                    onChange={e => setProfilePhone(e.target.value)}
+                    placeholder="+91 99999 88888"
                     style={{ padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
                   />
                 </div>

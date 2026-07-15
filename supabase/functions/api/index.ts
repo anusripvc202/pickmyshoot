@@ -1110,6 +1110,18 @@ serve(async (req) => {
           WHERE "id" = ${id} OR "_id" = ${id}
           RETURNING *
         `;
+
+        if (updatedUser) {
+          await sql`
+            UPDATE photographers SET
+              "name" = COALESCE(${updatedUser.name}, "name"),
+              "phone" = COALESCE(${updatedUser.phone}, "phone"),
+              "location" = COALESCE(${updatedUser.location}, "location"),
+              "email" = COALESCE(${updatedUser.email}, "email")
+            WHERE "_id" = ${updatedUser._id} OR LOWER(TRIM("email")) = LOWER(TRIM(${updatedUser.email}))
+          `;
+        }
+
         return new Response(JSON.stringify(updatedUser), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
       if (method === 'DELETE') {

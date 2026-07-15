@@ -82,12 +82,14 @@ const ClientDashboard = () => {
   const [profileName, setProfileName] = useState(activeProfile.name);
   const [profileEmail, setProfileEmail] = useState(activeProfile.email);
   const [profileBio, setProfileBio] = useState(activeProfile.bio);
+  const [profilePhone, setProfilePhone] = useState(activeProfile.phone || '');
 
   // Sync settings form inputs when active profile changes
   useEffect(() => {
     setProfileName(activeProfile.name);
     setProfileEmail(activeProfile.email);
     setProfileBio(activeProfile.bio);
+    setProfilePhone(activeProfile.phone || '');
   }, [activeProfileId, activeProfile]);
 
   // Client Receipt Viewer state
@@ -140,7 +142,8 @@ const ClientDashboard = () => {
       id: activeProfileId,
       name: profileName,
       email: profileEmail,
-      bio: profileBio
+      bio: profileBio,
+      phone: profilePhone
     };
 
     setProfiles(prev => prev.map(p => {
@@ -149,7 +152,8 @@ const ClientDashboard = () => {
           ...p,
           name: profileName,
           email: profileEmail,
-          bio: profileBio
+          bio: profileBio,
+          phone: profilePhone
         };
       }
       return p;
@@ -644,6 +648,17 @@ const ClientDashboard = () => {
                     type="email" 
                     value={profileEmail} 
                     onChange={e => setProfileEmail(e.target.value)}
+                    style={{ padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '13px', fontWeight: '700' }}>Contact Phone Number</label>
+                  <input 
+                    type="text" 
+                    value={profilePhone} 
+                    onChange={e => setProfilePhone(e.target.value)}
+                    placeholder="+91 99999 88888"
                     style={{ padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
                   />
                 </div>
