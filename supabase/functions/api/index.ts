@@ -1224,7 +1224,25 @@ serve(async (req) => {
 
       if (method === 'DELETE') {
         const id = url.searchParams.get('id');
+
+        // Get photographer details first for cascade
+        const [targetPhotographer] = await sql`SELECT * FROM photographers WHERE "_id" = ${id}`;
+
+        // Delete from photographers table
         await sql`DELETE FROM photographers WHERE "_id" = ${id}`;
+
+        // Also cascade: delete any matching listings (photographer/studio service listings)
+        await sql`DELETE FROM listings WHERE "creatorId" = ${id} OR "ownerId" = ${id} OR "_id" = ${id}`;
+
+        // If there's a matching user account with the same email/id, downgrade or delete it
+        if (targetPhotographer && targetPhotographer.email) {
+          const email = targetPhotographer.email.toLowerCase().trim();
+          // Remove the associated user account (seeded partner accounts or claimed accounts)
+          await sql`DELETE FROM users WHERE (LOWER(TRIM("email")) = ${email}) AND ("role" = 'photographer' OR "email" LIKE '%pickmyshoot-partner.com%')`;
+          // Also delete any associated listings by email
+          await sql`DELETE FROM listings WHERE LOWER(TRIM("creatorId")) = ${email} OR LOWER(TRIM("ownerId")) = ${email}`;
+        }
+
         return new Response(JSON.stringify({ success: true }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
     }

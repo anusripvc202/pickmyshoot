@@ -26,7 +26,7 @@ import {
 } from '../data/mockData';
 
 const AdminDashboard = () => {
-  const { logoutUser, triggerToast, profiles, currentUser, getAuthHeaders } = useAppContext();
+  const { logoutUser, triggerToast, profiles, currentUser, getAuthHeaders, setServices, setStudios } = useAppContext();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
 
@@ -261,7 +261,11 @@ const AdminDashboard = () => {
     try {
       const res = await fetch(`/api/photographers?id=${p._id}`, { method: 'DELETE' });
       if (!res.ok) throw new Error(`API error ${res.status}`);
+      // Remove from local Partners Directory list
       setPhotographers(prev => prev.filter(x => x._id !== p._id));
+      // Also remove the matching listing card from Explore page context
+      setServices(prev => prev.filter(s => s.ownerId !== p._id && s.creatorId !== p._id && s.id !== p._id));
+      setStudios(prev => prev.filter(s => s.ownerId !== p._id && s.creatorId !== p._id && s.id !== p._id));
       triggerToast('✓ Photographer removed from directory.');
     } catch (err) {
       triggerToast('Failed to delete: ' + err.message);
