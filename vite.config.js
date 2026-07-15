@@ -9,9 +9,9 @@ export default defineConfig({
     open: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:4000',
+        target: 'https://ttjywwxethwoqgtcvzno.supabase.co/functions/v1/api',
         changeOrigin: true,
-        rewrite: (path) => path
+        rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
   }
