@@ -13747,5 +13747,152 @@ input:checked + .slider:before {
   }
 }
 
+/* ============================================================
+   CUSTOM LOGIN PAGE OVERRIDES — Fullscreen & Red Theme
+   ============================================================ */
+
+.auth-page-container {
+  min-height: 100vh !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 16px !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: var(--bg-app, #f8f9fa) !important;
+}
+
+.auth-page-container .auth-card {
+  background: #C8102E !important; /* Premium Red background */
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 24px 70px rgba(200, 16, 46, 0.45) !important;
+  max-height: 95vh !important;
+  overflow-y: auto !important; /* Allow scroll inside card if screen height is extremely short */
+  display: flex !important;
+  flex-direction: column !important;
+  border-radius: 24px !important;
+}
+
+/* Scrollbar styling for card internal overflow */
+.auth-page-container .auth-card::-webkit-scrollbar {
+  width: 6px !important;
+}
+.auth-page-container .auth-card::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3) !important;
+  border-radius: 10px !important;
+}
+
+.auth-page-container .auth-header h2,
+.auth-page-container .auth-header p,
+.auth-page-container .auth-label {
+  color: #ffffff !important;
+}
+
+.auth-page-container .auth-header p {
+  opacity: 0.85 !important;
+}
+
+.auth-page-container .auth-brand-badge {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: #ffffff !important;
+}
+
+/* Tab nav buttons on red background */
+.auth-page-container .auth-tabs-nav {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 14px !important;
+  padding: 4px !important;
+  margin-bottom: 24px !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.auth-page-container .auth-tab-btn {
+  color: rgba(255, 255, 255, 0.7) !important;
+  border-bottom: none !important;
+  border-radius: 10px !important;
+  padding: 10px !important;
+}
+
+.auth-page-container .auth-tab-btn.active {
+  background: #ffffff !important;
+  color: #C8102E !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Form inputs on red card */
+.auth-page-container .auth-input {
+  background: #ffffff !important;
+  color: #202124 !important;
+  border: 2px solid transparent !important;
+}
+
+.auth-page-container .auth-input:focus {
+  border-color: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25) !important;
+}
+
+.auth-page-container .auth-input-wrap .auth-icon {
+  color: #C8102E !important;
+}
+
+.auth-page-container .auth-pass-toggle {
+  color: #5f6368 !important;
+}
+
+.auth-page-container .auth-remember-me-group label {
+  color: #ffffff !important;
+}
+
+/* Links & Text Switch buttons on red */
+.auth-page-container button[type="button"] {
+  color: #ffffff !important;
+  text-decoration: underline !important;
+}
+
+.auth-page-container p button {
+  color: #ffffff !important;
+  text-decoration: underline !important;
+}
+
+/* Submit Button: white background, red text */
+.auth-page-container .auth-submit-btn {
+  background: #ffffff !important;
+  color: #C8102E !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18) !important;
+}
+
+.auth-page-container .auth-submit-btn:hover {
+  background: #f8f9fa !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Social separation line */
+.auth-page-container .social-login-separator::before,
+.auth-page-container .social-login-separator::after {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.auth-page-container .social-login-separator span {
+  color: #ffffff !important;
+  background: #C8102E !important;
+  padding: 0 10px !important;
+}
+
+/* Social buttons on red */
+.auth-page-container .social-btn {
+  background: #ffffff !important;
+  color: #202124 !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.auth-page-container .social-btn:hover {
+  background: #f8f9fa !important;
+}
+
 
 

@@ -408,7 +408,8 @@ const Layout = () => {
       )}
 
       {/* TOP DESKTOP HEADER */}
-      <header className="app-header">
+      {location.pathname !== '/login' && (
+        <header className="app-header">
         <div className="max-width-wrapper">
           <div className="header-row">
             
@@ -660,12 +661,13 @@ const Layout = () => {
           </div>
         </div>
       </header>
+      )}
 
       {/* MAIN CONTENT BODY */}
       <main className="page-content-body">
         <AnimatePresence mode="wait">
           <PageTransition key={location.pathname}>
-            {location.pathname === '/' || location.pathname.startsWith('/dashboard') ? (
+            {location.pathname === '/' || location.pathname === '/login' || location.pathname.startsWith('/dashboard') ? (
               <Outlet />
             ) : (
               <div className="max-width-wrapper">
@@ -1352,7 +1354,8 @@ const Layout = () => {
       )}
 
       {/* ===== FOOTER ===== */}
-      <footer className="site-footer">
+      {location.pathname !== '/login' && (
+        <footer className="site-footer">
         <div className="footer-main">
           <div className="footer-inner">
             <div className="footer-brand-col">
@@ -1503,10 +1506,12 @@ const Layout = () => {
           </div>
         </div>
       </footer>
+      )}
 
 
       {/* MOBILE BOTTOM NAVIGATION BAR */}
-      <nav className="mobile-bottom-nav">
+      {location.pathname !== '/login' && (
+        <nav className="mobile-bottom-nav">
         <NavLink 
           to="/" 
           className={({ isActive }) => `mobile-nav-item ${isActive ? 'active' : ''}`}
@@ -1548,6 +1553,7 @@ const Layout = () => {
           <span>Profile</span>
         </NavLink>
       </nav>
+      )}
 
     </div>
   );
