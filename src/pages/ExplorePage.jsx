@@ -165,8 +165,10 @@ const ExplorePage = () => {
   const getRawList = () => {
     switch (exploreTab) {
       case 'services': {
-        const photographerServices = (profiles || [])
-          .filter(p => p.role === 'photographer')
+        const photographerProfiles = (profiles || []).filter(p => p.role === 'photographer');
+        const photographerProfileIds = new Set(photographerProfiles.map(p => p.id || p._id));
+
+        const photographerServices = photographerProfiles
           .map(p => ({
             id: p.id || p._id,
             title: p.name,
@@ -182,7 +184,14 @@ const ExplorePage = () => {
             isPhotographerProfile: true,
             categories: p.categories || ["Wedding Photography", "Candid Photography"]
           }));
-        return [...photographerServices, ...services];
+
+        // Exclude service listings whose owner is already shown as a photographer profile card
+        const dedupedServices = services.filter(s => {
+          const owner = s.ownerId || s.creatorId;
+          return !owner || !photographerProfileIds.has(owner);
+        });
+
+        return [...photographerServices, ...dedupedServices];
       }
       case 'studios': return studios;
       case 'models': return models;
