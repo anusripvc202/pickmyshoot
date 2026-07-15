@@ -13923,5 +13923,25 @@ input:checked + .slider:before {
   background: #f8f9fa !important;
 }
 
+/* High-contrast overrides for success/error alerts inside the red card */
+.auth-page-container .auth-msg {
+  background: #ffffff !important;
+  border-radius: 12px !important;
+  padding: 12px 16px !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+.auth-page-container .auth-msg.error {
+  border: 2px solid #ffccd1 !important;
+  color: #c8102e !important;
+}
+
+.auth-page-container .auth-msg.success {
+  border: 2px solid #d4edda !important;
+  color: #155724 !important;
+}
+
 
 
