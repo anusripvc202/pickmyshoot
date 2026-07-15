@@ -636,12 +636,6 @@ async function edgeSendEmails(booking: any) {
     let recipientEmail = creatorUser?.email && !creatorUser.email.includes('***') ? creatorUser.email : null;
     let recipientName = creatorUser?.name;
 
-    // Direct mapping for mock photographer ID used by mock listings
-    if (booking.creatorId === '6a380b8173c0e340a6bf3a42') {
-      recipientEmail = 'nikhiljai1215@gmail.com';
-      recipientName = 'Nikhil photography';
-    }
-
     // Secondary lookup in photographers table if not found in users (or if email was masked)
     if (!recipientEmail && booking.creatorId) {
       const [photographerProfile] = await sql`
@@ -653,11 +647,10 @@ async function edgeSendEmails(booking: any) {
       }
     }
 
-    // Fallback to nikhiljai1215@gmail.com so Nikhil receives mock booking notifications during tests
-    if (!recipientEmail) {
-      recipientEmail = 'nikhiljai1215@gmail.com';
-      recipientName = creatorUser?.name || 'Nikhil photography (Mock)';
-      console.log(`ℹ️  No creator found for ID "${booking.creatorId}" — falling back to nikhiljai1215@gmail.com for test notification.`);
+    // Skip sending email to dummy/partner placeholder accounts (unclaimed directory listings)
+    if (recipientEmail && (recipientEmail.includes('pickmyshoot-partner.com') || recipientEmail.includes('pickmyshoot.com') || recipientEmail.includes('example.com'))) {
+      console.log(`ℹ️  Skipping notification for mock/unclaimed photographer "${recipientName}" (${recipientEmail})`);
+      recipientEmail = null;
     }
 
     // Client email: use the booking's stored clientEmail first (saved directly at booking time 
