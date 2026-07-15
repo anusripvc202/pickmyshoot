@@ -1368,23 +1368,6 @@ const Layout = () => {
               <p className="footer-tagline">
                 India's leading marketplace for photographers, studio spaces, models, gear rentals &amp; creative professionals.
               </p>
-              {/* ── App badges ── */}
-              <div className="footer-app-badges" style={{ marginTop: '16px' }}>
-                <a href="#" className="footer-app-badge" aria-label="Download on the App Store">
-                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-                  <div>
-                    <span className="app-badge-small">Download on the</span>
-                    <span className="app-badge-large">App Store</span>
-                  </div>
-                </a>
-                <a href="#" className="footer-app-badge" aria-label="Get it on Google Play">
-                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M3.18 23.76c.3.17.64.24.99.2l12.6-12.6-3.18-3.18L3.18 23.76zm17.6-12.57c.38-.2.62-.58.62-1-.01-.42-.25-.8-.63-1L17.88 7.8 14.4 11.28l3.48 3.48 2.9-1.57zM.98.83a1.04 1.04 0 0 0-.98 1.1v20.08c0 .44.2.81.52 1.03L13.36 11.2.98.83zm12.77 9.67L2.09.5c-.1-.07-.2-.1-.32-.12L13.75 11.5l-.01-.01-.99-.99z"/></svg>
-                  <div>
-                    <span className="app-badge-small">GET IT ON</span>
-                    <span className="app-badge-large">Google Play</span>
-                  </div>
-                </a>
-              </div>
             </div>
 
             <div className="footer-links-col">
@@ -1458,7 +1441,7 @@ const Layout = () => {
             </div>
           </div>
           <div className="footer-mid-strip">
-            <div className="footer-mid-strip-content">
+            <div className="footer-mid-strip-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '24px' }}>
               <div className="footer-mid-newsletter">
                 <div className="footer-newsletter-text-group">
                   <span className="footer-newsletter-label">Stay in the Loop</span>
@@ -1468,6 +1451,40 @@ const Layout = () => {
                   <input type="email" placeholder="Your email address" className="footer-email-input" />
                   <button className="footer-subscribe-btn">Subscribe</button>
                 </div>
+              </div>
+              {/* ── Stats center ── */}
+              <div className="footer-stats-row" style={{ display: 'flex', alignItems: 'center', gap: '16px', flexShrink: 0, width: 'auto', background: 'var(--footer-social-bg)', border: '1px solid var(--footer-social-border)', borderRadius: '10px', padding: '8px 16px' }}>
+                <div className="footer-stat-item" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px', justifyContent: 'center' }}>
+                  <span className="footer-stat-num" style={{ fontSize: '15px' }}>15K+</span>
+                  <span className="footer-stat-lbl" style={{ fontSize: '9px', marginTop: '1px' }}>Creators</span>
+                </div>
+                <div className="footer-stat-sep" style={{ height: '16px' }} />
+                <div className="footer-stat-item" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px', justifyContent: 'center' }}>
+                  <span className="footer-stat-num" style={{ fontSize: '15px' }}>2.8K+</span>
+                  <span className="footer-stat-lbl" style={{ fontSize: '9px', marginTop: '1px' }}>Studios</span>
+                </div>
+                <div className="footer-stat-sep" style={{ height: '16px' }} />
+                <div className="footer-stat-item" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px', justifyContent: 'center' }}>
+                  <span className="footer-stat-num" style={{ fontSize: '15px' }}>50K+</span>
+                  <span className="footer-stat-lbl" style={{ fontSize: '9px', marginTop: '1px' }}>Bookings</span>
+                </div>
+              </div>
+              {/* ── App badges on right ── */}
+              <div className="footer-app-badges" style={{ flexShrink: 0 }}>
+                <a href="#" className="footer-app-badge" aria-label="Download on the App Store">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                  <div>
+                    <span className="app-badge-small">Download on the</span>
+                    <span className="app-badge-large">App Store</span>
+                  </div>
+                </a>
+                <a href="#" className="footer-app-badge" aria-label="Get it on Google Play">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M3.18 23.76c.3.17.64.24.99.2l12.6-12.6-3.18-3.18L3.18 23.76zm17.6-12.57c.38-.2.62-.58.62-1-.01-.42-.25-.8-.63-1L17.88 7.8 14.4 11.28l3.48 3.48 2.9-1.57zM.98.83a1.04 1.04 0 0 0-.98 1.1v20.08c0 .44.2.81.52 1.03L13.36 11.2.98.83zm12.77 9.67L2.09.5c-.1-.07-.2-.1-.32-.12L13.75 11.5l-.01-.01-.99-.99z"/></svg>
+                  <div>
+                    <span className="app-badge-small">GET IT ON</span>
+                    <span className="app-badge-large">Google Play</span>
+                  </div>
+                </a>
               </div>
             </div>
           </div>
