@@ -6062,9 +6062,13 @@ input:checked + .slider:before {
 
 /* Responsive adjustments for unified newsletter/social strip */
 @media (max-width: 1024px) {
+  .footer-mid-strip {
+    padding: 12px 20px;
+  }
   .footer-mid-strip-content {
-    justify-content: center;
-    gap: 16px;
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important;
+    gap: 12px !important;
   }
   .footer-trio-inner {
     justify-content: center;
