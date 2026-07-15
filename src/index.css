@@ -13943,5 +13943,28 @@ input:checked + .slider:before {
   color: #155724 !important;
 }
 
+/* Upload from gallery styles inside red card */
+.auth-page-container .auth-upload-label {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+  color: #ffffff !important;
+}
+
+.auth-page-container .auth-upload-label:hover {
+  background: #ffffff !important;
+  border-color: #ffffff !important;
+  color: #C8102E !important;
+}
+
+.auth-page-container .auth-upload-hint {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.auth-page-container .auth-avatar-placeholder {
+  border: 1.5px dashed rgba(255, 255, 255, 0.5) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
 
 
