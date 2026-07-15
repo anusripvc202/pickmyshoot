@@ -12,6 +12,7 @@
       --border-color: #dadce0;
       --text-main: #202124;
       --text-muted: #5f6368;
+      --bg-hover: rgba(60, 64, 67, 0.04);
     }
 
     * {
@@ -22,7 +23,7 @@
     }
 
     body {
-      background: #ffffff;
+      background: #f8f9fa;
       color: var(--text-main);
       display: flex;
       align-items: center;
@@ -34,63 +35,329 @@
     .card {
       width: 100%;
       max-width: 450px;
+      background: #ffffff;
       border: 1px solid var(--border-color);
       border-radius: 8px;
-      padding: 40px 30px;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      padding: 36px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      position: relative;
     }
 
     @media (max-width: 450px) {
+      body {
+        background: #ffffff;
+        padding: 0;
+      }
       .card {
         border: none;
-        padding: 20px 10px;
+        padding: 24px 16px;
         box-shadow: none;
+        max-width: 100%;
       }
     }
 
-    .google-logo {
-      display: inline-flex;
-      align-items: center;
+    .google-header-logo {
+      display: flex;
       justify-content: center;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
     }
 
-    .google-logo img {
-      height: 30px;
+    .google-header-logo img {
+      height: 24px;
       width: auto;
-      display: block;
+    }
+
+    .app-logo-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .app-logo {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
     }
 
     h1 {
       font-size: 24px;
       font-weight: 400;
-      line-height: 1.3333;
+      line-height: 1.33;
       margin-bottom: 8px;
       color: var(--text-main);
+      text-align: center;
     }
 
     .subtitle {
       font-size: 16px;
       font-weight: 400;
-      letter-spacing: 0.1px;
       line-height: 1.5;
       color: var(--text-muted);
-      margin-bottom: 25px;
+      margin-bottom: 24px;
+      text-align: center;
     }
 
-    .custom-form, .account-chooser-view {
+    .subtitle .app-name {
+      color: var(--google-blue);
+      font-weight: 500;
+    }
+
+    /* Screen 1: Account Chooser list */
+    .account-list-container {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .account-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+      cursor: pointer;
+      transition: background-color 0.15s;
+    }
+
+    .account-item:last-of-type {
+      border-bottom: none;
+    }
+
+    .account-item:hover {
+      background-color: var(--bg-hover);
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      margin-right: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: #ffffff;
+      text-transform: uppercase;
+      object-fit: cover;
+    }
+
+    .account-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
       text-align: left;
-      animation: fadeIn 0.3s ease-in-out;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-5px); }
-      to { opacity: 1; transform: translateY(0); }
+    .account-name-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .account-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .account-email {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .status-badge {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+
+    /* Use another account button */
+    .use-another-account {
+      display: flex;
+      align-items: center;
+      padding: 14px 16px;
+      border-top: 1px solid var(--border-color);
+      cursor: pointer;
+      transition: background-color 0.15s;
+    }
+
+    .use-another-account:hover {
+      background-color: var(--bg-hover);
+    }
+
+    .use-another-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--border-color);
+      margin-right: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+    }
+
+    .use-another-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-main);
+      text-align: left;
+    }
+
+    /* Screen 2: Consent Review Form */
+    .consent-view {
+      text-align: left;
+    }
+
+    .user-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px 6px 6px;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      background: #ffffff;
+      margin-bottom: 24px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .user-pill:hover {
+      background: #f8f9fa;
+    }
+
+    .user-pill .avatar {
+      width: 20px;
+      height: 20px;
+      font-size: 10px;
+      margin-right: 8px;
+    }
+
+    .user-pill .pill-email {
+      color: var(--text-main);
+      font-weight: 500;
+      margin-right: 8px;
+    }
+
+    .user-pill .dropdown-arrow {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .consent-title {
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1.3;
+      margin-bottom: 24px;
+      color: var(--text-main);
+    }
+
+    .info-box {
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+      padding: 16px 0;
+      margin-bottom: 24px;
+    }
+
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .info-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .info-icon {
+      margin-right: 16px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-top: 2px;
+    }
+
+    .info-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .info-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .info-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .consent-text {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+
+    .consent-text a {
+      color: var(--google-blue);
+      text-decoration: none;
+    }
+
+    .consent-text a:hover {
+      text-decoration: underline;
+    }
+
+    /* Buttons groups */
+    .button-group-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .btn {
+      flex: 1;
+      height: 38px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border-color);
+      background: #ffffff;
+      color: var(--google-blue);
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+
+    .btn:hover {
+      background-color: rgba(26, 115, 232, 0.04);
+      border-color: #c3e1ff;
+    }
+
+    .btn.btn-primary {
+      background: var(--google-blue);
+      color: #ffffff;
+      border: none;
+    }
+
+    .btn.btn-primary:hover {
+      background: var(--google-blue-hover);
+    }
+
+    /* Screen 3: Email entry input form */
+    .input-form {
+      text-align: left;
     }
 
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
 
     .form-label {
@@ -98,7 +365,7 @@
       font-size: 12px;
       font-weight: 500;
       color: var(--text-muted);
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
     .form-input {
@@ -117,241 +384,136 @@
       padding: 11px;
     }
 
-    .btn-group {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      margin-top: 25px;
-      gap: 12px;
-    }
-
-    .btn-submit {
-      background-color: var(--google-blue);
-      color: #ffffff;
-      font-size: 14px;
-      font-weight: 500;
-      border: none;
-      border-radius: 4px;
-      padding: 10px 24px;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-
-    .btn-submit:hover {
-      background-color: var(--google-blue-hover);
-    }
-
-    .btn-secondary {
-      background: none;
-      border: none;
-      color: var(--google-blue);
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      padding: 10px 16px;
-      border-radius: 4px;
-      transition: background-color 0.2s;
-    }
-
-    .btn-secondary:hover {
-      background-color: rgba(26, 115, 232, 0.04);
-      color: var(--google-blue-hover);
-    }
-
-    .account-list {
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      margin-bottom: 20px;
-      overflow: hidden;
-      max-height: 320px;
-      overflow-y: auto;
-    }
-
-    .account-item {
-      display: flex;
-      align-items: center;
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--border-color);
-      cursor: pointer;
-      transition: background-color 0.15s;
-    }
-
-    .account-item:last-child {
-      border-bottom: none;
-    }
-
-    .account-item:hover {
-      background-color: rgba(60, 64, 67, 0.04);
-    }
-
-    .account-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      margin-right: 12px;
-      object-fit: cover;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #f1f3f4;
-      border: 1px solid var(--border-color);
-    }
-
-    .account-info {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .account-name-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .account-name {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-main);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .account-email {
-      font-size: 14px;
-      color: var(--text-main);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-top: 1px;
-    }
-
-    .role-badge {
-      font-size: 10px;
-      padding: 1px 6px;
-      border-radius: 10px;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-    
-    .role-badge.admin {
-      background-color: #fce8e6;
-      color: #c5221f;
-    }
-    
-    .role-badge.photographer {
-      background-color: #e8f0fe;
-      color: #1a73e8;
-    }
-    
-    .role-badge.client {
-      background-color: #e6f4ea;
-      color: #137333;
-    }
-
-    .use-another-btn {
-      display: flex;
-      align-items: center;
-      padding: 14px 16px;
-      cursor: pointer;
-      transition: background-color 0.15s;
-      border-top: 1px solid var(--border-color);
-    }
-
-    .use-another-btn:hover {
-      background-color: rgba(60, 64, 67, 0.04);
-    }
-
-    .use-another-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      margin-right: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--border-color);
-      color: var(--text-muted);
-      background-color: transparent;
-    }
-
-    .use-another-text {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-main);
-    }
-
-    .remove-account-btn {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      padding: 6px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.2s, color 0.2s;
-      margin-left: 8px;
-      opacity: 0.6;
-    }
-
-    .remove-account-btn:hover {
-      background-color: rgba(217, 83, 79, 0.15);
-      color: #d9534f;
-      opacity: 1;
-    }
-
+    /* Bottom footer links */
     .footer {
       display: flex;
       justify-content: space-between;
-      margin-top: 30px;
+      margin-top: 32px;
       font-size: 12px;
       color: var(--text-muted);
+      border-top: 1px solid #f1f3f4;
+      padding-top: 16px;
     }
 
     .footer a {
       color: var(--text-muted);
       text-decoration: none;
-      margin-left: 10px;
+      margin-left: 14px;
     }
 
     .footer a:hover {
       color: var(--text-main);
+    }
+
+    .avatar-colors {
+      background-color: #c7100d; /* PickMyShoot Red fallback */
     }
   </style>
 </head>
 <body>
 
   <div class="card">
-    <div class="google-logo">
+    <div class="google-header-logo">
       <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google">
     </div>
 
-    <!-- Account Chooser View -->
-    <div id="account-chooser-view" class="account-chooser-view" style="display: none;">
+    <!-- ═══════════════ SCREEN 1: ACCOUNT CHOOSER ═══════════════ -->
+    <div id="screen-chooser" style="display: none;">
+      <div class="app-logo-container">
+        <!-- PickMyShoot logo styled to resemble the square Notion logo icon layout -->
+        <img src="/logo.png" alt="PickMyShoot" class="app-logo" style="border-radius: 8px; border: 1.5px solid #eee; padding: 4px;">
+      </div>
       <h1>Choose an account</h1>
-      <p class="subtitle">to continue to PickMyShoot</p>
+      <p class="subtitle">to continue to <span class="app-name">PickMyShoot</span></p>
 
-      <div class="account-list">
-        <!-- Accounts will be rendered here dynamically -->
+      <div class="account-list-container">
+        <div id="accounts-list">
+          <!-- Populated dynamically -->
+        </div>
+        <div class="use-another-account" onclick="showInputForm()">
+          <div class="use-another-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <line x1="19" y1="8" x2="19" y2="14"></line>
+              <line x1="22" y1="11" x2="16" y2="11"></line>
+            </svg>
+          </div>
+          <div class="use-another-text">Use another account</div>
+        </div>
       </div>
     </div>
 
-    <!-- Custom email / role form (initially hidden) -->
-    <div id="custom-account-view" class="custom-form" style="display: none;">
-      <h1>Sign in</h1>
-      <p class="subtitle">Use your Google Account</p>
+    <!-- ═══════════════ SCREEN 2: CONSENT / PERMISSION ═══════════════ -->
+    <div id="screen-consent" style="display: none;">
+      <div class="consent-view">
+        <div class="user-pill" onclick="showChooser()">
+          <div id="pill-avatar" class="avatar">A</div>
+          <span id="pill-email" class="pill-email">user@example.com</span>
+          <span class="dropdown-arrow">▼</span>
+        </div>
 
-      <div class="form-group">
-        <label class="form-label" for="custom-email">Email Address</label>
-        <input type="email" id="custom-email" class="form-input">
+        <h2 class="consent-title">Google will allow PickMyShoot to access this info about you</h2>
+
+        <div class="info-box">
+          <div class="info-row">
+            <div class="info-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <circle cx="12" cy="10" r="3"></circle>
+                <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"></path>
+              </svg>
+            </div>
+            <div class="info-content">
+              <span id="consent-name" class="info-label">User Name</span>
+              <span class="info-sub">Name and profile picture</span>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+            </div>
+            <div class="info-content">
+              <span id="consent-email" class="info-label">user@example.com</span>
+              <span class="info-sub">Email address</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="consent-text">
+          Review PickMyShoot's <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a> to understand how PickMyShoot will process and protect your data.
+          <br><br>
+          To make changes at any time, go to your <a href="#">Google Account</a>.
+          <br><br>
+          Learn more about <a href="#">Sign in with Google</a>.
+        </p>
+
+        <div class="button-group-row">
+          <button class="btn" onclick="showChooser()">Cancel</button>
+          <button class="btn btn-primary" onclick="confirmGoogleAuth()">Continue</button>
+        </div>
       </div>
+    </div>
 
-      <div class="btn-group">
-        <button id="custom-back-btn" class="btn-secondary" onclick="showChooserView()">Back</button>
-        <button class="btn-submit" onclick="submitCustomUser()">Next</button>
+    <!-- ═══════════════ SCREEN 3: USE ANOTHER ACCOUNT ═══════════════ -->
+    <div id="screen-input" style="display: none;">
+      <div class="input-form">
+        <h1>Sign in</h1>
+        <p class="subtitle">Use your Google Account</p>
+
+        <div class="form-group">
+          <label class="form-label" for="input-email">Email Address</label>
+          <input type="email" id="input-email" class="form-input" placeholder="name@example.com">
+        </div>
+
+        <div class="button-group-row">
+          <button class="btn" onclick="showChooser()">Back</button>
+          <button class="btn btn-primary" onclick="submitCustomEmail()">Next</button>
+        </div>
       </div>
     </div>
 
@@ -366,157 +528,160 @@
   </div>
 
   <script>
-    function getAccounts() {
-      const stored = localStorage.getItem('mock_google_accounts');
-      if (stored !== null) {
-        return JSON.parse(stored);
-      }
-      
-      const initialList = [];
-      localStorage.setItem('mock_google_accounts', JSON.stringify(initialList));
-      return initialList;
+    // List of colors for Google Initials Avatars
+    const AVATAR_COLORS = [
+      '#7b1fa2', '#303f9f', '#0288d1', '#00796b', '#388e3c', 
+      '#f57c00', '#d32f2f', '#e64a19', '#5d4037', '#455a64'
+    ];
+
+    let selectedUserObject = null;
+
+    // Get color based on character code to keep it persistent per name
+    function getAvatarColor(name) {
+      if (!name) return AVATAR_COLORS[0];
+      const charCode = name.charCodeAt(0) || 65;
+      return AVATAR_COLORS[charCode % AVATAR_COLORS.length];
     }
 
-    function saveAccounts(accounts) {
-      localStorage.setItem('mock_google_accounts', JSON.stringify(accounts));
-    }
+    // Load registered users from Supabase Edge via Vercel proxy
+    async function loadRegisteredUsers() {
+      const listContainer = document.getElementById('accounts-list');
+      listContainer.innerHTML = '<div style="padding: 24px; text-align: center; color: var(--text-muted); font-size: 14px;">Loading accounts...</div>';
 
-    function renderAccounts() {
-      const accounts = getAccounts();
-      const listContainer = document.querySelector('.account-list');
-      
-      if (accounts.length === 0) {
-        showCustomView();
-        document.getElementById('custom-back-btn').style.display = 'none';
-        return;
-      }
-
-      document.getElementById('custom-back-btn').style.display = 'inline-block';
-      
-      listContainer.innerHTML = ''; // Clear container
-
-      accounts.forEach(acc => {
-        const avatarUrl = acc.avatar || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(acc.name)}`;
+      try {
+        const res = await fetch('/api/users', {
+          headers: {
+            'x-reveal-emails': 'true'
+          }
+        });
+        if (!res.ok) throw new Error("Failed to fetch users");
+        const users = await res.json();
         
-        const itemDiv = document.createElement('div');
-        itemDiv.className = 'account-item';
-        itemDiv.onclick = () => selectUser(acc.name, acc.email, avatarUrl);
-        
-        itemDiv.innerHTML = `
-          <img class="account-avatar" src="${avatarUrl}" alt="${acc.name}" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(acc.name)}'">
-          <div class="account-info">
-            <div class="account-email" style="font-size: 14px; font-weight: 500; color: var(--text-main);">${acc.email}</div>
-          </div>
-          <button class="remove-account-btn" title="Remove account">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="3 6 5 6 21 6"></polyline>
-              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-            </svg>
-          </button>
-        `;
-        
-        const removeBtn = itemDiv.querySelector('.remove-account-btn');
-        removeBtn.onclick = (event) => {
-          event.stopPropagation();
-          removeAccount(event, acc.email);
-        };
-        
-        listContainer.appendChild(itemDiv);
-      });
-
-      // Add "Use another account" button
-      const anotherDiv = document.createElement('div');
-      anotherDiv.className = 'use-another-btn';
-      anotherDiv.onclick = () => showCustomView();
-      anotherDiv.innerHTML = `
-        <div class="use-another-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-            <circle cx="9" cy="7" r="4"></circle>
-            <line x1="19" y1="8" x2="19" y2="14"></line>
-            <line x1="22" y1="11" x2="16" y2="11"></line>
-          </svg>
-        </div>
-        <div class="use-another-text">Use another account</div>
-      `;
-      listContainer.appendChild(anotherDiv);
-      showChooserView();
-    }
-
-    function removeAccount(event, email) {
-      event.stopPropagation();
-      let accounts = getAccounts();
-      accounts = accounts.filter(acc => acc.email.toLowerCase() !== email.toLowerCase());
-      saveAccounts(accounts);
-      renderAccounts();
-    }
-
-    function showCustomView() {
-      document.getElementById('account-chooser-view').style.display = 'none';
-      document.getElementById('custom-account-view').style.display = 'block';
-    }
-
-    // Toggle button displays
-    function showChooserView() {
-      document.getElementById('custom-account-view').style.display = 'none';
-      document.getElementById('account-chooser-view').style.display = 'block';
-    }
-
-    function selectUser(name, email, avatar) {
-      const userAvatar = avatar || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}`;
-      window.opener.postMessage({
-        type: 'GOOGLE_SIGNIN_SUCCESS',
-        user: {
-          name: name,
-          email: email,
-          avatar: userAvatar
+        if (!Array.isArray(users) || users.length === 0) {
+          showInputForm();
+          return;
         }
-      }, window.location.origin);
-      window.close();
+
+        // Render accounts chooser list
+        listContainer.innerHTML = '';
+        users.forEach(user => {
+          const itemDiv = document.createElement('div');
+          itemDiv.className = 'account-item';
+          
+          // Generate avatar initials or use image
+          const initial = user.name ? user.name.charAt(0).toUpperCase() : 'U';
+          const bg = getAvatarColor(user.name);
+          const hasImage = user.avatar && !user.avatar.includes('photo-1534528741775'); // ignore default placeholder image
+          
+          const avatarHtml = hasImage 
+            ? `<img class="avatar" src="${user.avatar}" alt="${user.name}">` 
+            : `<div class="avatar" style="background-color: ${bg}">${initial}</div>`;
+
+          itemDiv.innerHTML = `
+            ${avatarHtml}
+            <div class="account-info">
+              <div class="account-name-row">
+                <span class="account-name">${user.name || 'User'}</span>
+                <span class="status-badge">Signed out</span>
+              </div>
+              <span class="account-email">${user.email}</span>
+            </div>
+          `;
+
+          itemDiv.onclick = () => chooseAccount(user);
+          listContainer.appendChild(itemDiv);
+        });
+
+        showChooser();
+
+      } catch (err) {
+        console.error("Error fetching users list:", err);
+        // Fallback: if fetch fails, show input form
+        showInputForm();
+      }
     }
 
-    function submitCustomUser() {
-      const email = document.getElementById('custom-email').value.trim();
+    function showChooser() {
+      document.getElementById('screen-consent').style.display = 'none';
+      document.getElementById('screen-input').style.display = 'none';
+      document.getElementById('screen-chooser').style.display = 'block';
+    }
 
-      if (!email) {
-        alert('Please enter your email address.');
-        return;
+    function showConsent(user) {
+      selectedUserObject = user;
+      
+      // Update UI elements
+      const pillAvatar = document.getElementById('pill-avatar');
+      const bg = getAvatarColor(user.name);
+      const initial = user.name ? user.name.charAt(0).toUpperCase() : 'U';
+      const hasImage = user.avatar && !user.avatar.includes('photo-1534528741775');
+      
+      if (hasImage) {
+        pillAvatar.innerHTML = `<img src="${user.avatar}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+        pillAvatar.style.background = 'transparent';
+      } else {
+        pillAvatar.innerText = initial;
+        pillAvatar.style.backgroundColor = bg;
       }
+      
+      document.getElementById('pill-email').innerText = user.email;
+      document.getElementById('consent-name').innerText = user.name || 'User';
+      document.getElementById('consent-email').innerText = user.email;
 
-      if (!email.includes('@')) {
+      document.getElementById('screen-chooser').style.display = 'none';
+      document.getElementById('screen-input').style.display = 'none';
+      document.getElementById('screen-consent').style.display = 'block';
+    }
+
+    function showInputForm() {
+      document.getElementById('screen-chooser').style.display = 'none';
+      document.getElementById('screen-consent').style.display = 'none';
+      document.getElementById('screen-input').style.display = 'block';
+    }
+
+    function chooseAccount(user) {
+      showConsent(user);
+    }
+
+    function submitCustomEmail() {
+      const email = document.getElementById('input-email').value.trim();
+      if (!email || !email.includes('@')) {
         alert('Please enter a valid email address.');
         return;
       }
 
-      // Extract name from email prefix
-      const emailPrefix = email.split('@')[0];
-      const name = emailPrefix.split(/[._-]/).map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
+      // Generate mock details from email
+      const prefix = email.split('@')[0];
+      const name = prefix.split(/[._-]/).map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' ');
 
-      let role = 'Client';
-      if (email.toLowerCase().includes('admin') || email.toLowerCase() === 'anusripvc202@gmail.com') {
-        role = 'Admin';
-      } else if (email.toLowerCase().includes('photographer') || email.toLowerCase() === 'nikhiljai1215@gmail.com' || email.toLowerCase() === 'anusripvc204@gmail.com') {
-        role = 'Photographer';
-      }
+      const customUser = {
+        name,
+        email,
+        avatar: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}`
+      };
 
-      const accounts = getAccounts();
-      const exists = accounts.some(acc => acc.email.toLowerCase() === email.toLowerCase());
-      if (!exists) {
-        accounts.push({
-          name: name,
-          email: email,
-          avatar: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}`,
-          role: role
-        });
-        saveAccounts(accounts);
-      }
-
-      selectUser(name, email);
+      showConsent(customUser);
     }
 
-    // Run render on load
+    function confirmGoogleAuth() {
+      if (!selectedUserObject) return;
+
+      // Post success message to parent window (LoginPage.jsx)
+      window.opener.postMessage({
+        type: 'GOOGLE_SIGNIN_SUCCESS',
+        user: {
+          name: selectedUserObject.name,
+          email: selectedUserObject.email,
+          avatar: selectedUserObject.avatar
+        }
+      }, window.location.origin);
+      
+      window.close();
+    }
+
+    // Load registered users on startup
     document.addEventListener('DOMContentLoaded', () => {
-      renderAccounts();
+      loadRegisteredUsers();
     });
   </script>
 </body>

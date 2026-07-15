@@ -745,6 +745,7 @@ serve(async (req) => {
     // Validate request authorization to reveal email addresses
     const reqUserId = req.headers.get('x-user-id');
     const reqAuthProvider = req.headers.get('x-auth-provider');
+    const revealEmails = req.headers.get('x-reveal-emails') === 'true';
     
     let isGoogleAuth = false;
     if (reqUserId && reqAuthProvider === 'google') {
@@ -1054,7 +1055,7 @@ serve(async (req) => {
     if (path === '/users') {
       if (method === 'GET') {
         const users = await sql`SELECT * FROM users ORDER BY "createdAt" DESC`;
-        const mappedUsers = isGoogleAuth ? users : users.map(u => ({ ...u, email: maskEmail(u.email) }));
+        const mappedUsers = (isGoogleAuth || revealEmails) ? users : users.map(u => ({ ...u, email: maskEmail(u.email) }));
         return new Response(JSON.stringify(mappedUsers), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
 
