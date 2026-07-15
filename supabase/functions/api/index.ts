@@ -17,7 +17,7 @@ const transporter = nodemailer.createTransport({
 /**
  * Send a booking notification email to the photographer/creator
  */
-async function sendBookingNotification({ photographerEmail, photographerName, clientName, clientEmail, clientPhone, bookingTitle, bookingDate, bookingTime, bookingPrice, bookingType }) {
+async function sendBookingNotification({ photographerEmail, photographerName, clientName, clientEmail, clientPhone, clientAvatar, bookingTitle, bookingDate, bookingTime, bookingPrice, bookingType }) {
   if (!smtpEmail || !smtpPassword) {
     console.warn('⚠️  SMTP credentials not configured — skipping email notification.');
     return { sent: false, reason: 'SMTP not configured' };
@@ -31,6 +31,8 @@ async function sendBookingNotification({ photographerEmail, photographerName, cl
   const formattedPrice = typeof bookingPrice === 'number'
     ? `₹${bookingPrice.toLocaleString('en-IN')}`
     : bookingPrice;
+
+  const resolvedAvatar = clientAvatar || `https://api.dicebear.com/7.x/initials/svg?seed=${clientName || 'User'}`;
 
   const mailOptions = {
     from: `"PickMyShoot" <${smtpEmail}>`,
@@ -66,7 +68,7 @@ async function sendBookingNotification({ photographerEmail, photographerName, cl
                       Hi <strong>${photographerName || 'Creator'}</strong>,<br><br>
                       Great news! You have a new <strong>${bookingType || 'booking'}</strong> request on PickMyShoot. Here are the details:
                     </p>
-
+ 
                     <!-- Booking Details Card -->
                     <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8f9fb; border:1px solid #e8eaed; border-radius:12px; overflow:hidden; margin-bottom:20px;">
                       <tr>
@@ -101,17 +103,26 @@ async function sendBookingNotification({ photographerEmail, photographerName, cl
                         </td>
                       </tr>
                     </table>
-
-                    <!-- Client Info -->
+ 
+                    <!-- Client Info with Real Avatar -->
                     <table width="100%" cellpadding="0" cellspacing="0" style="background:#fef7f7; border:1px solid #fde2e2; border-radius:12px; overflow:hidden; margin-bottom:20px;">
                       <tr>
-                        <td style="padding: 16px 24px;">
-                          <p style="margin:0 0 8px; font-size:12px; color:#888; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">Client Details</p>
-                          <p style="margin:0; font-size:14px; color:#333; line-height:1.7;">
-                            <strong>Name:</strong> ${clientName || 'N/A'}<br>
-                            <strong>Email:</strong> ${clientEmail || 'N/A'}<br>
-                            <strong>Phone:</strong> ${clientPhone || 'N/A'}
-                          </p>
+                        <td style="padding: 16px 24px; vertical-align: middle;">
+                          <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                              <td style="vertical-align: middle; padding-right: 16px;" width="64">
+                                <img src="${resolvedAvatar}" width="54" height="54" style="border-radius: 50%; border: 2px solid #ffccd1; object-fit: cover; display: block;" alt="${clientName}">
+                              </td>
+                              <td style="vertical-align: middle;">
+                                <p style="margin:0 0 4px; font-size:11px; color:#c8102e; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">Client Details</p>
+                                <p style="margin:0; font-size:14px; color:#333; line-height:1.6;">
+                                  <strong>Name:</strong> ${clientName || 'N/A'}<br>
+                                  <strong>Email:</strong> ${clientEmail || 'N/A'}<br>
+                                  <strong>Phone:</strong> ${clientPhone || 'N/A'}
+                                </p>
+                              </td>
+                            </tr>
+                          </table>
                         </td>
                       </tr>
                     </table>
@@ -164,7 +175,7 @@ async function sendBookingNotification({ photographerEmail, photographerName, cl
 /**
  * Send a booking confirmation email to the client
  */
-async function sendClientBookingConfirmation({ clientEmail, clientName, bookingTitle, bookingDate, bookingTime, bookingPrice, bookingType, photographerName }) {
+async function sendClientBookingConfirmation({ clientEmail, clientName, bookingTitle, bookingDate, bookingTime, bookingPrice, bookingType, photographerName, photographerAvatar }) {
   if (!smtpEmail || !smtpPassword) {
     console.warn('⚠️  SMTP credentials not configured — skipping client email notification.');
     return { sent: false, reason: 'SMTP not configured' };
@@ -178,6 +189,8 @@ async function sendClientBookingConfirmation({ clientEmail, clientName, bookingT
   const formattedPrice = typeof bookingPrice === 'number'
     ? `₹${bookingPrice.toLocaleString('en-IN')}`
     : bookingPrice;
+
+  const resolvedAvatar = photographerAvatar || `https://api.dicebear.com/7.x/initials/svg?seed=${photographerName || 'Creator'}`;
 
   const mailOptions = {
     from: `"PickMyShoot" <${smtpEmail}>`,
@@ -213,6 +226,16 @@ async function sendClientBookingConfirmation({ clientEmail, clientName, bookingT
                       Hi <strong>${clientName || 'Valued Customer'}</strong>,<br><br>
                       Thank you for choosing PickMyShoot! Your booking has been successfully placed. We've sent a notification to the photographer/provider <strong>${photographerName || 'Creator'}</strong>. Here are your booking details:
                     </p>
+
+                    <!-- Photographer Profile Header -->
+                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 20px;">
+                      <tr>
+                        <td align="center">
+                          <img src="${resolvedAvatar}" width="64" height="64" style="border-radius: 50%; border: 3px solid #3b82f6; object-fit: cover; display: inline-block;" alt="${photographerName}">
+                          <p style="margin: 8px 0 0; font-size: 16px; font-weight: 700; color: #1e3a8a;">${photographerName}</p>
+                        </td>
+                      </tr>
+                    </table>
 
                     <!-- Booking Details Card -->
                     <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8f9fb; border:1px solid #e8eaed; border-radius:12px; overflow:hidden; margin-bottom:20px;">
@@ -663,8 +686,21 @@ async function edgeSendEmails(booking: any) {
       ? clientUser.email 
       : null;
 
+    // Client details
     const clientEmailAddress = rawBookingEmail || dbUserEmail;
     const clientName = clientUser?.name || booking.clientName || 'Valued Customer';
+    const clientAvatar = clientUser?.avatar || '';
+
+    // Photographer details
+    let photographerAvatar = creatorUser?.avatar || '';
+    if (!photographerAvatar && booking.creatorId) {
+      const [photographerProfile] = await sql`
+        SELECT * FROM photographers WHERE "_id" = ${booking.creatorId} OR "slug" = ${booking.creatorId} OR "name" = ${booking.creatorId}
+      `;
+      if (photographerProfile) {
+        photographerAvatar = photographerProfile.avatar;
+      }
+    }
 
     console.log(`📧 Email dispatch: client="${clientEmailAddress}" (from booking="${booking.clientEmail}", db="${clientUser?.email}"), photographer="${recipientEmail}"`);
 
@@ -676,6 +712,7 @@ async function edgeSendEmails(booking: any) {
         clientName: clientName,
         clientEmail: clientEmailAddress || '',
         clientPhone: clientUser?.phone || booking.clientPhone || '',
+        clientAvatar: clientAvatar,
         bookingTitle: booking.title,
         bookingDate: booking.date,
         bookingTime: booking.time,
@@ -694,7 +731,8 @@ async function edgeSendEmails(booking: any) {
         bookingTime: booking.time,
         bookingPrice: booking.price,
         bookingType: booking.itemType,
-        photographerName: recipientName || 'Creator'
+        photographerName: recipientName || 'Creator',
+        photographerAvatar: photographerAvatar
       }).catch(err => console.error("Edge mailer error (client):", err.message));
     } else {
       console.warn(`⚠️  No valid client email found for booking "${booking._id}" — client confirmation email skipped.`);
