@@ -633,7 +633,7 @@ async function edgeSendEmails(booking: any) {
       SELECT * FROM users WHERE "id" = ${booking.clientId} OR "_id" = ${booking.clientId}
     `;
 
-    let recipientEmail = creatorUser?.email;
+    let recipientEmail = creatorUser?.email && !creatorUser.email.includes('***') ? creatorUser.email : null;
     let recipientName = creatorUser?.name;
 
     // Direct mapping for mock photographer ID used by mock listings
@@ -642,12 +642,12 @@ async function edgeSendEmails(booking: any) {
       recipientName = 'Nikhil photography';
     }
 
-    // Secondary lookup in photographers table if not found in users
+    // Secondary lookup in photographers table if not found in users (or if email was masked)
     if (!recipientEmail && booking.creatorId) {
       const [photographerProfile] = await sql`
         SELECT * FROM photographers WHERE "_id" = ${booking.creatorId} OR "slug" = ${booking.creatorId} OR "name" = ${booking.creatorId}
       `;
-      if (photographerProfile) {
+      if (photographerProfile && photographerProfile.email && !photographerProfile.email.includes('***')) {
         recipientEmail = photographerProfile.email;
         recipientName = photographerProfile.name;
       }
