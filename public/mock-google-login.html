@@ -543,6 +543,41 @@
       return AVATAR_COLORS[charCode % AVATAR_COLORS.length];
     }
 
+    const HARDCODED_ACCOUNTS = [
+      {
+        id: '6a380b8173c0e340a6bf3a42',
+        name: 'Nikhil',
+        role: 'photographer',
+        email: 'nikhiljai1215@gmail.com',
+        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80',
+        bio: 'Professional fashion and commercial photographer.'
+      },
+      {
+        id: '6a380bd273c0e340a6bf3a43',
+        name: 'Sri',
+        role: 'client',
+        email: 'ssrajuqc@gmail.com',
+        avatar: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&q=80',
+        bio: 'Creative director looking for studios and photographer gear.'
+      },
+      {
+        id: '6a39140ec8fbd2d7e85f0d91',
+        name: 'Jaideep',
+        role: 'client',
+        email: 'anusripvc203@gmail.com',
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80',
+        bio: 'Creative client seeking fashion and lookbook photographers.'
+      },
+      {
+        id: '6a391527c8fbd2d7e85f0d92',
+        name: 'Jaideepvarma',
+        role: 'photographer',
+        email: 'anusripvc204@gmail.com',
+        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80',
+        bio: 'Wedding cinematographer and event shooter.'
+      }
+    ];
+
     // Load registered users from Supabase Edge via Vercel proxy
     async function loadRegisteredUsers() {
       const listContainer = document.getElementById('accounts-list');
@@ -554,10 +589,20 @@
             'x-reveal-emails': 'true'
           }
         });
-        if (!res.ok) throw new Error("Failed to fetch users");
-        const users = await res.json();
+        let dbUsers = [];
+        if (res.ok) {
+          dbUsers = await res.json();
+        }
+
+        // Merge and deduplicate by email
+        const mergedMap = new Map();
+        HARDCODED_ACCOUNTS.forEach(a => mergedMap.set(a.email.toLowerCase(), a));
+        if (Array.isArray(dbUsers)) {
+          dbUsers.forEach(u => mergedMap.set(u.email.toLowerCase(), u));
+        }
+        const users = Array.from(mergedMap.values());
         
-        if (!Array.isArray(users) || users.length === 0) {
+        if (users.length === 0) {
           showInputForm();
           return;
         }
