@@ -682,27 +682,16 @@ const ExplorePage = () => {
 
               return (
                 <div
-                  key={item.id}
+                  key={item.id || item._id}
                   className={`explore-card-item bms-style ${isFilterSelected ? 'card-subtype-active' : ''}`}
                   onClick={() => {
                     // Models tab — always go to dedicated profile page
                     if (exploreTab === 'models') {
-                      navigate(`/model/${item.id}`);
+                      navigate(`/model/${item.id || item._id}`);
                       return;
                     }
-                    // Photographer profile — go to photographer profile page
-                    if (item.isPhotographerProfile) {
-                      navigate(`/photographer/${item.id}`);
-                      return;
-                    }
-                    // First click: apply the subtype filter to show related cards
-                    if (itemSubtype && selectedSubtype !== itemSubtype) {
-                      setSelectedSubtype(itemSubtype);
-                      setSelectedContextTag(null); // reset contextual filter for new subtype
-                    } else {
-                      // Second click (or no subtype): open details modal
-                      openDetails(item, exploreTab === 'rentals' ? 'gear' : exploreTab.slice(0, -1));
-                    }
+                    // Go to photographer/business profile page
+                    navigate(`/photographer/${item.id || item._id}`);
                   }}
                 >
                   <div className="explore-img-wrap">
@@ -723,10 +712,10 @@ const ExplorePage = () => {
                     )}
 
                     <button 
-                      className={`card-like-btn ${likedItems[item.id] ? 'liked' : ''}`}
-                      onClick={(e) => toggleLike(item.id, e)}
+                       className={`card-like-btn ${likedItems[item.id || item._id] ? 'liked' : ''}`}
+                      onClick={(e) => toggleLike(item.id || item._id, e)}
                     >
-                      <Heart size={14} fill={likedItems[item.id] ? 'var(--primary)' : 'none'} />
+                      <Heart size={14} fill={likedItems[item.id || item._id] ? 'var(--primary)' : 'none'} />
                     </button>
                   </div>
                   
@@ -738,7 +727,7 @@ const ExplorePage = () => {
                     </span>
                     <div className="explore-footer">
                       <span className="explore-price">
-                        ₹{item.price.toLocaleString('en-IN')}
+                        ₹{(typeof item.price === 'number' ? item.price : parseFloat(item.price) || 0).toLocaleString('en-IN')}
                         <span className="price-unit-tag">
                           {item.priceUnit ? `/${item.priceUnit}` : ''}
                         </span>
@@ -754,7 +743,7 @@ const ExplorePage = () => {
                         className="card-view-details-btn"
                         onClick={(e) => {
                           e.stopPropagation();
-                          openDetails(item, exploreTab === 'rentals' ? 'gear' : exploreTab.slice(0, -1));
+                          navigate(`/photographer/${item.id || item._id}`);
                         }}
                       >
                         View Details →

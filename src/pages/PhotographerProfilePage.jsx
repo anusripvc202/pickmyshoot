@@ -162,7 +162,20 @@ const mockReviews = [
 const PhotographerProfilePage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { profiles, studios, openDetails, likedItems, toggleLike, triggerToast, activeProfileId } = useAppContext();
+  const { 
+    profiles, 
+    studios, 
+    services,
+    models,
+    gear,
+    workshops,
+    jobs,
+    openDetails, 
+    likedItems, 
+    toggleLike, 
+    triggerToast, 
+    activeProfileId 
+  } = useAppContext();
   
   const [activeSlide, setActiveSlide] = useState(0);
   const [showFullBio, setShowFullBio] = useState(false);
@@ -180,7 +193,8 @@ const PhotographerProfilePage = () => {
 
   // Retrieve matching photographer
   const photographer = useMemo(() => {
-    const matched = profiles.find(p => p.id === id || p._id === id);
+    // 1. Search in profiles list (users)
+    let matched = profiles.find(p => p.id === id || p._id === id);
     if (matched) {
       let bioText = matched.bio || "";
       let startingPrice = matched.startingPrice;
@@ -202,6 +216,7 @@ const PhotographerProfilePage = () => {
       return {
         ...matched,
         bio: bioText,
+        location: matched.location || "Hyderabad, TS",
         reviews: matched.reviews || 500,
         shoots: matched.shoots || "150+",
         followers: matched.followers || "24K",
@@ -211,10 +226,42 @@ const PhotographerProfilePage = () => {
         isVerified: matched.isVerified !== undefined ? matched.isVerified : true
       };
     }
+
+    // 2. Search in all listings categories as fallback (services, studios, etc.)
+    const allListings = [...(services || []), ...(studios || []), ...(models || []), ...(gear || []), ...(workshops || []), ...(jobs || [])];
+    const matchedListing = allListings.find(l => l.id === id || l._id === id);
+    if (matchedListing) {
+      const priceVal = matchedListing.price ? (typeof matchedListing.price === 'object' ? matchedListing.price.hourly || matchedListing.price : parseFloat(matchedListing.price)) : 2000;
+      const ratingVal = matchedListing.rating ? (typeof matchedListing.rating === 'object' ? matchedListing.rating.score || matchedListing.rating : parseFloat(matchedListing.rating)) : 4.5;
+      
+      return {
+        id: matchedListing.id || matchedListing._id,
+        _id: matchedListing._id || matchedListing.id,
+        name: matchedListing.title,
+        role: "photographer",
+        avatar: matchedListing.image,
+        bio: matchedListing.description || "Premium registered visual creative partner space on PickMyShoot.",
+        location: matchedListing.location || "Hyderabad, TS",
+        rating: ratingVal.toString(),
+        reviews: matchedListing.reviews || 45,
+        shoots: matchedListing.reviews ? `${matchedListing.reviews}+` : "10+",
+        followers: "1.2K",
+        experience: "5+ Years",
+        startingPrice: priceVal,
+        phone: matchedListing.phone || "",
+        instaUrl: matchedListing.webUrl || matchedListing.website || "https://instagram.com/pickmyshoot",
+        webUrl: matchedListing.webUrl || matchedListing.website || "",
+        gmbUrl: matchedListing.gmbUrl || "",
+        fbUrl: matchedListing.fbUrl || "",
+        isVerified: true,
+        ownerId: matchedListing.ownerId || matchedListing.creatorId || "6a380b8173c0e340a6bf3a42"
+      };
+    }
+
     // Fallback search in fallback list
     const mockMatched = fallbackPhotographers.find(p => p.id === id);
     return mockMatched || fallbackPhotographers[0];
-  }, [profiles, id]);
+  }, [profiles, services, studios, models, gear, workshops, jobs, id]);
 
   const photographerOwnedStudios = useMemo(() => {
     if (!studios) return [];
@@ -245,6 +292,9 @@ const PhotographerProfilePage = () => {
       unit: " flat"
     }
   };
+
+  const cleanPhone = (photographer.phone || '919999988888').replace(/\D/g, '');
+  const formattedPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
 
   const handleBookNow = () => {
     // Open standard AppContext booking modal by converting photographer to service format
@@ -472,22 +522,38 @@ const PhotographerProfilePage = () => {
                 { label: "Instagram Link", connected: !!photographer.instaUrl, url: photographer.instaUrl },
                 { label: "Facebook Page", connected: !!photographer.fbUrl, url: photographer.fbUrl },
                 { label: "Website URL", connected: !!photographer.webUrl, url: photographer.webUrl }
-              ].map((soc, idx) => (
-                <div key={idx} style={{ background: '#fafafa', border: '1px solid #eee', borderRadius: '8px', padding: '12px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '12px', fontWeight: 700, color: '#333', marginBottom: '6px' }}>{soc.label}</div>
-                  <span style={{ 
-                    display: 'inline-block', 
-                    padding: '2px 8px', 
-                    borderRadius: '12px', 
-                    fontSize: '10px', 
-                    fontWeight: 700,
-                    background: soc.connected ? '#e8f5e9' : '#f5f5f5',
-                    color: soc.connected ? '#27ae60' : '#888'
-                  }}>
-                    {soc.connected ? "Connected" : "Not Linked"}
-                  </span>
-                </div>
-              ))}
+              ].map((soc, idx) => {
+                const CardContent = (
+                  <div style={{ height: '100%', background: '#fafafa', border: '1px solid #eee', borderRadius: '8px', padding: '12px', textAlign: 'center', transition: 'all 0.2s', cursor: soc.connected ? 'pointer' : 'default' }}>
+                    <div style={{ fontSize: '12px', fontWeight: 700, color: '#333', marginBottom: '6px' }}>{soc.label}</div>
+                    <span style={{ 
+                      display: 'inline-block', 
+                      padding: '2px 8px', 
+                      borderRadius: '12px', 
+                      fontSize: '10px', 
+                      fontWeight: 700,
+                      background: soc.connected ? '#e8f5e9' : '#f5f5f5',
+                      color: soc.connected ? '#27ae60' : '#888'
+                    }}>
+                      {soc.connected ? "Visit Link ↗" : "Not Linked"}
+                    </span>
+                  </div>
+                );
+
+                return soc.connected ? (
+                  <a 
+                    key={idx} 
+                    href={soc.url.startsWith('http') ? soc.url : `https://${soc.url}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    style={{ textDecoration: 'none', display: 'block' }}
+                  >
+                    {CardContent}
+                  </a>
+                ) : (
+                  <div key={idx}>{CardContent}</div>
+                );
+              })}
             </div>
           </div>
 
@@ -576,7 +642,7 @@ const PhotographerProfilePage = () => {
             </div>
             <div className="map-radius-overlay-info">
               <AlertCircle size={16} />
-              <span>Available for shoots within 50 km radius of {photographer.location.split(',')[0]} (Travel fees apply outside standard area)</span>
+              <span>Available for shoots within 50 km radius of {(photographer.location || "Hyderabad, TS").split(',')[0]} (Travel fees apply outside standard area)</span>
             </div>
           </div>
 
@@ -631,7 +697,7 @@ const PhotographerProfilePage = () => {
 
             <div className="social-buttons-flex-row">
               <a 
-                href={`https://wa.me/919999988888?text=Hi%20${encodeURIComponent(photographer.name)},%20I%20found%20your%20profile%20on%20PickMyShoot%20and%20would%20like%20to%20book%20a%20shoot!`} 
+                href={`https://wa.me/${formattedPhone}?text=Hi%20${encodeURIComponent(photographer.name)},%20I%20found%20your%20profile%20on%20PickMyShoot%20and%20would%20like%20to%20book%20a%20shoot!`} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="social-action-btn-item whatsapp-btn"
@@ -701,14 +767,14 @@ const PhotographerProfilePage = () => {
 
           <div className="mobile-action-buttons-wrap">
             <a 
-              href={`tel:+919999988888`} 
+              href={`tel:${photographer.phone || '+919999988888'}`} 
               className="mobile-quick-action-icon-btn"
               onClick={() => handleSocialClick('Call')}
             >
               <Phone size={16} />
             </a>
             <a 
-              href={`https://wa.me/919999988888?text=Hi%2520${encodeURIComponent(photographer.name)}`}
+              href={`https://wa.me/${formattedPhone}?text=Hi%2520${encodeURIComponent(photographer.name)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="mobile-quick-action-icon-btn"

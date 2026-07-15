@@ -34,8 +34,10 @@ const PhotographerDashboard = () => {
   const {
     bookings,
     services,
+    setServices,
     gear,
     studios,
+    setStudios,
     triggerToast,
     profiles,
     setProfiles,
@@ -378,6 +380,35 @@ const PhotographerDashboard = () => {
         console.warn("Could not sync profile settings update to DB:", err);
         triggerToast("Profile settings saved locally");
       });
+  };
+
+  const handleDeleteProfile = async () => {
+    const confirmation = window.confirm(
+      "⚠ WARNING: Are you sure you want to permanently delete your photographer profile, user account, and all associated services/listings?\n\nThis action cannot be undone."
+    );
+    if (!confirmation) return;
+
+    try {
+      const res = await fetch(`/api/users?id=${activeProfileId}`, {
+        method: 'DELETE'
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        // Filter out deleted photographer and listings from React states
+        setProfiles(prev => prev.filter(p => p.id !== activeProfileId && p._id !== activeProfileId));
+        setServices(prev => prev.filter(s => s.creatorId !== activeProfileId && s.ownerId !== activeProfileId && s.id !== activeProfileId && s._id !== activeProfileId));
+        setStudios(prev => prev.filter(s => s.creatorId !== activeProfileId && s.ownerId !== activeProfileId && s.id !== activeProfileId && s._id !== activeProfileId));
+
+        triggerToast("✓ Account and listings permanently deleted.");
+        logoutUser();
+        navigate('/');
+      } else {
+        triggerToast("Failed to delete account: " + (data.error || "Unknown error"));
+      }
+    } catch (err) {
+      console.error(err);
+      triggerToast("Error deleting account. Please try again.");
+    }
   };
 
   const handlePackagesUpdate = (e) => {
@@ -1792,6 +1823,21 @@ const PhotographerDashboard = () => {
                   </button>
                 </div>
               </form>
+
+              <div style={{ marginTop: '32px', borderTop: '2px solid #fee2e2', paddingTop: '24px' }}>
+                <h4 style={{ color: '#dc2626', fontWeight: 800, fontSize: '15px', marginBottom: '8px' }}>Danger Zone</h4>
+                <p style={{ color: '#666', fontSize: '13px', marginBottom: '16px' }}>
+                  Permanently delete your photographer profile and remove all your listings from the explore platform. This action is permanent and cannot be undone.
+                </p>
+                <button 
+                  type="button" 
+                  onClick={handleDeleteProfile} 
+                  className="console-action-btn delete-btn" 
+                  style={{ background: '#fef2f2', border: '1.5px solid #fecaca', color: '#dc2626', padding: '12px 24px', fontWeight: 700 }}
+                >
+                  Delete Profile & Account
+                </button>
+              </div>
             </div>
           </section>
         )}

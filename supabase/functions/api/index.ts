@@ -971,7 +971,7 @@ serve(async (req) => {
             "amenities", "features", "capacity", "area", "studioType", "categories", 
             "gender", "height", "category", "specs", "includes", "skills", "company", 
             "jobType", "instructor", "date", "timing", "workshopType", "specialization", 
-            "experience", "portfolio", "serviceType"
+            "experience", "portfolio", "serviceType", "phone", "webUrl", "gmbUrl", "fbUrl"
           ) VALUES (
             ${id}, 
             ${id}, 
@@ -1009,7 +1009,11 @@ serve(async (req) => {
             ${body.specialization || null}, 
             ${body.experience || null}, 
             ${body.portfolio || null}, 
-            ${body.serviceType || null}
+            ${body.serviceType || null},
+            ${body.phone || null},
+            ${body.webUrl || null},
+            ${body.gmbUrl || null},
+            ${body.fbUrl || null}
           ) RETURNING *
         `;
         return new Response(JSON.stringify(listing), { status: 201, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
@@ -1028,7 +1032,11 @@ serve(async (req) => {
             "description" = COALESCE(${updateData.description ?? null}, "description"),
             "location"    = COALESCE(${updateData.location    ?? null}, "location"),
             "active"      = COALESCE(${updateData.active      ?? null}, "active"),
-            "isFeatured"  = COALESCE(${updateData.isFeatured  ?? null}, "isFeatured")
+            "isFeatured"  = COALESCE(${updateData.isFeatured  ?? null}, "isFeatured"),
+            "phone"       = COALESCE(${updateData.phone       ?? null}, "phone"),
+            "webUrl"      = COALESCE(${updateData.webUrl      ?? null}, "webUrl"),
+            "gmbUrl"      = COALESCE(${updateData.gmbUrl      ?? null}, "gmbUrl"),
+            "fbUrl"       = COALESCE(${updateData.fbUrl       ?? null}, "fbUrl")
           WHERE "id" = ${id} OR "_id" = ${id}
           RETURNING *
         `;
@@ -1105,6 +1113,26 @@ serve(async (req) => {
       }
       if (method === 'DELETE') {
         const id = url.searchParams.get('id');
+        // Fetch user email first to delete linked listings and partner profiles
+        const [user] = await sql`SELECT "email" FROM users WHERE "id" = ${id} OR "_id" = ${id}`;
+        if (user && user.email) {
+          const email = user.email.toLowerCase().trim();
+          
+          // If the profile belongs to Nikhil, delete all seeded listings/photographer profiles using ID 6a380b8173c0e340a6bf3a42
+          if (email === 'nikhiljai1215@gmail.com') {
+            await sql`DELETE FROM listings WHERE "creatorId" = '6a380b8173c0e340a6bf3a42' OR "ownerId" = '6a380b8173c0e340a6bf3a42'`;
+            await sql`DELETE FROM photographers WHERE "_id" = '6a380b8173c0e340a6bf3a42' OR LOWER(TRIM("email")) = 'nikhiljai1215@gmail.com'`;
+            await sql`DELETE FROM bookings WHERE "creatorId" = '6a380b8173c0e340a6bf3a42' OR "ownerId" = '6a380b8173c0e340a6bf3a42'`;
+          }
+          
+          await sql`DELETE FROM listings WHERE "creatorId" = ${id} OR "ownerId" = ${id} OR "id" = ${id} OR "_id" = ${id}`;
+          await sql`DELETE FROM photographers WHERE "_id" = ${id} OR LOWER(TRIM("email")) = ${email}`;
+          await sql`DELETE FROM bookings WHERE "creatorId" = ${id} OR "ownerId" = ${id} OR "clientId" = ${id} OR LOWER(TRIM("clientEmail")) = ${email}`;
+        } else {
+          await sql`DELETE FROM listings WHERE "creatorId" = ${id} OR "ownerId" = ${id} OR "id" = ${id} OR "_id" = ${id}`;
+          await sql`DELETE FROM photographers WHERE "_id" = ${id}`;
+          await sql`DELETE FROM bookings WHERE "creatorId" = ${id} OR "ownerId" = ${id} OR "clientId" = ${id}`;
+        }
         await sql`DELETE FROM users WHERE "id" = ${id} OR "_id" = ${id}`;
         return new Response(JSON.stringify({ success: true }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
