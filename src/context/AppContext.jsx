@@ -9,6 +9,21 @@ import {
   jobs as initialJobs 
 } from '../data/mockData';
 
+/**
+ * Deduplicates a profiles array by email.
+ * DB profiles (non-pickmyshoot.com) always win over mock/demo profiles.
+ * The last entry for a given email in the array is kept.
+ */
+const deduplicateProfiles = (profilesArray) => {
+  const byEmail = new Map();
+  profilesArray.forEach(p => {
+    const key = (p.email || p.id || p._id || '').toLowerCase();
+    if (!key) return;
+    byEmail.set(key, p); // last one wins (DB overwrites mock)
+  });
+  return Array.from(byEmail.values());
+};
+
 const defaultMockProfiles = [
   {
     id: "demo-admin",
@@ -301,9 +316,9 @@ export const AppProvider = ({ children }) => {
           });
 
           setProfiles(prev => {
-            // Keep existing profiles unless they match email of DB profiles
+            // DB profiles always replace matching mock/local profiles
             const filteredPrev = prev.filter(p => !dbProfiles.some(dp => dp.email.toLowerCase() === p.email.toLowerCase()));
-            return [...filteredPrev, ...dbProfiles];
+            return deduplicateProfiles([...filteredPrev, ...dbProfiles]);
           });
         }
       })
@@ -765,10 +780,7 @@ export const AppProvider = ({ children }) => {
       };
 
       // Add user to local profiles list if not already there
-      setProfiles(prev => {
-        const filtered = prev.filter(p => p.email.toLowerCase() !== email.toLowerCase());
-        return [...filtered, mappedUser];
-      });
+      setProfiles(prev => deduplicateProfiles([...prev.filter(p => p.email.toLowerCase() !== email.toLowerCase()), mappedUser]));
 
       const mappedRole = getMappedRole(mappedUser);
       setCurrentUser(mappedUser);
@@ -806,7 +818,7 @@ export const AppProvider = ({ children }) => {
       authProvider: 'email'
     };
 
-    setProfiles(prev => [...prev, newProfile]);
+    setProfiles(prev => deduplicateProfiles([...prev.filter(p => p.email.toLowerCase() !== email.toLowerCase()), newProfile]));
     setCurrentUser(newProfile);
     setActiveProfileId(newProfileId);
     setIsAuthenticated(true);
@@ -887,7 +899,7 @@ export const AppProvider = ({ children }) => {
         authProvider: 'google'
       };
 
-      setProfiles(prev => [...prev, newProfile]);
+      setProfiles(prev => deduplicateProfiles([...prev, newProfile]));
       setCurrentUser(newProfile);
       setActiveProfileId(newProfileId);
       setIsAuthenticated(true);
