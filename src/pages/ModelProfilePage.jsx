@@ -122,7 +122,7 @@ const ModelProfilePage = () => {
       title: `${model.title} — ${packages[selectedPackage].name}`,
       price: packages[selectedPackage].price,
       image: model.image,
-      ownerId: model.id,
+      ownerId: model.ownerId || model.id,
       location: model.location,
       rating: model.rating,
       reviews: model.reviews

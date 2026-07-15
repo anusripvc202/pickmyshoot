@@ -303,7 +303,7 @@ const PhotographerProfilePage = () => {
       title: `${photographer.name} — ${packages[selectedPackage].name}`,
       price: packages[selectedPackage].price,
       image: photographer.avatar,
-      ownerId: photographer.id || photographer._id,
+      ownerId: photographer.ownerId || photographer.id || photographer._id,
       location: photographer.location,
       rating: photographer.rating,
       reviews: photographer.reviews
