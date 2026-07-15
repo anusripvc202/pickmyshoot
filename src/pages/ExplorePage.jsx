@@ -166,9 +166,21 @@ const ExplorePage = () => {
     switch (exploreTab) {
       case 'services': {
         const photographerProfiles = (profiles || []).filter(p => p.role === 'photographer');
-        const photographerProfileIds = new Set(photographerProfiles.map(p => p.id || p._id));
 
-        const photographerServices = photographerProfiles
+        // Deduplicate by email — pick the DB version (non-demo) when there's a conflict
+        const seenEmails = new Set();
+        const uniquePhotographerProfiles = photographerProfiles.filter(p => {
+          const email = (p.email || '').toLowerCase();
+          // Skip placeholder/demo accounts that should not show on public explore page
+          if (!email || email.includes('pickmyshoot.com') || email.includes('pickmyshoot-partner.com')) return false;
+          if (seenEmails.has(email)) return false;
+          seenEmails.add(email);
+          return true;
+        });
+
+        const photographerProfileIds = new Set(uniquePhotographerProfiles.map(p => p.id || p._id));
+
+        const photographerServices = uniquePhotographerProfiles
           .map(p => ({
             id: p.id || p._id,
             title: p.name,

@@ -27,21 +27,6 @@ const defaultMockProfiles = [
     studioName: "PickMyShoot HQ"
   },
   {
-    id: "demo-photographer",
-    name: "Rahul Verma (Photographer)",
-    role: "photographer",
-    email: "photographer@pickmyshoot.com",
-    phone: "+91 98765 43210",
-    bio: "Professional photographer with 8+ years experience in weddings, portraits, and fashion.",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=180&q=80",
-    shoots: "150+",
-    rating: "4.9 ★",
-    followers: "24K",
-    revenue: "₹2.4L",
-    success: "98%",
-    views: "1200"
-  },
-  {
     id: "demo-client",
     name: "Priya Sharma (Client)",
     role: "client",
