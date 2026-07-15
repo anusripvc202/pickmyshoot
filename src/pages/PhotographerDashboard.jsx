@@ -249,7 +249,7 @@ const PhotographerDashboard = () => {
       const res = await fetch('/api/verify-photographer', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: activeProfile.email || currentUser?.email, code: verifyCode.trim() })
+        body: JSON.stringify({ email: currentUser?.email || activeProfile.email, code: verifyCode.trim() })
       });
       const data = await res.json();
       if (res.ok && data.success) {
