@@ -680,8 +680,8 @@ export const AppProvider = ({ children }) => {
     }).catch(err => console.warn('Failed to record login activity:', err));
   };
 
-  // Authenticate user session
-  const loginUser = (email, password, demoProfileId = null) => {
+  // Authenticate user session securely against backend
+  const loginUser = async (email, password, demoProfileId = null) => {
     const getMappedRole = (profile) => {
       if (!profile || !profile.role) return 'client';
       const roleLower = profile.role.toLowerCase();
@@ -705,38 +705,98 @@ export const AppProvider = ({ children }) => {
       return false;
     }
 
-    // Check live profiles first
-    let foundProfile = profiles.find(p => p.email.toLowerCase() === email.toLowerCase());
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
 
-    // Fallback: check if there's a locally stored user with this email (registered this session)
-    if (!foundProfile) {
-      try {
-        const storedUser = localStorage.getItem('pickmyshoot_current_user');
-        if (storedUser) {
-          const parsed = JSON.parse(storedUser);
-          if (parsed && parsed.email && parsed.email.toLowerCase() === email.toLowerCase()) {
-            foundProfile = parsed;
-          }
-        }
-      } catch (e) { /* ignore */ }
-    }
-
-    if (foundProfile) {
-      if (foundProfile.password && foundProfile.password !== password) {
-        triggerToast("Incorrect password. Please try again!");
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        triggerToast(errData.error || "Invalid email or password. Please try again!");
         return false;
       }
-      const mappedRole = getMappedRole(foundProfile);
-      const updatedUser = { ...foundProfile, authProvider: foundProfile.authProvider || 'email' };
-      setCurrentUser(updatedUser);
-      setActiveProfileId(foundProfile.id);
+
+      const data = await res.json();
+      const dbUser = data.user;
+
+      // Map DB profile fields to include defaults
+      let bioText = dbUser.bio || "Newly registered visual creator profile.";
+      let startingPrice = dbUser.startingPrice;
+      let instaUrl = dbUser.instaUrl;
+      let categories = dbUser.categories || (dbUser.role === 'photographer' ? ["Wedding Photography", "Candid Photography"] : []);
+      let highlights = dbUser.highlights || (dbUser.role === 'photographer' ? ["1+ Year Experience", "Creative Angles", "High-End Camera Equipment"] : []);
+      let languages = dbUser.languages || ["English", "Hindi", "Telugu"];
+      let travelOutside = dbUser.travelOutside || "Yes";
+      let gmbUrl = dbUser.gmbUrl || "";
+      let fbUrl = dbUser.fbUrl || "";
+      let webUrl = dbUser.webUrl || "";
+
+      try {
+        if (dbUser.bio && dbUser.bio.startsWith('{')) {
+          const parsed = JSON.parse(dbUser.bio);
+          if (parsed && typeof parsed === 'object') {
+            bioText = parsed.text || bioText;
+            startingPrice = parsed.startingPrice || startingPrice;
+            instaUrl = parsed.instaUrl || instaUrl;
+            categories = parsed.categories || categories;
+            highlights = parsed.highlights || highlights;
+            languages = parsed.languages || languages;
+            travelOutside = parsed.travelOutside || travelOutside;
+            gmbUrl = parsed.gmbUrl || gmbUrl;
+            fbUrl = parsed.fbUrl || fbUrl;
+            webUrl = parsed.webUrl || webUrl;
+          }
+        }
+      } catch (e) {}
+
+      const mappedUser = {
+        ...dbUser,
+        id: dbUser.id || dbUser._id,
+        name: dbUser.name,
+        role: dbUser.role || 'client',
+        email: dbUser.email,
+        phone: dbUser.phone || "+91 99999 88888",
+        bio: bioText,
+        avatar: dbUser.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=180&q=80",
+        shoots: dbUser.shoots || "0",
+        rating: dbUser.rating || "5.0 ★",
+        followers: dbUser.followers || "0",
+        revenue: dbUser.revenue || "₹0",
+        success: dbUser.success || "100%",
+        views: dbUser.views || "1",
+        studioName: dbUser.studioName || dbUser.studio_name || "",
+        startingPrice: startingPrice,
+        instaUrl: instaUrl,
+        categories,
+        highlights,
+        languages,
+        travelOutside,
+        gmbUrl,
+        fbUrl,
+        webUrl,
+        authProvider: dbUser.authProvider || 'email'
+      };
+
+      // Add user to local profiles list if not already there
+      setProfiles(prev => {
+        const filtered = prev.filter(p => p.email.toLowerCase() !== email.toLowerCase());
+        return [...filtered, mappedUser];
+      });
+
+      const mappedRole = getMappedRole(mappedUser);
+      setCurrentUser(mappedUser);
+      setActiveProfileId(mappedUser.id);
       setIsAuthenticated(true);
       setCurrentRole(mappedRole);
-      recordLoginActivity(updatedUser, mappedRole);
-      triggerToast(`Welcome back, ${foundProfile.name}!`);
+      recordLoginActivity(mappedUser, mappedRole);
+      triggerToast(`Welcome back, ${mappedUser.name}!`);
       return true;
-    } else {
-      triggerToast("Invalid credentials. Please register first or use demo accounts!");
+
+    } catch (e) {
+      console.warn("Secure login attempt failed:", e);
+      triggerToast("Connection error. Please try again!");
       return false;
     }
   };

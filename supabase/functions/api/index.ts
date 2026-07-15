@@ -1247,6 +1247,31 @@ serve(async (req) => {
       }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
+    // ── LOGIN ROUTE ──
+    if (path === '/login' && method === 'POST') {
+      const body = await req.json();
+      const email = body.email?.trim()?.toLowerCase();
+      const password = body.password;
+
+      if (!email || !password) {
+        return new Response(JSON.stringify({ error: 'Email and password are required.' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+
+      const [user] = await sql`
+        SELECT * FROM users WHERE LOWER(TRIM("email")) = ${email}
+      `;
+
+      if (!user) {
+        return new Response(JSON.stringify({ error: 'User does not exist. Please register first.' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+
+      if (user.password && user.password !== password) {
+        return new Response(JSON.stringify({ error: 'Incorrect password. Please try again.' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+
+      return new Response(JSON.stringify({ success: true, user }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+
     // ── LOGIN ACTIVITY ROUTE ──
     if (path === '/login-activity') {
       if (method === 'POST') {

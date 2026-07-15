@@ -104,7 +104,7 @@ const LoginPage = () => {
     }
     setLoginLoading(true);
     await new Promise(r => setTimeout(r, 400)); // subtle loading feel
-    const success = loginUser(loginEmail, loginPassword);
+    const success = await loginUser(loginEmail, loginPassword);
     setLoginLoading(false);
     if (success) {
       if (rememberMe) {
