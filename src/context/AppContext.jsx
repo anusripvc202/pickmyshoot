@@ -240,7 +240,8 @@ export const AppProvider = ({ children }) => {
     return {
       'Content-Type': 'application/json',
       'X-User-Id': userId,
-      'X-Auth-Provider': authProvider
+      'X-Auth-Provider': authProvider,
+      'X-Reveal-Emails': 'true'  // Always show real emails to authenticated users
     };
   };
 

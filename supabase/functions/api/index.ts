@@ -660,8 +660,20 @@ async function edgeSendEmails(booking: any) {
       console.log(`ℹ️  No creator found for ID "${booking.creatorId}" — falling back to nikhiljai1215@gmail.com for test notification.`);
     }
 
-    const clientEmailAddress = clientUser?.email || booking.clientEmail;
+    // Client email: use the booking's stored clientEmail first (saved directly at booking time 
+    // from currentUser.email — most reliable), then fall back to DB user lookup.
+    // The DB user email may be masked/corrupted if it was saved incorrectly.
+    const rawBookingEmail = booking.clientEmail && !booking.clientEmail.includes('***') 
+      ? booking.clientEmail 
+      : null;
+    const dbUserEmail = clientUser?.email && !clientUser.email.includes('***') 
+      ? clientUser.email 
+      : null;
+
+    const clientEmailAddress = rawBookingEmail || dbUserEmail;
     const clientName = clientUser?.name || booking.clientName || 'Valued Customer';
+
+    console.log(`📧 Email dispatch: client="${clientEmailAddress}" (from booking="${booking.clientEmail}", db="${clientUser?.email}"), photographer="${recipientEmail}"`);
 
     // 1. Send notification to photographer
     if (recipientEmail) {
@@ -691,6 +703,8 @@ async function edgeSendEmails(booking: any) {
         bookingType: booking.itemType,
         photographerName: recipientName || 'Creator'
       }).catch(err => console.error("Edge mailer error (client):", err.message));
+    } else {
+      console.warn(`⚠️  No valid client email found for booking "${booking._id}" — client confirmation email skipped.`);
     }
   } catch (err) {
     console.error("Failed to send booking emails:", err.message);
@@ -1055,7 +1069,7 @@ serve(async (req) => {
     if (path === '/users') {
       if (method === 'GET') {
         const users = await sql`SELECT * FROM users ORDER BY "createdAt" DESC`;
-        const mappedUsers = (isGoogleAuth || revealEmails) ? users : users.map(u => ({ ...u, email: maskEmail(u.email) }));
+        const mappedUsers = (isGoogleAuth || revealEmails || reqUserId) ? users : users.map(u => ({ ...u, email: maskEmail(u.email) }));
         return new Response(JSON.stringify(mappedUsers), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
 
@@ -1179,7 +1193,7 @@ serve(async (req) => {
         }
 
         const photographers = await sql`SELECT * FROM photographers ORDER BY "createdAt" ASC`;
-        const mappedPhotographers = isGoogleAuth ? photographers : photographers.map(p => ({ ...p, email: maskEmail(p.email) }));
+        const mappedPhotographers = (isGoogleAuth || revealEmails || reqUserId) ? photographers : photographers.map(p => ({ ...p, email: maskEmail(p.email) }));
         return new Response(JSON.stringify(mappedPhotographers), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
 
