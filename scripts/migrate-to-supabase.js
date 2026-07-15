@@ -1,11 +1,11 @@
 import 'dotenv/config';
 import mongoose from 'mongoose';
 import pg from 'pg';
-import User from '../api/models/User.js';
-import Listing from '../api/models/Listing.js';
-import Booking from '../api/models/Booking.js';
-import Photographer from '../api/models/Photographer.js';
-import LoginActivity from '../api/models/LoginActivity.js';
+import User from '../api_old/models/User.js';
+import Listing from '../api_old/models/Listing.js';
+import Booking from '../api_old/models/Booking.js';
+import Photographer from '../api_old/models/Photographer.js';
+import LoginActivity from '../api_old/models/LoginActivity.js';
 
 const MONGODB_URI = process.env.MONGODB_URI;
 const SUPABASE_DB_URL = 'postgresql://postgres:anusripvc202@db.ttjywwxethwoqgtcvzno.supabase.co:5432/postgres';

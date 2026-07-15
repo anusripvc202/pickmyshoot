@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import mongoose from 'mongoose';
-import Listing from '../api/models/Listing.js';
+import Listing from '../api_old/models/Listing.js';
 
 const MONGODB_URI = process.env.MONGODB_URI;
 

@@ -1,8 +1,8 @@
 import 'dotenv/config';
 import mongoose from 'mongoose';
-import Photographer from '../api/models/Photographer.js';
-import User from '../api/models/User.js';
-import Listing from '../api/models/Listing.js';
+import Photographer from '../api_old/models/Photographer.js';
+import User from '../api_old/models/User.js';
+import Listing from '../api_old/models/Listing.js';
 
 async function run() {
   await mongoose.connect(process.env.MONGODB_URI);
