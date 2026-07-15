@@ -6177,8 +6177,11 @@ input:checked + .slider:before {
 /* Responsive footer */
 @media (max-width: 1200px) {
   .footer-inner {
-    grid-template-columns: 240px repeat(3, 1fr);
-    gap: 20px;
+    grid-template-columns: 200px repeat(4, 1fr);
+    gap: 16px;
+  }
+  .footer-tagline {
+    max-width: 100%;
   }
 }
 
