@@ -88,12 +88,12 @@ export const AppProvider = ({ children }) => {
   });
 
   // Lists
-  const [services, setServices] = useState(initialServices || []);
-  const [studios, setStudios] = useState(initialStudios || []);
-  const [models, setModels] = useState(initialModels || []);
-  const [gear, setGear] = useState(initialGear || []);
-  const [workshops, setWorkshops] = useState(initialWorkshops || []);
-  const [jobs, setJobs] = useState(initialJobs || []);
+  const [services, setServices] = useState([]);
+  const [studios, setStudios] = useState([]);
+  const [models, setModels] = useState([]);
+  const [gear, setGear] = useState([]);
+  const [workshops, setWorkshops] = useState([]);
+  const [jobs, setJobs] = useState([]);
 
 
   // Initial Mock Portfolio Items state
@@ -381,7 +381,7 @@ export const AppProvider = ({ children }) => {
     return () => clearInterval(interval);
   }, [activeProfileId, isAuthenticated]);
 
-  // Reusable function: load listings from DB and merge with mock data
+  // Reusable function: load listings from DB
   const reloadListings = () => {
     fetch('/api/listings', {
       headers: getAuthHeaders()
@@ -391,58 +391,39 @@ export const AppProvider = ({ children }) => {
         return res.json();
       })
       .then(data => {
-        if (Array.isArray(data) && data.length > 0) {
-          const dbServices = [];
-          const dbStudios = [];
-          const dbModels = [];
-          const dbGear = [];
-          const dbWorkshops = [];
-          const dbJobs = [];
+        const dbList = Array.isArray(data) ? data : [];
+        const dbServices = [];
+        const dbStudios = [];
+        const dbModels = [];
+        const dbGear = [];
+        const dbWorkshops = [];
+        const dbJobs = [];
 
-          data.forEach(item => {
-            // Only include active DB listings
-            if (item.active === false) return;
-            const mappedItem = {
-              ...item,
-              id: item.id || item._id,
-              ownerId: item.ownerId || (item.creatorId && typeof item.creatorId === 'object' ? item.creatorId.id || item.creatorId._id : item.creatorId)
-            };
-            if (item.type === 'service') dbServices.push(mappedItem);
-            else if (item.type === 'studio') dbStudios.push(mappedItem);
-            else if (item.type === 'model') dbModels.push(mappedItem);
-            else if (item.type === 'gear') dbGear.push(mappedItem);
-            else if (item.type === 'workshop') dbWorkshops.push(mappedItem);
-            else if (item.type === 'job') dbJobs.push(mappedItem);
-          });
-
-          // Helper: merge DB items with prev mock data.
-          const mergeItems = (dbItems, prev) => {
-            const enriched = dbItems.map(dbItem => {
-              const mock = prev.find(p => p.id === dbItem.id);
-              if (!mock) return dbItem;
-              return {
-                ...dbItem,
-                image:       dbItem.image       || mock.image,
-                title:       dbItem.title       || mock.title,
-                description: dbItem.description || mock.description,
-                rating:      dbItem.rating      ?? mock.rating,
-                reviews:     dbItem.reviews     ?? mock.reviews,
-              };
-            });
-            const filteredPrev = prev.filter(p => !enriched.some(d => d.id === p.id));
-            return [...enriched, ...filteredPrev];
+        dbList.forEach(item => {
+          // Only include active DB listings
+          if (item.active === false) return;
+          const mappedItem = {
+            ...item,
+            id: item.id || item._id,
+            ownerId: item.ownerId || (item.creatorId && typeof item.creatorId === 'object' ? item.creatorId.id || item.creatorId._id : item.creatorId)
           };
+          if (item.type === 'service') dbServices.push(mappedItem);
+          else if (item.type === 'studio') dbStudios.push(mappedItem);
+          else if (item.type === 'model') dbModels.push(mappedItem);
+          else if (item.type === 'gear') dbGear.push(mappedItem);
+          else if (item.type === 'workshop') dbWorkshops.push(mappedItem);
+          else if (item.type === 'job') dbJobs.push(mappedItem);
+        });
 
-          // Always replace with full DB list (enriched) so new custom listings always show
-          setServices(prev  => mergeItems(dbServices,  prev));
-          setStudios(prev   => mergeItems(dbStudios,   prev));
-          setModels(prev    => mergeItems(dbModels,    prev));
-          setGear(prev      => mergeItems(dbGear,      prev));
-          setWorkshops(prev => mergeItems(dbWorkshops, prev));
-          setJobs(prev      => mergeItems(dbJobs,      prev));
-        }
+        // Always replace with full DB list so only DB listings show
+        setServices(dbServices);
+        setStudios(dbStudios);
+        setModels(dbModels);
+        setGear(dbGear);
+        setWorkshops(dbWorkshops);
+        setJobs(dbJobs);
       })
-      .catch(err => console.warn('Failed to load listings from DB — showing mock data:', err));
+      .catch(err => console.warn('Failed to load listings from DB:', err));
   };
 
   // Load listings from DB on app startup

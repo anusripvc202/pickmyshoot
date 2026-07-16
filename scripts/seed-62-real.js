@@ -42,8 +42,16 @@ let studioImgIdx = 0;
 let serviceImgIdx = 0;
 
 const finalListings = [];
+const seenNamesSet = new Set();
 
 excelRows.forEach((er, index) => {
+  const normName = er.name ? er.name.trim().toLowerCase() : '';
+  if (!normName) return;
+  if (seenNamesSet.has(normName)) {
+    return; // Skip duplicate business names
+  }
+  seenNamesSet.add(normName);
+
   const erNameClean = cleanName(er.name);
   const erPhoneClean = cleanPhone(er.phone);
   
@@ -156,6 +164,10 @@ excelRows.forEach((er, index) => {
       gmbUrl: null,
       fbUrl: null
     };
+  }
+  
+  if (erNameClean.includes('tejastudio') || erNameClean.includes('tejaphoto') || erNameClean.includes('saiteja')) {
+    mapped.image = '/teja_studios.png';
   }
   
   finalListings.push(mapped);

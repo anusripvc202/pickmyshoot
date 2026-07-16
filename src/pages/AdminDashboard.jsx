@@ -108,29 +108,7 @@ const AdminDashboard = () => {
       const data = await res.json();
       const dbListings = Array.isArray(data) ? data : [];
 
-      // Construct mock listings mapped to appropriate structure
-      const mockListings = [
-        ...initialStudios.map(s => ({ ...s, type: 'studio' })),
-        ...initialGear.map(g => ({ ...g, type: 'gear' })),
-        ...initialServices.map(s => ({ ...s, type: 'service' })),
-        ...initialModels.map(m => ({ ...m, type: 'model' })),
-        ...initialJobs.map(j => ({ ...j, type: 'job' }))
-      ];
-
-      // Merge: DB listings override mock listings with same id
-      const merged = [...dbListings];
-      mockListings.forEach(mockItem => {
-        const exists = merged.some(dbItem => dbItem.id === mockItem.id);
-        if (!exists) {
-          merged.push({
-            ...mockItem,
-            _id: mockItem.id, // simulate mongodb id
-            active: true
-          });
-        }
-      });
-
-      setListings(merged);
+      setListings(dbListings);
     } catch (err) {
       setListingsError('Could not load listings: ' + err.message);
     } finally {
