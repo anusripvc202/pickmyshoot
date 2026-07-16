@@ -375,7 +375,7 @@ const PhotographerProfilePage = () => {
               <div className="header-meta-info">
                 {photographer.isVerified && (
                   <div className="verified-badge-wrap red-accent">
-                    <Award size={12} style={{ marginRight: '4px' }} /> Verified Photographer
+                    <Award size={12} style={{ marginRight: '4px' }} /> {photographer.role === 'admin' ? 'Platform Administrator' : 'Verified Photographer'}
                   </div>
                 )}
                 <h1 className="photographer-name-title">{photographer.name}</h1>
