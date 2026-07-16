@@ -108,9 +108,9 @@ const LoginPage = () => {
     }
     setLoginLoading(true);
     await new Promise(r => setTimeout(r, 400)); // subtle loading feel
-    const success = await loginUser(loginEmail, loginPassword);
+    const result = await loginUser(loginEmail, loginPassword);
     setLoginLoading(false);
-    if (success) {
+    if (result && result.success) {
       if (rememberMe) {
         localStorage.setItem('pickmyshoot_remembered_email', loginEmail);
         localStorage.setItem('pickmyshoot_remember_me', 'true');
@@ -120,7 +120,7 @@ const LoginPage = () => {
       }
       navigate(redirect);
     } else {
-      setLoginError('Invalid email or password. Please try again.');
+      setLoginError(result?.error || 'Invalid email or password. Please try again.');
     }
   };
 

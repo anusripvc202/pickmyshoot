@@ -707,9 +707,9 @@ export const AppProvider = ({ children }) => {
         setCurrentRole(mappedRole);
         recordLoginActivity(foundProfile, mappedRole);
         triggerToast(`Welcome back, ${foundProfile.name}!`);
-        return true;
+        return { success: true };
       }
-      return false;
+      return { success: false, error: "Invalid profile." };
     }
 
     try {
@@ -722,7 +722,7 @@ export const AppProvider = ({ children }) => {
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
         triggerToast(errData.error || "Invalid email or password. Please try again!");
-        return false;
+        return { success: false, error: errData.error || "Invalid email or password. Please try again!" };
       }
 
       const data = await res.json();
@@ -794,14 +794,14 @@ export const AppProvider = ({ children }) => {
       setActiveProfileId(mappedUser.id);
       setIsAuthenticated(true);
       setCurrentRole(mappedRole);
-      recordLoginActivity(mappedUser, mappedRole);
       triggerToast(`Welcome back, ${mappedUser.name}!`);
-      return true;
+      recordLoginActivity(mappedUser, mappedRole);
+      return { success: true };
 
     } catch (e) {
       console.warn("Secure login attempt failed:", e);
       triggerToast("Connection error. Please try again!");
-      return false;
+      return { success: false, error: "Connection error. Please try again!" };
     }
   };
 
