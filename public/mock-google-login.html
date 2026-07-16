@@ -543,107 +543,69 @@
       return AVATAR_COLORS[charCode % AVATAR_COLORS.length];
     }
 
-    const HARDCODED_ACCOUNTS = [
-      {
-        id: '6a380b8173c0e340a6bf3a42',
-        name: 'Nikhil',
-        role: 'photographer',
-        email: 'nikhiljai1215@gmail.com',
-        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80',
-        bio: 'Professional fashion and commercial photographer.'
-      },
-      {
-        id: '6a380bd273c0e340a6bf3a43',
-        name: 'Sri',
-        role: 'client',
-        email: 'ssrajuqc@gmail.com',
-        avatar: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&q=80',
-        bio: 'Creative director looking for studios and photographer gear.'
-      },
-      {
-        id: '6a39140ec8fbd2d7e85f0d91',
-        name: 'Jaideep',
-        role: 'client',
-        email: 'anusripvc203@gmail.com',
-        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80',
-        bio: 'Creative client seeking fashion and lookbook photographers.'
-      },
-      {
-        id: '6a391527c8fbd2d7e85f0d92',
-        name: 'Jaideepvarma',
-        role: 'photographer',
-        email: 'anusripvc204@gmail.com',
-        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80',
-        bio: 'Wedding cinematographer and event shooter.'
-      }
-    ];
+    // ── Device-local account store ──
+    // Only shows the account(s) previously used on THIS device (stored in localStorage).
+    // No global DB fetch — each browser sees only its own remembered account.
+    const LOCAL_STORAGE_KEY = 'pickmyshoot_google_accounts';
 
-    // Load registered users from Supabase Edge via Vercel proxy
-    async function loadRegisteredUsers() {
-      const listContainer = document.getElementById('accounts-list');
-      listContainer.innerHTML = '<div style="padding: 24px; text-align: center; color: var(--text-muted); font-size: 14px;">Loading accounts...</div>';
-
+    function getSavedAccounts() {
       try {
-        const res = await fetch('/api/users', {
-          headers: {
-            'x-reveal-emails': 'true'
-          }
-        });
-        let dbUsers = [];
-        if (res.ok) {
-          dbUsers = await res.json();
-        }
-
-        // Merge and deduplicate by email
-        const mergedMap = new Map();
-        HARDCODED_ACCOUNTS.forEach(a => mergedMap.set(a.email.toLowerCase(), a));
-        if (Array.isArray(dbUsers)) {
-          dbUsers.forEach(u => mergedMap.set(u.email.toLowerCase(), u));
-        }
-        const users = Array.from(mergedMap.values());
-        
-        if (users.length === 0) {
-          showInputForm();
-          return;
-        }
-
-        // Render accounts chooser list
-        listContainer.innerHTML = '';
-        users.forEach(user => {
-          const itemDiv = document.createElement('div');
-          itemDiv.className = 'account-item';
-          
-          // Generate avatar initials or use image
-          const initial = user.name ? user.name.charAt(0).toUpperCase() : 'U';
-          const bg = getAvatarColor(user.name);
-          const hasImage = user.avatar && !user.avatar.includes('photo-1534528741775'); // ignore default placeholder image
-          
-          const avatarHtml = hasImage 
-            ? `<img class="avatar" src="${user.avatar}" alt="${user.name}">` 
-            : `<div class="avatar" style="background-color: ${bg}">${initial}</div>`;
-
-          itemDiv.innerHTML = `
-            ${avatarHtml}
-            <div class="account-info">
-              <div class="account-name-row">
-                <span class="account-name">${user.name || 'User'}</span>
-                <span class="status-badge">Signed out</span>
-              </div>
-              <span class="account-email">${user.email}</span>
-            </div>
-          `;
-
-          itemDiv.onclick = () => chooseAccount(user);
-          listContainer.appendChild(itemDiv);
-        });
-
-        showChooser();
-
-      } catch (err) {
-        console.error("Error fetching users list:", err);
-        // Fallback: if fetch fails, show input form
-        showInputForm();
+        const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch {
+        return [];
       }
+    }
+
+    function saveAccount(user) {
+      const accounts = getSavedAccounts();
+      const exists = accounts.find(a => a.email.toLowerCase() === user.email.toLowerCase());
+      if (!exists) {
+        accounts.push({ name: user.name, email: user.email, avatar: user.avatar || null });
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(accounts));
+      }
+    }
+
+    function loadRegisteredUsers() {
+      const listContainer = document.getElementById('accounts-list');
+      const savedAccounts = getSavedAccounts();
+
+      if (savedAccounts.length === 0) {
+        // No remembered account on this device — go straight to email input
+        showInputForm();
+        return;
+      }
+
+      // Render only the locally-saved accounts for this device
+      listContainer.innerHTML = '';
+      savedAccounts.forEach(user => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'account-item';
+
+        const initial = user.name ? user.name.charAt(0).toUpperCase() : 'U';
+        const bg = getAvatarColor(user.name);
+        const hasImage = user.avatar && user.avatar.startsWith('http');
+
+        const avatarHtml = hasImage
+          ? `<img class="avatar" src="${user.avatar}" alt="${user.name}">`
+          : `<div class="avatar" style="background-color: ${bg}">${initial}</div>`;
+
+        itemDiv.innerHTML = `
+          ${avatarHtml}
+          <div class="account-info">
+            <div class="account-name-row">
+              <span class="account-name">${user.name || 'User'}</span>
+              <span class="status-badge">Signed out</span>
+            </div>
+            <span class="account-email">${user.email}</span>
+          </div>
+        `;
+
+        itemDiv.onclick = () => chooseAccount(user);
+        listContainer.appendChild(itemDiv);
+      });
+
+      showChooser();
     }
 
     function showChooser() {
@@ -710,6 +672,9 @@
 
     function confirmGoogleAuth() {
       if (!selectedUserObject) return;
+
+      // Save this account to device-local storage so it appears next time
+      saveAccount(selectedUserObject);
 
       // Post success message to parent window (LoginPage.jsx)
       window.opener.postMessage({
