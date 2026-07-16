@@ -578,13 +578,38 @@ export const AppProvider = ({ children }) => {
     triggerToast("User verification status updated!");
   };
 
-  // Add portfolio photo helper
-  const addPortfolioItem = (item) => {
-    setPortfolioItems(prev => [
-      { id: `pf-${Date.now()}`, ownerId: activeProfileId, likes: 0, aspect: 'portrait', ...item },
-      ...prev
-    ]);
+  // Add portfolio photo helper — saves to DB
+  const addPortfolioItem = async (item) => {
+    const newItem = { id: `pf-${Date.now()}`, ownerId: activeProfileId, likes: 0, aspect: 'portrait', ...item };
+    setPortfolioItems(prev => [newItem, ...prev]);
     triggerToast("New creation added to portfolio!");
+    // Persist to DB
+    try {
+      const updatedItems = [newItem, ...(portfolioItems || [])];
+      await fetch('/api/portfolio', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+        body: JSON.stringify({ ownerId: activeProfileId, items: updatedItems })
+      });
+    } catch (err) {
+      console.warn('Failed to persist portfolio to DB', err);
+    }
+  };
+
+  // Remove portfolio photo helper — removes from DB
+  const removePortfolioItem = async (itemId) => {
+    const updated = portfolioItems.filter(p => p.id !== itemId);
+    setPortfolioItems(updated);
+    triggerToast("Photo removed from portfolio.");
+    try {
+      await fetch('/api/portfolio', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+        body: JSON.stringify({ ownerId: activeProfileId, items: updated })
+      });
+    } catch (err) {
+      console.warn('Failed to update portfolio in DB', err);
+    }
   };
 
   // Support Ticket Actions
@@ -936,6 +961,7 @@ export const AppProvider = ({ children }) => {
       logoutUser,
       loginOrSignupGoogle,
       portfolioItems, setPortfolioItems,
+      removePortfolioItem,
       currentRole, changeUserRole,
       updateBookingStatus,
       toggleUserVerification,

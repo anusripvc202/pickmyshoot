@@ -182,14 +182,31 @@ const PhotographerProfilePage = () => {
   const [selectedPackage, setSelectedPackage] = useState('hourly');
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxImageIndex, setLightboxImageIndex] = useState(0);
+  const [dbPortfolioImages, setDbPortfolioImages] = useState([]);
+
+  // Load photographer's portfolio from DB
+  useEffect(() => {
+    if (!id) return;
+    fetch(`/api/portfolio?ownerId=${id}`)
+      .then(r => r.ok ? r.json() : [])
+      .then(items => {
+        if (Array.isArray(items) && items.length > 0) {
+          setDbPortfolioImages(items.map(it => ({ url: it.image, caption: it.title || it.category || 'Portfolio Photo' })));
+        }
+      })
+      .catch(() => {});
+  }, [id]);
+
+  // derived: use DB photos if available, otherwise use hardcoded fallback
+  const activePortfolioImages = dbPortfolioImages.length > 0 ? dbPortfolioImages : portfolioImages;
 
   // Auto-scroll logic for slider
   useEffect(() => {
     const timer = setInterval(() => {
-      setActiveSlide((prev) => (prev + 1) % portfolioImages.length);
+      setActiveSlide((prev) => (prev + 1) % activePortfolioImages.length);
     }, 4500);
     return () => clearInterval(timer);
-  }, []);
+  }, [activePortfolioImages.length]);
 
   // Retrieve matching photographer
   const photographer = useMemo(() => {
@@ -561,7 +578,7 @@ const PhotographerProfilePage = () => {
           <div className="profile-section-card">
             <h3 className="section-card-title">Recent Portfolio Grid</h3>
             <div className="portfolio-grid-layout">
-              {portfolioImages.map((image, idx) => (
+              {activePortfolioImages.slice(0, 6).map((image, idx) => (
                 <div key={idx} className="portfolio-grid-card" onClick={() => openLightbox(idx)}>
                   <img src={image.url} className="portfolio-grid-img" alt={image.caption} />
                   <div className="portfolio-grid-hover-overlay">
@@ -572,7 +589,7 @@ const PhotographerProfilePage = () => {
               ))}
             </div>
             <button className="view-all-portfolio-btn" onClick={() => openLightbox(0)}>
-              View All 15 Portfolio Photos <ChevronRight size={14} />
+              View All {activePortfolioImages.length} Portfolio Photos <ChevronRight size={14} />
             </button>
           </div>
 

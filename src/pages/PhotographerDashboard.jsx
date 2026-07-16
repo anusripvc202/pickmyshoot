@@ -47,6 +47,7 @@ const PhotographerDashboard = () => {
     toggleListingActive,
     updateBookingStatus,
     addPortfolioItem,
+    removePortfolioItem,
     portfolioItems,
     chatSessions,
     chatMessages,
@@ -196,6 +197,15 @@ const PhotographerDashboard = () => {
   const [newProfileType, setNewProfileType] = useState('Photographer');
   const [newProfileName, setNewProfileName] = useState('');
   const [newProfilePrice, setNewProfilePrice] = useState(1500);
+
+  // Load portfolio from DB when photographer logs in
+  useEffect(() => {
+    if (!activeProfileId) return;
+    fetch(`/api/portfolio?ownerId=${activeProfileId}`)
+      .then(r => r.ok ? r.json() : [])
+      .then(items => { if (Array.isArray(items) && items.length > 0) setPortfolioItems(items); })
+      .catch(() => {});
+  }, [activeProfileId]);
 
   // Public Profile Preview Modal
   const [showPublicProfileModal, setShowPublicProfileModal] = useState(false);
@@ -1361,11 +1371,8 @@ const PhotographerDashboard = () => {
                           <span style={{ fontSize: '11px', fontWeight: 700, background: '#c7100d', padding: '2px 6px', borderRadius: '8px', width: 'fit-content' }}>{pf.category}</span>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <span style={{ fontSize: '12px', fontWeight: 800, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', maxWidth: '120px' }}>{pf.title}</span>
-                            <button 
-                              onClick={() => {
-                                // Delete portfolio item helper
-                                triggerToast("✓ Photo deleted from portfolio");
-                              }}
+                             <button 
+                              onClick={() => removePortfolioItem(pf.id)}
                               style={{ background: 'none', border: 'none', color: '#ff4d4d', cursor: 'pointer', padding: 0 }}
                             >
                               <Trash2 size={16} />

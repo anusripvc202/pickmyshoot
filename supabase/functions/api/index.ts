@@ -1292,6 +1292,43 @@ serve(async (req) => {
       }
     }
 
+    // ── PORTFOLIO ROUTE ──
+    if (path === '/portfolio') {
+      // Ensure portfolio column exists
+      try {
+        await sql`ALTER TABLE photographers ADD COLUMN IF NOT EXISTS "portfolio" JSONB DEFAULT '[]'::jsonb`;
+        await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS "portfolio" JSONB DEFAULT '[]'::jsonb`;
+      } catch (e) { /* already exists */ }
+
+      if (method === 'GET') {
+        const ownerId = url.searchParams.get('ownerId');
+        if (!ownerId) {
+          return new Response(JSON.stringify({ error: 'ownerId required' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+        // Try photographers table first, then users
+        const [ph] = await sql`SELECT "portfolio" FROM photographers WHERE "_id" = ${ownerId} OR "email" = ${ownerId}`;
+        if (ph) {
+          return new Response(JSON.stringify(ph.portfolio || []), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+        const [u] = await sql`SELECT "portfolio" FROM users WHERE "id" = ${ownerId} OR "_id" = ${ownerId}`;
+        return new Response(JSON.stringify(u?.portfolio || []), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+
+      if (method === 'POST') {
+        const body = await req.json();
+        const { ownerId, items } = body;
+        if (!ownerId) {
+          return new Response(JSON.stringify({ error: 'ownerId required' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+        const portfolioJson = JSON.stringify(items || []);
+        // Upsert into photographers table
+        await sql`UPDATE photographers SET "portfolio" = ${portfolioJson}::jsonb WHERE "_id" = ${ownerId}`;
+        // Also update users table
+        await sql`UPDATE users SET "portfolio" = ${portfolioJson}::jsonb WHERE "id" = ${ownerId} OR "_id" = ${ownerId}`;
+        return new Response(JSON.stringify({ success: true, count: (items || []).length }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+    }
+
     // ── CLAIM PROFILE ROUTE ──
     if (path === '/claim-profile' && method === 'POST') {
       const body = await req.json();
