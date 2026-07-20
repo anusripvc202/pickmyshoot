@@ -627,9 +627,6 @@ const Layout = () => {
                           </>
                         )}
                         <div style={{ borderTop: '1px dashed var(--border)', margin: '6px 0' }} />
-                        <button className="dropdown-menu-item-btn" onClick={() => { navigate('/profile'); setUserDropdownOpen(false); }}>
-                          👤 My Profile
-                        </button>
                         <button className="dropdown-menu-item-btn logout-btn-action" onClick={() => { logoutUser(); setUserDropdownOpen(false); navigate('/'); }}>
                           Sign Out
                         </button>
@@ -1456,20 +1453,20 @@ const Layout = () => {
                 </div>
               </div>
               {/* ── Stats center ── */}
-              <div className="footer-stats-row" style={{ display: 'flex', alignItems: 'center', gap: '16px', flexShrink: 0, width: 'auto', background: 'var(--footer-social-bg)', border: '1px solid var(--footer-social-border)', borderRadius: '10px', padding: '8px 16px' }}>
+              <div className="footer-stats-row" style={{ display: 'flex', alignItems: 'center', gap: '14px', flexShrink: 0, width: 'auto', background: 'var(--footer-social-bg)', border: '1px solid var(--footer-social-border)', borderRadius: '10px', padding: '8px 16px', fontFamily: 'var(--font-body)' }}>
                 <div className="footer-stat-item" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px', justifyContent: 'center' }}>
-                  <span className="footer-stat-num" style={{ fontSize: '15px' }}>15K+</span>
-                  <span className="footer-stat-lbl" style={{ fontSize: '9px', marginTop: '1px' }}>Creators</span>
+                  <span className="footer-stat-num" style={{ fontSize: '14px', fontWeight: '700' }}>15K+</span>
+                  <span className="footer-stat-lbl" style={{ fontSize: '9px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: '1px' }}>Creators</span>
                 </div>
-                <div className="footer-stat-sep" style={{ height: '16px' }} />
+                <div className="footer-stat-sep" style={{ width: '1.5px', height: '14px', background: 'rgba(98, 106, 128, 0.25)' }} />
                 <div className="footer-stat-item" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px', justifyContent: 'center' }}>
-                  <span className="footer-stat-num" style={{ fontSize: '15px' }}>2.8K+</span>
-                  <span className="footer-stat-lbl" style={{ fontSize: '9px', marginTop: '1px' }}>Studios</span>
+                  <span className="footer-stat-num" style={{ fontSize: '14px', fontWeight: '700' }}>2.8K+</span>
+                  <span className="footer-stat-lbl" style={{ fontSize: '9px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: '1px' }}>Studios</span>
                 </div>
-                <div className="footer-stat-sep" style={{ height: '16px' }} />
+                <div className="footer-stat-sep" style={{ width: '1.5px', height: '14px', background: 'rgba(98, 106, 128, 0.25)' }} />
                 <div className="footer-stat-item" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px', justifyContent: 'center' }}>
-                  <span className="footer-stat-num" style={{ fontSize: '15px' }}>50K+</span>
-                  <span className="footer-stat-lbl" style={{ fontSize: '9px', marginTop: '1px' }}>Bookings</span>
+                  <span className="footer-stat-num" style={{ fontSize: '14px', fontWeight: '700' }}>50K+</span>
+                  <span className="footer-stat-lbl" style={{ fontSize: '9px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: '1px' }}>Bookings</span>
                 </div>
               </div>
               {/* ── App badges on right ── */}

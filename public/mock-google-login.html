@@ -505,13 +505,23 @@
         <h1>Sign in</h1>
         <p class="subtitle">Use your Google Account</p>
 
-        <div class="form-group">
+        <div class="form-group" style="margin-bottom: 16px;">
           <label class="form-label" for="input-email">Email Address</label>
           <input type="email" id="input-email" class="form-input" placeholder="name@example.com">
         </div>
 
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label class="form-label" for="input-name">Full Name</label>
+          <input type="text" id="input-name" class="form-input" placeholder="John Doe">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 24px;">
+          <label class="form-label" for="input-avatar">Google Profile Image URL (Optional)</label>
+          <input type="url" id="input-avatar" class="form-input" placeholder="https://lh3.googleusercontent.com/...">
+        </div>
+
         <div class="button-group-row">
-          <button class="btn" onclick="showChooser()">Back</button>
+          <button class="btn" onclick="handleInputBack()">Back</button>
           <button class="btn btn-primary" onclick="submitCustomEmail()">Next</button>
         </div>
       </div>
@@ -528,20 +538,7 @@
   </div>
 
   <script>
-    // List of colors for Google Initials Avatars
-    const AVATAR_COLORS = [
-      '#7b1fa2', '#303f9f', '#0288d1', '#00796b', '#388e3c', 
-      '#f57c00', '#d32f2f', '#e64a19', '#5d4037', '#455a64'
-    ];
-
     let selectedUserObject = null;
-
-    // Get color based on character code to keep it persistent per name
-    function getAvatarColor(name) {
-      if (!name) return AVATAR_COLORS[0];
-      const charCode = name.charCodeAt(0) || 65;
-      return AVATAR_COLORS[charCode % AVATAR_COLORS.length];
-    }
 
     // ── Device-local account store ──
     // Only shows the account(s) previously used on THIS device (stored in localStorage).
@@ -571,24 +568,16 @@
       const savedAccounts = getSavedAccounts();
 
       if (savedAccounts.length === 0) {
-        // No remembered account on this device — go straight to email input
         showInputForm();
         return;
       }
 
-      // Render only the locally-saved accounts for this device
       listContainer.innerHTML = '';
       savedAccounts.forEach(user => {
         const itemDiv = document.createElement('div');
         itemDiv.className = 'account-item';
 
-        const initial = user.name ? user.name.charAt(0).toUpperCase() : 'U';
-        const bg = getAvatarColor(user.name);
-        const hasImage = user.avatar && user.avatar.startsWith('http');
-
-        const avatarHtml = hasImage
-          ? `<img class="avatar" src="${user.avatar}" alt="${user.name}">`
-          : `<div class="avatar" style="background-color: ${bg}">${initial}</div>`;
+        const avatarHtml = `<img class="avatar" src="${user.avatar || 'https://lh3.googleusercontent.com/a/default-user=s96-c'}" alt="${user.name}">`;
 
         itemDiv.innerHTML = `
           ${avatarHtml}
@@ -609,6 +598,11 @@
     }
 
     function showChooser() {
+      const savedAccounts = getSavedAccounts();
+      if (savedAccounts.length === 0) {
+        showInputForm();
+        return;
+      }
       document.getElementById('screen-consent').style.display = 'none';
       document.getElementById('screen-input').style.display = 'none';
       document.getElementById('screen-chooser').style.display = 'block';
@@ -619,17 +613,8 @@
       
       // Update UI elements
       const pillAvatar = document.getElementById('pill-avatar');
-      const bg = getAvatarColor(user.name);
-      const initial = user.name ? user.name.charAt(0).toUpperCase() : 'U';
-      const hasImage = user.avatar && !user.avatar.includes('photo-1534528741775');
-      
-      if (hasImage) {
-        pillAvatar.innerHTML = `<img src="${user.avatar}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
-        pillAvatar.style.background = 'transparent';
-      } else {
-        pillAvatar.innerText = initial;
-        pillAvatar.style.backgroundColor = bg;
-      }
+      pillAvatar.innerHTML = `<img src="${user.avatar || 'https://lh3.googleusercontent.com/a/default-user=s96-c'}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+      pillAvatar.style.background = 'transparent';
       
       document.getElementById('pill-email').innerText = user.email;
       document.getElementById('consent-name').innerText = user.name || 'User';
@@ -638,6 +623,16 @@
       document.getElementById('screen-chooser').style.display = 'none';
       document.getElementById('screen-input').style.display = 'none';
       document.getElementById('screen-consent').style.display = 'block';
+    }
+
+    // Default back behavior
+    function handleInputBack() {
+      const savedAccounts = getSavedAccounts();
+      if (savedAccounts.length === 0) {
+        alert('Please sign in to continue.');
+      } else {
+        showChooser();
+      }
     }
 
     function showInputForm() {
@@ -657,14 +652,21 @@
         return;
       }
 
-      // Generate mock details from email
-      const prefix = email.split('@')[0];
-      const name = prefix.split(/[._-]/).map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' ');
+      let name = document.getElementById('input-name').value.trim();
+      if (!name) {
+        const prefix = email.split('@')[0];
+        name = prefix.split(/[._-]/).map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' ');
+      }
+
+      let avatar = document.getElementById('input-avatar').value.trim();
+      if (!avatar) {
+        avatar = 'https://lh3.googleusercontent.com/a/default-user=s96-c';
+      }
 
       const customUser = {
         name,
         email,
-        avatar: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}`
+        avatar
       };
 
       showConsent(customUser);

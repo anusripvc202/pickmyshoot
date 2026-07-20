@@ -34,10 +34,22 @@ async function sendBookingNotification({ photographerEmail, photographerName, cl
 
   const resolvedAvatar = clientAvatar || `https://api.dicebear.com/7.x/initials/svg?seed=${clientName || 'User'}`;
 
+  const attachments = [];
+  let imgUrl = resolvedAvatar;
+  if (resolvedAvatar && resolvedAvatar.startsWith('data:')) {
+    attachments.push({
+      filename: 'client-avatar',
+      path: resolvedAvatar,
+      cid: 'clientAvatarImage'
+    });
+    imgUrl = 'cid:clientAvatarImage';
+  }
+
   const mailOptions = {
     from: `"PickMyShoot" <${smtpEmail}>`,
     to: photographerEmail,
     subject: `🎯 New Booking Request — ${bookingTitle}`,
+    attachments,
     html: `
       <!DOCTYPE html>
       <html>
@@ -111,7 +123,7 @@ async function sendBookingNotification({ photographerEmail, photographerName, cl
                           <table width="100%" cellpadding="0" cellspacing="0">
                             <tr>
                               <td style="vertical-align: middle; padding-right: 16px;" width="64">
-                                <img src="${resolvedAvatar}" width="54" height="54" style="border-radius: 50%; border: 2px solid #ffccd1; object-fit: cover; display: block;" alt="${clientName}">
+                                <img src="${imgUrl}" width="54" height="54" style="border-radius: 50%; border: 2px solid #ffccd1; object-fit: cover; display: block;" alt="${clientName}">
                               </td>
                               <td style="vertical-align: middle;">
                                 <p style="margin:0 0 4px; font-size:11px; color:#c8102e; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">Client Details</p>
@@ -192,10 +204,22 @@ async function sendClientBookingConfirmation({ clientEmail, clientName, bookingT
 
   const resolvedAvatar = photographerAvatar || `https://api.dicebear.com/7.x/initials/svg?seed=${photographerName || 'Creator'}`;
 
+  const attachments = [];
+  let imgUrl = resolvedAvatar;
+  if (resolvedAvatar && resolvedAvatar.startsWith('data:')) {
+    attachments.push({
+      filename: 'photographer-avatar',
+      path: resolvedAvatar,
+      cid: 'photographerAvatarImage'
+    });
+    imgUrl = 'cid:photographerAvatarImage';
+  }
+
   const mailOptions = {
     from: `"PickMyShoot" <${smtpEmail}>`,
     to: clientEmail,
     subject: `🎉 Booking Confirmed — ${bookingTitle}`,
+    attachments,
     html: `
       <!DOCTYPE html>
       <html>
@@ -226,12 +250,12 @@ async function sendClientBookingConfirmation({ clientEmail, clientName, bookingT
                       Hi <strong>${clientName || 'Valued Customer'}</strong>,<br><br>
                       Thank you for choosing PickMyShoot! Your booking has been successfully placed. We've sent a notification to the photographer/provider <strong>${photographerName || 'Creator'}</strong>. Here are your booking details:
                     </p>
-
+ 
                     <!-- Photographer Profile Header -->
                     <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 20px;">
                       <tr>
                         <td align="center">
-                          <img src="${resolvedAvatar}" width="64" height="64" style="border-radius: 50%; border: 3px solid #3b82f6; object-fit: cover; display: inline-block;" alt="${photographerName}">
+                          <img src="${imgUrl}" width="64" height="64" style="border-radius: 50%; border: 3px solid #3b82f6; object-fit: cover; display: inline-block;" alt="${photographerName}">
                           <p style="margin: 8px 0 0; font-size: 16px; font-weight: 700; color: #1e3a8a;">${photographerName}</p>
                         </td>
                       </tr>
@@ -783,6 +807,8 @@ serve(async (req) => {
       await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS "resetToken" TEXT;`;
       await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS "resetTokenExpires" TIMESTAMP;`;
       await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS "authProvider" TEXT;`;
+      await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS "studioName" TEXT;`;
+      await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS "studio_name" TEXT;`;
     } catch (err) {
       console.warn("Schema adjustment check warning:", err.message);
     }
@@ -1099,7 +1125,31 @@ serve(async (req) => {
     // ── USERS ROUTE ──
     if (path === '/users') {
       if (method === 'GET') {
-        const users = await sql`SELECT * FROM users ORDER BY "createdAt" DESC`;
+        // Retrieve requesting user role
+        let userRole = 'client';
+        if (reqUserId) {
+          try {
+            const [dbUser] = await sql`
+              SELECT "role" FROM users 
+              WHERE "id" = ${reqUserId} OR "_id" = ${reqUserId}
+            `;
+            if (dbUser) {
+              userRole = dbUser.role || 'client';
+            }
+          } catch (err) {
+            console.warn("User role authorization check warning:", err.message);
+          }
+        }
+
+        let users;
+        if (userRole === 'admin') {
+          users = await sql`SELECT * FROM users ORDER BY "createdAt" DESC`;
+        } else if (reqUserId) {
+          users = await sql`SELECT * FROM users WHERE "id" = ${reqUserId} OR "_id" = ${reqUserId}`;
+        } else {
+          users = [];
+        }
+
         const mappedUsers = (isGoogleAuth || revealEmails || reqUserId) ? users : users.map(u => ({ ...u, email: maskEmail(u.email) }));
         return new Response(JSON.stringify(mappedUsers), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }

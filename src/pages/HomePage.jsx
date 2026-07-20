@@ -57,8 +57,36 @@ const HomePage = () => {
   }, [services]);
 
   const displayPhotographers = React.useMemo(() => {
-    return profiles.filter(p => p.role === 'photographer');
-  }, [profiles]);
+    const dbPhotogs = services.map(s => {
+      const cleanName = s.title.split('|')[0].trim();
+      // Extract area or city from address
+      const locParts = (s.location || '').split(',');
+      const area = locParts[0] ? locParts[0].trim() : 'Hyderabad';
+      const ratingVal = s.rating ? (typeof s.rating === 'object' ? s.rating.score || '4.8' : s.rating) : '4.8';
+
+      return {
+        id: s.id || s._id,
+        _id: s._id || s.id,
+        name: cleanName,
+        avatar: s.image,
+        location: area,
+        rating: ratingVal.toString(),
+        reviews: s.reviews || 10,
+        isVerified: true
+      };
+    });
+
+    const seen = new Set();
+    const unique = [];
+    for (const dp of dbPhotogs) {
+      const lower = dp.name.toLowerCase();
+      if (!seen.has(lower)) {
+        seen.add(lower);
+        unique.push(dp);
+      }
+    }
+    return unique.slice(0, 10);
+  }, [services]);
 
   const [currentSlide, setCurrentSlide] = useState(0);
   const [activePromoIndex, setActivePromoIndex] = useState(0);
@@ -718,13 +746,25 @@ const HomePage = () => {
               </div>
               <div className="near-you-info">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span className="near-you-title">{studio.title}</span>
+                  <span className="near-you-title" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '75%' }} title={studio.title}>
+                    {studio.title}
+                  </span>
                   <div className="card-rating-row" style={{ marginTop: 0 }}>
                     <Star size={11} className="card-rating-star" />
                     <span>{studio.rating}</span>
                   </div>
                 </div>
-                <span className="near-you-loc">📍 {studio.location} • {studio.distance}</span>
+                <span className="near-you-loc" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={studio.location}>
+                  📍 {studio.location?.split(',')[0] || studio.location}
+                  {studio.distance ? ` • ${studio.distance}` : ''}
+                </span>
+                <div className="near-you-price-row">
+                  <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Rental Rate</span>
+                  <span style={{ fontSize: '14px', fontWeight: '800', color: 'var(--primary)' }}>
+                    ₹{(typeof studio.price === 'number' ? studio.price : parseFloat(studio.price) || 2000).toLocaleString('en-IN')}
+                    {studio.priceUnit ? `/${studio.priceUnit}` : '/hr'}
+                  </span>
+                </div>
               </div>
             </div>
           ))}

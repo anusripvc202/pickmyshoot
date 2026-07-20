@@ -8,6 +8,7 @@ import {
   workshops as initialWorkshops, 
   jobs as initialJobs 
 } from '../data/mockData';
+import uniqueImages from '../data/uniqueImages.json';
 
 /**
  * Deduplicates a profiles array by email.
@@ -22,6 +23,70 @@ const deduplicateProfiles = (profilesArray) => {
     byEmail.set(key, p); // last one wins (DB overwrites mock)
   });
   return Array.from(byEmail.values());
+};
+
+const getUniqueUnsplashImage = (title, type, serviceType, id) => {
+  const tLower = (title || '').toLowerCase();
+  
+  // Custom professional photography shoot override mappings (focusing on scenery, gear, and decor - NO persons/faces)
+  if (tLower.includes('lorven')) {
+    return 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&w=800&q=80'; // Minimalist clothing rack (Fashion shoot theme)
+  }
+  if (tLower.includes('shriyak')) {
+    return 'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=800&q=80'; // High-end fashion accessories (Fashion theme)
+  }
+  if (tLower.includes('satyasai')) {
+    return 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80'; // Professional studio setup with lighting and backdrops
+  }
+  if (tLower.includes('photoshilpi')) {
+    return 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=800&q=80'; // Camera on tripod (Creative shoot theme)
+  }
+  if (tLower.includes('pixel new')) {
+    return 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=800&q=80'; // Camera gear and lenses (Photography/videography)
+  }
+  if (tLower.includes('tender tots')) {
+    return 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=800&q=80'; // Cute baby socks/shoes and toys (Baby theme)
+  }
+  if (tLower.includes('wedding stories')) {
+    return 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80'; // Wedding table decor and floral design
+  }
+  if (tLower.includes('avinash rayudu')) {
+    return 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=800&q=80'; // Wedding rings detail
+  }
+  if (tLower.includes('ambika')) {
+    return 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=80'; // Elegant wedding floral setup
+  }
+  if (tLower.includes('cameraman sai')) {
+    return 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=80'; // Wedding reception setup
+  }
+  if (tLower.includes('vertex')) {
+    return 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80'; // Wedding floral design
+  }
+
+  let hash = 0;
+  const str = (title || '') + (id || '');
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash |= 0;
+  }
+  const index = Math.abs(hash);
+
+  if (type === 'studio') {
+    const list = uniqueImages.studio || [];
+    return list.length > 0 ? list[index % list.length] : 'https://images.unsplash.com/photo-1603566723801-ffeb5562725e?auto=format&fit=crop&w=800&q=80';
+  } else {
+    const sType = (serviceType || '').toLowerCase();
+    if (sType.includes('baby') || sType.includes('kids') || sType.includes('munchkins') || tLower.includes('baby') || tLower.includes('kids')) {
+      const list = uniqueImages.baby || [];
+      return list.length > 0 ? list[index % list.length] : 'https://images.unsplash.com/photo-1504196606672-aef5c9cefc92?auto=format&fit=crop&w=800&q=80';
+    } else if (sType.includes('wedding') || sType.includes('marriage') || tLower.includes('wedding') || tLower.includes('marriage') || tLower.includes('candid')) {
+      const list = uniqueImages.wedding || [];
+      return list.length > 0 ? list[index % list.length] : 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80';
+    } else {
+      const list = uniqueImages.fashion || [];
+      return list.length > 0 ? list[index % list.length] : 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=800&q=80';
+    }
+  }
 };
 
 const defaultMockProfiles = [
@@ -247,7 +312,16 @@ export const AppProvider = ({ children }) => {
 
   // Load registered users from MongoDB on startup
   useEffect(() => {
-    fetch('/api/users', {
+    if (!isAuthenticated) {
+      setProfiles([]);
+      return;
+    }
+
+    const endpoint = currentRole === 'admin'
+      ? '/api/users'
+      : `/api/users?id=${activeProfileId}`;
+
+    fetch(endpoint, {
       headers: getAuthHeaders()
     })
       .then(res => {
@@ -255,76 +329,76 @@ export const AppProvider = ({ children }) => {
         return res.json();
       })
       .then(data => {
-        if (Array.isArray(data)) {
-          const dbProfiles = data.map(u => {
-            let bioText = u.bio || "Newly registered visual creator profile.";
-            let startingPrice = u.startingPrice;
-            let instaUrl = u.instaUrl;
-            let categories = u.categories || (u.role === 'photographer' ? ["Wedding Photography", "Candid Photography"] : []);
-            let highlights = u.highlights || (u.role === 'photographer' ? ["1+ Year Experience", "Creative Angles", "High-End Camera Equipment"] : []);
-            let languages = u.languages || ["English", "Hindi", "Telugu"];
-            let travelOutside = u.travelOutside || "Yes";
-            let gmbUrl = u.gmbUrl || "";
-            let fbUrl = u.fbUrl || "";
-            let webUrl = u.webUrl || "";
+        const rawData = Array.isArray(data) ? data : [data];
+        // Filter down to only authenticated user unless admin
+        const filteredData = currentRole === 'admin'
+          ? rawData
+          : rawData.filter(u => (u.id || u._id) === activeProfileId);
 
-            try {
-              if (u.bio && u.bio.startsWith('{')) {
-                const parsed = JSON.parse(u.bio);
-                if (parsed && typeof parsed === 'object') {
-                  bioText = parsed.text || bioText;
-                  startingPrice = parsed.startingPrice || startingPrice;
-                  instaUrl = parsed.instaUrl || instaUrl;
-                  categories = parsed.categories || categories;
-                  highlights = parsed.highlights || highlights;
-                  languages = parsed.languages || languages;
-                  travelOutside = parsed.travelOutside || travelOutside;
-                  gmbUrl = parsed.gmbUrl || gmbUrl;
-                  fbUrl = parsed.fbUrl || fbUrl;
-                  webUrl = parsed.webUrl || webUrl;
-                }
+        const dbProfiles = filteredData.map(u => {
+          let bioText = u.bio || "Newly registered visual creator profile.";
+          let startingPrice = u.startingPrice;
+          let instaUrl = u.instaUrl;
+          let categories = u.categories || (u.role === 'photographer' ? ["Wedding Photography", "Candid Photography"] : []);
+          let highlights = u.highlights || (u.role === 'photographer' ? ["1+ Year Experience", "Creative Angles", "High-End Camera Equipment"] : []);
+          let languages = u.languages || ["English", "Hindi", "Telugu"];
+          let travelOutside = u.travelOutside || "Yes";
+          let gmbUrl = u.gmbUrl || "";
+          let fbUrl = u.fbUrl || "";
+          let webUrl = u.webUrl || "";
+
+          try {
+            if (u.bio && u.bio.startsWith('{')) {
+              const parsed = JSON.parse(u.bio);
+              if (parsed && typeof parsed === 'object') {
+                bioText = parsed.text || bioText;
+                startingPrice = parsed.startingPrice || startingPrice;
+                instaUrl = parsed.instaUrl || instaUrl;
+                categories = parsed.categories || categories;
+                highlights = parsed.highlights || highlights;
+                languages = parsed.languages || languages;
+                travelOutside = parsed.travelOutside || travelOutside;
+                gmbUrl = parsed.gmbUrl || gmbUrl;
+                fbUrl = parsed.fbUrl || fbUrl;
+                webUrl = parsed.webUrl || webUrl;
               }
-            } catch (e) {
-              // Not JSON
             }
+          } catch (e) {
+            // Not JSON
+          }
 
-            return {
-              ...u,
-              id: u.id || u._id,
-              name: u.name,
-              role: u.role || 'client',
-              email: u.email,
-              phone: u.phone || "+91 99999 88888",
-              bio: bioText,
-              avatar: u.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=180&q=80",
-              shoots: u.shoots || "0",
-              rating: u.rating || "5.0 ★",
-              followers: u.followers || "0",
-              revenue: u.revenue || "₹0",
-              success: u.success || "100%",
-              views: u.views || "1",
-              studioName: u.studioName || u.studio_name || "",
-              startingPrice: startingPrice,
-              instaUrl: instaUrl,
-              categories,
-              highlights,
-              languages,
-              travelOutside,
-              gmbUrl,
-              fbUrl,
-              webUrl
-            };
-          });
+          return {
+            ...u,
+            id: u.id || u._id,
+            name: u.name,
+            role: u.role || 'client',
+            email: u.email,
+            phone: u.phone || "+91 99999 88888",
+            bio: bioText,
+            avatar: u.avatar || "https://lh3.googleusercontent.com/a/default-user=s96-c",
+            shoots: u.shoots || "0",
+            rating: u.rating || "5.0 ★",
+            followers: u.followers || "0",
+            revenue: u.revenue || "₹0",
+            success: u.success || "100%",
+            views: u.views || "1",
+            studioName: u.studioName || u.studio_name || "",
+            startingPrice: startingPrice,
+            instaUrl: instaUrl,
+            categories,
+            highlights,
+            languages,
+            travelOutside,
+            gmbUrl,
+            fbUrl,
+            webUrl
+          };
+        });
 
-          setProfiles(prev => {
-            // DB profiles always replace matching mock/local profiles
-            const filteredPrev = prev.filter(p => !dbProfiles.some(dp => dp.email.toLowerCase() === p.email.toLowerCase()));
-            return deduplicateProfiles([...filteredPrev, ...dbProfiles]);
-          });
-        }
+        setProfiles(dbProfiles);
       })
       .catch(err => console.warn('Failed to load users from DB:', err));
-  }, [isAuthenticated, activeProfileId]);
+  }, [isAuthenticated, activeProfileId, currentRole]);
 
   // Load and poll bookings from MongoDB
   useEffect(() => {
@@ -402,9 +476,17 @@ export const AppProvider = ({ children }) => {
         dbList.forEach(item => {
           // Only include active DB listings
           if (item.active === false) return;
+
+          let imageVal = item.image;
+          // Apply client-side unique image fallback for Unsplash images of services & studios
+          if ((item.type === 'service' || item.type === 'studio') && imageVal && (imageVal.includes('unsplash.com') || imageVal.startsWith('http')) && !imageVal.includes('sig=')) {
+            imageVal = getUniqueUnsplashImage(item.title, item.type, item.serviceType, item.id || item._id);
+          }
+
           const mappedItem = {
             ...item,
             id: item.id || item._id,
+            image: imageVal,
             ownerId: item.ownerId || (item.creatorId && typeof item.creatorId === 'object' ? item.creatorId.id || item.creatorId._id : item.creatorId)
           };
           if (item.type === 'service') dbServices.push(mappedItem);
@@ -857,6 +939,11 @@ export const AppProvider = ({ children }) => {
     setIsAuthenticated(false);
     setCurrentUser(null);
     setCurrentRole('client');
+    setActiveProfileId("");
+    localStorage.removeItem('pickmyshoot_is_authenticated');
+    localStorage.removeItem('pickmyshoot_current_user');
+    localStorage.removeItem('pickmyshoot_active_profile_id');
+    localStorage.removeItem('pickmyshoot_current_role');
     triggerToast("Logged out successfully.");
   };
 
@@ -896,7 +983,7 @@ export const AppProvider = ({ children }) => {
         email: email,
         phone: "+91 99999 88888",
         bio: "Newly registered visual creator profile via Google.",
-        avatar: avatar || `https://api.dicebear.com/7.x/initials/svg?seed=${name}`,
+        avatar: avatar || "https://lh3.googleusercontent.com/a/default-user=s96-c",
         shoots: "0",
         rating: "5.0 ★",
         followers: "0",
